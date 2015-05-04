@@ -1,0 +1,32 @@
+<?php
+/**
+ * Umc_Base extension
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the MIT License
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/mit-license.php
+ *
+ * @category  Umc
+ * @package   Umc_Base
+ * @copyright 2015 Marius Strajeru
+ * @license   http://opensource.org/licenses/mit-license.php MIT License
+ * @author    Marius Strajeru <ultimate.module.creator@gmail.com>
+ */
+?>
+<?php /** @var \Umc\Base\Block\Adminhtml\Module\Edit\Tab\Entities $this */ ?>
+<?php $_entities = $this->getEntities();?>
+<div id="entities_container">
+    <?php $_increment = 0;foreach ($_entities as $_code => $_entity) : ?>
+        <?php
+        /** @var \Umc\Base\Block\Adminhtml\Entity $block */
+        $block = $this->getLayout()->createBlock('Umc\Base\Block\Adminhtml\Entity');
+        echo $block->setTemplate('Umc_Base::entity.phtml')
+            ->setEntity($_entity)
+            ->setIncrement($_increment++)
+            ->toHtml();
+        ?>
+    <?php endforeach;?>
+</div>

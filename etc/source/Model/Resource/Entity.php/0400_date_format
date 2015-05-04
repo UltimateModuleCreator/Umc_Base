@@ -1,0 +1,4 @@
+        foreach ({{dateAttributeCodes}} as $field) {
+            $value = !$object->getData($field) ? null : $object->getData($field);
+            $object->setData($field, $this->{{_}}dateTime->formatDate($value));
+        }

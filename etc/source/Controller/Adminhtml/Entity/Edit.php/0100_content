@@ -1,0 +1,41 @@
+    /**
+     * is action allowed
+     *
+     * @return bool
+     */
+    protected function _isAllowed()
+    {
+        return $this->_authorization->isAllowed('{{Namespace}}_{{Module}}::{{entity}}');
+    }
+    public function execute()
+    {
+        $id = $this->getRequest()->getParam('{{entity}}_id');
+        /** @var \{{Namespace}}\{{Module}}\Model\{{Entity}} ${{entity}} */
+        ${{entity}} = $this->{{_}}init{{Entity}}();
+        /** @var \Magento\Backend\Model\View\Result\Page|\Magento\Framework\View\Result\Page $resultPage */
+        $resultPage = $this->{{_}}resultPageFactory->create();
+        $resultPage->setActiveMenu('{{Namespace}}_{{Module}}::{{entity}}');
+        $resultPage->getConfig()->getTitle()->set(__('{{EntitiesLabel}}'));
+        if ($id) {
+            ${{entity}}->load($id);
+            if (!${{entity}}->getId()) {
+                $this->messageManager->addError(__('This {{EntityLabel}} no longer exists.'));
+                $resultRedirect = $this->{{_}}resultRedirectFactory->create();
+                $resultRedirect->setPath(
+                    '{{namespace}}_{{module}}/*/edit',
+                    [
+                        '{{entity}}_id' => ${{entity}}->getId(),
+                        '_current' => true
+                    ]
+                );
+                return $resultRedirect;
+            }
+        }
+        $title = ${{entity}}->getId() ? ${{entity}}->get{{NameAttributeCode}}() : __('New {{EntityLabel}}');
+        $resultPage->getConfig()->getTitle()->append($title);
+        $data = $this->{{_}}backendSession->getData('{{namespace}}_{{module}}_{{entity}}_data', true);
+        if (!empty($data)) {
+            ${{entity}}->setData($data);
+        }
+        return $resultPage;
+    }

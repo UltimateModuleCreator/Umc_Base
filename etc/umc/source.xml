@@ -1,0 +1,943 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Umc_Base extension
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the MIT License
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/mit-license.php
+ *
+ * @category  Umc
+ * @package   Umc_Base
+ * @copyright 2015 Marius Strajeru
+ * @license   http://opensource.org/licenses/mit-license.php MIT License
+ * @author    Marius Strajeru <ultimate.module.creator@gmail.com>
+ */
+-->
+<source xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="source.xsd">
+    <file id="etc/module.xml" sort="10" scope="global" type="xml" translate="label description">
+        <label>Module declaration file</label>
+        <description>The module declaration file.</description>
+        <code>
+            <part id="content" file="0100_content" sort="100" />
+        </code>
+    </file>
+    <file id="etc/acl.xml" sort="20" scope="global" type="xml" translate="label description">
+        <label>ACL declaration file</label>
+        <description>Declare ACL for your module.</description>
+        <code>
+            <part id="top" file="0100_top" sort="100" />
+            <part id="entity" file="0200_entity" sort="200" scope="entity" /><!-- TODO: find the correct level and parent -->
+            <part id="footer" file="0300_footer" sort="300" />
+        </code>
+    </file>
+    <file id="etc/di.xml" sort="30" scope="global" type="xml" translate="label description">
+        <label>Dependency injection file</label>
+        <description>Dependency injection elements.</description>
+        <code>
+            <part id="top" file="0100_top" sort="100" />
+            <part id="search_top" file="0200_search_top" sort="200">
+                <depends id="entity_flag_search">
+                    <depend id="entity_flag_search">
+                        <val id="1">1</val>
+                    </depend>
+                </depends>
+            </part>
+            <part id="search" file="0300_search" sort="300" scope="entity">
+                <depends id="search">
+                    <depend id="search">
+                        <val id="1">1</val>
+                    </depend>
+                </depends>
+            </part>
+            <part id="search_footer" file="0400_search_footer" sort="400">
+                <depends id="entity_flag_search">
+                    <depend id="entity_flag_search">
+                        <val id="1">1</val>
+                    </depend>
+                </depends>
+            </part>
+            <part id="footer" file="0500_footer" sort="500"/>
+        </code>
+    </file>
+    <file id="etc/adminhtml/routes.xml" sort="40" scope="global" type="xml" translate="label description">
+        <label>Admin routes file</label>
+        <description>Route declaration for admin section.</description>
+        <code>
+            <part id="top" file="0100_content" sort="100" />
+        </code>
+    </file>
+    <file id="etc/adminhtml/menu.xml" sort="50" scope="global" type="xml" translate="label description">
+        <label>Admin menu file</label>
+        <description>Declaration of admin menu items.</description>
+        <code>
+            <part id="top" file="0100_top" sort="100" />
+            <part id="entity" file="0200_entity" sort="200" scope="entity" />
+            <part id="footer" file="0300_footer" sort="300" />
+        </code>
+    </file>
+    <file id="Block/Adminhtml/{{Entity}}/Edit.php" type="class" sort="60" scope="entity" translate="label description">
+        <label>Entity admin Edit block</label>
+        <description>Container block for the admin edit form</description>
+        <extends>Magento\Backend\Block\Widget\Form\Container</extends>
+        <members>
+            <member id="coreRegistry" type="protected" construct="true" show="true" var="Magento\Framework\Registry" sort="10">
+                <doc>Core registry</doc>
+            </member>
+            <member id="context" construct="true" show="false" parent="true" var="Magento\Backend\Block\Widget\Context" sort="20" />
+            <member id="data" construct="true" show="false" parent="true" var="array" sort="30" default="[]" />
+        </members>
+        <code>
+            <part id="content" file="0100_content" sort="100" />
+        </code>
+    </file>
+    <file id="Block/Adminhtml/{{Entity}}/Edit/Tab/{{Entity}}.php" type="class" sort="70" scope="entity" translate="label description">
+        <label>Main tab of entity add/edit form</label>
+        <description>Main tab of entity add/edit form</description>
+        <depends id="type">
+            <depend id="type">
+                <val id="flat">flat</val>
+            </depend>
+        </depends>
+        <extends>Magento\Backend\Block\Widget\Form\Generic</extends>
+        <implements>
+            <implement id="Magento\Backend\Block\Widget\Tab\TabInterface" sort="10" />
+        </implements>
+        <members>
+            <member id="wysiwygConfig" construct="true" show="true" var="Magento\Cms\Model\Wysiwyg\Config" sort="10">
+                <doc>Wysiwyg config</doc>
+                <depends id="has_editor">
+                    <depend id="has_editor">
+                        <val id="1">1</val>
+                    </depend>
+                </depends>
+            </member>
+            <member id="countryOptions" construct="true" show="true" var="Magento\Config\Model\Config\Source\Locale\Country" sort="20">
+                <doc>Country options</doc>
+                <depends id="has_attribute_type_country">
+                    <depend id="has_attribute_type_country">
+                        <val id="1">1</val>
+                    </depend>
+                </depends>
+                <depends id="has_attribute_type_countrymultiselect">
+                    <depend id="has_attribute_type_countrymultiselect">
+                        <val id="1">1</val>
+                    </depend>
+                </depends>
+            </member>
+            <member id="booleanOptions" construct="true" show="true" var="Magento\Config\Model\Config\Source\Yesno" sort="30">
+                <doc>Country options</doc>
+                <depends id="has_attribute_type_yesno">
+                    <depend id="has_attribute_type_yesno">
+                        <val id="1">1</val>
+                    </depend>
+                </depends>
+            </member>
+            <member id="{{codeCamelCase}}Options" construct="true" show="true" var="{{Namespace}}\{{Module}}\Model\{{Entity}}\Source\{{CodeCamelCase}}" sort="40" scope="attribute">
+                <doc>{{Label}} options</doc>
+                <depends id="has_options">
+                    <depend id="has_options">
+                        <val id="1">1</val>
+                    </depend>
+                </depends>
+            </member>
+
+            <member id="context" construct="true" show="false" parent="true" var="Magento\Backend\Block\Template\Context" sort="50" />
+            <member id="registry" construct="true" show="false" parent="true" var="Magento\Framework\Registry" sort="60" />
+            <member id="formFactory" construct="true" show="false" parent="true" var="Magento\Framework\Data\FormFactory" sort="70" />
+            <member id="data" construct="true" show="false" parent="true" var="array" sort="80" default="[]" />
+        </members>
+        <code>
+            <part id="top" file="0100_top" sort="100" />
+            <part id="image" file="0200_image" sort="200">
+                <depends id="has_attribute_type_image">
+                    <depend id="has_attribute_type_image">
+                        <val id="1">1</val>
+                    </depend>
+                </depends>
+            </part>
+            <part id="file" file="0300_file" sort="200">
+                <depends id="has_attribute_type_image">
+                    <depend id="has_attribute_type_image">
+                        <val id="1">1</val>
+                    </depend>
+                </depends>
+            </part>
+            <part id="content" file="0400_content" sort="400" />
+        </code>
+    </file>
+    <file id="Controller/Adminhtml/{{Entity}}.php" type="class" sort="80" scope="entity" translate="label description">
+        <label>Admin entity controller</label>
+        <description>Base controller for admin</description>
+        <extends>Magento\Backend\App\Action</extends>
+        <members>
+            <member id="{{entity}}Factory" type="protected" construct="true" show="true" var="{{Namespace}}\{{Module}}\Model\{{Entity}}Factory" sort="10">
+                <doc>{{EntityLabel}} Factory</doc>
+            </member>
+            <member id="coreRegistry" type="protected" construct="true" show="true" var="Magento\Framework\Registry" sort="20">
+                <doc>Core registry</doc>
+            </member>
+            <member id="resultRedirectFactory" type="protected" construct="true" show="true" var="Magento\Backend\Model\View\Result\RedirectFactory" sort="30">
+                <doc>Result redirect factory</doc>
+            </member>
+            <member id="context" construct="true" show="false" parent="true" var="Magento\Backend\App\Action\Context" sort="40" />
+        </members>
+        <code>
+            <part id="content" file="0100_content" sort="100" />
+        </code>
+    </file>
+    <file id="Controller/Adminhtml/{{Entity}}/Delete.php" type="class" sort="90" scope="entity" translate="label description">
+        <label>Admin entity delete action</label>
+        <description>Delete an entity instance in the backend</description>
+        <extends>{{Namespace}}\{{Module}}\Controller\Adminhtml\{{Entity}}</extends>
+        <code>
+            <part id="content" file="0100_content" sort="100" />
+        </code>
+    </file>
+    <file id="Controller/Adminhtml/{{Entity}}/Edit.php" type="class" sort="100" scope="entity" translate="label description">
+        <label>Admin entity edit action</label>
+        <description>Edit an entity instance in the backend</description>
+        <extends>{{Namespace}}\{{Module}}\Controller\Adminhtml\{{Entity}}</extends>
+        <members>
+            <member id="backendSession" type="protected" construct="true" show="true" var="Magento\Backend\Model\Session" sort="10">
+                <doc>Backend session</doc>
+            </member>
+            <member id="resultPageFactory" type="protected" construct="true" show="true" var="Magento\Framework\View\Result\PageFactory" sort="20">
+                <doc>Page factory</doc>
+            </member>
+            <member id="{{entity}}Factory" construct="true" show="false" parent="true" var="{{Namespace}}\{{Module}}\Model\{{Entity}}Factory" sort="30" />
+            <member id="registry" construct="true" show="false" parent="true" var="Magento\Framework\Registry" sort="40" />
+            <member id="resultRedirectFactory" construct="true" show="false" parent="true" var="Magento\Backend\Model\View\Result\RedirectFactory" sort="50" />
+            <member id="context" construct="true" show="false" parent="true" var="Magento\Backend\App\Action\Context" sort="60" />
+        </members>
+        <code>
+            <part id="content" file="0100_content" sort="100" />
+        </code>
+    </file>
+    <file id="Controller/Adminhtml/{{Entity}}/ExportCsv.php" type="class" sort="110" scope="entity" translate="label description">
+        <label>Export Entity grid as csv action</label>
+        <description>Export Entity grid as csv action</description>
+        <extends>Magento\Backend\App\Action</extends>
+        <members>
+            <member id="fileFactory" type="protected" construct="true" show="true" var="Magento\Framework\App\Response\Http\FileFactory" sort="10">
+                <doc>File Factory</doc>
+            </member>
+            <member id="resultPageFactory" type="protected" construct="true" show="true" var="Magento\Framework\View\Result\PageFactory" sort="20">
+                <doc>Page factory</doc>
+            </member>
+            <member id="context" construct="true" show="false" parent="true" var="Magento\Backend\App\Action\Context" sort="50" />
+        </members>
+        <code>
+            <part id="content" file="0100_content" sort="100" />
+        </code>
+    </file>
+    <file id="Controller/Adminhtml/{{Entity}}/ExportExcel.php" type="class" sort="120" scope="entity" translate="label description">
+        <label>Export Entity grid as xls action</label>
+        <description>Export Entity grid as xls action</description>
+        <extends>Magento\Backend\App\Action</extends>
+        <members>
+            <member id="fileFactory" type="protected" construct="true" show="true" var="Magento\Framework\App\Response\Http\FileFactory" sort="10">
+                <doc>File Factory</doc>
+            </member>
+            <member id="resultPageFactory" type="protected" construct="true" show="true" var="Magento\Framework\View\Result\PageFactory" sort="20">
+                <doc>Page factory</doc>
+            </member>
+            <member id="context" construct="true" show="false" parent="true" var="Magento\Backend\App\Action\Context" sort="50" />
+        </members>
+        <code>
+            <part id="content" file="0100_content" sort="100" />
+        </code>
+    </file>
+    <file id="Controller/Adminhtml/{{Entity}}/Grid.php" type="class" sort="130" scope="entity" translate="label description">
+        <label>Entity admin grid action</label>
+        <description>Grid AJAX actions should call this</description>
+        <extends>{{Namespace}}\{{Module}}\Controller\Adminhtml\{{Entity}}\Index</extends>
+        <code>
+            <part id="content" file="0100_content" sort="100" />
+        </code>
+    </file>
+    <file id="Controller/Adminhtml/{{Entity}}/Index.php" type="class" sort="140" scope="entity" translate="label description">
+        <label>Default admin action for an entity</label>
+        <description>Default admin action for an entity</description>
+        <extends>Magento\Backend\App\Action</extends>
+        <members>
+            <member id="resultPageFactory" type="protected" construct="true" show="true" var="Magento\Framework\View\Result\PageFactory" sort="10">
+                <doc>Page result factory</doc>
+            </member>
+            <member id="resultPage" type="protected" construct="false" show="true" var="Magento\Backend\Model\View\Result\Page" sort="20">
+                <doc>Page factory</doc>
+            </member>
+            <member id="context" construct="true" show="false" parent="true" var="Magento\Backend\App\Action\Context" sort="30" />
+        </members>
+        <code>
+            <part id="content" file="0100_content" sort="100" />
+        </code>
+    </file>
+    <file id="Controller/Adminhtml/{{Entity}}/MassDelete.php" type="class" sort="150" scope="entity" translate="label description">
+        <label>Mass Delete entity admin action</label>
+        <description>Mass Delete entity admin action</description>
+        <extends>{{Namespace}}\{{Module}}\Controller\Adminhtml\{{Entity}}</extends>
+        <code>
+            <part id="content" file="0100_content" sort="100" />
+        </code>
+    </file>
+    <file id="Controller/Adminhtml/{{Entity}}/NewAction.php" type="class" sort="160" scope="entity" translate="label description">
+        <label>Add entity admin action</label>
+        <description>Add entity admin action</description>
+        <extends>Magento\Backend\App\Action</extends>
+        <members>
+            <member id="resultForwardFactory" type="protected" construct="true" show="true" var="Magento\Backend\Model\View\Result\ForwardFactory" sort="10">
+                <doc>Redirect result factory</doc>
+            </member>
+            <member id="context" construct="true" show="false" parent="true" var="Magento\Backend\App\Action\Context" sort="20" />
+        </members>
+        <code>
+            <part id="content" file="0100_content" sort="100" />
+        </code>
+    </file>
+    <file id="Controller/Adminhtml/{{Entity}}/Save.php" type="class" sort="170" scope="entity" translate="label description">
+        <label>Save entity admin action</label>
+        <description>Save entity admin action</description>
+        <extends>{{Namespace}}\{{Module}}\Controller\Adminhtml\{{Entity}}</extends>
+        <members>
+            <member id="uploadModel" construct="true" show="true" var="{{Namespace}}\{{Module}}\Model\Upload" sort="10">
+                <doc>Upload model</doc>
+                <depends id="has_attribute_type_file">
+                    <depend id="has_attribute_type_file">
+                        <val id="1">1</val>
+                    </depend>
+                    <depend id="type">
+                        <val id="flat">flat</val>
+                    </depend>
+                </depends>
+                <depends id="has_attribute_type_image">
+                    <depend id="has_attribute_type_image">
+                        <val id="1">1</val>
+                    </depend>
+                    <depend id="type">
+                        <val id="flat">flat</val>
+                    </depend>
+                </depends>
+            </member>
+            <member id="fileModel" construct="true" show="true" var="{{Namespace}}\{{Module}}\Model\{{Entity}}\File" sort="20">
+                <doc>File model</doc>
+                <depends id="has_attribute_type_file">
+                    <depend id="has_attribute_type_file">
+                        <val id="1">1</val>
+                    </depend>
+                    <depend id="type">
+                        <val id="type">flat</val>
+                    </depend>
+                </depends>
+            </member>
+            <member id="imageModel" construct="true" show="true" var="{{Namespace}}\{{Module}}\Model\{{Entity}}\Image" sort="30">
+                <doc>Image model</doc>
+                <depends id="has_attribute_type_image">
+                    <depend id="has_attribute_type_image">
+                        <val id="1">1</val>
+                    </depend>
+                    <depend id="type">
+                        <val id="flat">flat</val>
+                    </depend>
+                </depends>
+            </member>
+            <member id="backendSession" construct="true" show="true" var="Magento\Backend\Model\Session" sort="40">
+                <doc>Backend session</doc>
+            </member>
+            <member id="dateFilter" construct="true" show="true" var="Magento\Framework\Stdlib\DateTime\Filter\Date" sort="50">
+                <doc>Date filter</doc>
+                <depends id="has_attribute_type_date">
+                    <depend id="has_attribute_type_date">
+                        <val id="1">1</val>
+                    </depend>
+                    <depend id="type">
+                        <val id="flat">flat</val>
+                    </depend>
+                </depends>
+            </member>
+            <member id="{{entity}}Factory" type="protected" construct="true" show="false" parent="true" var="{{Namespace}}\{{Module}}\Model\{{Entity}}Factory" sort="60" />
+            <member id="registry" construct="true" show="false" parent="true" var="Magento\Framework\Registry" sort="70" />
+            <member id="resultRedirectFactory" construct="true" show="false" parent="true" var="Magento\Backend\Model\View\Result\RedirectFactory" sort="80" />
+            <member id="context" construct="true" show="false" parent="true" var="Magento\Backend\App\Action\Context" sort="90" />
+        </members>
+        <code>
+            <part id="top" file="0100_top" sort="100" />
+            <part id="filter" file="0200_filter" sort="200">
+                <depends id="has_attribute_type_date">
+                    <depend id="has_attribute_type_date">
+                        <val id="1">1</val>
+                    </depend>
+                    <depend id="type">
+                        <val id="flat">flat</val>
+                    </depend>
+                </depends>
+                <depends id="has_multi">
+                    <depend id="has_multi">
+                        <val id="1">1</val>
+                    </depend>
+                    <depend id="type">
+                        <val id="flat">flat</val>
+                    </depend>
+                </depends>
+            </part>
+            <part id="init" file="0300_init" sort="300" />
+            <part id="image_upload" file="0400_image_upload" sort="400" scope="attribute">
+                <depends id="image">
+                    <depend id="type">
+                        <val id="image">image</val>
+                    </depend>
+                </depends>
+            </part>
+            <part id="file_upload" file="0500_file_upload" sort="500" scope="attribute">
+                <depends id="file">
+                    <depend id="type">
+                        <val id="file">file</val>
+                    </depend>
+                </depends>
+            </part>
+            <part id="save" file="0600_save" sort="600" />
+            <part id="filter_top" file="0700_filter_top" sort="700">
+                <depends id="has_attribute_type_date">
+                    <depend id="has_attribute_type_date">
+                        <val id="1">1</val>
+                    </depend>
+                    <depend id="type">
+                        <val id="flat">flat</val>
+                    </depend>
+                </depends>
+                <depends id="has_multi">
+                    <depend id="has_multi">
+                        <val id="1">1</val>
+                    </depend>
+                    <depend id="type">
+                        <val id="flat">flat</val>
+                    </depend>
+                </depends>
+            </part>
+            <part id="filter_top_date" file="0800_filter_top_date" sort="800">
+                <depends id="has_attribute_type_date">
+                    <depend id="has_attribute_type_date">
+                        <val id="1">1</val>
+                    </depend>
+                    <depend id="type">
+                        <val id="flat">flat</val>
+                    </depend>
+                </depends>
+            </part>
+            <part id="filter_date" file="0900_filter_date" sort="900" scope="attribute">
+                <depends id="date">
+                    <depend id="type">
+                        <val id="date">date</val>
+                    </depend>
+                    <depend id="entity_type">
+                        <val id="flat">flat</val>
+                    </depend>
+                </depends>
+            </part>
+            <part id="filter_center" file="1000_filter_center" sort="1000">
+                <depends id="has_attribute_type_date">
+                    <depend id="has_attribute_type_date">
+                        <val id="1">1</val>
+                    </depend>
+                    <depend id="type">
+                        <val id="flat">flat</val>
+                    </depend>
+                </depends>
+            </part>
+            <part id="filter_multi" file="1100_filter_multi" sort="1100" scope="attribute">
+                <depends id="multi">
+                    <depend id="is_multi">
+                        <val id="1">1</val>
+                    </depend>
+                    <depend id="entity_type">
+                        <val id="flat">flat</val>
+                    </depend>
+                </depends>
+            </part>
+            <part id="filter_bottom" file="1200_filter_bottom" sort="1200">
+                <depends id="has_attribute_type_date">
+                    <depend id="has_attribute_type_date">
+                        <val id="1">1</val>
+                    </depend>
+                    <depend id="type">
+                        <val id="flat">flat</val>
+                    </depend>
+                </depends>
+                <depends id="has_multi">
+                    <depend id="has_multi">
+                        <val id="1">1</val>
+                    </depend>
+                    <depend id="type">
+                        <val id="flat">flat</val>
+                    </depend>
+                </depends>
+            </part>
+        </code>
+    </file>
+
+    <file id="Block/Adminhtml/{{Entity}}/Helper/File.php" type="class" sort="180" scope="entity" translate="label description">
+        <label>Entity admin file input renderer</label>
+        <description>Used for file upload </description>
+        <depends id="has_attribute_type_file">
+            <depend id="has_attribute_type_file">
+                <val id="1">1</val>
+            </depend>
+        </depends>
+        <extends>Magento\Framework\Data\Form\Element\File</extends>
+        <annotations>
+            <annotation id="getValue" return="string" sort="10" />
+            <annotation id="getDisabled" return="bool" sort="20" />
+            <annotation id="setExtType" return="File" params="\string $extType" sort="30" />
+        </annotations>
+        <members>
+            <member id="fileModel" type="protected" construct="true" show="true" var="{{Namespace}}\{{Module}}\Model\{{Entity}}\File" sort="10">
+                <doc>{{EntityLabel}} file model</doc>
+            </member>
+            <member id="factoryElement" construct="true" show="false" parent="true" var="Magento\Framework\Data\Form\Element\Factory" sort="20" />
+            <member id="factoryCollection" construct="true" show="false" parent="true" var="Magento\Framework\Data\Form\Element\CollectionFactory" sort="30" />
+            <member id="escaper" construct="true" show="false" parent="true" var="Magento\Framework\Escaper" sort="40" />
+            <member id="data" construct="true" show="false" parent="true" var="array" sort="50" />
+        </members>
+        <constructs>
+            <construct id="setters"><![CDATA[$this->setType('file');###$this->setExtType('file');]]></construct>
+        </constructs>
+        <code>
+            <part id="content" file="0100_content" sort="100" />
+        </code>
+    </file>
+    <file id="Block/Adminhtml/{{Entity}}/Helper/Image.php" type="class" sort="190" scope="entity" translate="label description">
+        <label>Entity admin image input renderer</label>
+        <description>Used for image upload</description>
+        <depends id="has_attribute_type_image">
+            <depend id="has_attribute_type_image">
+                <val id="1">1</val>
+            </depend>
+        </depends>
+        <extends>Magento\Framework\Data\Form\Element\Image</extends>
+        <annotations>
+            <annotation id="getValue" return="string" sort="10" />
+        </annotations>
+        <members>
+            <member id="imageModel" type="protected" construct="true" show="true" var="{{Namespace}}\{{Module}}\Model\{{Entity}}\Image" sort="10">
+                <doc>{{EntityLabel}} image model</doc>
+            </member>
+            <member id="factoryElement" construct="true" show="false" parent="true" var="Magento\Framework\Data\Form\Element\Factory" sort="20" />
+            <member id="factoryCollection" construct="true" show="false" parent="true" var="Magento\Framework\Data\Form\Element\CollectionFactory" sort="30" />
+            <member id="escaper" construct="true" show="false" parent="true" var="Magento\Framework\Escaper" sort="40" />
+            <member id="urlBuilder" construct="true" show="false" parent="true" var="Magento\Framework\UrlInterface" sort="50" />
+            <member id="data" construct="true" show="false" parent="true" var="array" sort="60" />
+        </members>
+        <code>
+            <part id="content" file="0100_content" sort="100" />
+        </code>
+    </file>
+    <file id="Block/Adminhtml/{{Entity}}.php" type="class" sort="200" scope="entity" translate="label description">
+        <label>Entity admin grid container block</label>
+        <description>Entity admin grid container block</description>
+        <extends>Magento\Backend\Block\Widget\Grid\Container</extends>
+        <code>
+            <part id="content" file="0100_content" sort="100" />
+        </code>
+    </file>
+    <file id="Block/Adminhtml/{{Entity}}/Grid.php" type="class" sort="210" scope="entity" translate="label description">
+        <label>Entity admin grid block</label>
+        <description>Entity admin grid block</description>
+        <extends>Magento\Backend\Block\Widget\Grid</extends>
+        <code>
+            <part id="content" file="0100_content" sort="100" />
+        </code>
+    </file>
+    <file id="Block/Adminhtml/{{Entity}}/Edit/Tabs.php" type="class" sort="220" scope="entity" translate="label description">
+        <label>Entity admin edit tabs block</label>
+        <description>Entity admin edit tabs block</description>
+        <extends>Magento\Backend\Block\Widget\Tabs</extends>
+        <annotations>
+            <annotation id="setTitle" params="\string $title" return="Tabs" />
+        </annotations>
+        <code>
+            <part id="content" file="0100_content" sort="100" />
+        </code>
+    </file>
+    <file id="Block/Adminhtml/{{Entity}}/Edit/Form.php" type="class" sort="230" scope="entity" translate="label description">
+        <label>Entity admin edit form block</label>
+        <description>Entity admin edit form block</description>
+        <extends>Magento\Backend\Block\Widget\Form\Generic</extends>
+        <code>
+            <part id="content" file="0100_content" sort="100" />
+        </code>
+    </file>
+    <file id="view/adminhtml/layout/{{namespace}}_{{module}}_{{entity}}_edit.xml" type="xml" sort="240" scope="entity" translate="label description">
+        <label>Add/Edit Action layout handle</label>
+        <description>Add/Edit Action layout handle</description>
+        <code>
+            <part id="top" file="0100_top" sort="100" />
+            <part id="editor" file="0200_editor" sort="200">
+                <depends id="has_editor">
+                    <depend id="has_editor">
+                        <val id="1">1</val>
+                    </depend>
+                    <depend id="type">
+                        <val id="flat">flat</val>
+                    </depend>
+                </depends>
+            </part>
+            <part id="content_top" file="0300_content_top" sort="300" />
+            <part id="main_tab" file="0400_main_tab" sort="400">
+                <depends id="type">
+                    <depend id="type">
+                        <val id="flat">flat</val>
+                    </depend>
+                </depends>
+            </part>
+            <part id="content_bottom" file="0500_content_bottom" sort="500" />
+            <part id="left_top" file="0600_left_top" sort="600" />
+            <part id="left_main_tab" file="0700_left_main_tab" sort="700">
+                <depends id="type">
+                    <depend id="type">
+                        <val id="flat">flat</val>
+                    </depend>
+                </depends>
+            </part>
+            <part id="left_add_main_tab" file="0800_left_add_main_tab" sort="800">
+                <depends id="type">
+                    <depend id="type">
+                        <val id="flat">flat</val>
+                    </depend>
+                </depends>
+            </part>
+            <part id="left_bottom" file="0900_left_bottom" sort="900" />
+            <part id="bottom" file="1000_bottom" sort="1000" />
+        </code>
+    </file>
+    <file id="view/adminhtml/layout/{{namespace}}_{{module}}_{{entity}}_exportcsv.xml" type="xml" sort="250" scope="entity" translate="label description">
+        <label>Layout handle for export csv action</label>
+        <description>Layout handle for export csv action</description>
+        <code>
+            <part id="content" file="0100_content" sort="100" />
+        </code>
+    </file>
+    <file id="view/adminhtml/layout/{{namespace}}_{{module}}_{{entity}}_exportexcel.xml" type="xml" sort="260" scope="entity" translate="label description">
+        <label>Layout handle for export excel action</label>
+        <description>Layout handle for export excel action</description>
+        <code>
+            <part id="content" file="0100_content" sort="100" />
+        </code>
+    </file>
+    <file id="view/adminhtml/layout/{{namespace}}_{{module}}_{{entity}}_grid.xml" type="xml" sort="270" scope="entity" translate="label description">
+        <label>Layout handle for grid action</label>
+        <description>Layout handle for grid action</description>
+        <code>
+            <part id="content" file="0100_content" sort="100" />
+        </code>
+    </file>
+    <file id="view/adminhtml/layout/{{namespace}}_{{module}}_{{entity}}_grid_block.xml" type="xml" sort="280" scope="entity" translate="label description">
+        <label>Grid layout handle</label>
+        <description>Grid layout handle</description>
+        <code>
+            <part id="top" file="0100_top" sort="100" />
+            <part id="name_column" file="0200_name_column" sort="200" />
+            <part id="columns" file="0300_columns" sort="300" scope="attribute">
+                <depends id="admin_grid">
+                    <depend id="admin_grid">
+                        <val id="1">1</val>
+                    </depend>
+                </depends>
+            </part>
+            <part id="created_at" file="0400_created_at" sort="400">
+                <depends id="add_created_to_grid">
+                    <depend id="add_created_to_grid">
+                        <val id="1">1</val>
+                    </depend>
+                </depends>
+            </part>
+            <part id="updated_at" file="0500_updated_at" sort="500">
+                <depends id="add_updated_to_grid">
+                    <depend id="add_updated_to_grid">
+                        <val id="1">1</val>
+                    </depend>
+                </depends>
+            </part>
+            <part id="footer" file="0600_footer" sort="600" />
+        </code>
+    </file>
+    <file id="view/adminhtml/layout/{{namespace}}_{{module}}_{{entity}}_index.xml" type="xml" sort="290" scope="entity" translate="label description">
+        <label>Index Action layout handle</label>
+        <description>Index Action layout handle</description>
+        <code>
+            <part id="content" file="0100_content" sort="100" />
+        </code>
+    </file>
+    <file id="Model/Upload.php" type="class" sort="300" scope="global" translate="label description">
+        <label>Model for uploading files</label>
+        <description>Model for uploading files</description>
+        <depends id="has_flat_upload">
+            <depend id="has_flat_upload">
+                <val id="1">1</val>
+            </depend>
+        </depends>
+        <members>
+            <member id="uploaderFactory" construct="true" show="true" var="Magento\MediaStorage\Model\File\UploaderFactory" sort="10">
+                <doc>Upload model factory</doc>
+            </member>
+        </members>
+        <code>
+            <part id="content" file="0100_content" sort="100" />
+        </code>
+    </file>
+    <file id="Model/{{Entity}}.php" type="class" sort="310" scope="entity" translate="label description">
+        <label>Entity model class</label>
+        <description>Entity model class</description>
+        <extends>Magento\Framework\Model\AbstractModel</extends>
+        <annotations>
+            <annotation id="set{{CodeCamelCase}}" return="{{Entity}}" params="${{codeCamelCase}}" sort="10" scope="attribute" />
+            <annotation id="get{{CodeCamelCase}}" return="mixed" sort="20" scope="attribute" />
+            <annotation id="setCreatedAt" return="{{Entity}}" params="\string $createdAt" sort="30" />
+            <annotation id="getCreatedAt" return="string" sort="40" />
+            <annotation id="setUpdatedAt" return="{{Entity}}" params="\string $updatedAt" sort="50" />
+            <annotation id="getUpdatedAt" return="string" sort="60" />
+        </annotations>
+        <members>
+            <member id="CACHE_TAG" constant="true" var="string" sort="10" default="'{{namespace}}_{{module}}_{{entity}}'">
+                <doc>Cache tag</doc>
+            </member>
+            <member id="_cacheTag" construct="false" show="true" var="string" sort="20" core="true" default="'{{namespace}}_{{module}}_{{entity}}'">
+                <doc>Cache tag</doc>
+            </member>
+            <member id="_eventPrefix" construct="false" show="true" var="string" sort="30" core="true" default="'{{namespace}}_{{module}}_{{entity}}'">
+                <doc>Event prefix</doc>
+            </member>
+            <member id="context" construct="true" show="false" parent="true" var="Magento\Framework\Model\Context" sort="60" />
+            <member id="registry" construct="true" show="false" parent="true" var="Magento\Framework\Registry" sort="70" />
+            <member id="resource" construct="true" show="false" parent="true" var="Magento\Framework\Model\Resource\AbstractResource" sort="80" />
+            <member id="resourceCollection" construct="true" show="false" parent="true" var="Magento\Framework\Data\Collection\Db" sort="90" />
+            <member id="data" construct="true" show="false" parent="true" var="array" sort="100" />
+        </members>
+        <code>
+            <part id="top" file="0100_top" sort="100" />
+        </code>
+    </file>
+
+    <file id="Model/{{Entity}}/Image.php" type="class" sort="312" scope="entity" translate="label description">
+        <label>Entity Image model class</label>
+        <description>Entity Image model class</description>
+        <depends id="has_attribute_type_image">
+            <depend id="has_attribute_type_image">
+                <val id="1">1</val>
+            </depend>
+        </depends>
+        <members>
+            <member id="subDir" var="string" show="true" construct="false" sort="10" default="'{{namespace}}/{{module}}/{{entity}}'">
+                <doc>Media sub folder</doc>
+            </member>
+            <member id="urlBuilder" show="true" construct="true" var="Magento\Framework\UrlInterface" sort="20">
+                <doc>URL builder</doc>
+            </member>
+            <member id="fileSystem" construct="true" show="true" var="Magento\Framework\Filesystem" sort="30">
+                <doc>File system model</doc>
+            </member>
+        </members>
+        <code>
+            <part id="top" file="0100_content" sort="100" />
+        </code>
+    </file>
+
+    <file id="Model/{{Entity}}/File.php" type="class" sort="316" scope="entity" translate="label description">
+        <label>Entity File model class</label>
+        <description>Entity File model class</description>
+        <depends id="has_attribute_type_file">
+            <depend id="has_attribute_type_file">
+                <val id="1">1</val>
+            </depend>
+        </depends>
+        <members>
+            <member id="subDir" var="string" show="true" construct="false" sort="10" default="'{{namespace}}/{{module}}/{{entity}}'">
+                <doc>Media sub folder</doc>
+            </member>
+            <member id="urlBuilder" show="true" construct="true" var="Magento\Framework\UrlInterface" sort="20">
+                <doc>URL builder</doc>
+            </member>
+            <member id="fileSystem" construct="true" show="true" var="Magento\Framework\Filesystem" sort="30">
+                <doc>File system model</doc>
+            </member>
+        </members>
+        <code>
+            <part id="top" file="0100_content" sort="100" />
+        </code>
+    </file>
+
+    <file id="Model/Resource/{{Entity}}.php" type="class" sort="320" scope="entity" translate="label description">
+        <label>Entity resource model class</label>
+        <description>Entity resource model class</description>
+        <extends>Magento\Framework\Model\Resource\Db\AbstractDb</extends>
+        <members>
+            <member id="dateTime" show="true" construct="true" var="Magento\Framework\Stdlib\DateTime" sort="10">
+                <doc>Date time handler</doc>
+                <depends id="has_attribute_type_date">
+                    <depend id="has_attribute_type_date">
+                        <val id="1">1</val>
+                    </depend>
+                    <depend id="type">
+                        <val id="flat">flat</val>
+                    </depend>
+                </depends>
+            </member>
+            <member id="date" show="true" construct="true" var="Magento\Framework\Stdlib\DateTime\DateTime" sort="20">
+                <doc>Date model</doc>
+                <depends id="type">
+                    <depend id="type">
+                        <val id="flat">flat</val>
+                    </depend>
+                </depends>
+            </member>
+            <member id="context" show="false" construct="true" parent="true" var="Magento\Framework\Model\Resource\Db\Context" sort="30" />
+        </members>
+        <code>
+            <part id="top" file="0100_top" sort="100" />
+            <part id="before_save_top" file="0200_before_save_top" sort="200" />
+            <part id="set_created" file="0300_set_created" sort="300">
+                <depends id="type">
+                    <depend id="type">
+                        <val id="flat">flat</val>
+                    </depend>
+                </depends>
+            </part>
+            <part id="date_format" file="0400_date_format" sort="400">
+                <depends id="has_attribute_type_date">
+                    <depend id="has_attribute_type_date">
+                        <val id="1">1</val>
+                    </depend>
+                    <depend id="type">
+                        <val id="flat">flat</val>
+                    </depend>
+                </depends>
+            </part>
+            <part id="before_save_bottom" file="0500_before_save_bottom" sort="500" />
+        </code>
+    </file>
+    <file id="Model/Resource/{{Entity}}/Collection.php" type="class" sort="330" scope="entity" translate="label description">
+        <label>Entity Collection model</label>
+        <description>Entity Collection model</description>
+        <extends>Magento\Framework\Model\Resource\Db\Collection\AbstractCollection</extends>
+        <members>
+            <member id="_eventPrefix" construct="false" show="true" var="string" sort="10" core="true" default="'{{namespace}}_{{module}}_{{entity}}_collection'">
+                <doc>Event prefix</doc>
+            </member>
+            <member id="_eventObject" construct="false" show="true" var="string" sort="20" core="true" default="'{{entity}}_collection'">
+                <doc>Event object</doc>
+            </member>
+            <member id="entityFactory" show="false" construct="true" parent="true" var="Magento\Core\Model\EntityFactory" sort="30" />
+            <member id="logger" show="false" construct="true" parent="true" var="Psr\Log\LoggerInterface" sort="40" />
+            <member id="fetchStrategy" show="false" construct="true" parent="true" var="Magento\Framework\Data\Collection\Db\FetchStrategyInterface" sort="50" />
+            <member id="eventManager" show="false" construct="true" parent="true" var="Magento\Framework\Event\ManagerInterface" sort="60" />
+            <member id="connection" show="false" construct="true" parent="true" var="" sort="70" default="null" />
+            <member id="resource" show="false" construct="true" parent="true" var="Magento\Framework\Model\Resource\Db\AbstractDb" sort="70" default="null" />
+        </members>
+        <code>
+            <part id="top" file="0100_top" sort="100" />
+            <part id="count" file="0200_count" sort="200" />
+        </code>
+    </file>
+
+    <file id="Model/Adminhtml/Search/{{Entity}}.php" type="class" sort="340" scope="entity" translate="label description">
+        <label>Admin search model</label>
+        <description>Model used for the global admin search</description>
+        <depends id="search">
+            <depend id="search">
+                <val id="1">1</val>
+            </depend>
+        </depends>
+        <extends>Magento\Framework\Object</extends>
+        <members>
+            <member id="collectionFactory" construct="true" show="true" var="{{Namespace}}\{{Module}}\Model\Resource\{{Entity}}\CollectionFactory" sort="10">
+                <doc>{{EntityLabel}} Collection factory</doc>
+            </member>
+            <member id="adminhtmlData" construct="true" show="true" var="Magento\Backend\Helper\Data" sort="20">
+                <doc>Backend data helper</doc>
+            </member>
+        </members>
+        <code>
+            <part id="content" file="0100_content" sort="100" />
+        </code>
+    </file>
+
+    <file id="Setup/InstallSchema.php" type="class" sort="350" scope="global" translate="label description">
+        <label>Install script</label>
+        <description>Install script</description>
+        <implements>
+            <implement id="Magento\Framework\Setup\InstallSchemaInterface" sort="10" />
+        </implements>
+        <code>
+            <part id="top" file="0100_top" sort="100" />
+            <part id="entity_table" file="0200_entity_table" sort="200" scope="entity">
+                <depends id="type">
+                    <depend id="type">
+                        <val id="flat">flat</val>
+                    </depend>
+                </depends>
+            </part>
+            <part id="footer" file="0400_footer" sort="400" />
+        </code>
+    </file>
+
+    <file id="Model/{{Entity}}/Source/{{CodeCamelCase}}.php" type="class" sort="360" scope="attribute" translate="label description">
+        <label>Source model for option attributes</label>
+        <description>Source model for option attributes</description>
+        <depends id="has_options">
+            <depend id="has_options">
+                <val id="1">1</val>
+            </depend>
+            <depend id="entity_type">
+                <val id="flat">flat</val>
+            </depend>
+        </depends>
+        <implements>
+            <implement id="Magento\Framework\Option\ArrayInterface" sort="10" />
+        </implements>
+        <code>
+            <part id="content" file="0100_content" sort="100" />
+        </code>
+    </file>
+
+    <file id="i18n/en_US.csv" type="csv" sort="370" scope="global" translate="label description">
+        <label>en_US language file</label>
+        <description>en_US language file</description>
+        <code>
+            <part id="global" file="0100_global" sort="100" />
+            <part id="entity" file="0200_entity" sort="200" scope="entity" />
+            <part id="file" file="0300_file" sort="300">
+                <depends id="has_attribute_type_file">
+                    <depend id="has_attribute_type_file">
+                        <val id="1">1</val>
+                    </depend>
+                </depends>
+            </part>
+            <part id="attribute" file="0400_attribute" sort="400" scope="attribute" />
+        </code>
+    </file>
+
+    <scope id="global" translate="label">
+        <label>Global</label>
+    </scope>
+    <scope id="entity" translate="label">
+        <label>Entity</label>
+    </scope>
+    <scope id="attribute" translate="label">
+        <label>Attribute</label>
+    </scope>
+    <depend_labels id="umc_entity">
+        <depend_label id="has_attribute_type_file" translate="label">
+            <label>has at least one file type attribute</label>
+        </depend_label>
+        <depend_label id="has_attribute_type_image" translate="label">
+            <label>has at least one image type attribute</label>
+        </depend_label>
+    </depend_labels>
+    <depend_labels id="umc_module">
+        <depend_label id="has_flat_upload" translate="label">
+            <label>Has at least one flat entity that requires file uploads</label>
+        </depend_label>
+    </depend_labels>
+</source>

@@ -1,0 +1,12 @@
+    /**
+     * constructor
+     *
+     * @return void
+     */
+    protected function _construct()
+    {
+        parent::_construct();
+        $this->setId('{{entity}}_tabs');
+        $this->setDestElementId('edit_form');
+        $this->setTitle(__('{{EntityLabel}} Information'));
+    }

@@ -1,0 +1,19 @@
+    /**
+     * Prepare form
+     *
+     * @return $this
+     */
+    protected function _prepareForm()
+    {
+        /** @var \{{Namespace}}\{{Module}}\Model\{{Entity}} ${{entity}} */
+        ${{entity}} = $this->_coreRegistry->registry('{{namespace}}_{{module}}_{{entity}}');
+        $form = $this->_formFactory->create();
+        $form->setHtmlIdPrefix('{{entity}}_');
+        $form->setFieldNameSuffix('{{entity}}');
+        $fieldset = $form->addFieldset(
+            'base_fieldset',
+            [
+                'legend' => __('{{EntityLabel}} Information'),
+                'class'  => 'fieldset-wide'
+            ]
+        );

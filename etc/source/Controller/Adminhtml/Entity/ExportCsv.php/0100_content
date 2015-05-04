@@ -1,0 +1,17 @@
+    /**
+     * Export {{EntityLabel}} grid to CSV format
+     *
+     * @return {{class Magento\Framework\App\ResponseInterface}}
+     */
+    public function execute()
+    {
+        $resultPage = $this->{{_}}resultPageFactory->create();
+        $fileName = '{{entities}}.csv';
+        /** @var \{{Namespace}}\{{Module}}\Block\Adminhtml\{{Entity}}\Grid $grid */
+        $grid = $resultPage->getLayout()->getChildBlock('{{namespace}}_{{module}}.{{entity}}.grid', 'grid.export');
+        return $this->{{_}}fileFactory->create(
+            $fileName,
+            $grid->getCsvFile(),
+            {{class Magento\Framework\App\Filesystem\DirectoryList}}::VAR_DIR
+        );
+    }

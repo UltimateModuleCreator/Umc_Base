@@ -1,0 +1,78 @@
+<?php
+/**
+ * Umc_Base extension
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the MIT License
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/mit-license.php
+ *
+ * @category  Umc
+ * @package   Umc_Base
+ * @copyright 2015 Marius Strajeru
+ * @license   http://opensource.org/licenses/mit-license.php MIT License
+ * @author    Marius Strajeru <ultimate.module.creator@gmail.com>
+ */
+?>
+<?php /** @var \Umc\Base\Block\Adminhtml\Entity $this */ ?>
+<?php if ($this->getIsTemplate()) : ?>
+<script id="entity-template" type="text/x-magento-template">
+<?php endif;?>
+    <div class="entry-edit umc-entity" id="entity-container-<?php echo $this->getIncrement();?>">
+        <div id="entity-<?php echo $this->getIncrement() ?>-wrapper" class="fieldset-wrapper collapsable-wrapper">
+            <div class="fieldset-wrapper-title">
+                <strong data-target="#entity-<?php echo $this->getIncrement() ?>-content" data-toggle="collapse" class="title active">
+                <span class="entity-title">
+                    <?php echo ($this->getEntity()) ? $this->getEntity()->getLabelSingular() : __('Entity %1', $this->getIncrement());?>
+                </span>
+                </strong>
+                <div class="col-right">
+                    <button title="<?php echo __('Remove entity') ?>" type="button" class="action- scalable delete icon-btn remove-entity">
+                        <span><?php echo __('Remove entity') ?></span>
+                    </button>
+                </div>
+            </div>
+            <div id="entity-<?php echo $this->getIncrement() ?>-content" class="fieldset-wrapper-content collapse">
+                <?php echo $this->getFormHtml();?>
+                <div id="entity-<?php echo $this->getIncrement();?>-attributes-container" class="entry-edit">
+                    <div class="fieldset-wrapper collapsable-wrapper">
+                        <div class="fieldset-wrapper-title">
+                            <strong data-target="#entity-<?php echo $this->getIncrement() ?>-attributes" data-toggle="collapse" class="title active">
+                                <?php echo __('Fields / Attributes');?>
+                            </strong>
+                            <div class="col-right">
+                                <button type="button" title="<?php echo __('Add field / attribute');?>" class="action- scalable delete icon-btn add-attribute">
+                                    <span><?php echo __('Add field / attribute');?></span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="entity-<?php echo $this->getIncrement() ?>-attributes" class="fieldset-wrapper-content in collapse">
+                        <div class="box attributes-container">
+                            <?php $_increment = 0; foreach ($this->getAttributes() as $_attribute) : ?>
+                                <?php
+                                /** @var \Umc\Base\Block\Adminhtml\Attribute $block */
+                                $block = $this->getLayout()->createBlock('Umc\Base\Block\Adminhtml\Attribute');
+                                echo $block->setTemplate('Umc_Base::attribute.phtml')
+                                    ->setAttributeInstance($_attribute)
+                                    ->setEntityId($this->getIncrement())
+                                    ->setIncrement($_increment++)
+                                    ->toHtml();
+                                ?>
+                            <?php endforeach;?>
+                        </div>
+                        <button type="button" title="<?php echo __('Add field / attribute');?>" class="action- scalable delete icon-btn add-attribute show-inner">
+                        <span>
+                            <?php echo __('Add field / attribute');?>
+                        </span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<?php if ($this->getIsTemplate()) : ?>
+</script>
+<?php endif;?>

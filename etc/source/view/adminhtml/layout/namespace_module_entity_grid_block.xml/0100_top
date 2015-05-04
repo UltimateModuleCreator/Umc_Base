@@ -1,0 +1,63 @@
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceBlock name="{{namespace}}_{{module}}_{{entity}}.grid.container">
+            <block class="{{Namespace}}\{{Module}}\Block\Adminhtml\{{Entity}}\Grid" name="{{namespace}}_{{module}}.{{entity}}.grid" as="grid">
+                <arguments>
+                    <argument name="id" xsi:type="string">{{namespace}}_{{module}}_{{entity}}_grid</argument>
+                    <argument name="dataSource" xsi:type="object">{{Namespace}}\{{Module}}\Model\Resource\{{Entity}}\Collection</argument>
+                    <argument name="use_ajax" xsi:type="string">true</argument>
+                    <argument name="default_sort" xsi:type="string">{{entity}}_id</argument>
+                    <argument name="default_dir" xsi:type="string">DESC</argument>
+                    <argument name="save_parameters_in_session" xsi:type="string">1</argument>
+                    <argument name="grid_url" xsi:type="url" path="*/*/grid">
+                        <param name="_current">1</param>
+                    </argument>
+                </arguments>
+                <block class="Magento\Backend\Block\Widget\Grid\Massaction" name="{{namespace}}_{{module}}.{{entity}}.grid.massaction" as="grid.massaction">
+                    <arguments>
+                        <argument name="massaction_id_field" xsi:type="string">{{entity}}_id</argument>
+                        <argument name="form_field_name" xsi:type="string">{{entity}}_ids</argument>
+                        <argument name="use_select_all" xsi:type="string">1</argument>
+                        <argument name="options" xsi:type="array">
+                            <item name="delete" xsi:type="array">
+                                <item name="label" xsi:type="string" translate="true">Delete</item>
+                                <item name="url" xsi:type="string">{{namespace}}_{{module}}/{{entity}}/massDelete</item>
+                                <item name="confirm" xsi:type="string" translate="true">Are you sure you want to delete the {{EntitiesLabel}}?</item>
+                            </item>
+                        </argument>
+                    </arguments>
+                </block>
+                <block class="Magento\Backend\Block\Widget\Grid\Export" name="{{namespace}}_{{module}}.{{entity}}.grid.export" as="grid.export">
+                    <arguments>
+                        <argument name="exportTypes" xsi:type="array">
+                            <item name="csv" xsi:type="array">
+                                <item name="urlPath" xsi:type="string">{{namespace}}_{{module}}/*/exportCsv</item>
+                                <item name="label" xsi:type="string" translate="true">CSV</item>
+                            </item>
+                            <item name="excel" xsi:type="array">
+                                <item name="urlPath" xsi:type="string">{{namespace}}_{{module}}/*/exportExcel</item>
+                                <item name="label" xsi:type="string" translate="true">Excel XML</item>
+                            </item>
+                        </argument>
+                    </arguments>
+                </block>
+                <block class="Magento\Backend\Block\Widget\Grid\ColumnSet" as="grid.columnSet" name="{{namespace}}_{{module}}.{{entity}}.grid.columnSet">
+                    <arguments>
+                        <argument name="id" xsi:type="string">{{namespace}}_{{module}}_{{entity}}_grid</argument>
+                        <argument name="empty_cell_label" xsi:type="string" translate="true">There were no {{EntitiesLabel}} found</argument>
+                        <argument name="empty_text" xsi:type="string" translate="true">There were no {{EntitiesLabel}} found</argument>
+                        <argument name="rowUrl" xsi:type="array">
+                            <item name="path" xsi:type="string">{{namespace}}_{{module}}/*/edit</item>
+                            <item name="extraParamsTemplate" xsi:type="array">
+                                <item name="{{entity}}_id" xsi:type="string">getId</item>
+                            </item>
+                        </argument>
+                    </arguments>
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="{{entity}}_id">
+                        <arguments>
+                            <argument name="header" xsi:type="string" translate="true">ID</argument>
+                            <argument name="type" xsi:type="string">number</argument>
+                            <argument name="index" xsi:type="string">{{entity}}_id</argument>
+                            <argument name="id" xsi:type="string">{{entity}}_id</argument>
+                        </arguments>
+                    </block>

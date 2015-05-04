@@ -1,0 +1,14 @@
+    }
+
+    /**
+     * Get SQL for get record count.
+     * Extra GROUP BY strip added.
+     *
+     * @return \Magento\Framework\DB\Select
+     */
+    public function getSelectCountSql()
+    {
+        $countSelect = parent::getSelectCountSql();
+        $countSelect->reset(\Zend_Db_Select::GROUP);
+        return $countSelect;
+    }

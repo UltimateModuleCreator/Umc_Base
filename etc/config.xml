@@ -1,0 +1,62 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Umc_Base extension
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the MIT License
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/mit-license.php
+ *
+ * @category  Umc
+ * @package   Umc_Base
+ * @copyright 2015 Marius Strajeru
+ * @license   http://opensource.org/licenses/mit-license.php MIT License
+ * @author    Marius Strajeru <ultimate.module.creator@gmail.com>
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../Magento/Store/etc/config.xsd">
+    <default>
+        <umc>
+            <umc_general>
+                <tooltips>1</tooltips>
+            </umc_general>
+            <umc_settings>
+                <qualified>0</qualified>
+                <underscore>0</underscore>
+                <annotation>1</annotation>
+            </umc_settings>
+            <umc_module>
+                <version>1.0.0</version>
+            </umc_module>
+            <umc_settings>
+                <license>{{Namespace}}_{{Module}} extension
+NOTICE OF LICENSE
+
+This source file is subject to the MIT License
+that is bundled with this package in the file LICENSE.txt.
+It is also available through the world-wide-web at this URL:
+http://opensource.org/licenses/mit-license.php
+
+@category  {{Namespace}}
+@package   {{Namespace}}_{{Module}}
+@copyright Copyright (c) {{Y}}
+@license   http://opensource.org/licenses/mit-license.php MIT License</license>
+            </umc_settings>
+            <umc_entity>
+                <type>flat</type>
+                <add_created_to_grid>1</add_created_to_grid>
+                <add_updated_to_grid>1</add_updated_to_grid>
+                <search>0</search>
+            </umc_entity>
+            <umc_attribute>
+                <type>text</type>
+                <required>1</required>
+                <editor>0</editor>
+                <admin_grid>1</admin_grid>
+            </umc_attribute>
+        </umc>
+    </default>
+</config>

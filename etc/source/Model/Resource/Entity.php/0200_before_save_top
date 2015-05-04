@@ -1,0 +1,8 @@
+    /**
+     * before save callback
+     *
+     * @param {{class Magento\Framework\Model\AbstractModel}}|\{{Namespace}}\{{Module}}\Model\{{Entity}} $object
+     * @return $this
+     */
+    protected function _beforeSave({{class Magento\Framework\Model\AbstractModel}} $object)
+    {

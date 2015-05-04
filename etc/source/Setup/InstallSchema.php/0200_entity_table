@@ -1,0 +1,33 @@
+        if (!$installer->tableExists('{{namespace}}_{{module}}_{{entity}}')) {
+            $table = $installer->getConnection()->newTable(
+                $installer->getTable('{{namespace}}_{{module}}_{{entity}}')
+            )
+            ->addColumn(
+                '{{entity}}_id',
+                {{class Magento\Framework\DB\Ddl\Table}}::TYPE_INTEGER,
+                null,
+                [
+                    'identity' => true,
+                    'nullable' => false,
+                    'primary' => true
+                ],
+                '{{EntityLabel}} ID'
+            )
+{{columnsSetup}}
+            ->addColumn(
+                'created_at',
+                {{class Magento\Framework\DB\Ddl\Table}}::TYPE_TIMESTAMP,
+                null,
+                [],
+                '{{EntityLabel}} Created At'
+            )
+            ->addColumn(
+                'updated_at',
+                {{class Magento\Framework\DB\Ddl\Table}}::TYPE_TIMESTAMP,
+                null,
+                [],
+                '{{EntityLabel}} Updated At'
+            )
+            ->setComment('{{EntityLabel}} Table');
+            $installer->getConnection()->createTable($table);
+        }

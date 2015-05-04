@@ -1,0 +1,18 @@
+    /**
+     * get images base url
+     *
+     * @return string
+     */
+    public function getBaseUrl()
+    {
+        return $this->{{_}}urlBuilder->getBaseUrl(['_type' => {{class Magento\Framework\UrlInterface}}::URL_TYPE_MEDIA]).$this->{{_}}subDir.'/file';
+    }
+    /**
+     * get base image dir
+     *
+     * @return string
+     */
+    public function getBaseDir()
+    {
+        return $this->{{_}}fileSystem->getDirectoryWrite({{class Magento\Framework\App\Filesystem\DirectoryList}}::MEDIA)->getAbsolutePath($this->{{_}}subDir.'/file');
+    }

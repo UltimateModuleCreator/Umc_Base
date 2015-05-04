@@ -1,0 +1,242 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Umc_Base extension
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the MIT License
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/mit-license.php
+ *
+ * @category  Umc
+ * @package   Umc_Base
+ * @copyright 2015 Marius Strajeru
+ * @license   http://opensource.org/licenses/mit-license.php MIT License
+ * @author    Marius Strajeru <ultimate.module.creator@gmail.com>
+ */
+-->
+<forms xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="form.xsd">
+    <form id="umc_settings">
+        <fieldset id="settings" sort="10" collapsible="true" translate="label">
+            <label>Module Settings</label>
+            <field id="qualified" type="select" required="true" sort="10" system="true" translate="label tooltip">
+                <label>Fully qualified class names</label>
+                <tooltip><![CDATA[If set to Yes then the generated code will have `use` statements at the top of the classes and only use class aliases in the code. If it's set to No then the full class path will be used in the code.]]></tooltip>
+                <source>Magento\Config\Model\Config\Source\Yesno</source>
+            </field>
+            <field id="underscore" type="select" required="true" sort="20" system="true" translate="label tooltip">
+                <label>Underscore for protected</label>
+                <tooltip><![CDATA[This does not apply for the methods and members that come from the core code.]]></tooltip>
+                <source>Magento\Config\Model\Config\Source\Yesno</source>
+            </field>
+            <field id="annotation" type="select" required="true" sort="30" system="true" translate="label tooltip">
+                <label>Add annotations</label>
+                <tooltip><![CDATA[If set to yes, then the methods that are magically called from your classes will be added at the top of the class as reference.]]></tooltip>
+                <source>Magento\Config\Model\Config\Source\Yesno</source>
+            </field>
+            <field id="license" type="textarea" required="false" sort="40" system="true" translate="label tooltip">
+                <label><![CDATA[License]]></label>
+                <tooltip><![CDATA[The text you put here will be added at the top of (almost) each file in the module you create.<br />Use {{Namespace}} as a placeholder for namespace, {{Module}} as a placeholder for the module name and {{Y}} as placeholder for current year.<br />If you don't want any License text on your files just leave this field empty.]]></tooltip>
+                <rows>5</rows>
+            </field>
+            <!--<field id="install" type="select" required="true" sort="30" system="true" translate="label tooltip">-->
+            <!--<label>Action</label>-->
+            <!--<tooltip><![CDATA[This allows you to directly install the module you create on the current Magento instance, or create a zip with it and install it later.]]></tooltip>-->
+            <!--<source>Umc\Base\Model\Source\Module\Install</source>-->
+            <!--</field>-->
+        </fieldset>
+    </form>
+    <form id="umc_module">
+        <fieldset id="general" sort="10" collapsible="true" translate="label">
+            <label>Module Information</label>
+            <field id="namespace" type="text" required="true" sort="10" system="true" translate="label tooltip">
+                <label>Namespace</label>
+                <tooltip>This is the folder name of your new extension. Your company name should go here. Use only letters and numbers. Start with a capital letter.</tooltip>
+            </field>
+            <field id="module_name" type="text" required="true" sort="20" system="false" translate="label tooltip">
+                <label>Module name</label>
+                <tooltip><![CDATA[This is your extension/module name. It should be something meaningful and not very long.<br />Try to use a noun in singular form. Start with a capital letter.]]></tooltip>
+            </field>
+
+            <field id="version" type="text" required="true" sort="40" system="true" translate="label tooltip">
+                <label>Version</label>
+                <tooltip><![CDATA[This is the version of the module.]]></tooltip>
+            </field>
+            <field id="menu_text" type="text" required="true" sort="50" system="false" translate="label tooltip">
+                <label>Admin menu title</label>
+                <tooltip><![CDATA[This is the title that will be added to the menu.]]></tooltip>
+            </field>
+            <field id="menu_parent" type="text" required="false" sort="60" system="false" readonly="true" class="menu-parent-id" translate="label tooltip note">
+                <label>Admin parent menu ID</label>
+                <tooltip><![CDATA[This is the parent menu id of the module menu. Leave empty to add in top menu.]]></tooltip>
+                <note><![CDATA[<a href="#" class="menu-selector-trigger">Select menu parent and position</a>]]></note>
+            </field>
+            <field id="sort_order" type="text" required="true" sort="70" system="false" readonly="true" class="menu-sort-order" translate="label tooltip note">
+                <label>Admin menu sort order</label>
+                <tooltip><![CDATA[This is the sort order in the menu.]]></tooltip>
+                <note><![CDATA[<a href="#" class="menu-selector-trigger">Select menu parent and position</a>]]></note>
+            </field>
+        </fieldset>
+    </form>
+    <form id="umc_entity">
+        <fieldset id="name_settings" collapsible="true" sort="10" translate="label">
+            <label>Name Settings</label>
+            <field id="label_singular" type="text" sort="10" required="true" class="label-singular" translate="label tooltip">
+                <label>Label singular</label>
+                <tooltip><![CDATA[Each entity must have a label used for buttons, links, messages.<br />This is the singular form of the label. For example in a blog module, the post entity will have the label in singular form 'Post']]></tooltip>
+            </field>
+            <field id="label_plural" type="text" sort="20" required="true" translate="label tooltip">
+                <label>Label plural</label>
+                <tooltip><![CDATA[This is the plural form of the label above. It will be used for lists. (For example: 'Posts'). Try to use English words for this label. It's not mandatory, but it makes the taxonomy more readable. UMC will create a language file for the modules it generates and you can translate your module.<br /><span class="label label-info">Info:</span>I recommend the first letter to be uppercase.]]></tooltip>
+            </field>
+            <field id="name_singular" type="text" sort="30" required="true" class="validate-alphanum validate-code" translate="label tooltip">
+                <label>Name singular</label>
+                <tooltip><![CDATA[UMC generates the code in a 'human readable' form. It's easier to figure out what the code is about when the variables and methods have a propper name.<br />For example it's easier to read foreach ($_posts as $_post){...} or $_post->getTags() than foreach ($_list as $_item){...} or $_entity->getRelated('tags');<br />The value you fill in here will be used for variable names, file names and table names.]]></tooltip>
+            </field>
+            <field id="name_plural" type="text" sort="40" required="true" class="validate-alphanum validate-code" translate="label tooltip">
+                <label>Name plural</label>
+                <tooltip><![CDATA[This is the plural value of the entity code. For example 'posts'.]]></tooltip>
+            </field>
+        </fieldset>
+        <fieldset id="backend_settings" collapsible="true" sort="20">
+            <label>Backend settings</label>
+            <field id="type" type="select" sort="10" required="true" system="true" reloader-class="entity-reloader attribute-reloader" translate="label tooltip">
+                <label>Entity type</label>
+                <tooltip><![CDATA[This represents the entity behavior. Flat means one entity instance is mapped to a table row.]]></tooltip>
+                <source>Umc\Base\Model\Source\Entity\Type</source>
+            </field>
+            <field id="add_created_to_grid" type="select" sort="1" required="true" system="true" translate="label tooltip">
+                <label>Add 'Created at' to admin grid</label>
+                <tooltip><![CDATA[The entities created with UMC will have a field called 'created_at' with the creation date of any entity instance.<br />If this is set to 'Yes' the 'Created at' field will be added to the admin grid.]]></tooltip>
+                <source>Magento\Config\Model\Config\Source\Yesno</source>
+            </field>
+            <field id="add_updated_to_grid" type="select" sort="40" required="true" system="true" translate="label tooltip">
+                <label>Add 'Updated at' to admin grid</label>
+                <tooltip><![CDATA[The entities created with UMC will have a field called 'updated_at' with the last update date of any entity instance.<br />If this is set to 'Yes' the 'Updated at' field will be added to the admin grid.]]></tooltip>
+                <source>Magento\Config\Model\Config\Source\Yesno</source>
+            </field>
+            <field id="search" type="select" sort="50" required="true" system="true" translate="label tooltip">
+                <label>Include in admin global search</label>
+                <tooltip><![CDATA[The Magento admin Global search (at the top of every admin page) searches for the text you enter in products, customers and orders.<br />If you set this to 'Yes' than it will search in your entity also.]]></tooltip>
+                <source>Magento\Config\Model\Config\Source\Yesno</source>
+            </field>
+        </fieldset>
+    </form>
+    <form id="umc_attribute">
+        <fieldset id="attribute" collapsible="true" class="attribute-fieldset" sort="10" translate="label">
+            <label>Main Settings</label>
+            <field id="code" type="text" required="true" sort="10" class="validate-code">
+                <label>Attribute Code</label>
+                <tooltip><![CDATA[This is the attribute code. It will be used in the logic of the extension. Use only letters (a-z), numbers (0-9) or underscore(_) in this field, first character should be a letter.<br />There are some naming restriction. For example the code cannot be: 'data', 'child']]></tooltip>
+            </field>
+            <field id="label" type="text" required="true" sort="20" class="attribute-label" translate="label tooltip">
+                <label>Attribute label</label>
+                <tooltip><![CDATA[This is the attribute label that will be visible in the back-end in the add/edit form and in some cases in frontend.]]></tooltip>
+            </field>
+            <field id="type" type="select" required="true" sort="30" system="true" reloader-class="attribute-reloader" translate="label tooltip">
+                <label>Attribute Type</label>
+                <tooltip><![CDATA[This is the attribute type. This wil determine the table column type for this field/attribute and its behavior.]]></tooltip>
+                <source>Umc\Base\Model\Source\Attribute\Type</source>
+            </field>
+            <field id="is_name" type="radio" sort="50" class="validate-one-required-by-name is-name" translate="label tooltip">
+                <label>Acts as name</label>
+                <tooltip><![CDATA[Each entity must have an attribute to behave as 'Name'. This attribute will be used to identify different entities among themselves. It will also be used in dropdowns with entities. This option is available only for text, number and decimal attributes.]]></tooltip>
+                <depends id="type">
+                    <depend id="type" type="attribute">
+                        <val id="text">text</val>
+                        <val id="decimal">decimal</val>
+                        <val id="date">date</val>
+                        <val id="int">int</val>
+                    </depend>
+                </depends>
+            </field>
+            <field id="required" required="true" type="select" sort="60" system="true" translate="label tooltip">
+                <label>Required</label>
+                <tooltip><![CDATA[This sets the attribute as required in the admin add/edit form.]]></tooltip>
+                <source>\Magento\Config\Model\Config\Source\Yesno</source>
+                <depends id="type">
+                    <depend id="type" type="attribute">
+                        <val id="text">text</val>
+                        <val id="decimal">decimal</val>
+                        <val id="date">date</val>
+                        <val id="int">int</val>
+                        <val id="dropdown">dropdown</val>
+                        <val id="multiselect">multiselect</val>
+                        <val id="country">country</val>
+                        <val id="yesno">yesno</val>
+                        <val id="textarea">textarea</val>
+                        <val id="country_multiselect">country_multiselect</val>
+                    </depend>
+                </depends>
+            </field>
+            <field id="options" required="false" type="textarea" sort="90" system="false" translate="label tooltip">
+                <label>Options in select</label>
+                <tooltip><![CDATA[If you choose to enter the values for the dropdown or multiselect manually, input them here. Separate the options with a new line.]]></tooltip>
+                <note>One option on each row</note>
+                <depends id="type">
+                    <depend id="type" type="attribute">
+                        <val id="dropdown">dropdown</val>
+                        <val id="multiselect">multiselect</val>
+                    </depend>
+                </depends>
+            </field>
+            <field id="position" type="hidden" sort="1000" system="true" class="attribute-position">
+                <label />
+            </field>
+        </fieldset>
+        <fieldset id="additional" collapsible="true" sort="20" translate="label">
+            <label>Advanced settings</label>
+            <field id="note" type="text" sort="10" translate="label tooltip">
+                <label>Note</label>
+                <tooltip><![CDATA[This will be added as a comment under the field in the admin add/edit form.]]></tooltip>
+            </field>
+            <field id="admin_grid" required="true" type="select" sort="80" system="true" translate="label tooltip">
+                <label>Show in admin grid</label>
+                <tooltip><![CDATA[This allows you to display the attribute as a column in the admin grid of the entity. The attribute set to behave as 'Name' will be included by default in the grid.]]></tooltip>
+                <source>\Magento\Config\Model\Config\Source\Yesno</source>
+                <depends id="type">
+                    <depend id="type" type="attribute">
+                        <val id="text">text</val>
+                        <val id="decimal">decimal</val>
+                        <val id="date">date</val>
+                        <val id="int">int</val>
+                        <val id="dropdown">dropdown</val>
+                        <val id="country">country</val>
+                        <val id="yesno">yesno</val>
+                    </depend>
+                </depends>
+            </field>
+            <field id="editor" required="true" type="select" sort="20" system="true" translate="label tooltip">
+                <label>Use WYSIWYG editor</label>
+                <tooltip><![CDATA[This allows you to use a WYSIWYG editor for the attribute. It is available only for Textarea attributes.]]></tooltip>
+                <source>\Magento\Config\Model\Config\Source\Yesno</source>
+                <depends id="type">
+                    <depend id="type" type="attribute">
+                        <val id="textarea">textarea</val>
+                    </depend>
+                </depends>
+            </field>
+            <field id="default_value" required="false" type="textarea" sort="40" system="false" translate="label tooltip">
+                <label>Default value</label>
+                <tooltip><![CDATA[Fill in a default value for the attribute. Leave empty for no value. For dropdown and multiselect attributes the value, must be a valid value. not valid ones will be removed. For the multiselect attributes add one default value on each line. For Yes/No attribtues enter 1 for Yes, 0 for No. For country attributes fill in the country ISO2 code. You cannot set a default value for image and file attributes.]]></tooltip>
+                <note>One option on each row for multiple selects</note>
+                <depends id="type">
+                    <depend id="type" type="attribute">
+                        <val id="text">text</val>
+                        <val id="textarea">textarea</val>
+                        <val id="decimal">decimal</val>
+                        <val id="date">date</val>
+                        <val id="int">int</val>
+                        <val id="dropdown">dropdown</val>
+                        <val id="country">country</val>
+                        <val id="country_multiselect">country_multiselect</val>
+                        <val id="yesno">yesno</val>
+                        <val id="multiselect">multiselect</val>
+                    </depend>
+                </depends>
+            </field>
+        </fieldset>
+    </form>
+</forms>

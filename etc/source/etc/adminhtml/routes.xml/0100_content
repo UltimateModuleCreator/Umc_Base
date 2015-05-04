@@ -1,0 +1,7 @@
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../lib/internal/Magento/Framework/App/etc/routes.xsd">
+    <router id="admin">
+        <route id="{{namespace}}_{{module}}" frontName="{{namespace}}_{{module}}">
+            <module name="{{Namespace}}_{{Module}}" before="Magento_Backend" />
+        </route>
+    </router>
+</config>

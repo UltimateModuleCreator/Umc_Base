@@ -1,0 +1,70 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Umc_Base extension
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the MIT License
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/mit-license.php
+ *
+ * @category  Umc
+ * @package   Umc_Base
+ * @copyright 2015 Marius Strajeru
+ * @license   http://opensource.org/licenses/mit-license.php MIT License
+ * @author    Marius Strajeru <ultimate.module.creator@gmail.com>
+ */
+-->
+<page layout="admin-2columns-left" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
+    <head>
+        <css src="Umc_Base::css/styles.css"/>
+        <css src="jquery/jstree/themes/default/style.css" />
+    </head>
+    <body>
+        <referenceContainer name="content">
+            <block class="Umc\Base\Block\Adminhtml\Module\Edit" name="umc_base_module_edit" template="Umc_Base::edit.phtml"/>
+            <block class="Umc\Base\Block\Adminhtml\Menu" name="umc_base_menu" template="Umc_Base::menu.phtml"/>
+            <block class="Umc\Base\Block\Adminhtml\Entity" name="umc_base_entity" template="Umc_Base::entity.phtml">
+                <action method="setIncrement">
+                    <argument name="increment" xsi:type="string"><![CDATA[<%= entity_id %>]]></argument>
+                </action>
+                <action method="setIsTemplate">
+                    <argument name="is_template" xsi:type="boolean">true</argument>
+                </action>
+            </block>
+            <block class="Umc\Base\Block\Adminhtml\Attribute" name="umc_base_attribute" template="Umc_Base::attribute.phtml">
+                <action method="setIncrement">
+                    <argument name="increment" xsi:type="string"><![CDATA[<%= attribute_id %>]]></argument>
+                </action>
+                <action method="setEntityId">
+                    <argument name="entity_id" xsi:type="string"><![CDATA[<%= entity_id %>]]></argument>
+                </action>
+                <action method="setIsTemplate">
+                    <argument name="is_template" xsi:type="boolean">true</argument>
+                </action>
+            </block>
+            <block class="Umc\Base\Block\Adminhtml\Tooltips" name="umc_base_tooltips" template="Umc_Base::tooltips.phtml"/>
+        </referenceContainer>
+        <referenceContainer name="left">
+            <block class="Umc\Base\Block\Adminhtml\Module\Edit\Tabs" name="umc_base_module_tabs">
+                <block class="Umc\Base\Block\Adminhtml\Module\Edit\Tab\Module" name="umc_base_module_tab_module"/>
+                <block class="Umc\Base\Block\Adminhtml\Module\Edit\Tab\Settings" name="umc_base_module_tab_settings"/>
+                <block class="Umc\Base\Block\Adminhtml\Module\Edit\Tab\Entities" name="umc_base_module_tab_entities" template="Umc_Base::entities.phtml"/>
+                <action method="addTab">
+                    <argument name="name" xsi:type="string">module</argument>
+                    <argument name="block" xsi:type="string">umc_base_module_tab_module</argument>
+                </action>
+                <action method="addTab">
+                    <argument name="name" xsi:type="string">settings</argument>
+                    <argument name="block" xsi:type="string">umc_base_module_tab_settings</argument>
+                </action>
+                <action method="addTab">
+                    <argument name="name" xsi:type="string">entities</argument>
+                    <argument name="block" xsi:type="string">umc_base_module_tab_entities</argument>
+                </action>
+            </block>
+        </referenceContainer>
+    </body>
+</page>

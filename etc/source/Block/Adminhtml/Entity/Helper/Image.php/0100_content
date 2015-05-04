@@ -1,0 +1,13 @@
+    /**
+     * Get image preview url
+     *
+     * @return string
+     */
+    protected function _getUrl()
+    {
+        $url = false;
+        if ($this->getValue()) {
+            $url = $this->{{_}}imageModel->getBaseUrl().$this->getValue();
+        }
+        return $url;
+    }

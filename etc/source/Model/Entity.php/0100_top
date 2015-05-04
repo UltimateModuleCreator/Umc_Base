@@ -1,0 +1,32 @@
+
+    /**
+     * Initialize resource model
+     *
+     * @return void
+     */
+    protected function _construct()
+    {
+        $this->_init('{{Namespace}}\{{Module}}\Model\Resource\{{Entity}}');
+    }
+
+    /**
+     * Get identities
+     *
+     * @return array
+     */
+    public function getIdentities()
+    {
+        return [self::CACHE_TAG . '_' . $this->getId()];
+    }
+
+    /**
+     * get entity default values
+     *
+     * @return array
+     */
+    public function getDefaultValues()
+    {
+        $values = [];
+{{defaultAttributeValues}}
+        return $values;
+    }

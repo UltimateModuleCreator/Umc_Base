@@ -1,0 +1,2 @@
+            ${{entity}} = $this->{{_}}init{{Entity}}();
+            ${{entity}}->setData($data);

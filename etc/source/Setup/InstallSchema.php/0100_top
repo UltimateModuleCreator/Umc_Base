@@ -1,0 +1,12 @@
+    /**
+     * install tables
+     *
+     * @param {{class Magento\Framework\Setup\SchemaSetupInterface}} $setup
+     * @param {{class Magento\Framework\Setup\ModuleContextInterface}} $context
+     * @return void
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
+    public function install({{class Magento\Framework\Setup\SchemaSetupInterface}} $setup, {{class Magento\Framework\Setup\ModuleContextInterface}} $context)
+    {
+        $installer = $setup;
+        $installer->startSetup();

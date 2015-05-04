@@ -1,0 +1,11 @@
+    /**
+     * forward to edit
+     *
+     * @return \Magento\Backend\Model\View\Result\Forward
+     */
+    public function execute()
+    {
+        $resultForward = $this->{{_}}resultForwardFactory->create();
+        $resultForward->forward('edit');
+        return $resultForward;
+    }

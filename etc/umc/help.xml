@@ -1,0 +1,149 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Umc_Base extension
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the MIT License
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/mit-license.php
+ *
+ * @category  Umc
+ * @package   Umc_Base
+ * @copyright 2015 Marius Strajeru
+ * @license   http://opensource.org/licenses/mit-license.php MIT License
+ * @author    Marius Strajeru <ultimate.module.creator@gmail.com>
+ */
+-->
+<help xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="help.xsd">
+    <section id="general" sort="10" translate="label">
+        <label>General Information</label>
+        <fieldset id="modules" translate="label description" sort="10">
+            <label>Installed UMC2 modules</label>
+            <description>UMC2 consists of several modules. Each one except the base module can be disabled. Your current installed modules are:</description>
+            <source method="getUmcModules" class="Umc\Base\Model\Help\Module" shared="true" />
+            <columns>
+                <column id="module" sort="10">
+                    <label>Module</label>
+                    <key>module</key>
+                </column>
+                <column id="version" sort="20">
+                    <label>Version</label>
+                    <key>version</key>
+                </column>
+            </columns>
+        </fieldset>
+        <fieldset id="files" sort="20">
+            <label>Generated files</label>
+            <description>UMC2 generates the files needed for your module. You can find below the list of generated files.</description>
+            <source method="getGeneratedFiles" class="Umc\Base\Model\Help\Module" shared="true" />
+            <columns>
+                <column id="label" sort="10">
+                    <label>Label</label>
+                    <key>label</key>
+                </column>
+                <column id="scope" sort="20">
+                    <label>Scope</label>
+                    <key>scope</key>
+                </column>
+                <column id="destination" sort="30">
+                    <label>Destination</label>
+                    <key>destination</key>
+                </column>
+                <column id="description" sort="40">
+                    <label>Description</label>
+                    <key>description</key>
+                </column>
+                <column id="condition" sort="50">
+                    <label>Condition</label>
+                    <key>condition</key>
+                </column>
+            </columns>
+        </fieldset>
+    </section>
+    <section id="fields">
+        <label>Creating a module</label>
+        <fieldset id="fields" sort="10">
+            <label>Fields to fill in</label>
+            <description>In order to create a module you will need to fill in a form. You will need to fill in your module settings, add as many entities as you want and as many attributes as you need for each entity. You can also establish relations between your entities. Here is what you need to fill in.</description>
+            <source method="getFields" class="Umc\Base\Model\Help\Module" shared="true" />
+            <columns>
+                <column id="field" sort="10" translate="label">
+                    <label>Field name</label>
+                    <key>field</key>
+                </column>
+                <column id="type" sort="20" translate="label">
+                    <label>Field type</label>
+                    <key>type</key>
+                </column>
+                <column id="description" sort="20" translate="label">
+                    <label>Description</label>
+                    <key>description</key>
+                </column>
+            </columns>
+        </fieldset>
+    </section>
+    <section id="restrictions" sort="30" translate="label">
+        <label>Naming restrictions</label>
+        <fieldset id="umc_module" sort="10" translate="label description">
+            <label>Module naming restrictions</label>
+            <description>There are some naming restrictions for the module setup.</description>
+            <source method="getModuleRestrictions" class="Umc\Base\Model\Help\Module" shared="true" />
+            <columns>
+                <column id="field" sort="10" translate="label">
+                    <label>Field</label>
+                    <key>field</key>
+                </column>
+                <column id="value" sort="20" translate="label">
+                    <label>Value</label>
+                    <key>value</key>
+                </column>
+                <column id="message" sort="30" translate="label">
+                    <label>Message</label>
+                    <key>message</key>
+                </column>
+            </columns>
+        </fieldset>
+        <fieldset id="umc_entity" sort="20" translate="label description">
+            <label>Entity naming restrictions</label>
+            <description>There are some naming restrictions for the entity setup.</description>
+            <source method="getEntityRestrictions" class="Umc\Base\Model\Help\Module" shared="true" />
+            <columns>
+                <column id="field" sort="10" translate="label">
+                    <label>Field</label>
+                    <key>field</key>
+                </column>
+                <column id="value" sort="20" translate="label">
+                    <label>Value</label>
+                    <key>value</key>
+                </column>
+                <column id="message" sort="30" translate="label">
+                    <label>Message</label>
+                    <key>message</key>
+                </column>
+            </columns>
+        </fieldset>
+        <fieldset id="umc_attribute" sort="30" translate="label description">
+            <label>Attribute naming restrictions</label>
+            <description>There are some naming restrictions for the attribute setup.</description>
+            <source method="getAttributeRestrictions" class="Umc\Base\Model\Help\Module" shared="true" />
+            <columns>
+                <column id="field" sort="10" translate="label">
+                    <label>Field</label>
+                    <key>field</key>
+                </column>
+                <column id="value" sort="20" translate="label">
+                    <label>Value</label>
+                    <key>value</key>
+                </column>
+                <column id="message" sort="30" translate="label">
+                    <label>Message</label>
+                    <key>message</key>
+                </column>
+            </columns>
+        </fieldset>
+    </section>
+    <module id="Umc_Base" build="dev1" sort="1" />
+</help>

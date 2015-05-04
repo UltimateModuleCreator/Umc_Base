@@ -1,0 +1,49 @@
+<?php
+/**
+ * Umc_Base extension
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the MIT License
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/mit-license.php
+ *
+ * @category  Umc
+ * @package   Umc_Base
+ * @copyright 2015 Marius Strajeru
+ * @license   http://opensource.org/licenses/mit-license.php MIT License
+ * @author    Marius Strajeru <ultimate.module.creator@gmail.com>
+ */
+?>
+<?php /** @var \Umc\Base\Block\Adminhtml\Module\Edit $this */ ?>
+<?php echo $this->getFormHtml();?>
+<script type="text/javascript">
+        require([
+            "jquery",
+            "jquery/ui",
+            "mage/translate",
+            'mage/backend/form',
+            'mage/backend/validation',
+            "Umc_Base/js/umc"
+        ], function(jQuery){
+            jQuery(document).ready(function(){
+                jQuery('#edit_form').umcmodule({
+                    attributeDepends: <?php echo $this->getAttributeDepends();?>,
+                    entityDepends: <?php echo $this->getEntityDepends();?>,
+                    nameAttributes:<?php echo $this->getNameAttributes();?>
+                })
+                .validation({
+                    validationUrl: '<?php echo $this->getValidationUrl() ?>',
+                    highlight: function(element) {
+                        jQuery(element).parents('.fieldset-wrapper-content').each(function(){
+                            if (!jQuery(this).hasClass('in')) {
+                                jQuery(this).prev().find('[data-toggle="collapse"]').trigger('click');
+                            }
+                        });
+                    }
+                });
+            });
+        });
+
+</script>

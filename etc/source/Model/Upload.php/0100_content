@@ -1,0 +1,33 @@
+    /**
+     * upload file
+     *
+     * @param $input
+     * @param $destinationFolder
+     * @param $data
+     * @return string
+     * @throws {{class Magento\Framework\Exception\LocalizedException}}
+     */
+    public function uploadFileAndGetName($input, $destinationFolder, $data)
+    {
+        try {
+            if (isset($data[$input]['delete'])) {
+                return '';
+            } else {
+                $uploader = $this->{{_}}uploaderFactory->create(['fileId' => $input]);
+                $uploader->setAllowRenameFiles(true);
+                $uploader->setFilesDispersion(true);
+                $uploader->setAllowCreateFolders(true);
+                $result = $uploader->save($destinationFolder);
+                return $result['file'];
+            }
+        } catch (\Exception $e) {
+            if ($e->getCode() != {{class Magento\Framework\File\Uploader}}::TMP_NAME_EMPTY) {
+                throw new {{class Magento\Framework\Exception\LocalizedException}}($e->getMessage());
+            } else {
+                if (isset($data[$input]['value'])) {
+                    return $data[$input]['value'];
+                }
+            }
+        }
+        return '';
+    }

@@ -1,0 +1,131 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Umc_Base extension
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the MIT License
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/mit-license.php
+ *
+ * @category  Umc
+ * @package   Umc_Base
+ * @copyright 2015 Marius Strajeru
+ * @license   http://opensource.org/licenses/mit-license.php MIT License
+ * @author    Marius Strajeru <ultimate.module.creator@gmail.com>
+ */
+-->
+<restrictions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="restriction.xsd">
+    <entity id="umc_module">
+        <restriction id="namespace">
+            <val id="Magento" translate="message">
+                <real_val>Magento</real_val>
+                <message><![CDATA[Don't use Magento as namespace. Be creative.]]></message>
+            </val>
+        </restriction>
+    </entity>
+    <entity id="umc_entity">
+        <restriction id="name_singular" reserved="true">
+            <val id="resource" translate="message">
+                <real_val>resource</real_val>
+                <message>You cannot use this value here. It will conflict with the Magento folder structure.</message>
+            </val>
+            <val id="setup" translate="message">
+                <real_val>setup</real_val>
+                <message>You cannot use this value here. It will conflict with the Magento folder structure.</message>
+            </val>
+            <val id="attribute" translate="message">
+                <real_val>attribute</real_val>
+                <message>You cannot use this value here. It will conflict with the Magento folder structure.</message>
+            </val>
+            <val id="options" translate="message">
+                <real_val>options</real_val>
+                <message>You cannot use this value here. It will conflict with the Magento folder structure.</message>
+            </val>
+            <val id="system" translate="message">
+                <real_val>system</real_val>
+                <message>You cannot use this value here. It will conflict with the Magento folder structure.</message>
+            </val>
+            <val id="data" translate="message">
+                <real_val>data</real_val>
+                <message>You cannot use this value here. It will conflict with the Magento folder structure.</message>
+            </val>
+            <val id="collection" translate="message">
+                <real_val>collection</real_val>
+                <message>You cannot use this value here. It will conflict with the Magento folder structure.</message>
+            </val>
+            <val id="adminhtml" translate="message">
+                <real_val>adminhtml</real_val>
+                <message>You cannot use this value here. It will conflict with the Magento folder structure.</message>
+            </val>
+            <val id="observer" translate="message">
+                <real_val>observer</real_val>
+                <message>You cannot use this value here. It will conflict with the Magento folder structure.</message>
+            </val>
+            <val id="tree" translate="message">
+                <real_val>tree</real_val>
+                <message>You cannot use this value here. It will conflict with the Magento folder structure.</message>
+                <depend type="self" id="is_tree">
+                    <depend_val id="1">1</depend_val>
+                </depend>
+            </val>
+            <val id="node" translate="message">
+                <real_val>node</real_val>
+                <message>You cannot use this value here. It will conflict with the Magento folder structure.</message>
+                <depend type="self" id="is_tree">
+                    <depend_val id="1">1</depend_val>
+                </depend>
+            </val>
+        </restriction>
+    </entity>
+    <entity id="umc_attribute">
+        <restriction id="code" class="Magento\Framework\Model\AbstractModel">
+            <val id="identities" translate="message">
+                <real_val>identities</real_val>
+                <message><![CDATA[You cannot use this value here. It will conflict with the Magento class methods.]]></message>
+            </val>
+            <val id="default_values" translate="message">
+                <real_val>default_values</real_val>
+                <message><![CDATA[You cannot use this value here. It will conflict with the Magento class methods.]]></message>
+            </val>
+            <val id="created_at" translate="message">
+                <real_val>created_at</real_val>
+                <message><![CDATA[An attribute/field with code "created_at" will be added by default to your entity.]]></message>
+            </val>
+            <val id="updated_at" translate="message">
+                <real_val>updated_at</real_val>
+                <message><![CDATA[An attribute/field with code "updated_at" will be added by default to your entity.]]></message>
+            </val>
+            <val id="parent_id" translate="message">
+                <real_val>parent_id</real_val>
+                <message><![CDATA[An attribute /field with the code "parent_id" will be added by default to your entity if the behaves as tree.]]></message>
+                <depend type="parent" id="is_tree">
+                    <depend_val id="1">1</depend_val>
+                </depend>
+            </val>
+            <val id="level" translate="message">
+                <real_val>level</real_val>
+                <message><![CDATA[An attribute /field with the code "level" will be added by default to your entity if the behaves as tree.]]></message>
+                <depend type="parent" id="is_tree">
+                    <depend_val id="1">1</depend_val>
+                </depend>
+            </val>
+            <val id="children_count" translate="message">
+                <real_val>children_count</real_val>
+                <message><![CDATA[An attribute /field with the code "children_count" will be added by default to your entity if the behaves as tree.]]></message>
+                <depend type="parent" id="is_tree">
+                    <depend_val id="1">1</depend_val>
+                </depend>
+            </val>
+            <val id="path" translate="message">
+                <real_val>path</real_val>
+                <message><![CDATA[An attribute /field with the code "path" will be added by default to your entity if the behaves as tree.]]></message>
+                <depend type="parent" id="is_tree">
+                    <depend_val id="1">1</depend_val>
+                </depend>
+            </val>
+        </restriction>
+    </entity>
+</restrictions>

@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Umc_Base extension
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the MIT License
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/mit-license.php
+ *
+ * @category  Umc
+ * @package   Umc_Base
+ * @copyright 2015 Marius Strajeru
+ * @license   http://opensource.org/licenses/mit-license.php MIT License
+ * @author    Marius Strajeru <ultimate.module.creator@gmail.com>
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Magento/Backend/etc/menu.xsd">
+    <menu>
+        <add id="Umc_Base::umc" title="UMC" module="Umc_Base" sortOrder="200" resource="Umc_Base::umc" />
+        <add id="Umc_Base::umc_list" title="View Modules" module="Umc_Base" sortOrder="10" resource="Umc_Base::umc" parent="Umc_Base::umc" action="umc/module/" />
+        <add id="Umc_Base::umc_add" title="Create Module" module="Umc_Base" sortOrder="20" resource="Umc_Base::umc" parent="Umc_Base::umc" action="umc/module/new" />
+        <add id="Umc_Base::umc_help" title="Help" module="Umc_Base" sortOrder="30" resource="Umc_Base::umc" parent="Umc_Base::umc" action="umc/module/help" />
+    </menu>
+</config>

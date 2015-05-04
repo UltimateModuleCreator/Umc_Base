@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Umc_Base extension
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the MIT License
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/mit-license.php
+ *
+ * @category  Umc
+ * @package   Umc_Base
+ * @copyright 2015 Marius Strajeru
+ * @license   http://opensource.org/licenses/mit-license.php MIT License
+ * @author    Marius Strajeru <ultimate.module.creator@gmail.com>
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Magento/Config/etc/system_file.xsd">
+    <system>
+        <tab id="umc" sortOrder="500">
+            <label>Ultimate Module Creator</label>
+        </tab>
+        <section id="umc" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+            <class>separator-top</class>
+            <label>Ultimate Module Creator</label>
+            <tab>umc</tab>
+            <resource>Umc_Base::umc</resource>
+            <group id="umc_general" type="text" sortOrder="5" showInDefault="1" showInWebsite="0" showInStore="0">
+                <label>UI settings</label>
+                <field id="tooltips" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Enable Tooltips</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <tooltip>You can enabled disable the tooltips on the fields. When you get the hand of it you can disable this to make the UMC a bit faster.</tooltip>
+                </field>
+            </group>
+            <group id="umc_module" type="text" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+                <label>Default module values</label>
+                <frontend_model>Umc\Base\Block\Adminhtml\System\Config\Module</frontend_model>
+            </group>
+            <group id="umc_settings" type="text" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+                <label>Default settings values</label>
+                <frontend_model>Umc\Base\Block\Adminhtml\System\Config\Settings</frontend_model>
+            </group>
+            <group id="umc_entity" type="text" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0">
+                <label>Default entity values</label>
+                <frontend_model>Umc\Base\Block\Adminhtml\System\Config\Entity</frontend_model>
+            </group>
+            <group id="umc_attribute" type="text" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0">
+                <label>Default attribute values</label>
+                <frontend_model>Umc\Base\Block\Adminhtml\System\Config\Attribute</frontend_model>
+            </group>
+        </section>
+    </system>
+</config>

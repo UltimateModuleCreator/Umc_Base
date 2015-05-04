@@ -1,0 +1,5 @@
+        if (isset($data['{{code}}'])) {
+            if (is_array($data['{{code}}'])) {
+                $data['{{code}}'] = implode(',', $data['{{code}}']);
+            }
+        }

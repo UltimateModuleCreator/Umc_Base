@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Umc_Base extension
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the MIT License
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/mit-license.php
+ *
+ * @category  Umc
+ * @package   Umc_Base
+ * @copyright 2015 Marius Strajeru
+ * @license   http://opensource.org/licenses/mit-license.php MIT License
+ * @author    Marius Strajeru <ultimate.module.creator@gmail.com>
+ */
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:element name="restrictions">
+        <xs:annotation>
+            <xs:documentation>All restriction elements</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="entity" minOccurs="0" maxOccurs="unbounded" />
+            </xs:sequence>
+        </xs:complexType>
+        <xs:unique name="uniqueEntityId">
+            <xs:annotation>
+                <xs:documentation>Attribute id is unique under all entities</xs:documentation>
+            </xs:annotation>
+            <xs:selector xpath="entity"/>
+            <xs:field xpath="@id"/>
+        </xs:unique>
+    </xs:element>
+
+    <xs:element name="entity">
+        <xs:annotation>
+            <xs:documentation>Restrictions by entity</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="restriction" minOccurs="1" maxOccurs="unbounded" />
+            </xs:sequence>
+            <xs:attributeGroup ref="entityAttributeGroup"/>
+        </xs:complexType>
+        <xs:unique name="uniqueRestrictionId">
+            <xs:annotation>
+                <xs:documentation>Attribute id is unique under all restrictions</xs:documentation>
+            </xs:annotation>
+            <xs:selector xpath="restriction"/>
+            <xs:field xpath="@id"/>
+        </xs:unique>
+    </xs:element>
+
+    <xs:element name="restriction">
+        <xs:annotation>
+            <xs:documentation>Restrictions</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="val" minOccurs="1" maxOccurs="unbounded" />
+            </xs:sequence>
+            <xs:attributeGroup ref="restrictionAttributeGroup"/>
+        </xs:complexType>
+        <xs:unique name="uniqueValId">
+            <xs:annotation>
+                <xs:documentation>Attribute id is unique under all values</xs:documentation>
+            </xs:annotation>
+            <xs:selector xpath="val"/>
+            <xs:field xpath="@id"/>
+        </xs:unique>
+    </xs:element>
+
+    <xs:element name="val">
+        <xs:annotation>
+            <xs:documentation>Restriction values</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:sequence>
+                <xs:sequence>
+                    <xs:element name="real_val" type="xs:string" minOccurs="1" maxOccurs="1" />
+                    <xs:element name="message" type="xs:string" minOccurs="1" maxOccurs="1" />
+                    <xs:element ref="depend" minOccurs="0" maxOccurs="1" />
+                </xs:sequence>
+            </xs:sequence>
+            <xs:attributeGroup ref="valAttributeGroup"/>
+        </xs:complexType>
+        <xs:unique name="uniqueDependId">
+            <xs:annotation>
+                <xs:documentation>Attribute id is unique under all dependencies</xs:documentation>
+            </xs:annotation>
+            <xs:selector xpath="depend"/>
+            <xs:field xpath="@id"/>
+        </xs:unique>
+    </xs:element>
+
+    <xs:element name="depend">
+        <xs:annotation>
+            <xs:documentation>Restriction dependencies groups</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="depend_val" minOccurs="0" maxOccurs="1" />
+            </xs:sequence>
+            <xs:attributeGroup ref="dependAttributeGroup"/>
+        </xs:complexType>
+        <xs:unique name="uniqueDependValId">
+            <xs:annotation>
+                <xs:documentation>Attribute id is unique under all dependency values</xs:documentation>
+            </xs:annotation>
+            <xs:selector xpath="depend_val"/>
+            <xs:field xpath="@id"/>
+        </xs:unique>
+    </xs:element>
+
+    <xs:element name="depend_val">
+        <xs:annotation>
+            <xs:documentation>Restriction dependencies values</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:simpleContent>
+                <xs:extension base="xs:string">
+                    <xs:attribute type="xs:string" name="id" use="required"/>
+                    <xs:attribute type="xs:boolean" name="disabled" use="optional"/>
+                </xs:extension>
+            </xs:simpleContent>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:attributeGroup name="entityAttributeGroup">
+        <xs:attribute name="id" type="xs:string" use="required" />
+        <xs:attribute name="sort"  type="xs:int" use="optional"/>
+    </xs:attributeGroup>
+
+    <xs:attributeGroup name="restrictionAttributeGroup">
+        <xs:attribute type="xs:string" name="id" use="required" />
+        <xs:attribute type="xs:boolean" name="disabled" use="optional" />
+        <xs:attribute type="xs:boolean" name="reserved" use="optional" />
+        <xs:attribute type="xs:string" name="class" use="optional" />
+    </xs:attributeGroup>
+
+    <xs:attributeGroup name="valAttributeGroup">
+        <xs:attribute type="xs:string" name="id" use="required" />
+        <xs:attribute type="xs:boolean" name="disabled" use="optional" />
+        <xs:attribute type="xs:string" name="translate" use="optional"/>
+    </xs:attributeGroup>
+
+    <xs:attributeGroup name="dependAttributeGroup">
+        <xs:attribute type="xs:string" name="id" use="required" />
+        <xs:attribute type="xs:boolean" name="disabled" use="optional" />
+        <xs:attribute type="xs:string" name="type" use="required" />
+    </xs:attributeGroup>
+</xs:schema>

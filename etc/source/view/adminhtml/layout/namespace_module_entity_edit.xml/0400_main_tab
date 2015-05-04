@@ -1,0 +1,1 @@
+        <block class="{{Namespace}}\{{Module}}\Block\Adminhtml\{{Entity}}\Edit" name="{{namespace}}_{{module}}_{{entity}}_edit"/>

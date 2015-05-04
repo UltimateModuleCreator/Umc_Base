@@ -1,0 +1,42 @@
+    /**
+     * execute action
+     *
+     * @return \Magento\Backend\Model\View\Result\Redirect
+     */
+    public function execute()
+    {
+        $resultRedirect = $this->{{_}}resultRedirectFactory->create();
+        $id = $this->getRequest()->getParam('{{entity}}_id');
+        if ($id) {
+            ${{nameAttributeCode}} = "";
+            try {
+                /** @var \{{Namespace}}\{{Module}}\Model\{{Entity}} ${{entity}} */
+                ${{entity}} = $this->{{_}}{{entity}}Factory->create();
+                ${{entity}}->load($id);
+                ${{nameAttributeCode}} = ${{entity}}->get{{NameAttributeCode}}();
+                ${{entity}}->delete();
+                $this->messageManager->addSuccess(__('The {{EntityLabel}} has been deleted.'));
+                $this->_eventManager->dispatch(
+                    'adminhtml_{{namespace}}_{{module}}_{{entity}}_on_delete',
+                    ['{{nameAttributeCode}}' => ${{nameAttributeCode}}, 'status' => 'success']
+                );
+                $resultRedirect->setPath('{{namespace}}_{{module}}/*/');
+                return $resultRedirect;
+            } catch (\Exception $e) {
+                $this->_eventManager->dispatch(
+                    'adminhtml_{{namespace}}_{{module}}_{{entity}}_on_delete',
+                    ['{{nameAttributeCode}}' => ${{nameAttributeCode}}, 'status' => 'fail']
+                );
+                // display error message
+                $this->messageManager->addError($e->getMessage());
+                // go back to edit form
+                $resultRedirect->setPath('{{namespace}}_{{module}}/*/edit', ['{{entity}}_id' => $id]);
+                return $resultRedirect;
+            }
+        }
+        // display error message
+        $this->messageManager->addError(__('{{EntityLabel}} to delete was not found.'));
+        // go to grid
+        $resultRedirect->setPath('{{namespace}}_{{module}}/*/');
+        return $resultRedirect;
+    }

@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Umc_Base extension
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the MIT License
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/mit-license.php
+ *
+ * @category  Umc
+ * @package   Umc_Base
+ * @copyright 2015 Marius Strajeru
+ * @license   http://opensource.org/licenses/mit-license.php MIT License
+ * @author    Marius Strajeru <ultimate.module.creator@gmail.com>
+ */
+-->
+<classes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="class.xsd">
+    <class id="Magento\Backend\Block\Widget\Grid\Container" class="Magento\Backend\Block\Widget\Grid\Container" alias="GridContainer"/>
+    <class id="Magento\Backend\Block\Widget\Grid" class="Magento\Backend\Block\Widget\Grid" alias="WidgetGrid" />
+    <class id="Magento\Backend\Block\Widget\Tabs" class="Magento\Backend\Block\Widget\Tabs" alias="WidgetTabs" />
+    <class id="Magento\Backend\Block\Widget\Form\Generic" class="Magento\Backend\Block\Widget\Form\Generic" alias="GenericForm" />
+    <class id="Magento\Backend\Block\Widget\Form\Container" class="Magento\Backend\Block\Widget\Form\Container" alias="FormContainer" />
+    <class id="Magento\Backend\Model\Session" class="Magento\Backend\Model\Session" alias="BackendSession" />
+    <class id="Magento\Framework\Data\Form\Element\File" class="Magento\Framework\Data\Form\Element\File" alias="FileField" />
+    <class id="Magento\Framework\Data\Form\Element\Factory" class="Magento\Framework\Data\Form\Element\Factory" alias="ElementFactory" />
+    <class id="Magento\Framework\Data\Form\Element\CollectionFactory" class="Magento\Framework\Data\Form\Element\CollectionFactory" alias="ElementCollectionFactory" />
+    <class id="{{Namespace}}\{{Module}}\Model\{{Entity}}\File" class="{{Namespace}}\{{Module}}\Model\{{Entity}}\File" alias="{{Entity}}File" />
+    <class id="Magento\Framework\Data\Form\Element\Image" class="Magento\Framework\Data\Form\Element\Image" alias="ImageField" />
+    <class id="{{Namespace}}\{{Module}}\Model\{{Entity}}\Image" class="{{Namespace}}\{{Module}}\Model\{{Entity}}\Image" alias="{{Entity}}Image" />
+    <class id="Magento\Framework\Stdlib\DateTime\Filter\Date" class="Magento\Framework\Stdlib\DateTime\Filter\Date" alias="DateFilter" />
+    <class id="Magento\Framework\Data\Collection\Db" class="Magento\Framework\Data\Collection\Db" alias="DbCollection" />
+    <class id="{{Namespace}}\{{Module}}\Model\{{Entity}}" class="{{Namespace}}\{{Module}}\Model\{{Entity}}" alias="{{Entity}}Model" />
+    <class id="Magento\Framework\Stdlib\DateTime" class="Magento\Framework\Stdlib\DateTime" alias="LibDateTime" />
+    <class id="Magento\Framework\Event\ManagerInterface" class="Magento\Framework\Event\ManagerInterface" alias="EventManagerInterface" />
+    <class id="Magento\Cms\Model\Wysiwyg\Config" class="Magento\Cms\Model\Wysiwyg\Config" alias="WysiwygConfig" />
+    <class id="Magento\Backend\Helper\Data" class="Magento\Backend\Helper\Data" alias="BackendHelper" />
+</classes>

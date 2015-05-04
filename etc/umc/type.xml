@@ -1,0 +1,79 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Umc_Base extension
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the MIT License
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/mit-license.php
+ *
+ * @category  Umc
+ * @package   Umc_Base
+ * @copyright 2015 Marius Strajeru
+ * @license   http://opensource.org/licenses/mit-license.php MIT License
+ * @author    Marius Strajeru <ultimate.module.creator@gmail.com>
+ */
+-->
+<types xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="type.xsd">
+    <entity id="umc_entity">
+        <type id="flat" model="Umc\Base\Model\Core\Entity\Type\Flat" sort="10" translate="label">
+            <label>Flat</label>
+        </type>
+    </entity>
+    <entity id="umc_attribute">
+        <type id="country" model="Umc\Base\Model\Core\Attribute\Type\Country" sort="10" group="dropdown" translate="label">
+            <label>Country</label>
+        </type>
+        <type id="country_multiselect" model="Umc\Base\Model\Core\Attribute\Type\CountryMultiselect" sort="15" group="multiselect" translate="label">
+            <label>Country Multiselect</label>
+        </type>
+        <type id="date" model="Umc\Base\Model\Core\Attribute\Type\Date" sort="20" group="date" translate="label">
+            <label>Date</label>
+        </type>
+        <type id="decimal" model="Umc\Base\Model\Core\Attribute\Type\Decimal" sort="30" group="text" translate="label">
+            <label>Decimal</label>
+        </type>
+        <type id="dropdown" model="Umc\Base\Model\Core\Attribute\Type\Dropdown" sort="40" group="dropdown" translate="label">
+            <label>Dropdown</label>
+        </type>
+        <type id="file" model="Umc\Base\Model\Core\Attribute\Type\File" sort="50" group="file" translate="label">
+            <label>File</label>
+        </type>
+        <type id="image" model="Umc\Base\Model\Core\Attribute\Type\Image" sort="60" group="file" translate="label">
+            <label>Image</label>
+        </type>
+        <type id="int" model="Umc\Base\Model\Core\Attribute\Type\Int" sort="70" group="text" translate="label">
+            <label>Integer</label>
+        </type>
+        <type id="multiselect" model="Umc\Base\Model\Core\Attribute\Type\Multiselect" sort="80" group="multiselect" translate="label">
+            <label>Multiselect</label>
+        </type>
+        <type id="text" model="Umc\Base\Model\Core\Attribute\Type\Text" sort="1" group="text" translate="label">
+            <label>Text</label>
+        </type>
+        <type id="textarea" model="Umc\Base\Model\Core\Attribute\Type\Textarea" sort="100" group="text" translate="label">
+            <label>Textarea</label>
+        </type>
+        <type id="yesno" model="Umc\Base\Model\Core\Attribute\Type\Yesno" sort="110" group="dropdown" translate="label">
+            <label>Yes / No</label>
+        </type>
+        <group id="text" sort="10" translate="label">
+            <label>Text</label>
+        </group>
+        <group id="dropdown" sort="20" translate="label">
+            <label>Dropdown</label>
+        </group>
+        <group id="multiselect" sort="25" translate="label">
+            <label>Multiple select</label>
+        </group>
+        <group id="file" sort="30" translate="label">
+            <label>File</label>
+        </group>
+        <group id="date" sort="40" translate="label">
+            <label>Date</label>
+        </group>
+    </entity>
+</types>

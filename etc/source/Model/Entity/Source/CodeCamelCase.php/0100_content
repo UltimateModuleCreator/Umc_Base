@@ -1,0 +1,11 @@
+{{OptionConstants}}
+
+    /**
+     * to option array
+     *
+     * @return array
+     */
+    public function toOptionArray()
+    {
+{{toOptionArray}}
+    }

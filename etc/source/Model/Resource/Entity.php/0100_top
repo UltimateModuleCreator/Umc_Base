@@ -1,0 +1,26 @@
+
+    /**
+     * Initialize resource model
+     *
+     * @return void
+     */
+    protected function _construct()
+    {
+        $this->_init('{{namespace}}_{{module}}_{{entity}}', '{{entity}}_id');
+    }
+
+    /**
+     * Retrieves {{EntityLabel}} {{NameAttributeLabel}} from DB by passed id.
+     *
+     * @param string $id
+     * @return string|bool
+     */
+    public function get{{Entity}}{{NameAttributeCode}}ById($id)
+    {
+        $adapter = $this->_getReadAdapter();
+        $select = $adapter->select()
+            ->from($this->getMainTable(), '{{nameAttributeCode}}')
+            ->where('{{entity}}_id = :{{entity}}_id');
+        $binds = ['{{entity}}_id' => (int)$id];
+        return $adapter->fetchOne($select, $binds);
+    }

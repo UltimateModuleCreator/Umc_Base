@@ -1,0 +1,94 @@
+<?php
+/**
+ * Umc_Base extension
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the MIT License
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/mit-license.php
+ *
+ * @category  Umc
+ * @package   Umc_Base
+ * @copyright 2015 Marius Strajeru
+ * @license   http://opensource.org/licenses/mit-license.php MIT License
+ * @author    Marius Strajeru <ultimate.module.creator@gmail.com>
+ */
+?>
+<?php /** @var \Umc\Base\Block\Adminhtml\Help $this  */?>
+<fieldset id="help" class="fieldset fieldset-wide">
+    <legend class="legend">
+        <span><?php echo __('UMC2 Help')?></span>
+    </legend>
+    <div>
+        <?php echo __('The Ultimate Module Creator for Magento 2 (UMC2) is a Magento extension that lets you create other magento CRUD modules for your own entities. You can create as many entities as you want in one extension, you can establish relations between them, decide to generate only back-end pages or both back-end and frontend pages.');?><br />
+        <?php echo __('This module is intended for developers. It should not be used in production.')?><br />
+        <?php echo __('Also, the modules you create with it should be tested before moved to production.');?>
+    </div>
+</fieldset>
+<div class="umc-help">
+    <?php foreach ($this->getSections() as $sectionId=> $section) : ?>
+        <div data-role="umc-help-section-<?php echo $sectionId?>-wrapper" id="umc-help-section-<?php echo $sectionId?>-wrapper" class="fieldset-wrapper collapsable-wrapper ">
+            <div class="fieldset-wrapper-title">
+                <strong data-target="#umc-help-section-<?php echo $sectionId?>-content" data-toggle="collapse" class="title">
+                    <span><?php echo __($section['label'])?></span>
+                </strong>
+            </div>
+            <div data-role="umc-help-section-<?php echo $sectionId?>-content" id="umc-help-section-<?php echo $sectionId?>-content" class="fieldset-wrapper-content collapse">
+                <?php if ($section['description']) : ?>
+                    <div class="umc-help-section-description"><?php echo __($section['description'])?></div>
+                <?php endif;?>
+                <?php if (isset($section['fieldsets'])) : ?>
+                    <?php foreach ($section['fieldsets'] as $fieldsetId=>$fieldset) : ?>
+                        <?php if (isset($fieldset['description'])) : ?>
+                            <p class="umc-help-fieldset-description"><?php echo $fieldset['description'];?></p>
+                        <?php endif;?>
+                        <div data-role="umc-help-fieldset-<?php echo $sectionId?>-<?php echo $fieldsetId?>-wrapper" id="umc-help-fieldset-<?php echo $sectionId?>-<?php echo $fieldsetId?>-wrapper" class="fieldset-wrapper collapsable-wrapper ">
+                            <div class="fieldset-wrapper-title">
+                                <strong data-target="#umc-help-fieldset-<?php echo $sectionId?>-<?php echo $fieldsetId?>-content" data-toggle="collapse" class="title">
+                                    <span><?php echo $fieldset['label']?></span>
+                                </strong>
+                            </div>
+                            <div data-role="umc-help-fieldset-<?php echo $sectionId?>-<?php echo $fieldsetId?>-content" id="umc-help-fieldset-<?php echo $sectionId?>-<?php echo $fieldsetId?>-content" class="fieldset-wrapper-content collapse">
+                                <div class="grid">
+                                    <table id="umc-help-<?php echo $sectionId?>-<?php echo $fieldsetId?>-table" class="umc-help-table">
+                                        <thead>
+                                        <?php foreach ($fieldset['columns'] as $column) : ?>
+                                            <td><?php echo $column['label']?></td>
+                                        <?php endforeach ;?>
+                                        </thead>
+                                        <tbody>
+                                        <?php foreach ($fieldset['fields'] as $field) : ?>
+                                            <tr>
+                                                <?php if (isset($field['__colspan'])) : ?>
+                                                    <td colspan="<?php echo count($fieldset['columns'])?>"><strong><?php echo $field['__colspan']?></strong></td>
+                                                <?php else : ?>
+                                                    <?php foreach ($fieldset['columns'] as $column) : ?>
+                                                        <td><?php echo $this->getFormatedValue($field, $column); ?></td>
+                                                    <?php endforeach ;?>
+                                                <?php endif;?>
+                                            </tr>
+                                        <?php endforeach ;?>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    <?php endforeach?>
+                <?php endif;?>
+            </div>
+        </div>
+    <?php endforeach;?>
+</div>
+<script type="text/javascript">
+    require(
+        ["jquery"],
+        function(jQuery){
+            jQuery(document).ready(function(){
+                jQuery('.fieldset-wrapper-content.collapse').collapse('hide');
+            });
+        }
+    );
+
+</script>

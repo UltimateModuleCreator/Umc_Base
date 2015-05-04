@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Umc_Base extension
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the MIT License
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/mit-license.php
+ *
+ * @category  Umc
+ * @package   Umc_Base
+ * @copyright 2015 Marius Strajeru
+ * @license   http://opensource.org/licenses/mit-license.php MIT License
+ * @author    Marius Strajeru <ultimate.module.creator@gmail.com>
+ */
+-->
+<save_attributes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="save_attributes.xsd">
+    <entity id="umc_settings">
+        <attribute id="install" />
+        <attribute id="license" />
+        <attribute id="qualified" />
+        <attribute id="underscore" />
+        <attribute id="annotation" />
+    </entity>
+    <entity id="umc_module">
+        <attribute id="namespace" />
+        <attribute id="module_name" />
+        <attribute id="version" />
+        <attribute id="menu_text" />
+        <attribute id="menu_parent" />
+        <attribute id="sort_order" />
+    </entity>
+    <entity id="umc_entity">
+        <attribute id="label_singular" />
+        <attribute id="label_plural" />
+        <attribute id="name_singular" />
+        <attribute id="name_plural" />
+        <attribute id="is_tree" />
+        <attribute id="add_created_to_grid" />
+        <attribute id="add_updated_to_grid" />
+        <attribute id="type" />
+        <attribute id="search" />
+    </entity>
+</save_attributes>
