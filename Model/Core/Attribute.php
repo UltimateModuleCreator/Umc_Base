@@ -28,6 +28,9 @@ use Umc\Base\Model\Core\Attribute\Type\Factory as AttributeTypeFactory;
  * @method bool getRequired()
  * @method string getOptions()
  * @method string getNote()
+ * @method Attribute setCode(\string $code)
+ * @method Attribute setLabel(\string $label)
+ * @method Attribute setType(\string $type)
  */
 class Attribute extends AbstractModel implements ModelInterface
 {

@@ -22,11 +22,13 @@ use Magento\Framework\Event\ManagerInterface;
 use Umc\Base\Model\Config\Form as FormConfig;
 use Umc\Base\Model\Config\Restriction as RestrictionConfig;
 use Umc\Base\Model\Config\SaveAttributes as SaveAttributesConfig;
+use Umc\Base\Model\Core\AttributeFactory;
 use Umc\Base\Model\Core\Entity\Type\Factory as TypeFactory;
 use Umc\Base\Model\Core\Entity\Type\TypeInterface;
 
 /**
  * @method int getSortOrder()
+ * @method int getIsTree()
  */
 class Entity extends AbstractModel implements ModelInterface
 {
@@ -74,6 +76,11 @@ class Entity extends AbstractModel implements ModelInterface
     protected $typeFactory;
 
     /**
+     * @var
+     */
+    protected $attributeFactory;
+
+    /**
      * attribute that acts as name
      *
      * @var Attribute|null
@@ -84,6 +91,7 @@ class Entity extends AbstractModel implements ModelInterface
      * constructor
      *
      * @param TypeFactory $typeFactory
+     * @param AttributeFactory $attributeFactory
      * @param ManagerInterface $eventManager
      * @param SaveAttributesConfig $saveAttributesConfig
      * @param FormConfig $formConfig
@@ -93,6 +101,7 @@ class Entity extends AbstractModel implements ModelInterface
      */
     public function __construct(
         TypeFactory $typeFactory,
+        AttributeFactory $attributeFactory,
         ManagerInterface $eventManager,
         SaveAttributesConfig $saveAttributesConfig,
         FormConfig $formConfig,
@@ -100,7 +109,8 @@ class Entity extends AbstractModel implements ModelInterface
         Escaper $escaper,
         array $data = []
     ) {
-        $this->typeFactory = $typeFactory;
+        $this->typeFactory      = $typeFactory;
+        $this->attributeFactory = $attributeFactory;
         parent::__construct($eventManager, $saveAttributesConfig, $formConfig, $restrictionConfig, $escaper, $data);
     }
 
@@ -376,20 +386,24 @@ class Entity extends AbstractModel implements ModelInterface
     {
         if (is_null($this->placeholders)) {
             $this->placeholders = [
-                '{{entity}}'            => $this->getNameSingular(),
-                '{{Entity}}'            => $this->getNameSingular(true),
-                '{{EntityLabel}}'       => $this->getLabelSingular(true),
-                '{{EntitiesLabel}}'     => $this->getLabelPlural(true),
-                '{{entities}}'          => $this->getNamePlural(),
-                '{{Entities}}'          => $this->getNamePlural(true),
-                '{{sort_order}}'        => $this->getSortOrder(),
-                '{{nameAttributeCode}}' => $this->getNameAttributeCode(),
-                '{{NameAttributeCode}}' => $this->getNameAttributeCode(true),
-                '{{NameAttributeLabel}}'=> $this->getNameAttribute()->getLabel(),
-                '{{dateAttributeCodes}}'=> $this->getDateAttributeCodes(),
-                '{{columnsSetup}}'      => $this->getColumnsSetup(),
-                '{{editFormFields}}'    => $this->getEditFormFields(),
-                '{{defaultAttributeValues}}' => $this->getDefaultAttributeValues()
+                '{{entity}}'                => $this->getNameSingular(),
+                '{{Entity}}'                => $this->getNameSingular(true),
+                '{{EntityLabel}}'           => $this->getLabelSingular(true),
+                '{{EntitiesLabel}}'         => $this->getLabelPlural(true),
+                '{{entities}}'              => $this->getNamePlural(),
+                '{{Entities}}'              => $this->getNamePlural(true),
+                '{{sort_order}}'            => $this->getSortOrder(),
+                '{{nameAttributeCode}}'     => $this->getNameAttributeCode(),
+                '{{NameAttributeCode}}'     => $this->getNameAttributeCode(true),
+                '{{NameAttributeLabel}}'    => $this->getNameAttribute()->getLabel(),
+                '{{dateAttributeCodes}}'    => $this->getDateAttributeCodes(),
+                '{{columnsSetup}}'          => $this->getColumnsSetup(),
+                '{{editFormFields}}'        => $this->getEditFormFields(),
+                '{{defaultAttributeValues}}'=> $this->getDefaultAttributeValues(),
+                '{{isActiveTreeSuggest}}'   => $this->getIsActiveTreeSuggest(),
+                '{{treeClass}}'             => $this->getTreeClass(),
+                '{{editSpecificJsAction}}'  => $this->getEditSpecificJsAction(),
+                '{{AdminFormParentClass}}'  => $this->getAdminFormParentClass(),
             ];
             $this->placeholders = array_merge($this->placeholders, $this->getTypeInstance()->getPlaceholders());
             $this->placeholders = array_merge($this->getModule()->getPlaceholders(), $this->placeholders);
@@ -493,6 +507,9 @@ class Entity extends AbstractModel implements ModelInterface
         foreach ($this->getAttributes() as $attribute) {
             $setup .= $attribute->getColumnSetup();
         }
+        foreach ($this->getSystemAttributes() as $attribute) {
+            $setup .= $attribute->getColumnSetup();
+        }
         return $setup;
     }
 
@@ -548,5 +565,85 @@ class Entity extends AbstractModel implements ModelInterface
         return ['DROP TABLE '.$this->getModule()->getNamespace(true).'_'.
             $this->getModule()->getModuleName(true).'_'.
             $this->getNameSingular().';'];
+    }
+
+    /**
+     * //TODO: should be pluginezed when 'is_active' attribute support is added
+     * @return string
+     */
+    public function getIsActiveTreeSuggest()
+    {
+        return 'true';
+    }
+
+    /**
+     * //TODO: should be pluginezed when 'is_active' attribute support is added
+     * @return string
+     */
+    public function getTreeClass()
+    {
+        return 'active-category';
+    }
+
+    /**
+     * @return Attribute[]
+     */
+    public function getSystemAttributes()
+    {
+        $attributes = [];
+        if ($this->getIsTree()) {
+            $attribute = $this->attributeFactory->create();
+            $attribute->setCode('parent_id');
+            $attribute->setLabel('Parent id');
+            $attribute->setType('int');
+            $attribute->setEntity($this);
+            $attributes[] = $attribute;
+
+            $attribute = $this->attributeFactory->create();
+            $attribute->setCode('path');
+            $attribute->setLabel('Path');
+            $attribute->setType('text');
+            $attribute->setEntity($this);
+            $attributes[] = $attribute;
+
+            $attribute = $this->attributeFactory->create();
+            $attribute->setCode('position');
+            $attribute->setLabel('Position');
+            $attribute->setType('int');
+            $attribute->setEntity($this);
+            $attributes[] = $attribute;
+
+            $attribute = $this->attributeFactory->create();
+            $attribute->setCode('level');
+            $attribute->setLabel('Level');
+            $attribute->setType('int');
+            $attribute->setEntity($this);
+            $attributes[] = $attribute;
+
+            $attribute = $this->attributeFactory->create();
+            $attribute->setCode('children_count');
+            $attribute->setLabel('Children Count');
+            $attribute->setType('int');
+            $attribute->setEntity($this);
+            $attributes[] = $attribute;
+        }
+        return $attributes;
+    }
+
+    /**
+     * //todo: pluginize when is_active attribute is added
+     * @return string
+     */
+    public function getEditSpecificJsAction()
+    {
+        return '';
+    }
+
+    public function getAdminFormParentClass()
+    {
+        $module = $this->getModule();
+        return (!$this->getIsTree())
+            ? 'Magento\Backend\Block\Widget\Form\Generic'
+            : $module->getNamespace().'\\'.$module->getModuleName().'\Block\Adminhtml\\'.$this->getNameSingular(true).'\\Abstract'.$this->getNameSingular(true);
     }
 }

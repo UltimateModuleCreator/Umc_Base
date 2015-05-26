@@ -7,6 +7,10 @@
     {
         return $this->_authorization->isAllowed('{{Namespace}}_{{Module}}::{{entity}}');
     }
+
+    /**
+     * @return \Magento\Backend\Model\View\Result\Page|\Magento\Backend\Model\View\Result\Redirect|\Magento\Framework\View\Result\Page
+     */
     public function execute()
     {
         $id = $this->getRequest()->getParam('{{entity}}_id');

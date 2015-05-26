@@ -3,7 +3,7 @@
      *
      * @return $this
      */
-    public function setPageData()
+    protected function {{_}}setPageData()
     {
         return $this;
     }

@@ -3,7 +3,7 @@
      *
      * @return string
      */
-    protected function _getUrl()
+    protected function {{_}}getUrl()
     {
         $url = false;
         if ($this->getValue()) {

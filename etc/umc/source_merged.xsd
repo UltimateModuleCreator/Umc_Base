@@ -65,6 +65,7 @@
                 <xs:element ref="implements" maxOccurs="unbounded" minOccurs="0"/>
                 <xs:element ref="annotations" maxOccurs="unbounded" minOccurs="0"/>
                 <xs:element ref="members" maxOccurs="unbounded" minOccurs="0" />
+                <xs:element name="parent_construct_extra" type="xs:string" minOccurs="0" maxOccurs="1" />
                 <xs:element ref="constructs" maxOccurs="unbounded" minOccurs="0"/>
                 <xs:element ref="code" maxOccurs="unbounded" minOccurs="0"/>
             </xs:sequence>
@@ -211,16 +212,10 @@
             <xs:documentation>Each annotation</xs:documentation>
         </xs:annotation>
         <xs:complexType>
-            <xs:simpleContent>
-                <xs:extension base="xs:string">
-                    <xs:attribute type="xs:string" name="id" use="required"/>
-                    <xs:attribute type="xs:boolean" name="disabled" use="optional"/>
-                    <xs:attribute type="xs:string" name="params" use="optional"/>
-                    <xs:attribute type="xs:string" name="return" use="required"/>
-                    <xs:attribute type="xs:int" name="sort" use="optional"/>
-                    <xs:attribute type="xs:string" name="scope" use="optional"/>
-                </xs:extension>
-            </xs:simpleContent>
+            <xs:sequence>
+                <xs:element ref="depends" maxOccurs="unbounded" minOccurs="0" />
+            </xs:sequence>
+            <xs:attributeGroup ref="annotationAttributeGroup"/>
         </xs:complexType>
     </xs:element>
 
@@ -404,6 +399,15 @@
         <xs:attribute type="xs:string" name="id" use="required"/>
         <xs:attribute type="xs:int" name="sort" use="required"/>
         <xs:attribute type="xs:boolean" name="disabled" use="optional"/>
+    </xs:attributeGroup>
+
+    <xs:attributeGroup name="annotationAttributeGroup">
+        <xs:attribute type="xs:string" name="id" use="required"/>
+        <xs:attribute type="xs:boolean" name="disabled" use="optional"/>
+        <xs:attribute type="xs:string" name="params" use="optional"/>
+        <xs:attribute type="xs:string" name="return" use="required"/>
+        <xs:attribute type="xs:int" name="sort" use="optional"/>
+        <xs:attribute type="xs:string" name="scope" use="optional"/>
     </xs:attributeGroup>
 
 </xs:schema>

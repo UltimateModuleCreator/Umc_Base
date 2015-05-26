@@ -1,0 +1,15 @@
+
+    /**
+     * prepare the form
+     */
+    protected function _construct()
+    {
+        $this->_objectId = '{{entity}}_id';
+        $this->_blockGroup = '{{Namespace}}_{{Module}}';
+        $this->_controller = 'adminhtml_{{entity}}';
+        $this->_mode = 'edit';
+        parent::_construct();
+        $this->buttonList->remove('back');
+        $this->buttonList->remove('reset');
+        $this->buttonList->remove('save');
+    }

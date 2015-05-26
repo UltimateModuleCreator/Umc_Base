@@ -1,0 +1,245 @@
+    /**
+     * @param $path
+     * @return int|string
+     */
+    protected function {{_}}getMaxPosition($path)
+    {
+        $adapter = $this->getReadConnection();
+        $positionField = $adapter->quoteIdentifier('position');
+        $level = count(explode('/', $path));
+        $bind = ['c_level' => $level, 'c_path' => $path . '/%'];
+        $select = $adapter->select()->from(
+            $this->getTable('{{namespace}}_{{module}}_{{entity}}'),
+            'MAX(' . $positionField . ')'
+        )->where(
+                $adapter->quoteIdentifier('path') . ' LIKE :c_path'
+            )->where(
+                $adapter->quoteIdentifier('level') . ' = :c_level'
+            );
+
+        $position = $adapter->fetchOne($select, $bind);
+        if (!$position) {
+            $position = 0;
+        }
+        return $position;
+    }
+
+    /**
+     * Update path field
+     *
+     * @param \{{Namespace}}\{{Module}}\Model\{{Entity}} $object
+     * @return $this
+     */
+    protected function {{_}}savePath($object)
+    {
+        if ($object->getId()) {
+            $this->_getWriteAdapter()->update(
+                $this->getMainTable(),
+                ['path' => $object->getPath()],
+                ['{{entity}}_id = ?' => $object->getId()]
+            );
+            $object->unsetData('path_ids');
+        }
+        return $this;
+    }
+
+    /**
+     * @param AbstractModel $object
+     * @return $this
+     */
+    protected function _afterSave(\Magento\Framework\Model\AbstractModel $object)
+    {
+        /** @var \{{Namespace}}\{{Module}}\Model\{{Entity}} $object */
+        if (substr($object->getPath(), -1) == '/') {
+            $object->setPath($object->getPath() . $object->getId());
+            $this->{{_}}savePath($object);
+        }
+        return parent::_afterSave($object);
+    }
+
+    /**
+     * @param AbstractModel $object
+     * @return $this
+     */
+    protected function _beforeDelete({{class Magento\Framework\Model\AbstractModel}} $object)
+    {
+        parent::_beforeDelete($object);
+
+        /**
+         * Update children count for all parent {{EntitiesLabel}}
+         */
+        $parentIds = $object->getParentIds();
+        if ($parentIds) {
+            $childDecrease = $object->getChildrenCount() + 1;
+            // +1 is itself
+            $data = ['children_count' => new \Zend_Db_Expr('children_count - ' . $childDecrease)];
+            $where = ['{{entity}}_id IN(?)' => $parentIds];
+            $this->_getWriteAdapter()->update($this->getMainTable(), $data, $where);
+        }
+        $this->deleteChildren($object);
+        return $this;
+    }
+
+    /**
+     * @param \Magento\Framework\Object $object
+     * @return $this
+     */
+    public function deleteChildren(\Magento\Framework\Object $object)
+    {
+        $adapter = $this->_getWriteAdapter();
+        $pathField = $adapter->quoteIdentifier('path');
+
+        $select = $adapter->select()->from(
+            $this->getMainTable(),
+            ['{{entity}}_id']
+        )->where(
+                $pathField . ' LIKE :c_path'
+            );
+
+        $childrenIds = $adapter->fetchCol($select, ['c_path' => $object->getPath() . '/%']);
+
+        if (!empty($childrenIds)) {
+            $adapter->delete($this->getMainTable(), ['{{entity}}_id IN (?)' => $childrenIds]);
+        }
+
+        /**
+         * Add deleted children ids to object
+         * This data can be used in after delete event
+         */
+        $object->setDeletedChildrenIds($childrenIds);
+        return $this;
+    }
+
+    /**
+     * @param \{{Namespace}}\{{Module}}\Model\{{Entity}} ${{entity}}
+     * @param \{{Namespace}}\{{Module}}\Model\{{Entity}} $newParent
+     * @param null $after{{Entity}}Id
+     * @return $this
+     */
+    public function changeParent(
+        \{{Namespace}}\{{Module}}\Model\{{Entity}} ${{entity}},
+        \{{Namespace}}\{{Module}}\Model\{{Entity}} $newParent,
+        $after{{Entity}}Id = null
+    ) {
+        $childrenCount = $this->getChildrenCount(${{entity}}->getId()) + 1;
+        $table = $this->getMainTable();
+        $adapter = $this->_getWriteAdapter();
+        $levelFiled = $adapter->quoteIdentifier('level');
+        $pathField = $adapter->quoteIdentifier('path');
+
+        /**
+         * Decrease children count for all old {{EntityLabel}} parent {{EntitiesLabel}}
+         */
+        $adapter->update(
+            $table,
+            ['children_count' => new \Zend_Db_Expr('children_count - ' . $childrenCount)],
+            ['{{entity}}_id IN(?)' => ${{entity}}->getParentIds()]
+        );
+
+        /**
+         * Increase children count for new {{EntityLabel}} parents
+         */
+        $adapter->update(
+            $table,
+            ['children_count' => new \Zend_Db_Expr('children_count + ' . $childrenCount)],
+            ['{{entity}}_id IN(?)' => $newParent->getPathIds()]
+        );
+
+        $position = $this->{{_}}processPositions(${{entity}}, $newParent, $after{{Entity}}Id);
+
+        $newPath = sprintf('%s/%s', $newParent->getPath(), ${{entity}}->getId());
+        $newLevel = $newParent->getLevel() + 1;
+        $levelDisposition = $newLevel - ${{entity}}->getLevel();
+
+        /**
+         * Update children nodes path
+         */
+        $adapter->update(
+            $table,
+            [
+                'path' => new \Zend_Db_Expr(
+                    'REPLACE(' . $pathField . ',' . $adapter->quote(
+                        ${{entity}}->getPath() . '/'
+                    ) . ', ' . $adapter->quote(
+                        $newPath . '/'
+                    ) . ')'
+                ),
+                'level' => new \Zend_Db_Expr($levelFiled . ' + ' . $levelDisposition)
+            ],
+            [$pathField . ' LIKE ?' => ${{entity}}->getPath() . '/%']
+        );
+        /**
+         * Update moved {{EntityLabel}} data
+         */
+        $data = [
+            'path' => $newPath,
+            'level' => $newLevel,
+            'position' => $position,
+            'parent_id' => $newParent->getId(),
+        ];
+        $adapter->update($table, $data, ['{{entity}}_id = ?' => ${{entity}}->getId()]);
+
+        // Update {{EntityLabel}} object to new data
+        ${{entity}}->addData($data);
+        ${{entity}}->unsetData('path_ids');
+
+        return $this;
+    }
+
+    /**
+     * @param \{{Namespace}}\{{Module}}\Model\{{Entity}} ${{entity}}
+     * @param \{{Namespace}}\{{Module}}\Model\{{Entity}} $newParent
+     * @param $after{{Entity}}Id
+     * @return int
+     */
+    protected function {{_}}processPositions(
+        \{{Namespace}}\{{Module}}\Model\{{Entity}} ${{entity}},
+        \{{Namespace}}\{{Module}}\Model\{{Entity}} $newParent,
+        $after{{Entity}}Id
+    )
+    {
+        $table = $this->getMainTable();
+        $adapter = $this->_getWriteAdapter();
+        $positionField = $adapter->quoteIdentifier('position');
+
+        $bind = ['position' => new \Zend_Db_Expr($positionField . ' - 1')];
+        $where = [
+            'parent_id = ?' => ${{entity}}->getParentId(),
+            $positionField . ' > ?' => ${{entity}}->getPosition(),
+        ];
+        $adapter->update($table, $bind, $where);
+
+        /**
+         * Prepare position value
+         */
+        if ($after{{Entity}}Id) {
+            $select = $adapter->select()->from($table, 'position')->where('{{entity}}_id = :{{entity}}_id');
+            $position = $adapter->fetchOne($select, ['{{entity}}_id' => $after{{Entity}}Id]);
+            $position += 1;
+        } else {
+            $position = 1;
+        }
+
+        $bind = ['position' => new \Zend_Db_Expr($positionField . ' + 1')];
+        $where = ['parent_id = ?' => $newParent->getId(), $positionField . ' >= ?' => $position];
+        $adapter->update($table, $bind, $where);
+
+        return $position;
+    }
+
+    /**
+     * @param ${{entity}}Id
+     * @return string
+     */
+    public function getChildrenCount(${{entity}}Id)
+    {
+        $select = $this->_getReadAdapter()->select()->from(
+            $this->getMainTable(),
+            'children_count'
+        )->where(
+                '{{entity}}_id = :{{entity}}_id'
+            );
+        $bind = ['{{entity}}_id' => ${{entity}}Id];
+
+        return $this->_getReadAdapter()->fetchOne($select, $bind);
+    }

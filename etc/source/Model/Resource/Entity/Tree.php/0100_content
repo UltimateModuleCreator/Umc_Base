@@ -1,0 +1,391 @@
+
+    /**
+     * Add data to collection
+     *
+     * @param Collection $collection
+     * @param boolean $sorted
+     * @param array $exclude
+     * @param boolean $toLoad
+     * @param boolean $onlyActive
+     * @return $this
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     */
+    public function addCollectionData(
+        $collection = null,
+        $sorted = false,
+        $exclude = [],
+        $toLoad = true,
+        $onlyActive = false
+    ) {
+        if ($collection === null) {
+            $collection = $this->getCollection($sorted);
+        } else {
+            $this->setCollection($collection);
+        }
+
+        if (!is_array($exclude)) {
+            $exclude = [$exclude];
+        }
+
+        $nodeIds = [];
+        foreach ($this->getNodes() as $node) {
+            if (!in_array($node->getId(), $exclude)) {
+                $nodeIds[] = $node->getId();
+            }
+        }
+        $collection->addIdFilter($nodeIds);
+        if ($onlyActive) {
+            $disabledIds = $this->{{_}}getDisabledIds($collection, $nodeIds);
+            if ($disabledIds) {
+                $collection->addFieldToFilter('{{entity}}_id', ['nin' => $disabledIds]);
+            }
+        }
+
+
+        if ($toLoad) {
+            $collection->load();
+
+            foreach ($collection as ${{entity}}) {
+                if ($this->getNodeById(${{entity}}->getId())) {
+                    $this->getNodeById(${{entity}}->getId())->addData(${{entity}}->getData());
+                }
+            }
+
+            foreach ($this->getNodes() as $node) {
+                if (!$collection->getItemById($node->getId()) && $node->getParent()) {
+                    $this->removeNode($node);
+                }
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * Add inactive categories ids
+     *
+     * @param mixed $ids
+     * @return $this
+     */
+    public function addInactive{{Entity}}Ids($ids)
+    {
+        if (!is_array($this->inactive{{Entity}}Ids)) {
+            $this->{{_}}initInactive{{Entity}}Ids();
+        }
+        $this->inactive{{Entity}}Ids = array_merge($ids, $this->inactive{{Entity}}Ids);
+        return $this;
+    }
+
+    /**
+     * Retrieve inactive {{EntitiesLabel}} ids
+     *
+     * @return $this
+     */
+    protected function {{_}}initInactive{{Entity}}Ids()
+    {
+        $this->inactive{{Entity}}Ids = [];
+        $this->eventManager->dispatch('{{namespace}}_{{module}}_{{entity}}_tree_init_inactive_{{entity}}_ids', ['tree' => $this]);
+        return $this;
+    }
+
+    /**
+     * Retrieve inactive {{EntitiesLabel}} ids
+     *
+     * @return array
+     */
+    public function getInactive{{Entity}}Ids()
+    {
+        if (!is_array($this->inactive{{Entity}}Ids)) {
+            $this->{{_}}initInactive{{Entity}}Ids();
+        }
+
+        return $this->inactive{{Entity}}Ids;
+    }
+
+    /**
+     * Return disable {{EntityLabel}} ids
+     *
+     * @param Collection $collection
+     * @param array $allIds
+     * @return array
+     */
+    protected function {{_}}getDisabledIds($collection, $allIds)
+    {
+        //TODO: implement this for frontend
+        return [];
+    }
+
+    /**
+     * Retrieve inactive {{EntityLabel}} item ids
+     *
+     * @param Collection $collection
+     * @param int $storeId
+     * @return array
+     */
+    protected function {{_}}getInactiveItemIds($collection, $storeId)
+    {
+        //TODO: implement this for frontend
+        return [];
+    }
+
+    /**
+     * Check is {{EntityLabel}} items active
+     *
+     * @param int $id
+     * @return boolean
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
+     */
+    protected function {{_}}getItemIsActive($id)
+    {
+        //TODO: implement this for frontend
+        return false;
+    }
+
+    /**
+     * Get {{EntitiesLabel}} collection
+     *
+     * @param boolean $sorted
+     * @return Collection
+     */
+    public function getCollection($sorted = false)
+    {
+        if ($this->{{_}}collection === null) {
+            $this->{{_}}collection = $this->{{_}}getDefaultCollection($sorted);
+        }
+        return $this->{{_}}collection;
+    }
+
+    /**
+     * Clean unneeded collection
+     *
+     * @param Collection|array $object
+     * @return void
+     */
+    protected function {{_}}clean($object)
+    {
+        if (is_array($object)) {
+            foreach ($object as $obj) {
+                $this->{{_}}clean($obj);
+            }
+        }
+        unset($object);
+    }
+
+    /**
+     * set collection
+     *
+     * @param Collection $collection
+     * @return $this
+     */
+    public function setCollection($collection)
+    {
+        if ($this->{{_}}collection !== null) {
+            $this->{{_}}clean($this->{{_}}collection);
+        }
+        $this->{{_}}collection = $collection;
+        return $this;
+    }
+
+    /**
+     * get default collection
+     *
+     * @param boolean $sorted
+     * @return Collection
+     */
+    protected function {{_}}getDefaultCollection($sorted = false)
+    {
+        $collection = $this->{{_}}collectionFactory->create();
+        if ($sorted) {
+            if (is_string($sorted)) {
+                // $sorted is supposed to be attribute name
+                $collection->addFieldToSort($sorted);
+            } else {
+                $collection->addFieldToSort('{{nameAttributeCode}}');
+            }
+        }
+
+        return $collection;
+    }
+
+    /**
+     * Executing parents move method and cleaning cache after it
+     *
+     * @param mixed ${{entity}}
+     * @param mixed $newParent
+     * @param mixed $prevNode
+     * @return void
+     */
+    public function move(${{entity}}, $newParent, $prevNode = null)
+    {
+        $this->{{entity}}Resource->move(${{entity}}->getId(), $newParent->getId());
+        parent::move(${{entity}}, $newParent, $prevNode);
+
+        $this->{{_}}afterMove();
+    }
+
+    /**
+     * Move tree after
+     *
+     * @return $this
+     */
+    protected function {{_}}afterMove()
+    {
+        $this->cache->clean([\{{Namespace}}\{{Module}}\Model\{{Entity}}::CACHE_TAG]);
+        return $this;
+    }
+
+    /**
+     * Load whole {{EntityLabel}} tree, that will include specified {{EntitiesLabel}} ids.
+     *
+     * @param array $ids
+     * @param bool $addCollectionData
+     * @return $this|bool
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     */
+    public function loadByIds($ids, $addCollectionData = true)
+    {
+        $levelField = $this->_conn->quoteIdentifier('level');
+        $pathField = $this->_conn->quoteIdentifier('path');
+        // load first two levels, if no ids specified
+        if (empty($ids)) {
+            $select = $this->_conn
+                ->select()
+                ->from($this->_table, '{{entity}}_id')
+                ->where($levelField . ' <= 2');
+            $ids = $this->_conn->fetchCol($select);
+        }
+        if (!is_array($ids)) {
+            $ids = [$ids];
+        }
+        foreach ($ids as $key => $id) {
+            $ids[$key] = (int)$id;
+        }
+
+        // collect paths of specified IDs and prepare to collect all their parents and neighbours
+        $select = $this->_conn
+            ->select()
+            ->from($this->_table, ['path', 'level'])
+            ->where('{{entity}}_id IN (?)', $ids);
+        $where = [$levelField . '=0' => true];
+
+        foreach ($this->_conn->fetchAll($select) as $item) {
+            $pathIds = explode('/', $item['path']);
+            $level = (int)$item['level'];
+            while ($level > 0) {
+                $pathIds[count($pathIds) - 1] = '%';
+                $path = implode('/', $pathIds);
+                $where["{$levelField}={$level} AND {$pathField} LIKE '{$path}'"] = true;
+                array_pop($pathIds);
+                $level--;
+            }
+        }
+        $where = array_keys($where);
+
+        // get all required records
+        if ($addCollectionData) {
+            $select = $this->{{_}}createCollectionDataSelect();
+        } else {
+            $select = clone $this->_select;
+            $select->order($this->_orderField . ' ' . {{class Magento\Framework\DB\Select}}::SQL_ASC);
+        }
+        $select->where(implode(' OR ', $where));
+
+        // get array of records and add them as nodes to the tree
+        $arrNodes = $this->_conn->fetchAll($select);
+        if (!$arrNodes) {
+            return false;
+        }
+        $childrenItems = [];
+        foreach ($arrNodes as $key => $nodeInfo) {
+            $pathToParent = explode('/', $nodeInfo[$this->_pathField]);
+            array_pop($pathToParent);
+            $pathToParent = implode('/', $pathToParent);
+            $childrenItems[$pathToParent][] = $nodeInfo;
+        }
+        $this->addChildNodes($childrenItems, '', null);
+        return $this;
+    }
+
+    /**
+     * Load array of category parents
+     *
+     * @param string $path
+     * @param bool $addCollectionData
+     * @param bool $withRootNode
+     * @return array
+     */
+    public function loadBreadcrumbsArray($path, $addCollectionData = true, $withRootNode = false)
+    {
+        $pathIds = explode('/', $path);
+        if (!$withRootNode) {
+            array_shift($pathIds);
+        }
+        $result = [];
+        if (!empty($pathIds)) {
+            if ($addCollectionData) {
+                $select = $this->{{_}}createCollectionDataSelect(false);
+            } else {
+                $select = clone $this->_select;
+            }
+            $select->where(
+                'e.{{entity}}_id IN(?)',
+                $pathIds
+            )->order(
+                $this->_conn->getLengthSql('e.path') . ' ' . \Magento\Framework\DB\Select::SQL_ASC
+            );
+            $result = $this->_conn->fetchAll($select);
+        }
+        return $result;
+    }
+
+
+    /**
+     * Obtain select for {{EntitiesLabel}}
+     *
+     * @param bool $sorted
+     * @param array $optionalAttributes
+     * @return \Zend_Db_Select
+     */
+    protected function {{_}}createCollectionDataSelect($sorted = true, $optionalAttributes = [])
+    {
+
+        $select = $this->{{_}}getDefaultCollection($sorted ? $this->_orderField : false)->getSelect();
+
+        // count children products qty plus self products qty
+        ${{entities}}Table = $this->{{_}}coreResource->getTableName('{{namespace}}_{{module}}_{{entity}}');
+
+        $subConcat = $this->_conn->getConcatSql(['e.path', $this->_conn->quote('/%')]);
+        $subSelect = $this->_conn->select()->from(
+            ['see' => ${{entities}}Table],
+            null
+        )->where(
+            'see.{{entity}}_id = e.{{entity}}_id'
+        )->orWhere(
+            'see.path LIKE ?',
+            $subConcat
+        );
+        return $select;
+    }
+
+    /**
+     * Get real existing {{EntityLabel}} ids by specified ids
+     *
+     * @param array $ids
+     * @return array
+     */
+    public function getExisting{{Entity}}IdsBySpecifiedIds($ids)
+    {
+        if (empty($ids)) {
+            return [];
+        }
+        if (!is_array($ids)) {
+            $ids = [$ids];
+        }
+        $select = $this->_conn
+            ->select()
+            ->from($this->_table, ['{{entity}}_id'])
+            ->where('{{entity}}_id IN (?)', $ids);
+        return $this->_conn->fetchCol($select);
+    }

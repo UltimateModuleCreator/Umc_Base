@@ -9,13 +9,13 @@
         $this->addClass('input-file');
         $html .= parent::getElementHtml();
         if ($this->getValue()) {
-            $url = $this->_getUrl();
+            $url = $this->{{_}}getUrl();
             if (!preg_match("/^http\:\/\/|https\:\/\//", $url)) {
                 $url = $this->{{_}}fileModel->getBaseUrl() . $url;
             }
-            $html .= '<br /><a href="'.$url.'">'.$this->_getUrl().'</a> ';
+            $html .= '<br /><a href="'.$url.'">'.$this->{{_}}getUrl().'</a> ';
         }
-        $html .= $this->_getDeleteCheckbox();
+        $html .= $this->{{_}}getDeleteCheckbox();
         return $html;
     }
 
@@ -24,7 +24,7 @@
      *
      * @return string
      */
-    protected function _getDeleteCheckbox()
+    protected function {{_}}getDeleteCheckbox()
     {
         $html = '';
         if ($this->getValue()) {
@@ -35,7 +35,7 @@
                 $this->getHtmlId().'_delete"'.($this->getDisabled() ? ' disabled="disabled"': '').'/>';
             $html .= '<label for="'.$this->getHtmlId().'_delete"'.($this->getDisabled() ? ' class="disabled"' : '').'>';
             $html .= $label.'</label>';
-            $html .= $this->_getHiddenInput();
+            $html .= $this->{{_}}getHiddenInput();
             $html .= '</span>';
         }
         return $html;
@@ -46,7 +46,7 @@
      *
      * @return string
      */
-    protected function _getHiddenInput()
+    protected function {{_}}getHiddenInput()
     {
         return '<input type="hidden" name="'.parent::getName().'[value]" value="'.$this->getValue().'" />';
     }
@@ -54,7 +54,7 @@
     /**
      * @return string
      */
-    protected function _getUrl()
+    protected function {{_}}getUrl()
     {
         return $this->getValue();
     }

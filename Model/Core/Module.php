@@ -225,6 +225,9 @@ class Module extends AbstractModel implements ModelInterface
     {
         $errors = parent::validate();
         $errors = array_merge($errors, $this->getSettings()->validate());
+        if (count($this->getEntities()) == 0 ) {
+            $errors[''][] = __('Each module must contain at least one entity.');
+        }
         foreach ($this->getEntities() as $entity) {
             $entityErrors = $entity->validate();
             $errors = array_merge($errors, $entityErrors);

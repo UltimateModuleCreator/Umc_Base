@@ -1,0 +1,4 @@
+        <referenceContainer name="left" htmlClass="admin__scope-old" htmlTag="div" />
+        <referenceContainer name="left">
+            <block class="{{Namespace}}\{{Module}}\Block\Adminhtml\{{Entity}}\Tree" name="{{namespace}}.{{module}}.{{entity}}.tree" template="{{entity}}/tree.phtml"/>
+        </referenceContainer>

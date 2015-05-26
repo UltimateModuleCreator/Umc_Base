@@ -1,0 +1,43 @@
+
+    /**
+     * Initialize Tabs
+     *
+     * @return void
+     */
+    protected function _construct()
+    {
+        parent::_construct();
+        $this->setId('{{entity}}_info_tabs');
+        $this->setDestElementId('{{entity}}_tab_content');
+        $this->setTitle(__('{{EntityLabel}} Data'));
+    }
+
+    /**
+     * Retrieve {{EntityLabel}} object
+     *
+     * @return \{{Namespace}}\{{Module}}\Model\{{Entity}}
+     */
+    public function get{{Entity}}()
+    {
+        return $this->{{_}}coreRegistry->registry('{{namespace}}_{{module}}_{{entity}}');
+    }
+
+
+    /**
+     * Prepare Layout Content
+     *
+     * @return $this
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     */
+    protected function _prepareLayout()
+    {
+        $this->addTab(
+            '{{entity}}',
+            [
+                'label' => __('{{EntityLabel}} information'),
+                'content' => $this->getLayout()->createBlock(
+                    '{{Namespace}}\{{Module}}\Block\Adminhtml\{{Entity}}\Edit\Tab\{{Entity}}',
+                    '{{namespace}}_{{module}}_{{entity}_edit_tab_{{entity}}'
+                )->toHtml()
+            ]
+        );

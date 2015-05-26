@@ -1,0 +1,237 @@
+    /**
+     * @return $this
+     */
+    protected function _prepareLayout()
+    {
+        ${{entity}}   = $this->get{{Entity}}();
+        ${{entity}}Id = (int)${{entity}}->getId();
+        // 0 when we create {{EntityLabel}}, otherwise some value for editing {{EntityLabel}}
+
+        $this->setChild(
+            'tabs',
+            $this->getLayout()->createBlock('{{Namespace}}\{{Module}}\Block\Adminhtml\{{Entity}}\Edit\Tabs', 'tabs')
+        );
+
+        // Save button
+        $this->{{_}}addButton(
+            'save',
+            [
+                'id' => 'save',
+                'label' => __('Save {{EntityLabel}}'),
+                'class' => 'save primary save-{{entity}}',
+                'data_attribute' => [
+                    'mage-init' => [
+                        '{{Namespace}}_{{Module}}/{{entity}}/edit' => [
+                            'url' => $this->getSaveUrl(),
+                            'ajax' => true
+                        ]
+                    ]
+                ]
+            ]
+        );
+
+        // Delete button
+        if (${{entity}}Id && !in_array(${{entity}}Id, $this->getRootIds())) {
+            $this->{{_}}addButton(
+                'delete',
+                [
+                    'id' => 'delete',
+                    'label' => __('Delete {{EntityLabel}}'),
+                    'onclick' => "{{entity}}Delete('" . $this->getUrl(
+                        '{{namespace}}_{{module}}/*/delete',
+                        ['_current' => true]
+                    ) . "')",
+                    'class' => 'delete'
+                ]
+            );
+        }
+
+        // Reset button
+        $resetPath = ${{entity}}Id ? '{{namespace}}_{{module}}/*/edit' : '{{namespace}}_{{module}}/*/add';
+        $this->{{_}}addButton(
+            'reset',
+            [
+                'id' => 'reset',
+                'label' => __('Reset'),
+                'onclick' => "{{entity}}Reset('" . $this->getUrl($resetPath, ['_current' => true]) . "',false)",
+                'class' => 'reset'
+            ]
+        );
+
+        return parent::_prepareLayout();
+    }
+
+    /**
+     * Retrieve additional buttons html
+     *
+     * @return string
+     */
+    public function getAdditionalButtonsHtml()
+    {
+        $html = '';
+        foreach ($this->{{_}}additionalButtons as $childName) {
+            $html .= $this->getChildHtml($childName);
+        }
+        return $html;
+    }
+
+    /**
+     * Add additional button
+     *
+     * @param string $alias
+     * @param array $config
+     * @return $this
+     */
+    public function addAdditionalButton($alias, $config)
+    {
+        if (isset($config['name'])) {
+            $config['element_name'] = $config['name'];
+        }
+        if ($this->{{_}}hasToolbarBlock()) {
+            $this->{{_}}addButton($alias, $config);
+        } else {
+            $this->setChild(
+                $alias . '_button',
+                $this->getLayout()->createBlock('Magento\Backend\Block\Widget\Button')->addData($config)
+            );
+            $this->additionalButtons[$alias] = $alias . '_button';
+        }
+
+        return $this;
+    }
+
+    /**
+     * Remove additional button
+     *
+     * @param string $alias
+     * @return $this
+     */
+    public function removeAdditionalButton($alias)
+    {
+        if (isset($this->additionalButtons[$alias])) {
+            $this->unsetChild($this->additionalButtons[$alias]);
+            unset($this->additionalButtons[$alias]);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTabsHtml()
+    {
+        return $this->getChildHtml('tabs');
+    }
+
+    /**
+     * @return \Magento\Framework\Phrase|string
+     */
+    public function getHeader()
+    {
+        if ($this->get{{Entity}}Id()) {
+            return $this->get{{Entity}}{{NameAttributeCode}}();
+        } else {
+            $parentId = (int)$this->getRequest()->getParam('parent');
+            if ($parentId && $parentId != {{class {{Namespace}}\{{Module}}\Model\{{Entity}}}}::TREE_ROOT_ID) {
+                return __('New Child {{EntityLabel}}');
+            } else {
+                return __('New Root {{EntityLabel}}');
+            }
+        }
+    }
+
+    /**
+     * @param array $args
+     * @return string
+     */
+    public function getDeleteUrl(array $args = [])
+    {
+        $params = ['_current' => true];
+        $params = array_merge($params, $args);
+        return $this->getUrl('{{namespace}}_{{module}}/*/delete', $params);
+    }
+
+    /**
+     * Return URL for refresh input element 'path' in form
+     *
+     * @param array $args
+     * @return string
+     */
+    public function getRefreshPathUrl(array $args = [])
+    {
+        $params = ['_current' => true];
+        $params = array_merge($params, $args);
+        return $this->getUrl('{{namespace}}_{{module}}/*/refreshPath', $params);
+    }
+
+    /**
+     * @return bool
+     */
+    public function isAjax()
+    {
+        return $this->_request->isXmlHttpRequest() || $this->_request->getParam('isAjax');
+    }
+
+    /**
+     * Get parent {{EntityLabel}} id
+     *
+     * @return int
+     */
+    public function getParent{{Entity}}Id()
+    {
+        return (int)$this->templateContext->getRequest()->getParam('parent');
+    }
+
+    /**
+     * Get {{EntityLabel}}  id
+     *
+     * @return int
+     */
+    public function get{{Entity}}Id()
+    {
+        return (int)$this->templateContext->getRequest()->getParam('{{entity}}_id');
+    }
+
+    /**
+     * Add button block as a child block or to global Page Toolbar block if available
+     *
+     * @param string $buttonId
+     * @param array $data
+     * @return $this
+     */
+    protected function {{_}}addButton($buttonId, array $data)
+    {
+        $childBlockId = $buttonId . '_button';
+        $button = $this->{{_}}getButtonChildBlock($childBlockId);
+        $button->setData($data);
+        $block = $this->getLayout()->getBlock('page.actions.toolbar');
+        if ($block) {
+            $block->setChild($childBlockId, $button);
+        } else {
+            $this->setChild($childBlockId, $button);
+        }
+    }
+
+    /**
+     * @return bool
+     */
+    protected function {{_}}hasToolbarBlock()
+    {
+        return $this->getLayout()->isBlock('page.actions.toolbar');
+    }
+
+    /**
+     * Adding child block with specified child's id.
+     *
+     * @param string $childId
+     * @param null|string $blockClassName
+     * @return \Magento\Backend\Block\Widget
+     */
+    protected function {{_}}getButtonChildBlock($childId, $blockClassName = null)
+    {
+        if (null === $blockClassName) {
+            $blockClassName = 'Magento\Backend\Block\Widget\Button';
+        }
+        return $this->getLayout()->createBlock($blockClassName, $this->getNameInLayout() . '-' . $childId);
+    }

@@ -1,0 +1,28 @@
+
+    /**
+     * add if filter
+     *
+     * @param ${{entity}}Ids
+     * @return $this
+     */
+    public function addIdFilter(${{entity}}Ids)
+    {
+        if (is_array(${{entity}}Ids)) {
+            if (empty(${{entity}}Ids)) {
+                $condition = '';
+            } else {
+                $condition = ['in' => ${{entity}}Ids];
+            }
+        } elseif (is_numeric(${{entity}}Ids)) {
+            $condition = ${{entity}}Ids;
+        } elseif (is_string(${{entity}}Ids)) {
+            $ids = explode(',', ${{entity}}Ids);
+            if (empty($ids)) {
+                $condition = ${{entity}}Ids;
+            } else {
+                $condition = ['in' => $ids];
+            }
+        }
+        $this->addFieldToFilter('{{entity}}_id', $condition);
+        return $this;
+    }

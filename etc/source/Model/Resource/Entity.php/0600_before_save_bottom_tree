@@ -1,0 +1,36 @@
+        /** @var \{{Namespace}}\{{Module}}\Model\{{Entity}} $object */
+        parent::_beforeSave($object);
+        if (!$object->getChildrenCount()) {
+            $object->setChildrenCount(0);
+        }
+
+        if ($object->isObjectNew()) {
+            if ($object->getPosition() === null) {
+                $object->setPosition($this->{{_}}getMaxPosition($object->getPath()) + 1);
+            }
+            $path = explode('/', $object->getPath());
+            $level = count($path)  - ($object->getId() ? 1 : 0);
+            $toUpdateChild = array_diff($path, [$object->getId()]);
+
+            if (!$object->hasPosition()) {
+                $object->setPosition($this->{{_}}getMaxPosition(implode('/', $toUpdateChild)) + 1);
+            }
+            if (!$object->hasLevel()) {
+                $object->setLevel($level);
+            }
+            if (!$object->hasParentId() && $level && !$object->getInitialSetupFlag()) {
+                $object->setParentId($path[$level - 1]);
+            }
+            if (!$object->getId() && !$object->getInitialSetupFlag()) {
+                $object->setPath($object->getPath() . '/');
+            }
+            if (!$object->getInitialSetupFlag()) {
+                $this->_getWriteAdapter()->update(
+                    $this->getMainTable(),
+                    ['children_count' => new \Zend_Db_Expr('children_count+1')],
+                    ['{{entity}}_id IN(?)' => $toUpdateChild]
+                );
+            }
+        }
+        return $this;
+    }

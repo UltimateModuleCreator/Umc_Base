@@ -1,0 +1,11 @@
+
+    /**
+     * Creates {{EntityLabel}} model
+     *
+     * @param array $data
+     * @return \{{Namespace}}\{{Module}}\Model\{{Entity}}
+     */
+    public function create{{Entity}}($data = [])
+    {
+        return $this->{{_}}{{entity}}Factory->create($data);
+    }

@@ -1,0 +1,50 @@
+    /**
+     * Move {{EntityLabel}} action
+     *
+     * @return \Magento\Framework\Controller\Result\Raw
+     */
+    public function execute()
+    {
+        /**
+         * New parent {{EntityLabel}} identifier
+         */
+        $parentNodeId = $this->getRequest()->getPost('pid', false);
+        /**
+         * {{EntityLabel}} id after which we have put our {{EntityLabel}}
+         */
+        $prevNodeId = $this->getRequest()->getPost('aid', false);
+
+        /** @var $block \Magento\Framework\View\Element\Messages */
+        $block = $this->{{_}}layoutFactory->create()->getMessagesBlock();
+        $error = false;
+
+        try {
+            ${{entity}} = $this->{{_}}init{{Entity}}();
+            if (${{entity}} === false) {
+                throw new \Exception(__('{{EntityLabel}} is not available.'));
+            }
+            ${{entity}}->move($parentNodeId, $prevNodeId);
+        } catch ({{class Magento\Framework\Exception\LocalizedException}} $e) {
+            $error = true;
+            $this->messageManager->addError(__('There was a {{EntityLabel}} move error.'));
+        } catch ({{class Magento\Framework\Exception\AlreadyExistsException}} $e) {
+            $error = true;
+            $this->messageManager->addError(__('There was a {{EntityLabel}} move error. %1', $e->getMessage()));
+        } catch (\Exception $e) {
+            $error = true;
+            $this->messageManager->addError(__('There was a {{EntityLabel}} move error.'));
+            $this->{{_}}logger->critical($e);
+        }
+
+        if (!$error) {
+            $this->messageManager->addSuccess(__('You moved the {{EntityLabel}}'));
+        }
+
+        $block->setMessages($this->messageManager->getMessages(true));
+        $resultJson = $this->{{_}}resultJsonFactory->create();
+
+        return $resultJson->setData([
+            'messages' => $block->getGroupedHtml(),
+            'error' => $error
+        ]);
+    }

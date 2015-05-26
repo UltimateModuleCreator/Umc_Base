@@ -41,11 +41,6 @@
                 <tooltip><![CDATA[The text you put here will be added at the top of (almost) each file in the module you create.<br />Use {{Namespace}} as a placeholder for namespace, {{Module}} as a placeholder for the module name and {{Y}} as placeholder for current year.<br />If you don't want any License text on your files just leave this field empty.]]></tooltip>
                 <rows>5</rows>
             </field>
-            <!--<field id="install" type="select" required="true" sort="30" system="true" translate="label tooltip">-->
-            <!--<label>Action</label>-->
-            <!--<tooltip><![CDATA[This allows you to directly install the module you create on the current Magento instance, or create a zip with it and install it later.]]></tooltip>-->
-            <!--<source>Umc\Base\Model\Source\Module\Install</source>-->
-            <!--</field>-->
         </fieldset>
     </form>
     <form id="umc_module">
@@ -107,15 +102,30 @@
                 <tooltip><![CDATA[This represents the entity behavior. Flat means one entity instance is mapped to a table row.]]></tooltip>
                 <source>Umc\Base\Model\Source\Entity\Type</source>
             </field>
-            <field id="add_created_to_grid" type="select" sort="1" required="true" system="true" translate="label tooltip">
+            <field id="is_tree" type="select" sort="20" required="true" system="true" reloader-class="entity-reloader attribute-reloader" translate="label tooltip">
+                <label>Behaves as tree</label>
+                <tooltip><![CDATA[If set to Yes your entity will have a tree behavior just like the catalog categories do.]]></tooltip>
+                <source>Magento\Config\Model\Config\Source\Yesno</source>
+            </field>
+            <field id="add_created_to_grid" type="select" sort="30" required="true" system="true" translate="label tooltip">
                 <label>Add 'Created at' to admin grid</label>
                 <tooltip><![CDATA[The entities created with UMC will have a field called 'created_at' with the creation date of any entity instance.<br />If this is set to 'Yes' the 'Created at' field will be added to the admin grid.]]></tooltip>
                 <source>Magento\Config\Model\Config\Source\Yesno</source>
+                <depends id="is_tree">
+                    <depend id="is_tree" type="entity">
+                        <val id="0">0</val>
+                    </depend>
+                </depends>
             </field>
             <field id="add_updated_to_grid" type="select" sort="40" required="true" system="true" translate="label tooltip">
                 <label>Add 'Updated at' to admin grid</label>
                 <tooltip><![CDATA[The entities created with UMC will have a field called 'updated_at' with the last update date of any entity instance.<br />If this is set to 'Yes' the 'Updated at' field will be added to the admin grid.]]></tooltip>
                 <source>Magento\Config\Model\Config\Source\Yesno</source>
+                <depends id="is_tree">
+                    <depend id="is_tree" type="entity">
+                        <val id="0">0</val>
+                    </depend>
+                </depends>
             </field>
             <field id="search" type="select" sort="50" required="true" system="true" translate="label tooltip">
                 <label>Include in admin global search</label>

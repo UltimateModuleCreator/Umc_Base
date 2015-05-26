@@ -37,4 +37,12 @@
     <class id="Magento\Framework\Event\ManagerInterface" class="Magento\Framework\Event\ManagerInterface" alias="EventManagerInterface" />
     <class id="Magento\Cms\Model\Wysiwyg\Config" class="Magento\Cms\Model\Wysiwyg\Config" alias="WysiwygConfig" />
     <class id="Magento\Backend\Helper\Data" class="Magento\Backend\Helper\Data" alias="BackendHelper" />
+    <class id="Magento\Framework\DB\Helper" class="Magento\Framework\DB\Helper" alias="DbHelper" />
+    <class id="Magento\Framework\Json\EncoderInterface" class="Magento\Framework\Json\EncoderInterface" alias="JsonEncoderInterface" />
+    <class id="Magento\Backend\Model\Auth\Session" class="Magento\Backend\Model\Auth\Session" alias="AuthSession" />
+    <class id="{{Namespace}}\{{Module}}\Model\Resource\{{Entity}}\CollectionFactory" class="{{Namespace}}\{{Module}}\Model\Resource\{{Entity}}\CollectionFactory" alias="{{Entity}}CollectionFactory" />
+    <class id="{{Namespace}}\{{Module}}\Model\Resource\{{Entity}}\Tree" class="{{Namespace}}\{{Module}}\Model\Resource\{{Entity}}\Tree" alias="{{Entity}}Tree" />
+    <class id="Magento\Framework\Data\Tree" class="Magento\Framework\Data\Tree" alias="DataTree" />
+    <class id="Magento\Framework\DB\Select" class="Magento\Framework\DB\Select" alias="DbSelect" />
+    <class id="{{Namespace}}\{{Module}}\Controller\Adminhtml\{{Entity}}" class="{{Namespace}}\{{Module}}\Controller\Adminhtml\{{Entity}}" alias="{{Entity}}Controller" />
 </classes>

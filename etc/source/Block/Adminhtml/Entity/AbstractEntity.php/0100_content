@@ -1,0 +1,171 @@
+    /**
+     * Retrieve current {{EntityLabel}} instance
+     *
+     * @return \{{Namespace}}\{{Module}}\Model\{{Entity}}
+     */
+    public function get{{Entity}}()
+    {
+        return $this->{{_}}coreRegistry->registry('{{namespace}}_{{module}}_{{entity}}');
+    }
+
+    /**
+     * @return int|string|null
+     */
+    public function get{{Entity}}Id()
+    {
+        if ($this->get{{Entity}}()) {
+            return $this->get{{Entity}}()->getId();
+        }
+        return {{class {{Namespace}}\{{Module}}\Model\{{Entity}}}}::TREE_ROOT_ID;
+    }
+
+    /**
+     * @return string
+     */
+    public function get{{Entity}}{{NameAttributeCode}}()
+    {
+        return $this->get{{Entity}}()->get{{NameAttributeCode}}();
+    }
+
+    /**
+     * @return mixed
+     */
+    public function get{{Entity}}Path()
+    {
+        if ($this->get{{Entity}}()) {
+            return $this->get{{Entity}}()->getPath();
+        }
+        return {{class {{Namespace}}\{{Module}}\Model\{{Entity}}}}::TREE_ROOT_ID;
+    }
+
+
+    /**
+     * @param null $parentNode{{Entity}}
+     * @param int $recursionLevel
+     * @return Node|mixed
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     */
+    public function getRoot($parentNode{{Entity}} = null, $recursionLevel = 3)
+    {
+        if ($parentNode{{Entity}} !== null && $parentNode{{Entity}}->getId()) {
+            return $this->getNode($parentNode{{Entity}}, $recursionLevel);
+        }
+        $root = $this->{{_}}coreRegistry->registry('{{namespace}}_{{module}}_{{entity}}_root');
+        if ($root === null) {
+            $rootId = {{class {{Namespace}}\{{Module}}\Model\{{Entity}}}}::TREE_ROOT_ID;
+
+            $tree = $this->{{_}}{{entity}}Tree->load(null, $recursionLevel);
+
+            if ($this->get{{Entity}}()) {
+                $tree->loadEnsuredNodes($this->get{{Entity}}(), $tree->getNodeById($rootId));
+            }
+
+            $tree->addCollectionData($this->get{{Entity}}Collection());
+
+            $root = $tree->getNodeById($rootId);
+
+            if ($root && $rootId != {{class {{Namespace}}\{{Module}}\Model\{{Entity}}}}::TREE_ROOT_ID) {
+                $root->setIsVisible(true);
+            } elseif ($root && $root->getId() == {{class {{Namespace}}\{{Module}}\Model\{{Entity}}}}::TREE_ROOT_ID) {
+                $root->setName(__('ROOT'));
+            }
+
+            $this->{{_}}coreRegistry->register('{{namespace}}_{{module}}_{{entity}}_root', $root);
+        }
+
+        return $root;
+    }
+
+    /**
+     * @return \{{Namespace}}\{{Module}}\Model\Resource\{{Entity}}\Collection
+     */
+    public function get{{Entity}}Collection()
+    {
+        $collection = $this->getData('{{entity}}_collection');
+        if ($collection === null) {
+            $collection = $this->{{_}}{{entity}}CollectionFactory->create();
+            $this->setData('{{entity}}_collection', $collection);
+        }
+        return $collection;
+    }
+
+    /**
+     * Get and register {{EntitiesLabel}} root by specified {{EntitiesLabel}} IDs
+     *
+     * IDs can be arbitrary set of any {{EntitiesLabel}} ids.
+     * Tree with minimal required nodes (all parents and neighbours) will be built.
+     * If ids are empty, default tree with depth = 2 will be returned.
+     *
+     * @param array $ids
+     * @return mixed
+     */
+    public function getRootByIds($ids)
+    {
+        $root = $this->{{_}}coreRegistry->registry('{{namespace}}_{{module}}_{{entity}}_root');
+        if (null === $root) {
+            $ids = $this->{{_}}{{entity}}Tree->getExisting{{Entity}}IdsBySpecifiedIds($ids);
+            $tree = $this->{{_}}{{entity}}Tree->loadByIds($ids);
+            $rootId = {{class {{Namespace}}\{{Module}}\Model\{{Entity}}}}::TREE_ROOT_ID;
+            $root = $tree->getNodeById($rootId);
+            if ($root && $rootId != {{class {{Namespace}}\{{Module}}\Model\{{Entity}}}}::TREE_ROOT_ID) {
+                $root->setIsVisible(true);
+            } elseif ($root && $root->getId() == {{class {{Namespace}}\{{Module}}\Model\{{Entity}}}}::TREE_ROOT_ID) {
+                $root->setName(__('Root'));
+            }
+
+            $tree->addCollectionData($this->get{{Entity}}Collection());
+            $this->{{_}}coreRegistry->register('{{namespace}}_{{module}}_{{entity}}_root', $root);
+        }
+        return $root;
+    }
+
+    /**
+     * @param $parentNode{{Entity}}
+     * @param int $recursionLevel
+     * @return Node
+     */
+    public function getNode($parentNode{{Entity}}, $recursionLevel = 2)
+    {
+        $nodeId = $parentNode{{Entity}}->getId();
+        $node = $this->{{_}}{{entity}}Tree->loadNode($nodeId);
+        $node->loadChildren($recursionLevel);
+
+        if ($node && $nodeId != {{class {{Namespace}}\{{Module}}\Model\{{Entity}}}}::TREE_ROOT_ID) {
+            $node->setIsVisible(true);
+        } elseif ($node && $node->getId() == {{class {{Namespace}}\{{Module}}\Model\{{Entity}}}}::TREE_ROOT_ID) {
+            $node->setName(__('Root'));
+        }
+
+        $this->{{_}}{{entity}}Tree->addCollectionData($this->get{{Entity}}Collection());
+
+        return $node;
+    }
+
+    /**
+     * @param array $args
+     * @return string
+     */
+    public function getSaveUrl(array $args = [])
+    {
+        $params = ['_current' => false, '_query' => false];
+        $params = array_merge($params, $args);
+        return $this->getUrl('{{namespace}}_{{module}}/*/save', $params);
+    }
+
+    /**
+     * @return string
+     */
+    public function getEditUrl()
+    {
+        return $this->getUrl(
+            '{{namespace}}_{{module}}/{{entity}}/edit',
+            ['_query' => false, 'id' => null, 'parent' => null]
+        );
+    }
+    /**
+     * @return []
+     */
+    public function getRootIds()
+    {
+        return [{{class {{Namespace}}\{{Module}}\Model\{{Entity}}}}::TREE_ROOT_ID];
+    }

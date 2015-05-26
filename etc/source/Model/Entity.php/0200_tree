@@ -1,0 +1,88 @@
+
+    /**
+     * get tree path ids
+     *
+     * @return array
+     */
+    public function getPathIds()
+    {
+        $ids = $this->getData('path_ids');
+        if ($ids === null) {
+            $ids = explode('/', $this->getPath());
+            $this->setData('path_ids', $ids);
+        }
+        return $ids;
+    }
+
+    /**
+     * get all parent ids
+     * 
+     * @return array
+     */
+    public function getParentIds()
+    {
+        return array_diff($this->getPathIds(), [$this->getId()]);
+    }
+
+    /**
+     * move {{EntityLabel}} in tree
+     * 
+     * @param $parentId
+     * @param $after{{Entity}}Id
+     * @return $this
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Exception
+     */
+    public function move($parentId, $after{{Entity}}Id)
+    {
+        try {
+            $parent = $this->{{_}}{{entity}}Factory->create()->load($parentId);
+        } catch ({{class Magento\Framework\Exception\NoSuchEntityException}} $e) {
+            throw new {{class Magento\Framework\Exception\LocalizedException}}(
+                __('Sorry, but we can\'t move the {{EntityLabel}} because we can\'t find the new parent {{EntityLabel}} you selected.'),
+                $e
+            );
+        }
+
+        if (!$this->getId()) {
+            throw new {{class Magento\Framework\Exception\LocalizedException}}(
+                __('Sorry, but we can\'t move the {{EntityLabel}} because we can\'t find the new parent {{EntityLabel}} you selected.')
+            );
+        } elseif ($parent->getId() == $this->getId()) {
+            throw new {{class Magento\Framework\Exception\LocalizedException}}(
+                __(
+                    'We can\'t perform this {{EntityLabel}} move operation because the parent {{EntityLabel}} matches the child {{EntityLabel}}.'
+                )
+            );
+        }
+
+        $this->setMoved{{Entity}}Id($this->getId());
+        $oldParentId = $this->getParentId();
+        $oldParentIds = $this->getParentIds();
+
+        $eventParams = [
+            $this->_eventObject => $this,
+            'parent' => $parent,
+            '{{entity}}_id' => $this->getId(),
+            'prev_parent_id' => $oldParentId,
+            'parent_id' => $parentId,
+        ];
+
+        $this->_getResource()->beginTransaction();
+        try {
+            $this->_eventManager->dispatch($this->_eventPrefix . '_move_before', $eventParams);
+            $this->getResource()->changeParent($this, $parent, $after{{Entity}}Id);
+            $this->_eventManager->dispatch($this->_eventPrefix . '_move_after', $eventParams);
+            $this->_getResource()->commit();
+
+            // Set data for indexer
+            $this->setAffected{{Entity}}Ids([$this->getId(), $oldParentId, $parentId]);
+        } catch (\Exception $e) {
+            $this->_getResource()->rollBack();
+            throw $e;
+        }
+        $this->_eventManager->dispatch($this->_eventPrefix . '_move', $eventParams);
+        $this->_cacheManager->clean([self::CACHE_TAG]);
+
+        return $this;
+    }

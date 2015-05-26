@@ -5,7 +5,7 @@
      */
     public function execute()
     {
-        $this->setPageData();
+        $this->{{_}}setPageData();
         return $this->getResultPage();
     }
     /**
@@ -25,7 +25,7 @@
      *
      * @return $this
      */
-    protected function setPageData()
+    protected function {{_}}setPageData()
     {
         $resultPage = $this->getResultPage();
         $resultPage->setActiveMenu('{{Namespace}}_{{Module}}::{{entity}}');

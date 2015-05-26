@@ -55,7 +55,6 @@ class Date extends AbstractType
     public function getAdditionalEditFormOptions()
     {
         $options = parent::getAdditionalEditFormOptions();
-        $options[] = '\'image\' => $this->getViewFileUrl(\'images/grid-cal.png\'),';
         $options[] = '\'date_format\' => $this->_localeDate->getDateFormat(';
         $options[] = $this->getPadding().'{{class IntlDateFormatter}}::SHORT';
         $options[] = '),';

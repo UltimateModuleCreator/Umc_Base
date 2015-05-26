@@ -116,6 +116,8 @@ class ClassGenerator extends AbstractGenerator
      */
     protected $license;
 
+    protected $parentConstructExtraParams = '';
+
     /**
      * constructor
      *
@@ -147,13 +149,14 @@ class ClassGenerator extends AbstractGenerator
      */
     protected function reset()
     {
-        $this->namespace    = '';
-        $this->className    = '';
-        $this->implements   = [];
-        $this->extends      = '';
-        $this->members      = '';
-        $this->constructor  = '';
-        $this->uses         = [];
+        $this->namespace                    = '';
+        $this->className                    = '';
+        $this->implements                   = [];
+        $this->extends                      = '';
+        $this->members                      = '';
+        $this->constructor                  = '';
+        $this->uses                         = [];
+        $this->parentConstructExtraParams   = '';
         return $this;
     }
 
@@ -171,6 +174,7 @@ class ClassGenerator extends AbstractGenerator
         $this->generateExtends($model);
         $this->generateMembers($model);
         $this->generateAnnotations($model);
+        $this->generateParentConstructExtraParams($model);
         $content = $this->mergeElements($content);
         return $content;
     }
@@ -585,6 +589,9 @@ class ClassGenerator extends AbstractGenerator
                         $parentParams[] = '$'.$param['id'];
                     }
                 }
+                if ($this->parentConstructExtraParams) {
+                    $parentParams[] = $this->parentConstructExtraParams;
+                }
                 $parentLine .= implode(', ', $parentParams).');';
                 $lines[] = $parentLine;
             }
@@ -729,5 +736,14 @@ class ClassGenerator extends AbstractGenerator
             $className = $this->getAlias($param);
         }
         return $className;
+    }
+
+    public function generateParentConstructExtraParams(AbstractModel $model)
+    {
+        $this->parentConstructExtraParams = '';
+        if (isset($this->config['parent_construct_extra'])){
+            $this->parentConstructExtraParams = $model->filterContent($this->config['parent_construct_extra']);
+        }
+        return $this;
     }
 }

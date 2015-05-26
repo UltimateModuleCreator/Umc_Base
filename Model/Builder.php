@@ -138,7 +138,8 @@ class Builder extends Umc
             $fileConfig = $this->preProcessFileConfig($fileConfig);
             $scope = $fileConfig['scope'];
             $type  = $fileConfig['type'];
-            $files = $this->getGenerator($scope.'.'.$type)
+            $generator = $this->getGenerator($scope.'.'.$type);
+            $files = $generator
                 ->setConfig($fileConfig)
                 ->setModule($this->module)
                 ->generate();

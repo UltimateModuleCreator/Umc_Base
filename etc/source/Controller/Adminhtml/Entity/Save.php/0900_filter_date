@@ -1,1 +1,1 @@
-                '{{code}}' => $this->dateFilter,
+                '{{code}}' => $this->{{_}}dateFilter,

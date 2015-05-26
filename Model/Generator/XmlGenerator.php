@@ -42,9 +42,8 @@ class XmlGenerator extends AbstractGenerator implements GeneratorInterface
             }, $dom->saveXML($dom->firstChild));
             return $this->getHeader().$this->getLicense().$processed.$this->getEol();
         }
-        catch (\Exception $e) {
-            echo $e->getMessage();
-            echo $content;exit;
+        catch (\Exception $up) {
+            throw $up;
         }
     }
 
@@ -55,7 +54,7 @@ class XmlGenerator extends AbstractGenerator implements GeneratorInterface
      */
     public function getHeader()
     {
-        return '<?xml version="1.0"?>';
+        return '<?xml version="1.0"?>'.$this->getEol();
     }
 
     /**
@@ -85,7 +84,7 @@ class XmlGenerator extends AbstractGenerator implements GeneratorInterface
             }
             $lines = explode("\n", $license);
             $eol = $this->getEol();
-            $top = $eol.'<!--'.$eol;
+            $top = '<!--'.$eol;
             $footer = $eol.'-->'.$eol;
             $processed = $top.'/**'.$eol;
             foreach ($lines as $line) {

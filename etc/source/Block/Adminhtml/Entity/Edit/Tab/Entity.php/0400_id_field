@@ -1,0 +1,7 @@
+        if (${{entity}}->getId()) {
+            $fieldset->addField(
+                '{{entity}}_id',
+                'hidden',
+                ['name' => '{{entity}}_id']
+            );
+        }

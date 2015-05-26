@@ -61,7 +61,7 @@ interface GeneratorInterface
      * set file config
      *
      * @param array $config
-     * @return mixed
+     * @return $this
      */
     public function setConfig(array $config);
 }
