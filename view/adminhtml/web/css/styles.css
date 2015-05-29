@@ -24,7 +24,7 @@
     content: ".";
     visibility: hidden;
     height: 0;
-    clear: both;
+    /*clear: both;*/
 }
 
 .umc-module-edit .field label.addafter{
@@ -90,7 +90,7 @@
     height:50px;
     background-color: #cac3b4;
 }
-.umc-module-edit .umc-attribute .fieldset-wrapper-title strong span {
+.umc-module-edit .umc-attribute .draggable-handle {
     cursor: move!important;
 }
 .umc-module-edit .admin__control-text {
@@ -136,6 +136,33 @@
      opacity: 1;
      visibility: visible;
  }
+.collapse {
+    overflow:hidden;
+}
 .umc-attribute > .collapsable-wrapper.opened > .fieldset-wrapper-title {
     margin-bottom: 0;
+}
+.admin__collapsible-block-wrapper .admin__collapsible-title::before
+{
+    right:auto!important;
+}
+.entity-title,
+.entity-attributes-title span,
+#umc_modulegeneral-wrapper .admin__fieldset-wrapper-title span,
+#umc_settingssettings-wrapper .admin__fieldset-wrapper-title span{
+    margin-left: 20px;
+}
+
+.add-attribute:before {
+    font-family: 'MUI-Icons';
+    font-style: normal;
+    speak: none;
+    font-weight: normal;
+    font-size: 18px;
+    -webkit-font-smoothing: antialiased;
+    content: '\e02d';
+    color: #b7b3ad;
+}
+.add-attribute span {
+    display: none;
 }

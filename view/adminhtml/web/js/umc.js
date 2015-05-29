@@ -93,7 +93,7 @@ define([
             attributePositionSelector:  'input.attribute-position',
             attributeReloaderSelector:  '.attribute-reloader',
             attributeSelector:          '.umc-attribute',
-            attributeSortHandle:        '.fieldset-wrapper-title strong span',
+            attributeSortHandle:        '.draggable-handle',
             attributeSortPlaceholder:   'umc-sort-placehoder',
             attributeTemplate:          '#attribute-template',
             attributeTitleSelector:     '.attribute-title',
@@ -226,7 +226,7 @@ define([
             attributePositionSelector:  'input.attribute-position',
             attributeReloaderSelector:  '.attribute-reloader',
             attributeSelector:          '.umc-attribute',
-            attributeSortHandle:        '.fieldset-wrapper-title',
+            attributeSortHandle:        '.attributeSortHandle',
             attributeSortPlaceholder:   'umc-sort-placehoder',
             attributeTemplate:          '#attribute-template',
             attributeTitleSelector:     '.fieldset-wrapper-title strong span',
@@ -414,7 +414,7 @@ define([
             });
             $(this.element).find(this.options.labelSelector).change();
 
-            $(this.element).find('button.delete').on('click', function() {
+            $(this.element).find('button.remove-attribute').on('click', function() {
                 if (confirm($.mage.__('Are you sure you want to remove this attribute?'))) {
                     that.remove();
                 }
