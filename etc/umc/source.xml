@@ -1568,7 +1568,7 @@
             <implement id="Magento\Framework\Setup\InstallDataInterface" sort="10" />
         </implements>
         <members>
-            <member id="departmentSetupFactory" sort="10" var="{{Namespace}}\{{Module}}\Setup\{{Entity}}SetupFactory" construct="true" show="true" scope="entity">
+            <member id="{{entity}}SetupFactory" sort="10" var="{{Namespace}}\{{Module}}\Setup\{{Entity}}SetupFactory" construct="true" show="true" scope="entity">
                 <doc>{{EntityLabel}} setup factory</doc>
                 <depends id="is_tree">
                     <depend id="is_tree">
