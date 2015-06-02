@@ -109,6 +109,10 @@ define([
             menuSelector:               '#menu-selector',
             menuSelectorTrigger :       '.menu-selector-trigger',
             nameAttributes:             {},
+            relationContainerSelector:  '#umc-relation-container',
+            relations :                 {},
+            relationsTabSelector:       'li[data-ui-id="umc-base-module-tabs-tab-item-relation"]',
+            relationTemplate:           '#relation-template',
             removeEntityMessage:        $.mage.__('Are you sure you want to remove this entity?'),
             removeEntityTrigger:        '.remove-entity',
             tabsSelector                :'#umc_base_module_tabs',
@@ -202,15 +206,52 @@ define([
             if (collapse) {
                 $(element).find('.fieldset-wrapper-content.collapse').collapse('hide');
             }
+            this.rebuildRelations();
         },
         removeEntity: function(index) {
             for (var i = 0; i < this.entities.length; i++) {
                 if (this.entities[i].umcentity('getIndex') == index) {
                     this.entities[i].umcentity('destroy');
                     this.entities.splice(i, 1);
+                    $(this.options.relationContainerSelector + ' .relation_entity_' + index).each(function() {
+                        $(this).parent().remove();
+                    });
+                    this.rebuildRelations();
                 }
             }
             return this;
+        },
+        rebuildRelations: function() {
+            var entities = this.entities;
+            if (entities.length < 2) {
+                $(this.options.relationsTabSelector).hide();
+            } else {
+                $(this.options.relationsTabSelector).show();
+            }
+            var container = $(this.options.relationContainerSelector);
+            for (var i=0; i<entities.length - 1; i++) {
+                for (var j = i+1; j<entities.length; j++) {
+                    var index1 = entities[i].umcentity("getIndex");
+                    var index2 = entities[j].umcentity("getIndex");
+                    var relName = index1 + '_' + index2;
+                    var _tmp = 'relation_' + relName;
+                    if (container.find('#' + _tmp).length == 0) {
+                        var vars = {
+                            relation_id: _tmp,
+                            e1:index1,
+                            e2:index2,
+                            label1: entities[i].find(this.options.entityTitleSelector + ':first').html(),
+                            label2: entities[j].find(this.options.entityTitleSelector + ':first').html()
+                        };
+                        $(container).append(mageTemplate(this.options.relationTemplate)(vars));
+                        var relations = this.options.relations;
+                        if (typeof relations[relName] != "undefined") {
+                            $('#' + _tmp).find('option[value="' + relations[relName] +'"]:first').attr('selected', 'selected');
+                        }
+
+                    }
+                }
+            }
         }
     });
     $.widget("umc_base.umcentity", {
@@ -250,6 +291,7 @@ define([
                     val = $(this).val();
                 }
                 $(that.element).find(that.options.entityTitleSelector).html(val);
+                $('.relation_entity_' + that.getIndex()).html(val);
             });
             $(this.element).find(this.options.removeEntityTrigger).on('click', function() {
                 if (confirm(that.options.removeEntityMessage)) {

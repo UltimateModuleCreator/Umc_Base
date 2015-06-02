@@ -172,10 +172,36 @@ class Edit extends Module
                         $entityIdsByCode[$entity['name_singular']] = $key;
                     }
                     unset($data['entities']);
+                    $relationsByCode = [];
+                    if (isset($data['relations'])) {
+                        if (isset($data['relations']['relation'][0])) {
+                            foreach ($data['relations']['relation'] as $relationArray) {
+                                $relationsByCode = array_merge($relationsByCode, $relationArray);
+                            }
+                        } else {
+                            $relationsByCode = $data['relations']['relation'];
+                        }
+
+                    }
+
+                    $relations = [];
+                    foreach ($relationsByCode as $code => $value) {
+                        $parts = explode('_', $code);
+                        if (count($parts) != 2) {
+                            continue;
+                        }
+                        if (isset($entityIdsByCode[$parts[0]]) && isset($entityIdsByCode[$parts[1]])) {
+                            $entity0 = $entityIdsByCode[$parts[0]];
+                            $entity1 = $entityIdsByCode[$parts[1]];
+                            $relations[$entity0][$entity1] = $value;
+                        }
+                    }
+                    unset($data['relations']);
                     $data = [
                         $module->getEntityCode()         => $data,
                         'entity'                         => $entities,
-                        $this->settings->getEntityCode() => $settings
+                        $this->settings->getEntityCode() => $settings,
+                        'relation'                       => $relations
                     ];
                 } else {
                     $data = [];

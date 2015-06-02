@@ -191,6 +191,9 @@
                     </depend>
                 </depends>
             </member>
+            <member id="{{entity}}SourceModel" construct="true" show="true" var="{{Namespace}}\{{Module}}\Model\Source\{{Entity}}" sort="45" scope="parent_entity">
+                <doc>{{EntityLabel}} Source Model</doc>
+            </member>
 
             <member id="context" construct="true" show="false" parent="true" var="Magento\Backend\Block\Template\Context" sort="50" />
             <member id="registry" construct="true" show="false" parent="true" var="Magento\Framework\Registry" sort="60" />
@@ -1123,6 +1126,7 @@
         </depends>
         <code>
             <part id="top" file="0100_top" sort="100" />
+            <part id="parents" file="0150_parents" sort="150" scope="parent_entity" />
             <part id="name_column" file="0200_name_column" sort="200" />
             <part id="columns" file="0300_columns" sort="300" scope="attribute">
                 <depends id="admin_grid">
@@ -1534,6 +1538,35 @@
         </members>
         <code>
             <part id="content" file="0100_content" sort="100" />
+        </code>
+    </file>
+
+    <file id="Model/Source/{{Entity}}.php" type="class" sort="345" scope="entity" translate="label description">
+        <label>Entity Source Model</label>
+        <description>Model used for listing entities in dropdowns</description>
+        <depends id="is_parent">
+            <depend id="is_parent">
+                <val id="1">1</val>
+            </depend>
+        </depends>
+        <implements>
+            <implement id="Magento\Framework\Data\OptionSourceInterface" sort="10" />
+        </implements>
+        <members>
+            <member id="{{entity}}CollectionFactory" construct="true" show="true" var="{{Namespace}}\{{Module}}\Model\Resource\{{Entity}}\CollectionFactory" sort="10">
+                <doc>{{EntityLabel}} Collection factory</doc>
+            </member>
+        </members>
+        <code>
+            <part id="top" file="0100_top" sort="100" />
+            <part id="tree" file="0200_tree" sort="200">
+                <depends id="is_tree">
+                    <depend id="is_tree">
+                        <val id="1">1</val>
+                    </depend>
+                </depends>
+            </part>
+            <part id="footer" file="0300_footer" sort="300" />
         </code>
     </file>
 

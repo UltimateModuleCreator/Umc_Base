@@ -65,14 +65,23 @@ class TemplateGenerator extends AbstractGenerator implements GeneratorInterface
                 $license = str_replace('-->', '', $license);
             }
             $lines = explode("\n", $license);
-            $top = '<?php'.$this->getEol();
+            $top = $this->getLicensePrefix();
             $processed = $top.'/**'.$eol;
             foreach ($lines as $line) {
                 $processed .= ' * '.$line.$eol;
             }
-            $processed .= ' */'.$eol.'?>'.$this->getEol();
+            $processed .= ' */'.$eol.$this->getLicenseSuffix().$this->getEol();
             $this->license = $this->module->filterContent($processed);
         }
         return $this->license;
+    }
+
+    public function getLicensePrefix()
+    {
+        return '<?php '.$this->getEol();
+    }
+    public function getLicenseSuffix()
+    {
+        return '?>';
     }
 }

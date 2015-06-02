@@ -87,10 +87,16 @@ class Dropdown extends AbstractType
         $options = parent::getAdditionalEditFormOptions();
         $attribute = $this->getAttribute();
         $underscore = $this->getUnderscore();
+        if ($attribute->getForcedSourceModel()) {
+            $sourceModel = $attribute->getForcedSourceModel();
+        } else {
+            $sourceModel = $attribute->getCodeCamelCase().'Options';
+        }
+
         $options[] = '\'values\' => array_merge([\'\' => \'\'], $this->'.
             $underscore.
-            $attribute->getCodeCamelCase().
-            'Options->toOptionArray()),';
+            $sourceModel.
+            '->toOptionArray()),';
         return $options;
     }
 

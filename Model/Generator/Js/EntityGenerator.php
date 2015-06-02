@@ -39,4 +39,13 @@ class EntityGenerator extends TemplateGenerator implements GeneratorInterface
         return $this->module->getEntities();
     }
 
+    public function getLicensePrefix()
+    {
+        return '';
+    }
+    public function getLicenseSuffix()
+    {
+        return '';
+    }
+
 }

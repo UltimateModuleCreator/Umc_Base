@@ -163,8 +163,20 @@ class Edit extends Container
         return $this->formConfig->getDepends($this->attribute->getEntityCode());
     }
 
+    /**
+     * @return string
+     */
     public function getNameAttributes()
     {
         return $this->getModule()->getNameAttributes();
+    }
+    public function getRelationsAsJson()
+    {
+        /** @var \Umc\Base\Model\Core\Module $module */
+        $module = $this->coreRegistry->registry('current_module');
+        if ($module) {
+            return $module->getRelationsAsJson();
+        }
+        return '{}';
     }
 }

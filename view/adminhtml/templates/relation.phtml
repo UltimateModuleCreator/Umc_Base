@@ -1,0 +1,30 @@
+<?php
+/**
+ * Umc_Base extension
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the MIT License
+ * that is bundled with this package in the file LICENSE_UMC2.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/mit-license.php
+ *
+ * @category  Umc
+ * @package   Umc_Base
+ * @copyright 2015 Marius Strajeru
+ * @license   http://opensource.org/licenses/mit-license.php MIT License
+ * @author    Marius Strajeru <ultimate.module.creator@gmail.com>
+ */
+?>
+<script id="relation-template" type="text/x-magento-template">
+    <div id="<%= relation_id %>" data-id-1="<%= e1 %>" data-id-2="<%= e2 %>">
+        <div class="relation-label relation_entity_<%= e1 %>"><%= label1 %></div>
+        <select class="relation-select" name="relation[<%= e1 %>][<%= e2 %>]" id="relation_<%= e1 %>_<%= e2 %>">';
+            <?php foreach ($this->getTypes() as $type=>$label) :?>
+                <option value="<?php echo $type?>"><?php echo $label?></option>
+            <?php endforeach;?>
+        </select>
+        <div class="relation-label relation_entity_<%= e2 %>"><%= label2 %></div>
+        <div class="clearfix"></div>
+    </div>
+</script>

@@ -1,0 +1,1 @@
+        $collection->addFieldToFilter('{{entity}}_id', array('neq' => \{{Namespace}}\{{Module}}\Model\{{Entity}}::TREE_ROOT_ID));

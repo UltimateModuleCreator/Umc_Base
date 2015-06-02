@@ -31,6 +31,8 @@ use Umc\Base\Model\Core\Attribute\Type\Factory as AttributeTypeFactory;
  * @method Attribute setCode(\string $code)
  * @method Attribute setLabel(\string $label)
  * @method Attribute setType(\string $type)
+ * @method Attribute setForcedSourceModel(\string $forcedSourceModel)
+ * @method string getForcedSourceModel()
  */
 class Attribute extends AbstractModel implements ModelInterface
 {

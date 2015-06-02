@@ -76,4 +76,15 @@
             <label>Date</label>
         </group>
     </entity>
+    <entity id="umc_relation">
+        <type id="none" model="Umc\Base\Model\Core\Relation\Type\NoRelation" sort="10" translate="label">
+            <label>Has No Relation with</label>
+        </type>
+        <type id="parent" model="Umc\Base\Model\Core\Relation\Type\ParentRelation" sort="20" translate="label">
+            <label>Is Parent For</label>
+        </type>
+        <type id="child" model="Umc\Base\Model\Core\Relation\Type\ChildRelation" sort="30" translate="label">
+            <label>Is Child Of</label>
+        </type>
+    </entity>
 </types>

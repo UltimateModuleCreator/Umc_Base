@@ -1,6 +1,5 @@
         /** @var \{{Namespace}}\{{Module}}\Setup\{{Entity}}Setup ${{entity}}Setup */
         ${{entity}}Setup = $this->{{_}}{{entity}}SetupFactory->create(['setup' => $setup]);
-
         // Create Root {{EntityLabel}} Node
         ${{entity}} = ${{entity}}Setup->create{{Entity}}();
         ${{entity}}
@@ -11,3 +10,4 @@
             ->set{{NameAttributeCode}}('ROOT')
             ->setInitialSetupFlag(true)
             ->save();
+

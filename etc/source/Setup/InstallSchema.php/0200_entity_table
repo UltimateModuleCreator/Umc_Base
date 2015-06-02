@@ -9,7 +9,8 @@
                 [
                     'identity' => true,
                     'nullable' => false,
-                    'primary' => true
+                    'primary'  => true,
+                    'unsigned' => true,
                 ],
                 '{{EntityLabel}} ID'
             )

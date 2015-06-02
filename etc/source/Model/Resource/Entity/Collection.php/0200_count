@@ -12,3 +12,13 @@
         $countSelect->reset(\Zend_Db_Select::GROUP);
         return $countSelect;
     }
+    /**
+     * @param string $valueField
+     * @param string $labelField
+     * @param array $additional
+     * @return array
+     */
+    protected function _toOptionArray($valueField = '{{entity}}_id', $labelField = '{{nameAttributeCode}}', $additional = [])
+    {
+        return parent::_toOptionArray($valueField, $labelField, $additional);
+    }

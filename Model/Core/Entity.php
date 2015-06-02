@@ -25,10 +25,12 @@ use Umc\Base\Model\Config\SaveAttributes as SaveAttributesConfig;
 use Umc\Base\Model\Core\AttributeFactory;
 use Umc\Base\Model\Core\Entity\Type\Factory as TypeFactory;
 use Umc\Base\Model\Core\Entity\Type\TypeInterface;
+use Umc\Base\Model\Core\Relation\Type\ParentRelation;
 
 /**
  * @method int getSortOrder()
  * @method int getIsTree()
+ * @method Entity setIsParent(\bool $parent)
  */
 class Entity extends AbstractModel implements ModelInterface
 {
@@ -86,6 +88,11 @@ class Entity extends AbstractModel implements ModelInterface
      * @var Attribute|null
      */
     protected $nameAttribute;
+
+    /**
+     * @var array
+     */
+    protected $parentAttributes = [];
 
     /**
      * constructor
@@ -504,10 +511,13 @@ class Entity extends AbstractModel implements ModelInterface
     public function getColumnsSetup()
     {
         $setup = '';
-        foreach ($this->getAttributes() as $attribute) {
-            $setup .= $attribute->getColumnSetup();
-        }
-        foreach ($this->getSystemAttributes() as $attribute) {
+        /** @var Attribute[] $allAttributes */
+        $allAttributes = array_merge(
+            $this->getParentsAttributes('setup'),
+            $this->getAttributes(),
+            $this->getSystemAttributes()
+        );
+        foreach ($allAttributes as $attribute) {
             $setup .= $attribute->getColumnSetup();
         }
         return $setup;
@@ -521,6 +531,10 @@ class Entity extends AbstractModel implements ModelInterface
     public function getEditFormFields()
     {
         $fields = '';
+        $parents = $this->getParentsAttributes('edit_form');
+        foreach ($parents as $parent) {
+            $fields .= $parent->getEditFormField();
+        }
         foreach ($this->getAttributes() as $attribute) {
             $fields .= $attribute->getEditFormField();
         }
@@ -645,5 +659,95 @@ class Entity extends AbstractModel implements ModelInterface
         return (!$this->getIsTree())
             ? 'Magento\Backend\Block\Widget\Form\Generic'
             : $module->getNamespace().'\\'.$module->getModuleName().'\Block\Adminhtml\\'.$this->getNameSingular(true).'\\Abstract'.$this->getNameSingular(true);
+    }
+
+    /**
+     * @param $type
+     * @param Entity $entity
+     * @return $this
+     */
+    public function addRelatedEntity($type, Entity $entity)
+    {
+        if (!isset($this->relatedEntities[$type])) {
+            $this->relatedEntities[$type] = [];
+        }
+        $this->relatedEntities[$type][] = $entity;
+        return $this;
+    }
+
+    /**
+     * @param null $type
+     * @return array|Entity[]
+     */
+    public function getRelatedEntities($type = null)
+    {
+        if (is_null($type)) {
+            return $this->relatedEntities;
+        }
+        if (!isset($this->relatedEntities[$type])) {
+            return [];
+        }
+        return $this->relatedEntities[$type];
+    }
+
+    /**
+     * @param string $forWhat
+     * @return Attribute[]
+     */
+    public function getParentsAttributes($forWhat = 'setup')
+    {
+        if (!isset($this->parentAttributes[$forWhat])) {
+            $this->parentAttributes[$forWhat] = [];
+            $parents = $this->getRelatedEntities(ParentRelation::RELATION_TYPE_PARENT);
+            switch ($forWhat) {
+                case 'edit_form' :
+                case 'grid':
+                    $this->parentAttributes[$forWhat] = $this->getFormattedParentAttributesEditForm($parents);
+                    break;
+                case 'setup':
+                default:
+                    $this->parentAttributes[$forWhat] = $this->getFormattedParentAttributesSetup($parents);
+                    break;
+            }
+        }
+        return $this->parentAttributes[$forWhat];
+    }
+
+    /**
+     * @param Entity[] $parents
+     * @return array
+     */
+    protected function getFormattedParentAttributesSetup($parents)
+    {
+        $attributes = [];
+        foreach ($parents as $parent) {
+            /** @var Attribute $attribute */
+            $attribute = $this->attributeFactory->create();
+            $attribute->setType('int');
+            $attribute->setCode($parent->getNameSingular().'_id');
+            $attribute->setLabel($parent->getLabelSingular(true));
+            $attribute->setEntity($this);
+            $attributes[] = $attribute;
+        }
+        return $attributes;
+    }
+    /**
+     * @param Entity[] $parents
+     * @return array
+     */
+    protected function getFormattedParentAttributesEditForm($parents)
+    {
+        $attributes = [];
+        foreach ($parents as $parent) {
+            /** @var Attribute $attribute */
+            $attribute = $this->attributeFactory->create();
+            $attribute->setType('dropdown');
+            $attribute->setCode($parent->getNameSingular().'_id');
+            $attribute->setLabel($parent->getLabelSingular(true));
+            $attribute->setForcedSourceModel($parent->getNameSingular().'SourceModel');
+            $attribute->setEntity($this);
+            $attributes[] = $attribute;
+        }
+        return $attributes;
     }
 }

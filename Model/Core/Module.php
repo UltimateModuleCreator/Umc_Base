@@ -43,6 +43,10 @@ class Module extends AbstractModel implements ModelInterface
     protected $entityCode = 'umc_module';
 
     /**
+     * @var RelationFactory
+     */
+    protected $relationFactory;
+    /**
      * settings factory
      *
      * @var SettingsFactory
@@ -83,8 +87,12 @@ class Module extends AbstractModel implements ModelInterface
     protected $entityFlags = [];
 
     /**
-     * constructor
-     *
+     * @var Relation[]
+     */
+    protected $relations = [];
+
+    /**
+     * @param RelationFactory $relationFactory
      * @param SettingsFactory $settingsFactory
      * @param EntityFactory $entityFactory
      * @param AttributeFactory $attributeFactory
@@ -96,6 +104,7 @@ class Module extends AbstractModel implements ModelInterface
      * @param array $data
      */
     public function __construct(
+        RelationFactory $relationFactory,
         SettingsFactory $settingsFactory,
         EntityFactory $entityFactory,
         AttributeFactory $attributeFactory,
@@ -107,6 +116,7 @@ class Module extends AbstractModel implements ModelInterface
         array $data = []
     )
     {
+        $this->relationFactory  = $relationFactory;
         $this->settingsFactory  = $settingsFactory;
         $this->entityFactory    = $entityFactory;
         $this->attributeFactory = $attributeFactory;
@@ -210,6 +220,12 @@ class Module extends AbstractModel implements ModelInterface
             }
             $xml .= '</'.$entitiesTag.'>';
         }
+        $relationsTag = 'relations';
+        $xml .= '<'.$relationsTag.'>';
+        foreach ($this->getRelations() as $relation) {
+            $xml .= $relation->toXml();
+        }
+        $xml .= '</'.$relationsTag.'>';
         if ($rootName != false) {
             $xml.= '</'.$rootName.'>'."\n";
         }
@@ -293,6 +309,18 @@ class Module extends AbstractModel implements ModelInterface
                     $entity->setIndex($key);
                     $this->addEntity($entity);
                     $entitiesByIndex[$key] = $entity;
+                }
+            }
+        }
+        if (isset($data['relation'])) {
+            foreach ($data['relation'] as $index => $values) {
+                foreach ($values as $jndex => $type) {
+                    if (isset($entitiesByIndex[$index]) && isset($entitiesByIndex[$jndex])) {
+                        /** @var \Umc\Base\Model\Core\Relation $relation */
+                        $relation = $this->relationFactory->create();
+                        $relation->setEntities($entitiesByIndex[$index], $entitiesByIndex[$jndex], $type);
+                        $this->addRelation($relation);
+                    }
                 }
             }
         }
@@ -517,5 +545,44 @@ class Module extends AbstractModel implements ModelInterface
         }
         return json_encode($names);
     }
+    /**
+     * add an entity relation
+     *
+     * @param Relation $relation
+     * @return $this
+     */
+    public function addRelation(Relation $relation)
+    {
+        $relation->setModule($this);
+        $this->relations[] = $relation;
+        return $this;
+    }
 
+    /**
+     * get relations
+     *
+     * @return Relation[]
+     */
+    public function getRelations()
+    {
+        return $this->relations;
+    }
+    /**
+     * get relations as json
+     *
+     * @return string
+     */
+    public function getRelationsAsJson()
+    {
+        $json = [];
+        $relations = $this->getRelations();
+        foreach ($relations as $relation) {
+            $reversed = $relation->getReversed();
+            $relation->setReversed(false);
+            $entities = $relation->getEntities();
+            $json[$entities[0]->getIndex().'_'.$entities[1]->getIndex()] = $relation->getType();
+            $relation->setReversed($reversed);
+        }
+        return json_encode($json);
+    }
 }

@@ -45,6 +45,7 @@
                     <argument name="is_template" xsi:type="boolean">true</argument>
                 </action>
             </block>
+            <block class="Umc\Base\Block\Adminhtml\Relation" name="umc_base_relation" template="Umc_Base::relation.phtml"/>
             <block class="Umc\Base\Block\Adminhtml\Tooltips" name="umc_base_tooltips" template="Umc_Base::tooltips.phtml"/>
         </referenceContainer>
         <referenceContainer name="left">
@@ -52,6 +53,7 @@
                 <block class="Umc\Base\Block\Adminhtml\Module\Edit\Tab\Module" name="umc_base_module_tab_module"/>
                 <block class="Umc\Base\Block\Adminhtml\Module\Edit\Tab\Settings" name="umc_base_module_tab_settings"/>
                 <block class="Umc\Base\Block\Adminhtml\Module\Edit\Tab\Entities" name="umc_base_module_tab_entities" template="Umc_Base::entities.phtml"/>
+                <block class="Umc\Base\Block\Adminhtml\Module\Edit\Tab\Relation" name="umc_base_module_tab_relation" template="Umc_Base::relations.phtml"/>
                 <action method="addTab">
                     <argument name="name" xsi:type="string">module</argument>
                     <argument name="block" xsi:type="string">umc_base_module_tab_module</argument>
@@ -63,6 +65,10 @@
                 <action method="addTab">
                     <argument name="name" xsi:type="string">entities</argument>
                     <argument name="block" xsi:type="string">umc_base_module_tab_entities</argument>
+                </action>
+                <action method="addTab">
+                    <argument name="name" xsi:type="string">relation</argument>
+                    <argument name="block" xsi:type="string">umc_base_module_tab_relation</argument>
                 </action>
             </block>
         </referenceContainer>

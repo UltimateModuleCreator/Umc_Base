@@ -13,7 +13,7 @@ ${{entity}}Id = $block->get{{Entity}}Id();
 
 <iframe name="iframeSave" style="display:none; width:100%;"
         src="<?php echo $block->getViewFileUrl('blank.html') ?>"></iframe>
-<form id="{{entity}}_edit_form" action="<?php echo $block->getSaveUrl() ?>" method="post"
+<form id="{{entity}}_edit_form" name="{{entity}}-edit-form" action="<?php echo $block->getSaveUrl() ?>" method="post"
       enctype="multipart/form-data">
     <div class="no-display">
         <input type="hidden" name="isIframe" value="1"/>

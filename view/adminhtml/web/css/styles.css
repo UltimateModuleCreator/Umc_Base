@@ -166,3 +166,19 @@
 .add-attribute span {
     display: none;
 }
+
+.umc-module-edit .relation-label,
+.umc-module-edit .relation-select {
+    float:left;
+    font-size: 15px;
+    margin: 0 10px;
+    padding: 8px;
+}
+.umc-module-edit .relation-select {
+    height: auto;
+}
+.umc-module-edit .relation-label {
+    font-weight: bold;
+    text-align: center;
+    width:150px;
+}

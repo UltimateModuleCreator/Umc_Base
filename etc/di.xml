@@ -65,6 +65,12 @@
         </arguments>
     </type>
 
+    <type name="Umc\Base\Block\Adminhtml\Module\Edit\Tab\Relation">
+        <arguments>
+            <argument name="model" xsi:type="object">Umc\Base\Model\Core\Relation</argument>
+        </arguments>
+    </type>
+
 
     <!--[+] definitions for form config -->
     <virtualType name="Umc\Base\Model\Config\Form\SchemaLocator" type="Umc\Base\Model\Config\SchemaLocator\SchemaLocator">
@@ -461,6 +467,7 @@
             <argument name="processors" xsi:type="array">
                 <item name="part.entity" xsi:type="string">Umc\Base\Model\Processor\Part\Entity\Entity</item>
                 <item name="part.attribute" xsi:type="string">Umc\Base\Model\Processor\Part\Entity\Attribute</item>
+                <item name="part.parent_entity" xsi:type="string">Umc\Base\Model\Processor\Part\Entity\ParentPart</item>
             </argument>
         </arguments>
     </type>
@@ -484,6 +491,7 @@
                 <item name="part.attribute" xsi:type="string">Umc\Base\Model\Processor\Part\Entity\Attribute</item>
                 <item name="member.entity" xsi:type="string">Umc\Base\Model\Processor\Member\Entity\Entity</item>
                 <item name="member.attribute" xsi:type="string">Umc\Base\Model\Processor\Member\Entity\Attribute</item>
+                <item name="member.parent_entity" xsi:type="string">Umc\Base\Model\Processor\Member\Entity\ParentMember</item>
                 <item name="annotation.entity" xsi:type="string">Umc\Base\Model\Processor\Annotation\Entity\Entity</item>
                 <item name="annotation.attribute" xsi:type="string">Umc\Base\Model\Processor\Annotation\Entity\Attribute</item>
                 <item name="implement.entity" xsi:type="string">Umc\Base\Model\Processor\Implement\GlobalImplement</item>

@@ -1,0 +1,7 @@
+    /**
+     * @return array
+     */
+    public function toOptionArray()
+    {
+        /** @var \{{Namespace}}\{{Module}}\Model\Resource\{{Entity}}\Collection $collection */
+        $collection = $this->{{_}}{{entity}}CollectionFactory->create();
