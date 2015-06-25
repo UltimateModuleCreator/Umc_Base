@@ -1,0 +1,12 @@
+
+    /**
+     * @return string
+     */
+    public function get{{Siblings}}Json()
+    {
+        ${{siblings}} = $this->get{{Entity}}()->get{{Siblings}}Position();
+        if (!empty(${{siblings}})) {
+            return $this->{{_}}jsonEncoder->encode(${{siblings}});
+        }
+        return '{}';
+    }

@@ -149,7 +149,8 @@
 .entity-title,
 .entity-attributes-title span,
 #umc_modulegeneral-wrapper .admin__fieldset-wrapper-title span,
-#umc_settingssettings-wrapper .admin__fieldset-wrapper-title span{
+#umc_settingssettings-wrapper .admin__fieldset-wrapper-title span,
+.umc-help .fieldset-wrapper-title span {
     margin-left: 20px;
 }
 
@@ -181,4 +182,7 @@
     font-weight: bold;
     text-align: center;
     width:150px;
+}
+.umc-help-table thead th {
+    text-align: center;
 }

@@ -1,4 +1,4 @@
-        $object->setUpdatedAt($this->{{_}}date->gmtDate());
+        $object->setUpdatedAt($this->{{_}}date->date());
         if ($object->isObjectNew()) {
-            $object->setCreatedAt($this->{{_}}date->gmtDate());
+            $object->setCreatedAt($this->{{_}}date->date());
         }

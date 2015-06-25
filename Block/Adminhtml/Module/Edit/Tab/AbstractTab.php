@@ -189,7 +189,7 @@ class AbstractTab extends GenericForm
     public function getTooltipHtml($entity, $field)
     {
         return '<a class="umc-tooltip-trigger" href="#"'.
-            ' tabindex="'.self::MAX_TAB_INDEX.'" onclick="jQuery(\'#'.$entity.'_'.$field.'\').dialog(\'open\');return false;"></a>';
+            ' tabindex="'.self::MAX_TAB_INDEX.'" onclick="jQuery(\'#'.$entity.'_'.$field.'\').trigger(\'openModal\');return false;"></a>';
     }
 
     /**

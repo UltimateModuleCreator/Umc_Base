@@ -29,8 +29,8 @@ class Help extends Module
     public function execute()
     {
         $pageResult = $this->resultPageFactory->create();
-        $pageResult->getConfig()->getTitle()->prepend(__('Ultimate Module Creator'));
-        $pageResult->getConfig()->getTitle()->set(__('Help'));
+        $pageResult->getConfig()->getTitle()->set(__('Ultimate Module Creator'));
+        $pageResult->getConfig()->getTitle()->prepend(__('Help'));
         $this->_setActiveMenu('Umc_Base::umc_help')
             ->_addBreadcrumb(
                 __('Ultimate Module Creator'),

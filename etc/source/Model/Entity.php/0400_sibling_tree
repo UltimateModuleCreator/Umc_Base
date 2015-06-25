@@ -1,0 +1,11 @@
+    /**
+     * @return array
+     */
+    public function get{{Sibling}}Ids()
+    {
+        if (!$this->hasData('{{sibling}}_ids')) {
+            $ids = $this->_getResource()->get{{Sibling}}Ids($this);
+            $this->setData('{{sibling}}_ids', $ids);
+        }
+        return (array) $this->_getData('{{sibling}}_ids');
+    }

@@ -1,0 +1,27 @@
+<?php
+/** @var \{{Namespace}}\{{Module}}\Block\Adminhtml\{{Entity}}\Edit\Form $block */
+$parentId = $block->getParent{{Entity}}Id();
+${{entity}}Id = $block->get{{Entity}}Id();
+?>
+<div class="{{entity}}-edit-title">
+    <h3 class="title"><?php echo $block->escapeHtml($block->getHeader()) . ($block->get{{Entity}}Id() ? ' (' . __('ID: %1', $block->get{{Entity}}Id()) . ')' : '') ?></h3>
+</div>
+<div data-mage-init='{"floatingHeader": {}}' class="page-actions">
+    <?php echo $block->getAdditionalButtonsHtml(); ?>
+</div>
+<?php echo $block->getTabsHtml() ?>
+
+<iframe name="iframeSave" style="display:none; width:100%;"
+        src="<?php echo $block->getViewFileUrl('blank.html') ?>"></iframe>
+<form id="{{entity}}_edit_form" name="{{entity}}-edit-form" action="<?php echo $block->getSaveUrl() ?>" method="post"
+      enctype="multipart/form-data">
+    <div class="no-display">
+        <input type="hidden" name="isIframe" value="1"/>
+        <input name="form_key" type="hidden" value="<?php echo $block->getFormKey() ?>"/>
+        <input type="hidden" name="active_tab_id" id="active_tab_id" value=""/>
+        <?php if ($parentId !== 0): ?>
+            <input type="hidden" name="parent" value="<?php echo $parentId; ?>"/>
+        <?php endif; ?>
+        <?php if (${{entity}}Id !== 0): ?>
+            <input type="hidden" name="{{entity}}_id" value="<?php echo ${{entity}}Id; ?>"/>
+        <?php endif; ?>

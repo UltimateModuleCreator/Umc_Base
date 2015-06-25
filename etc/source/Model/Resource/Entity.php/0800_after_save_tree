@@ -1,0 +1,5 @@
+        /** @var \{{Namespace}}\{{Module}}\Model\{{Entity}} $object */
+        if (substr($object->getPath(), -1) == '/') {
+            $object->setPath($object->getPath() . $object->getId());
+            $this->{{_}}savePath($object);
+        }

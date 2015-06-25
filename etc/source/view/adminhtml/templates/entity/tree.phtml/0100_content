@@ -37,6 +37,7 @@ require([
     "jquery",
     "jquery/ui",
     "prototype",
+    'Magento_Ui/js/modal/modal',
     "extjs/ext-tree-checkbox",
     "mage/adminhtml/form",
     "mage/translate"
@@ -384,25 +385,16 @@ var mageDialog = (function($) {
             self.callback[type].forEach(function(call) {
                 call();
             });
-            $(dialog).dialog( "close" );
+            $(dialog).trigger("closeModal");
+            _resetState();
         };
         var _resetState = function() {
             self.dialogOpened = false;
             self.callback = {ok: [], cancel: []};
             delete self.dialog;
         };
-        self.dialog = $('[data-id="information-dialog-{{entity}}"]').dialog({
-            autoOpen:   false,
-            modal:      true,
-            dialogClass: 'popup-window ui-popup-message',
-            resizable: false,
-            width: '75%',
+        self.dialog = $('[data-id="information-dialog-{{entity}}"]').modal({
             title: $.mage.__('Warning message'),
-            position: {
-                my: 'left top',
-                at: 'center top',
-                of: 'body'
-            },
             buttons: [{
                     text: $.mage.__('Ok'),
                     'class': 'action-primary',
@@ -414,6 +406,7 @@ var mageDialog = (function($) {
                     'class': 'action-close',
                     click: function () {
                         onEvent('cancel', this);
+                        _resetState();
                     }
                 }
             ],
@@ -425,7 +418,7 @@ var mageDialog = (function($) {
                 $(this).closest('.ui-dialog').css('margin-top', topMargin);
             },
             close: function(event, ui) {
-                $(this).dialog('destroy');
+                $(this).trigger('closeModal');
                 _resetState();
             }
         });
@@ -445,7 +438,7 @@ var mageDialog = (function($) {
                 self.createDialog();
             }
             if (self.dialogOpened ==  false) {
-                self.dialog.dialog('open');
+                self.dialog.trigger('openModal');
             }
             return this;
         }

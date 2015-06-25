@@ -1,0 +1,4 @@
+<div id="<?php echo $block->getNameInLayout() ?>" style="display:none">
+    <?php echo $block->getFormHtml();?>
+    <?php echo $block->getAfterElementHtml();?>
+</div>

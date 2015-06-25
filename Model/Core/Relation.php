@@ -32,6 +32,9 @@ class Relation extends AbstractModel implements ModelInterface
      * @var string
      */
     protected $entityCode = 'umc_relation';
+    /**
+     * @var Relation\Type\TypeInterface
+     */
     protected $typeInstance;
 
     /**
@@ -42,6 +45,7 @@ class Relation extends AbstractModel implements ModelInterface
     protected $entityTwo;
     protected $type;
     protected $reversed = false;
+    protected $placeholders = [];
 
     /**
      * constructor
@@ -146,7 +150,7 @@ class Relation extends AbstractModel implements ModelInterface
     /**
      * get type instance
      *
-     * @return Attribute\Type\TypeInterface
+     * @return Relation\Type\TypeInterface
      */
     public function getTypeInstance()
     {
@@ -188,5 +192,50 @@ class Relation extends AbstractModel implements ModelInterface
             $xml .= '</'.$rootName.'>';
         }
         return $xml;
+    }
+
+    /**
+     * @return array
+     */
+    public function getPlaceholders()
+    {
+        $reversed = $this->getReversed();
+        if (!isset($this->placeholders[(int)$reversed])) {
+            $placeholders = [];
+            $entities = $this->getEntities();
+            $placeholders = array_merge($placeholders, $this->getTypeInstance()->getPlaceholders());
+            $placeholders = array_merge($placeholders, $entities[0]->getPlaceholders());
+            $placeholders = array_merge($placeholders, $entities[1]->getPlaceholdersAsSibling());
+            $this->placeholders[$reversed] = $placeholders;
+        }
+        return $this->placeholders[$reversed];
+    }
+
+    /**
+     * @param string $method
+     * @param array $args
+     * @return mixed
+     */
+    public function __call($method, $args)
+    {
+        if (substr($method, 0, strlen('getE1')) == 'getE1') {
+            $entities = $this->getEntities();
+            $key = $this->_underscore(substr($method, strlen('getE1')));
+            return $entities[0]->getDataUsingMethod($key);
+        }
+        if (substr($method, 0, strlen('getE2')) == 'getE2') {
+            $entities = $this->getEntities();
+            $key = $this->_underscore(substr($method, strlen('getE2')));
+            return $entities[1]->getDataUsingMethod($key);
+        }
+        return parent::__call($method, $args);
+    }
+
+    /**
+     * return array
+     */
+    public function getUninstallLines()
+    {
+        return $this->getTypeInstance()->getUninstallLines();
     }
 }

@@ -1,0 +1,1 @@
+        <block class="{{Namespace}}\{{Module}}\Block\Adminhtml\{{Sibling}}\New{{Sibling}}" name="new-{{sibling}}" template="{{Namespace}}_{{Module}}::{{sibling}}/new.phtml"/>

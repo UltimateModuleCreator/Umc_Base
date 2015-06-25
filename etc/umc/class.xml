@@ -31,7 +31,7 @@
     <class id="Magento\Framework\Data\Form\Element\Image" class="Magento\Framework\Data\Form\Element\Image" alias="ImageField" />
     <class id="{{Namespace}}\{{Module}}\Model\{{Entity}}\Image" class="{{Namespace}}\{{Module}}\Model\{{Entity}}\Image" alias="{{Entity}}Image" />
     <class id="Magento\Framework\Stdlib\DateTime\Filter\Date" class="Magento\Framework\Stdlib\DateTime\Filter\Date" alias="DateFilter" />
-    <class id="Magento\Framework\Data\Collection\Db" class="Magento\Framework\Data\Collection\Db" alias="DbCollection" />
+    <class id="Magento\Framework\Data\Collection\AbstractDb" class="Magento\Framework\Data\Collection\AbstractDb" alias="DbCollection" />
     <class id="{{Namespace}}\{{Module}}\Model\{{Entity}}" class="{{Namespace}}\{{Module}}\Model\{{Entity}}" alias="{{Entity}}Model" />
     <class id="Magento\Framework\Stdlib\DateTime" class="Magento\Framework\Stdlib\DateTime" alias="LibDateTime" />
     <class id="Magento\Framework\Event\ManagerInterface" class="Magento\Framework\Event\ManagerInterface" alias="EventManagerInterface" />
@@ -45,4 +45,8 @@
     <class id="Magento\Framework\Data\Tree" class="Magento\Framework\Data\Tree" alias="DataTree" />
     <class id="Magento\Framework\DB\Select" class="Magento\Framework\DB\Select" alias="DbSelect" />
     <class id="{{Namespace}}\{{Module}}\Controller\Adminhtml\{{Entity}}" class="{{Namespace}}\{{Module}}\Controller\Adminhtml\{{Entity}}" alias="{{Entity}}Controller" />
+    <class id="Magento\Backend\Helper\Js" class="Magento\Backend\Helper\Js" alias="JsHelper" />
+    <class id="{{Namespace}}\{{Module}}\Model\Resource\{{Sibling}}\Collection" class="{{Namespace}}\{{Module}}\Model\Resource\{{Sibling}}\Collection" alias="{{Sibling}}Collection" />
+    <class id="{{Namespace}}\{{Module}}\Model\Resource\{{Sibling}}\CollectionFactory" class="{{Namespace}}\{{Module}}\Model\Resource\{{Sibling}}\CollectionFactory" alias="{{Sibling}}CollectionFactory" />
+    <class id="{{siblingTabParent}}" class="{{siblingTabParent}}" alias="{{siblingTabParentAlias}}" />
 </classes>

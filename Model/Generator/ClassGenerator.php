@@ -69,6 +69,13 @@ class ClassGenerator extends AbstractGenerator
     protected $implements = [];
 
     /**
+     * additional constructor instructions
+     *
+     * @var array
+     */
+    protected $constructs = [];
+
+    /**
      * current class member vars
      *
      * @var array
@@ -152,6 +159,7 @@ class ClassGenerator extends AbstractGenerator
         $this->namespace                    = '';
         $this->className                    = '';
         $this->implements                   = [];
+        $this->constructs                   = [];
         $this->extends                      = '';
         $this->members                      = '';
         $this->constructor                  = '';
@@ -174,6 +182,7 @@ class ClassGenerator extends AbstractGenerator
         $this->generateExtends($model);
         $this->generateMembers($model);
         $this->generateAnnotations($model);
+        $this->generateConstructorInstructions($model);
         $this->generateParentConstructExtraParams($model);
         $content = $this->mergeElements($content);
         return $content;
@@ -311,7 +320,7 @@ class ClassGenerator extends AbstractGenerator
         if (isset($config['implements']['implement'])) {
             foreach ($config['implements']['implement'] as $implement) {
                 if ($model->validateDepend($implement)) {
-                    $scope = (isset($annotation['scope']) ? $annotation['scope'] : $this->getDefaultScope());
+                    $scope = (isset($implement['scope']) ? $implement['scope'] : $this->getDefaultScope());
                     $processor = $this->getImplementProcessor($scope);
                     $processor->setModel($model);
                     $this->implements = array_merge($this->implements, $processor->process($implement));
@@ -469,6 +478,11 @@ class ClassGenerator extends AbstractGenerator
         return $this->getProcessor(self::IMPLEMENT_PROCESSOR_KEY, $type);
     }
 
+    protected function getConstructProcessor($type)
+    {
+        return $this->getProcessor(self::CONSTRUCT_PROCESSOR_KEY, $type);
+    }
+
     /**
      * merge all elements of the class
      *
@@ -535,7 +549,7 @@ class ClassGenerator extends AbstractGenerator
         foreach ($members as $member) {
             $content .= $this->formatMember($member);
         }
-        if (isset($this->config['constructs']['construct'])) {
+        if (count($this->constructs)) {
             $hasConstruct = true;
         }
         //generate constructor
@@ -595,13 +609,10 @@ class ClassGenerator extends AbstractGenerator
                 $parentLine .= implode(', ', $parentParams).');';
                 $lines[] = $parentLine;
             }
-            //TODO: maybe use part processors here if needed for a different scope
-            if (isset($this->config['constructs']['construct'])) {
-                foreach ($this->config['constructs']['construct'] as $construct) {
-                    $parts = explode(self::CONSTRUCT_SEPARATOR, $construct['value']);
-                    foreach ($parts as $part) {
-                        $lines[] = $tab.$part;
-                    }
+            foreach ($this->constructs as $construct) {
+                $parts = explode(self::CONSTRUCT_SEPARATOR, $construct);
+                foreach ($parts as $part) {
+                    $lines[] = $tab.$part;
                 }
             }
             $lines[] = '}'.$eol;
@@ -745,5 +756,20 @@ class ClassGenerator extends AbstractGenerator
             $this->parentConstructExtraParams = $model->filterContent($this->config['parent_construct_extra']);
         }
         return $this;
+    }
+
+    public function generateConstructorInstructions(AbstractModel $model)
+    {
+        $config = $this->config;
+        $this->constructs = [];
+        if (isset($config['constructs']['construct'])) {
+            foreach ($config['constructs']['construct'] as $construct) {
+                $scope = (isset($construct['scope']) ? $construct['scope'] : $this->getDefaultScope());
+                $processor = $this->getConstructProcessor($scope);
+                $processor->setModel($model);
+                $this->constructs = array_merge($this->constructs, $processor->process($construct));
+            }
+        }
+        return $this->constructs;
     }
 }

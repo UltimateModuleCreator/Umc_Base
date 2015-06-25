@@ -222,7 +222,7 @@ class Edit extends Module
         } else {
             $title = __('Create module');
         }
-        $pageResult->getConfig()->getTitle()->append($title);
+        $pageResult->getConfig()->getTitle()->prepend($title);
         $this->_setActiveMenu('Umc_Base::umc')
             ->_addBreadcrumb(
                 __('Ultimate Module Creator'),

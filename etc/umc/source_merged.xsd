@@ -165,6 +165,7 @@
                 <xs:extension base="xs:string">
                     <xs:attribute type="xs:string" name="id" use="required"/>
                     <xs:attribute type="xs:boolean" name="disabled" use="optional"/>
+                    <xs:attribute type="xs:boolean" name="bool" use="optional"/>
                 </xs:extension>
             </xs:simpleContent>
         </xs:complexType>
@@ -269,18 +270,30 @@
 
     <xs:element name="construct">
         <xs:annotation>
-            <xs:documentation>Everything added after the parent constructor call</xs:documentation>
+            <xs:documentation>Constructor additional instructions</xs:documentation>
         </xs:annotation>
         <xs:complexType>
-            <xs:simpleContent>
-                <xs:extension base="xs:string">
-                    <xs:attribute type="xs:string" name="id" use="required"/>
-                    <xs:attribute type="xs:boolean" name="disabled" use="optional"/>
-                    <xs:attribute type="xs:int" name="sort" use="optional"/>
-                </xs:extension>
-            </xs:simpleContent>
+            <xs:sequence>
+                <xs:element ref="depends" maxOccurs="unbounded" minOccurs="0"/>
+            </xs:sequence>
+            <xs:attributeGroup ref="constructAttributeGroup"/>
         </xs:complexType>
     </xs:element>
+
+    <!--<xs:element name="construct">-->
+        <!--<xs:annotation>-->
+            <!--<xs:documentation>Everything added after the parent constructor call</xs:documentation>-->
+        <!--</xs:annotation>-->
+        <!--<xs:complexType>-->
+            <!--<xs:simpleContent>-->
+                <!--<xs:extension base="xs:string">-->
+                    <!--<xs:attribute type="xs:string" name="id" use="required"/>-->
+                    <!--<xs:attribute type="xs:boolean" name="disabled" use="optional"/>-->
+                    <!--<xs:attribute type="xs:int" name="sort" use="optional"/>-->
+                <!--</xs:extension>-->
+            <!--</xs:simpleContent>-->
+        <!--</xs:complexType>-->
+    <!--</xs:element>-->
 
     <xs:element name="part">
         <xs:annotation>
@@ -399,6 +412,14 @@
         <xs:attribute type="xs:string" name="id" use="required"/>
         <xs:attribute type="xs:int" name="sort" use="required"/>
         <xs:attribute type="xs:boolean" name="disabled" use="optional"/>
+    </xs:attributeGroup>
+
+    <xs:attributeGroup name="constructAttributeGroup">
+        <xs:attribute type="xs:string" name="id" use="required"/>
+        <xs:attribute type="xs:boolean" name="disabled" use="optional"/>
+        <xs:attribute type="xs:int" name="sort" use="required"/>
+        <xs:attribute type="xs:string" name="scope" use="optional"/>
+        <xs:attribute type="xs:string" name="value" use="required"/>
     </xs:attributeGroup>
 
     <xs:attributeGroup name="annotationAttributeGroup">

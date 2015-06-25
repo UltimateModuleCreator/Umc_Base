@@ -24,6 +24,7 @@ use Umc\Base\Model\Config\Restriction as RestrictionConfig;
 use Umc\Base\Model\Config\SaveAttributes as SaveAttributesConfig;
 use Umc\Base\Model\Core\AttributeFactory;
 use Umc\Base\Model\Core\EntityFactory;
+use Umc\Base\Model\Core\Relation\Type\SiblingRelation;
 use Umc\Base\Model\Core\SettingsFactory;
 
 /**
@@ -370,6 +371,7 @@ class Module extends AbstractModel implements ModelInterface
                 '{{menu_sort_order}}'   => $this->getSortOrder(),
                 '{{namespace}}'         => $this->getNamespace(true),
                 '{{menu_parent_value}}' => $this->getParentMenuValue(),
+                '{{requireJsDialogs}}'  => $this->getRequireJsDialogs(),
             ];
             $this->placeholders = array_merge($this->placeholders, $this->getSettings()->getPlaceholders());
         }
@@ -528,9 +530,13 @@ class Module extends AbstractModel implements ModelInterface
     public function getUninstallLines()
     {
         $lines = [];
+        foreach ($this->getRelations() as $relation) {
+            $lines = array_merge($lines, $relation->getUninstallLines());
+        }
         foreach ($this->getEntities() as $entity) {
             $lines = array_merge($lines, $entity->getUninstallLines());
         }
+        $lines[] = "DELETE FROM `setup_module` WHERE `module` = '".$this->getNamespace().'_'.$this->getModuleName()."';";
         return $lines;
     }
 
@@ -584,5 +590,47 @@ class Module extends AbstractModel implements ModelInterface
             $relation->setReversed($reversed);
         }
         return json_encode($json);
+    }
+
+    /**
+     * @return bool
+     */
+    public function getHasTreeRelatedEntities()
+    {
+        if (!$this->hasData('has_tree_related_entities')) {
+            $this->setData('has_tree_related_entities', false);
+            foreach ($this->getEntities() as $entity) {
+                if ($entity->getIsTree() && $entity->hasRelationType(SiblingRelation::RELATION_TYPE_SIBLING)) {
+                    $this->setData('has_tree_related_entities', true);
+                    break;
+                }
+            }
+        }
+        return $this->getData('has_tree_related_entities');
+    }
+
+    /**
+     * @return string
+     */
+    public function getRequireJsDialogs()
+    {
+        $config = [];
+        foreach ($this->getEntities() as $entity) {
+            if ($entity->getIsTree() && $entity->hasRelationType(SiblingRelation::RELATION_TYPE_SIBLING)) {
+                $config[] = $this->getPadding(3).
+                    "new".
+                    $entity->getNameSingular(true)."Dialog: '".
+                    $this->getNamespace().'_'.
+                    $this->getModuleName()."/".
+                    $entity->getNameSingular()."/new-".
+                    $entity->getNameSingular()."-dialog'";
+                $config[] = $this->getPadding(3).
+                    $entity->getNameSingular()."Form: '".
+                    $this->getNamespace().'_'.
+                    $this->getModuleName()."/".
+                    $entity->getNameSingular()."/form'";
+            }
+        }
+        return implode(','.$this->getEol(), $config);
     }
 }

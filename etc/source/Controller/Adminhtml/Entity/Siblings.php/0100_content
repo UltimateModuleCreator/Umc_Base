@@ -1,0 +1,14 @@
+    /**
+     * @return \Magento\Framework\View\Result\Layout
+     */
+    public function execute()
+    {
+        $this->{{_}}init{{Entity}}();
+        $resultLayout = $this->{{_}}resultLayoutFactory->create();
+        /** @var \{{Namespace}}\{{Module}}\Block\Adminhtml\{{Entity}}\Edit\Tab\{{Sibling}} ${{siblings}}Block */
+        ${{siblings}}Block = $resultLayout->getLayout()->getBlock('{{entity}}.edit.tab.{{sibling}}');
+        if (${{siblings}}Block) {
+            ${{siblings}}Block->set{{Entity}}{{Siblings}}($this->getRequest()->getPost('{{entity}}_{{siblings}}', null));
+        }
+        return $resultLayout;
+    }

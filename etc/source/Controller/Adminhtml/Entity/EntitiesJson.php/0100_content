@@ -11,19 +11,19 @@
             $this->_getSession()->set{{Namespace}}{{Module}}{{Entity}}IsTreeWasExpanded(false);
         }
         ${{entity}}Id = (int)$this->getRequest()->getPost('id');
-        $resultJson = $this->resultJsonFactory->create();
+        $resultJson = $this->{{_}}resultJsonFactory->create();
         if (${{entity}}Id) {
             $this->getRequest()->setParam('{{entity}}_id', ${{entity}}Id);
 
             ${{entity}} = $this->{{_}}init{{Entity}}();
             if (!${{entity}}) {
                 /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
-                $resultRedirect = $this->resultRedirectFactory->create();
+                $resultRedirect = $this->{{_}}resultRedirectFactory->create();
                 return $resultRedirect->setPath('{{namespace}}_{{module}}/*/', ['_current' => true, '{{entity}}_id' => null]);
             }
             /** @var \Magento\Framework\Controller\Result\Json $resultJson */
             return $resultJson->setJsonData(
-                $this->layoutFactory->create()->createBlock('{{Namespace}}\{{Module}}\Block\Adminhtml\{{Entity}}\Tree')
+                $this->{{_}}layoutFactory->create()->createBlock('{{Namespace}}\{{Module}}\Block\Adminhtml\{{Entity}}\Tree')
                     ->getTreeJson(${{entity}})
             );
         }

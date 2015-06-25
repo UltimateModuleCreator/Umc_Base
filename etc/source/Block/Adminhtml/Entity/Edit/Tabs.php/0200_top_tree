@@ -37,7 +37,7 @@
                 'label' => __('{{EntityLabel}} information'),
                 'content' => $this->getLayout()->createBlock(
                     '{{Namespace}}\{{Module}}\Block\Adminhtml\{{Entity}}\Edit\Tab\{{Entity}}',
-                    '{{namespace}}_{{module}}_{{entity}_edit_tab_{{entity}}'
+                    '{{namespace}}_{{module}}_{{entity}}_edit_tab_{{entity}}'
                 )->toHtml()
             ]
         );

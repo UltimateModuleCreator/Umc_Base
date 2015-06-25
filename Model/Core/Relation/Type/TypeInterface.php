@@ -26,4 +26,14 @@ interface TypeInterface
      * @return mixed
      */
     public function setRelation(Relation $attribute);
+
+    /**
+     * @return array
+     */
+    public function getPlaceholders();
+
+    /**
+     * @return array
+     */
+    public function getUninstallLines();
 }

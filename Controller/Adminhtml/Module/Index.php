@@ -29,8 +29,8 @@ class Index extends Module
     public function execute()
     {
         $pageResult = $this->resultPageFactory->create();
-        $pageResult->getConfig()->getTitle()->prepend(__('Ultimate Module Creator'));
-        $pageResult->getConfig()->getTitle()->set(__('Module List'));
+        $pageResult->getConfig()->getTitle()->set(__('Ultimate Module Creator'));
+        $pageResult->getConfig()->getTitle()->prepend(__('Module List'));
         $this->_setActiveMenu('Umc_Base::umc')
             ->_addBreadcrumb(
                 __('Ultimate Module Creator'),

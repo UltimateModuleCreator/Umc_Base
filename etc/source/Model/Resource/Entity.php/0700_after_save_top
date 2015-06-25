@@ -1,0 +1,8 @@
+    /**
+     * after save callback
+     *
+     * @param \Magento\Framework\Model\AbstractModel|\{{Namespace}}\{{Module}}\Model\{{Entity}} $object
+     * @return $this
+     */
+    protected function _afterSave({{class Magento\Framework\Model\AbstractModel}} $object)
+    {

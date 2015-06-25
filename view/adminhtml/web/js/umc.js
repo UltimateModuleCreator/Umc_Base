@@ -18,6 +18,7 @@ define([
     'jquery',
     'mage/template',
     'jquery/ui',
+    'Magento_Ui/js/modal/modal',
     'jquery/jstree/jquery.jstree',
     'useDefault',
     'mage/translate',
@@ -60,9 +61,13 @@ define([
          */
         _create: function() {
             var that = this;
-            this._dialog = this.element.dialog({
-                autoOpen: that.options.autoOpen,
-                modal: true,
+
+            this._dialog = this.element.modal({
+                type: 'slide',
+                modalClass: 'form-inline',
+                title: $(that.element).attr('title'),
+//                autoOpen: that.options.autoOpen,
+//                modal: true,
                 buttons: that.getButtons(),
                 width: 500
             });
@@ -71,11 +76,18 @@ define([
          * get the tooltip buttons
          */
         getButtons: function() {
+            var that = this;
             if (!this.buttons) {
-                this.buttons = {};
-                this.buttons[this.options.buttonLabel] = function() {
-                    $(this).dialog("close");
-                }
+                this.buttons = [{
+                    text: this.options.buttonLabel,
+                    class: 'action-primary',
+                    click: function (e) {
+                        $(that.element).trigger("closeModal");
+                    }
+                }];
+//                this.buttons[this.options.buttonLabel] = function() {
+//
+//                }
             }
             return this.buttons;
         }
@@ -124,16 +136,14 @@ define([
             var that = this;
             $(this.options.tooltipSelector).umctooltip();
             this.makeTree();
-            this.menuDialog = $(this.options.menuSelector).dialog({
-                autoOpen:   false,
-                modal:      true,
-                width:      600,
-                height:     500,
-                title:      $.mage.__('Select parent menu and position')
+            this.menuDialog = $(this.options.menuSelector).modal({
+                title:      $.mage.__('Select parent menu and position'),
+                modalClass: 'form-inline',
+                buttons:[]
             });
             $(this.options.menuSelectorTrigger).on('click', function(e) {
                 e.preventDefault();
-                that.menuDialog.dialog('open');
+                that.menuDialog.trigger('openModal');
             });
             $(this.options.addEntityTrigger).on('click', function() {
                 that.addEntity();
@@ -164,7 +174,7 @@ define([
                     sortOrder = parseInt(values[1]) + 10;
                 }
                 $('.menu-sort-order:first').val(sortOrder);
-                that.menuDialog.dialog('close');
+                that.menuDialog.trigger('closeModal');
             });
         },
         addEntity: function() {

@@ -26,6 +26,7 @@ use Umc\Base\Model\Core\AttributeFactory;
 use Umc\Base\Model\Core\Entity\Type\Factory as TypeFactory;
 use Umc\Base\Model\Core\Entity\Type\TypeInterface;
 use Umc\Base\Model\Core\Relation\Type\ParentRelation;
+use Umc\Base\Model\Core\Relation\Type\SiblingRelation;
 
 /**
  * @method int getSortOrder()
@@ -93,6 +94,11 @@ class Entity extends AbstractModel implements ModelInterface
      * @var array
      */
     protected $parentAttributes = [];
+
+    /**
+     * @var array
+     */
+    protected $placeholdersAsSibling;
 
     /**
      * constructor
@@ -353,8 +359,19 @@ class Entity extends AbstractModel implements ModelInterface
     }
 
     /**
+     * check if a certain attribute type exists
+     *
+     * @param $type
+     * @return bool
+     */
+    public function getHasAttributeTypeRequired($type)
+    {
+        return $this->getTypeInstance()->getHasAttributeTypeRequired($type);
+    }
+
+    /**
      * __call magic method
-     * handle the getHasAttributeType calls
+     * handle the getHasAttributeType, getHasRelationType calls
      *
      * @param string $method
      * @param array $args
@@ -362,9 +379,17 @@ class Entity extends AbstractModel implements ModelInterface
      */
     public function __call($method, $args)
     {
+        if (substr($method, 0, strlen('getHasAttributeTypeRequired')) == 'getHasAttributeTypeRequired') {
+            $key = $this->_underscore(substr($method, strlen('getHasAttributeTypeRequired')));
+            return $this->getHasAttributeTypeRequired($key);
+        }
         if (substr($method, 0, strlen('getHasAttributeType')) == 'getHasAttributeType') {
             $key = $this->_underscore(substr($method, strlen('getHasAttributeType')));
             return $this->getHasAttributeType($key);
+        }
+        if (substr($method, 0, strlen('getHasRelationType')) == 'getHasRelationType') {
+            $key = $this->_underscore(substr($method, strlen('getHasRelationType')));
+            return $this->hasRelationType($key);
         }
         return parent::__call($method, $args);
     }
@@ -378,6 +403,21 @@ class Entity extends AbstractModel implements ModelInterface
     {
         foreach ($this->getAttributes() as $attribute) {
             if ($attribute->getData('editor')) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * check if there is an attribute with editor
+     *
+     * @return bool
+     */
+    public function getHasEditorRequired()
+    {
+        foreach ($this->getAttributes() as $attribute) {
+            if ($attribute->getData('editor') && $attribute->getRequired()) {
                 return true;
             }
         }
@@ -411,11 +451,36 @@ class Entity extends AbstractModel implements ModelInterface
                 '{{treeClass}}'             => $this->getTreeClass(),
                 '{{editSpecificJsAction}}'  => $this->getEditSpecificJsAction(),
                 '{{AdminFormParentClass}}'  => $this->getAdminFormParentClass(),
+                '{{editFormFieldsAsNew}}'   => $this->getEditFormFieldsAsNew(),
+                '{{quickSaveAttributes}}'   => $this->getQuickSaveAttributes(),
+                '{{clearAttributes}}'       => $this->getClearAttributes(),
             ];
             $this->placeholders = array_merge($this->placeholders, $this->getTypeInstance()->getPlaceholders());
             $this->placeholders = array_merge($this->getModule()->getPlaceholders(), $this->placeholders);
         }
         return $this->placeholders;
+    }
+
+    /**
+     * @return array
+     */
+    public function getPlaceholdersAsSibling()
+    {
+        if (is_null($this->placeholdersAsSibling)) {
+            $this->placeholdersAsSibling = [
+                '{{sibling}}'       => $this->getNameSingular(),
+                '{{Sibling}}'       => $this->getNameSingular(true),
+                '{{SiblingLabel}}'  => $this->getLabelSingular(true),
+                '{{SiblingsLabel}}' => $this->getLabelPlural(true),
+                '{{siblings}}'      => $this->getNamePlural(),
+                '{{Siblings}}'      => $this->getNamePlural(true),
+                '{{SiblingNameAttributeLabel}}' => $this->getNameAttribute()->getLabel(),
+                '{{siblingNameAttributeCode}}' => $this->getNameAttribute()->getCode(),
+                '{{siblingTabParent}}' => $this->getSiblingTabParent(),
+                '{{siblingTabParentAlias}}' => $this->getSiblingTabParentAlias(),
+            ];
+        }
+        return $this->placeholdersAsSibling;
     }
 
     /**
@@ -537,6 +602,22 @@ class Entity extends AbstractModel implements ModelInterface
         }
         foreach ($this->getAttributes() as $attribute) {
             $fields .= $attribute->getEditFormField();
+        }
+        return $fields;
+    }
+
+    public function getEditFormFieldsAsNew()
+    {
+        $fields = '';
+        $prefix = 'new_'.$this->getNameSingular().'_';
+        foreach ($this->getAttributes() as $attribute) {
+            if ($attribute->getRequired() && !$attribute->getIsName()) {
+                $clone = $this->attributeFactory->create();
+                $clone->setEntity($this);
+                $clone->setData($attribute->getData());
+                $clone->setCode($prefix.$clone->getCode());
+                $fields .= $clone->getEditFormField();
+            }
         }
         return $fields;
     }
@@ -690,6 +771,7 @@ class Entity extends AbstractModel implements ModelInterface
         return $this->relatedEntities[$type];
     }
 
+
     /**
      * @param string $forWhat
      * @return Attribute[]
@@ -749,5 +831,97 @@ class Entity extends AbstractModel implements ModelInterface
             $attributes[] = $attribute;
         }
         return $attributes;
+    }
+
+    /**
+     * @param $type
+     * @return bool
+     */
+    public function hasRelationType($type)
+    {
+        return count($this->getRelatedEntities($type)) > 0;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getHasTreeSibling()
+    {
+        $siblings = $this->getRelatedEntities(SiblingRelation::RELATION_TYPE_SIBLING);
+        foreach ($siblings as $sibling) {
+            if ($sibling->getIsTree()) {
+                return true;
+            }
+        }
+        return false;
+
+    }
+
+    /**
+     * @return bool
+     */
+    public function getHasNonTreeSibling()
+    {
+        $siblings = $this->getRelatedEntities(SiblingRelation::RELATION_TYPE_SIBLING);
+        foreach ($siblings as $sibling) {
+            if (!$sibling->getIsTree()) {
+                return true;
+            }
+        }
+        return false;
+
+    }
+
+    /**
+     * @return string
+     */
+    public function getSiblingTabParent()
+    {
+        if ($this->getIsTree()) {
+            return 'Magento\Backend\Block\Widget\Form\Generic';
+        }
+        return 'Magento\Backend\Block\Widget\Grid\Extended';
+    }
+
+    /**
+     * @return string
+     */
+    public function getSiblingTabParentAlias()
+    {
+        if ($this->getIsTree()) {
+            return 'GenericForm';
+        }
+        return 'ExtendedGrid';
+    }
+
+    /**
+     * @return string
+     */
+    public function getQuickSaveAttributes()
+    {
+        $lines = [];
+        $prefix = 'new_'.$this->getNameSingular().'_';
+        foreach ($this->getAttributes() as $attribute) {
+            if ($attribute->getRequired() || $attribute->getIsName()) {
+                $lines[] = $attribute->getCode().' : '. "$('#".$prefix.$attribute->getCode()."').val()";
+            }
+        }
+        $padd = $this->getPadding(9);
+        return $padd.implode(','.$this->getEol().$padd, $lines);
+    }
+
+    /**
+     * @return string
+     */
+    public function getClearAttributes()
+    {
+        $prefix = 'new_'.$this->getNameSingular().'_';
+        $lines = ['#'.$prefix.'parent-suggest'];
+        foreach ($this->getAttributes() as $attribute) {
+            if ($attribute->getRequired() || $attribute->getIsName()) {
+                $lines[] = '#'.$prefix.$attribute->getCode();
+            }
+        }
+        return implode(', ', $lines);
     }
 }

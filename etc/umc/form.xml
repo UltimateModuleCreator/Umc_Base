@@ -207,6 +207,9 @@
                 <tooltip><![CDATA[This allows you to display the attribute as a column in the admin grid of the entity. The attribute set to behave as 'Name' will be included by default in the grid.]]></tooltip>
                 <source>\Magento\Config\Model\Config\Source\Yesno</source>
                 <depends id="type">
+                    <depend id="is_tree" type="entity">
+                        <val id="0">0</val>
+                    </depend>
                     <depend id="type" type="attribute">
                         <val id="text">text</val>
                         <val id="decimal">decimal</val>

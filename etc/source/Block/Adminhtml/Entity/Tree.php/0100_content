@@ -50,7 +50,7 @@
     public function getSuggested{{Entities}}Json(${{nameAttributeCode}}Part)
     {
         /* @var $collection \{{Namespace}}\{{Module}}\Model\Resource\{{Entity}}\Collection */
-        $collection = $this->{{entity}}CollectionFactory->create();
+        $collection = $this->{{_}}{{entity}}CollectionFactory->create();
 
         /* @var $matching{{NameAttributeCode}}Collection \{{Namespace}}\{{Module}}\Model\Resource\{{Entity}}\Collection */
         $matching{{NameAttributeCode}}Collection = clone $collection;
@@ -58,7 +58,7 @@
             ${{nameAttributeCode}}Part,
             ['position' => 'any']
         );
-        $matching{{NameAttributeCode}}Collection->addFiledToFilter(
+        $matching{{NameAttributeCode}}Collection->addFieldToFilter(
             '{{nameAttributeCode}}',
             ['like' => $escaped{{NameAttributeCode}}Part]
         )
@@ -79,24 +79,24 @@
             ['in' => array_keys($shown{{Entities}}Ids)]
         );
 
-        ${{Entities}}ById = [
+        ${{entities}}ById = [
             {{class {{Namespace}}\{{Module}}\Model\{{Entity}}}}::TREE_ROOT_ID => [
                 'id' => {{class {{Namespace}}\{{Module}}\Model\{{Entity}}}}::TREE_ROOT_ID,
                 'children' => [],
             ],
         ];
         foreach ($collection as ${{entity}}) {
-            /** @var {{Namespace}}\{{Module}}\Model\{{Entity}} ${{entity}} */
+            /** @var \{{Namespace}}\{{Module}}\Model\{{Entity}} ${{entity}} */
             foreach ([${{entity}}->getId(), ${{entity}}->getParentId()] as ${{entity}}Id) {
-                if (!isset(${{entity}}ById[${{entity}}Id])) {
-                    ${{entity}}ById[${{entity}}Id] = ['id' => ${{entity}}Id, 'children' => []];
+                if (!isset(${{entities}}ById[${{entity}}Id])) {
+                    ${{entities}}ById[${{entity}}Id] = ['id' => ${{entity}}Id, 'children' => []];
                 }
             }
-            ${{entity}}ById[${{entity}}->getId()]['is_active'] = {{isActiveTreeSuggest}};
-            ${{entity}}ById[${{entity}}->getId()]['label'] = ${{entity}}->get{{NameAttributeCode}}();
-            ${{entity}}ById[${{entity}}->getParentId()]['children'][] = & ${{entity}}ById[${{entity}}->getId()];
+            ${{entities}}ById[${{entity}}->getId()]['is_active'] = {{isActiveTreeSuggest}};
+            ${{entities}}ById[${{entity}}->getId()]['label'] = ${{entity}}->get{{NameAttributeCode}}();
+            ${{entities}}ById[${{entity}}->getParentId()]['children'][] = & ${{entities}}ById[${{entity}}->getId()];
         }
-        return $this->{{_}}jsonEncoder->encode(${{entity}}ById[{{class {{Namespace}}\{{Module}}\Model\{{Entity}}}}::TREE_ROOT_ID]['children']);
+        return $this->{{_}}jsonEncoder->encode(${{entities}}ById[{{class {{Namespace}}\{{Module}}\Model\{{Entity}}}}::TREE_ROOT_ID]['children']);
     }
 
     /**

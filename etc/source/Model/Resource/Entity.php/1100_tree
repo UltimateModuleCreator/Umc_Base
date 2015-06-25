@@ -1,3 +1,4 @@
+
     /**
      * @param $path
      * @return int|string
@@ -43,19 +44,6 @@
         return $this;
     }
 
-    /**
-     * @param AbstractModel $object
-     * @return $this
-     */
-    protected function _afterSave(\Magento\Framework\Model\AbstractModel $object)
-    {
-        /** @var \{{Namespace}}\{{Module}}\Model\{{Entity}} $object */
-        if (substr($object->getPath(), -1) == '/') {
-            $object->setPath($object->getPath() . $object->getId());
-            $this->{{_}}savePath($object);
-        }
-        return parent::_afterSave($object);
-    }
 
     /**
      * @param AbstractModel $object
@@ -84,7 +72,7 @@
      * @param \Magento\Framework\Object $object
      * @return $this
      */
-    public function deleteChildren(\Magento\Framework\Object $object)
+    public function deleteChildren({{class Magento\Framework\Object}} $object)
     {
         $adapter = $this->_getWriteAdapter();
         $pathField = $adapter->quoteIdentifier('path');

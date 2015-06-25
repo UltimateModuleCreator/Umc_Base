@@ -86,5 +86,8 @@
         <type id="child" model="Umc\Base\Model\Core\Relation\Type\ChildRelation" sort="30" translate="label">
             <label>Is Child Of</label>
         </type>
+        <type id="sibling" model="Umc\Base\Model\Core\Relation\Type\SiblingRelation" sort="40" translate="label">
+            <label>Is Sibling WIth</label>
+        </type>
     </entity>
 </types>

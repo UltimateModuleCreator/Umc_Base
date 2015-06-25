@@ -42,7 +42,7 @@ class TemplateGenerator extends AbstractGenerator implements GeneratorInterface
      *
      * @return string
      */
-    public function getLicense()
+    protected function getLicense()
     {
         if (is_null($this->license)) {
             $text = $this->module->getSettings()->getLicense();

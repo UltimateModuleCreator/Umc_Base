@@ -29,13 +29,13 @@
 </fieldset>
 <div class="umc-help">
     <?php foreach ($this->getSections() as $sectionId=> $section) : ?>
-        <div data-role="umc-help-section-<?php echo $sectionId?>-wrapper" id="umc-help-section-<?php echo $sectionId?>-wrapper" class="fieldset-wrapper collapsable-wrapper ">
+        <div data-role="umc-help-section-<?php echo $sectionId?>-wrapper" id="umc-help-section-<?php echo $sectionId?>-wrapper" class="fieldset-wrapper admin__collapsible-block-wrapper">
             <div class="fieldset-wrapper-title">
-                <strong data-target="#umc-help-section-<?php echo $sectionId?>-content" data-toggle="collapse" class="title">
+                <strong data-target="#umc-help-section-<?php echo $sectionId?>-content" data-toggle="collapse" class="admin__collapsible-title">
                     <span><?php echo __($section['label'])?></span>
                 </strong>
             </div>
-            <div data-role="umc-help-section-<?php echo $sectionId?>-content" id="umc-help-section-<?php echo $sectionId?>-content" class="fieldset-wrapper-content collapse">
+            <div data-role="umc-help-section-<?php echo $sectionId?>-content" id="umc-help-section-<?php echo $sectionId?>-content" class="fieldset-wrapper-content in collapse">
                 <?php if ($section['description']) : ?>
                     <div class="umc-help-section-description"><?php echo __($section['description'])?></div>
                 <?php endif;?>
@@ -44,18 +44,18 @@
                         <?php if (isset($fieldset['description'])) : ?>
                             <p class="umc-help-fieldset-description"><?php echo $fieldset['description'];?></p>
                         <?php endif;?>
-                        <div data-role="umc-help-fieldset-<?php echo $sectionId?>-<?php echo $fieldsetId?>-wrapper" id="umc-help-fieldset-<?php echo $sectionId?>-<?php echo $fieldsetId?>-wrapper" class="fieldset-wrapper collapsable-wrapper ">
+                        <div data-role="umc-help-fieldset-<?php echo $sectionId?>-<?php echo $fieldsetId?>-wrapper" id="umc-help-fieldset-<?php echo $sectionId?>-<?php echo $fieldsetId?>-wrapper" class="fieldset-wrapper admin__collapsible-block-wrapper">
                             <div class="fieldset-wrapper-title">
-                                <strong data-target="#umc-help-fieldset-<?php echo $sectionId?>-<?php echo $fieldsetId?>-content" data-toggle="collapse" class="title">
+                                <strong data-target="#umc-help-fieldset-<?php echo $sectionId?>-<?php echo $fieldsetId?>-content" data-toggle="collapse" class="admin__collapsible-title">
                                     <span><?php echo $fieldset['label']?></span>
                                 </strong>
                             </div>
-                            <div data-role="umc-help-fieldset-<?php echo $sectionId?>-<?php echo $fieldsetId?>-content" id="umc-help-fieldset-<?php echo $sectionId?>-<?php echo $fieldsetId?>-content" class="fieldset-wrapper-content collapse">
+                            <div data-role="umc-help-fieldset-<?php echo $sectionId?>-<?php echo $fieldsetId?>-content" id="umc-help-fieldset-<?php echo $sectionId?>-<?php echo $fieldsetId?>-content" class="fieldset-wrapper-content in collapse">
                                 <div class="grid">
-                                    <table id="umc-help-<?php echo $sectionId?>-<?php echo $fieldsetId?>-table" class="umc-help-table">
+                                    <table id="umc-help-<?php echo $sectionId?>-<?php echo $fieldsetId?>-table" class="data-grid umc-help-table">
                                         <thead>
                                         <?php foreach ($fieldset['columns'] as $column) : ?>
-                                            <td><?php echo $column['label']?></td>
+                                            <th><?php echo $column['label']?></th>
                                         <?php endforeach ;?>
                                         </thead>
                                         <tbody>

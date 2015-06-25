@@ -442,14 +442,18 @@
             <argument name="generatorMap" xsi:type="array">
                 <item name="global.xml" xsi:type="string">Umc\Base\Model\Generator\XmlGenerator</item>
                 <item name="entity.xml" xsi:type="string">Umc\Base\Model\Generator\Xml\EntityGenerator</item>
+                <item name="siblings.xml" xsi:type="string">Umc\Base\Model\Generator\Xml\SiblingsGenerator</item>
                 <item name="global.class" xsi:type="string">Umc\Base\Model\Generator\ClassGenerator</item>
                 <item name="entity.class" xsi:type="string">Umc\Base\Model\Generator\ClassGenerator\EntityGenerator</item>
+                <item name="siblings.class" xsi:type="string">Umc\Base\Model\Generator\ClassGenerator\SiblingsGenerator</item>
                 <item name="attribute.class" xsi:type="string">Umc\Base\Model\Generator\ClassGenerator\AttributeGenerator</item>
                 <item name="global.csv" xsi:type="string">Umc\Base\Model\Generator\CsvGenerator</item>
                 <item name="global.phtml" xsi:type="string">Umc\Base\Model\Generator\TemplateGenerator</item>
                 <item name="entity.phtml" xsi:type="string">Umc\Base\Model\Generator\Template\EntityGenerator</item>
                 <item name="global.js" xsi:type="string">Umc\Base\Model\Generator\JsGenerator</item>
                 <item name="entity.js" xsi:type="string">Umc\Base\Model\Generator\Js\EntityGenerator</item>
+                <item name="global.image" xsi:type="string">Umc\Base\Model\Generator\ImageGenerator</item>
+                <item name="entity.image" xsi:type="string">Umc\Base\Model\Generator\Image\EntityGenerator</item>
             </argument>
         </arguments>
     </type>
@@ -467,15 +471,26 @@
             <argument name="processors" xsi:type="array">
                 <item name="part.entity" xsi:type="string">Umc\Base\Model\Processor\Part\Entity\Entity</item>
                 <item name="part.attribute" xsi:type="string">Umc\Base\Model\Processor\Part\Entity\Attribute</item>
+                <item name="part.relation" xsi:type="string">Umc\Base\Model\Processor\Part\Entity\Relation</item>
                 <item name="part.parent_entity" xsi:type="string">Umc\Base\Model\Processor\Part\Entity\ParentPart</item>
             </argument>
         </arguments>
     </type>
+
+    <type name="Umc\Base\Model\Generator\Xml\SiblingsGenerator">
+        <arguments>
+            <argument name="processors" xsi:type="array">
+                <item name="part.siblings" xsi:type="string">Umc\Base\Model\Processor\Part\GlobalPart</item>
+            </argument>
+        </arguments>
+    </type>
+
     <type name="Umc\Base\Model\Generator\ClassGenerator">
         <arguments>
             <argument name="processors" xsi:type="array">
                 <item name="part.global" xsi:type="string">Umc\Base\Model\Processor\Part\GlobalPart</item>
                 <item name="part.entity" xsi:type="string">Umc\Base\Model\Processor\Part\Entity</item>
+                <item name="part.relation" xsi:type="string">Umc\Base\Model\Processor\Part\Relation</item>
                 <item name="member.global" xsi:type="string">Umc\Base\Model\Processor\Member\GlobalMember</item>
                 <item name="member.entity" xsi:type="string">Umc\Base\Model\Processor\Member\Entity</item>
                 <item name="annotation.global" xsi:type="string">Umc\Base\Model\Processor\Annotation\GlobalAnnotation</item>
@@ -489,12 +504,17 @@
             <argument name="processors" xsi:type="array">
                 <item name="part.entity" xsi:type="string">Umc\Base\Model\Processor\Part\Entity\Entity</item>
                 <item name="part.attribute" xsi:type="string">Umc\Base\Model\Processor\Part\Entity\Attribute</item>
+                <item name="part.relation" xsi:type="string">Umc\Base\Model\Processor\Part\Entity\Relation</item>
                 <item name="member.entity" xsi:type="string">Umc\Base\Model\Processor\Member\Entity\Entity</item>
                 <item name="member.attribute" xsi:type="string">Umc\Base\Model\Processor\Member\Entity\Attribute</item>
                 <item name="member.parent_entity" xsi:type="string">Umc\Base\Model\Processor\Member\Entity\ParentMember</item>
+                <item name="member.relation" xsi:type="string">Umc\Base\Model\Processor\Member\Entity\Relation</item>
                 <item name="annotation.entity" xsi:type="string">Umc\Base\Model\Processor\Annotation\Entity\Entity</item>
                 <item name="annotation.attribute" xsi:type="string">Umc\Base\Model\Processor\Annotation\Entity\Attribute</item>
+                <item name="annotation.relation" xsi:type="string">Umc\Base\Model\Processor\Annotation\Entity\Relation</item>
                 <item name="implement.entity" xsi:type="string">Umc\Base\Model\Processor\Implement\GlobalImplement</item>
+                <item name="construct.entity" xsi:type="string">Umc\Base\Model\Processor\Constructor\Entity\Entity</item>
+                <item name="construct.relation" xsi:type="string">Umc\Base\Model\Processor\Constructor\Entity\Relation</item>
             </argument>
         </arguments>
     </type>
@@ -510,12 +530,23 @@
         </arguments>
     </type>
 
+    <type name="Umc\Base\Model\Generator\ClassGenerator\SiblingsGenerator">
+        <arguments>
+            <argument name="processors" xsi:type="array">
+                <item name="part.siblings" xsi:type="string">Umc\Base\Model\Processor\Part\GlobalPart</item>
+                <item name="implement.siblings" xsi:type="string">Umc\Base\Model\Processor\Implement\GlobalImplement</item>
+                <item name="member.siblings" xsi:type="string">Umc\Base\Model\Processor\Member\GlobalMember</item>
+            </argument>
+        </arguments>
+    </type>
+
     <type name="Umc\Base\Model\Generator\CsvGenerator">
         <arguments>
             <argument name="processors" xsi:type="array">
                 <item name="part.global" xsi:type="string">Umc\Base\Model\Processor\Part\GlobalPart</item>
                 <item name="part.entity" xsi:type="string">Umc\Base\Model\Processor\Part\Entity</item>
                 <item name="part.attribute" xsi:type="string">Umc\Base\Model\Processor\Part\Attribute</item>
+                <item name="part.relation" xsi:type="string">Umc\Base\Model\Processor\Part\Relation</item>
             </argument>
         </arguments>
     </type>
@@ -532,6 +563,7 @@
         <arguments>
             <argument name="processors" xsi:type="array">
                 <item name="part.entity" xsi:type="string">Umc\Base\Model\Processor\Part\Entity\Entity</item>
+                <item name="part.relation" xsi:type="string">Umc\Base\Model\Processor\Part\Entity\Relation</item>
             </argument>
         </arguments>
     </type>
@@ -539,12 +571,29 @@
     <type name="Umc\Base\Model\Generator\JsGenerator">
         <arguments>
             <argument name="processors" xsi:type="array">
+                <item name="part.global" xsi:type="string">Umc\Base\Model\Processor\Part\GlobalPart</item>
                 <item name="part.entity" xsi:type="string">Umc\Base\Model\Processor\Part\Entity</item>
             </argument>
         </arguments>
     </type>
 
     <type name="Umc\Base\Model\Generator\Js\EntityGenerator">
+        <arguments>
+            <argument name="processors" xsi:type="array">
+                <item name="part.entity" xsi:type="string">Umc\Base\Model\Processor\Part\Entity\Entity</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="Umc\Base\Model\Generator\ImageGenerator">
+        <arguments>
+            <argument name="processors" xsi:type="array">
+                <item name="part.entity" xsi:type="string">Umc\Base\Model\Processor\Part\Entity</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="Umc\Base\Model\Generator\Image\EntityGenerator">
         <arguments>
             <argument name="processors" xsi:type="array">
                 <item name="part.entity" xsi:type="string">Umc\Base\Model\Processor\Part\Entity\Entity</item>

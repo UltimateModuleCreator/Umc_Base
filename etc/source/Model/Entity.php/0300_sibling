@@ -1,0 +1,32 @@
+    /**
+     * @return array|mixed
+     */
+    public function get{{Siblings}}Position()
+    {
+        if (!$this->getId()) {
+            return array();
+        }
+        $array = $this->getData('{{siblings}}_position');
+        if (is_null($array)) {
+            $array = $this->getResource()->get{{Siblings}}Position($this);
+            $this->setData('{{siblings}}_position', $array);
+        }
+        return $array;
+    }
+
+    /**
+     * @return \{{Namespace}}\{{Module}}\Model\Resource\{{Sibling}}\Collection
+     */
+    public function getSelected{{Siblings}}Collection()
+    {
+        if (is_null($this->{{_}}{{sibling}}Collection)) {
+            $collection = $this->{{_}}{{sibling}}CollectionFactory->create();
+            $collection->join(
+                '{{relation_table}}',
+                'main_table.{{sibling}}_id={{relation_table}}.{{sibling}}_id AND main_table.{{entity}}_id='.$this->getId(),
+                ['position']
+            );
+            $this->{{_}}{{sibling}}Collection = $collection;
+        }
+        return $this->{{_}}{{sibling}}Collection;
+    }

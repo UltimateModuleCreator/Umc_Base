@@ -29,6 +29,6 @@
     {
         $resultPage = $this->getResultPage();
         $resultPage->setActiveMenu('{{Namespace}}_{{Module}}::{{entity}}');
-        $resultPage->getConfig()->getTitle()->set((__('{{EntitiesLabel}}')));
+        $resultPage->getConfig()->getTitle()->prepend((__('{{EntitiesLabel}}')));
         return $this;
     }

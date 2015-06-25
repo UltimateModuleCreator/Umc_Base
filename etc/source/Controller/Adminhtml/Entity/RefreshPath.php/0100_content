@@ -1,0 +1,17 @@
+
+    /**
+     * Build response for refresh input element 'path' in form
+     *
+     * @return \Magento\Framework\Controller\Result\Json
+     */
+    public function execute()
+    {
+        ${{entity}}Id = (int)$this->getRequest()->getParam('{{entity}}_id');
+        if (${{entity}}Id) {
+            ${{entity}} = $this->{{_}}{{entity}}Factory->create()->load(${{entity}}Id);
+
+            /** @var \Magento\Framework\Controller\Result\Json $resultJson */
+            $resultJson = $this->{{_}}resultJsonFactory->create();
+            return $resultJson->setData(['id' => ${{entity}}Id, 'path' => ${{entity}}->getPath()]);
+        }
+    }

@@ -56,6 +56,13 @@ class AbstractGenerator extends Umc implements GeneratorInterface
     const IMPLEMENT_PROCESSOR_KEY = 'implement';
 
     /**
+     * prefix for construct processors
+     *
+     * @var string
+     */
+    const CONSTRUCT_PROCESSOR_KEY = 'construct';
+
+    /**
      * default scope
      *
      * @var string

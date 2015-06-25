@@ -45,4 +45,20 @@ class AbstractRelation extends Umc implements TypeInterface
     {
         return $this;
     }
+
+    /**
+     * @return array
+     */
+    public function getPlaceholders()
+    {
+        return [];
+    }
+
+    /**
+     * @return array
+     */
+    public function getUninstallLines()
+    {
+        return [];
+    }
 }

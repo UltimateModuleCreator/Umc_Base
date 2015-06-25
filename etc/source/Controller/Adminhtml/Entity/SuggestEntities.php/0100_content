@@ -1,0 +1,14 @@
+    /**
+     * {{EntityLabel}} list suggestion based on already entered symbols
+     *
+     * @return \Magento\Framework\Controller\Result\Json
+     */
+    public function execute()
+    {
+        /** @var \Magento\Framework\Controller\Result\Json $resultJson */
+        $resultJson = $this->{{_}}resultJsonFactory->create();
+        return $resultJson->setJsonData(
+            $this->{{_}}layoutFactory->create()->createBlock('{{Namespace}}\{{Module}}\Block\Adminhtml\{{Entity}}\Tree')
+                ->getSuggested{{Entities}}Json($this->getRequest()->getParam('label_part'))
+        );
+    }

@@ -1,0 +1,64 @@
+
+    /**
+     * @param \{{Namespace}}\{{Module}}\Model\{{Entity}} ${{entity}}
+     * @return array
+     */
+    protected function {{_}}save{{Sibling}}Relation(\{{Namespace}}\{{Module}}\Model\{{Entity}} ${{entity}})
+    {
+        ${{entity}}->setIsChanged{{Sibling}}List(false);
+        $id = ${{entity}}->getId();
+        ${{siblings}} = ${{entity}}->get{{Siblings}}Ids();
+        if (${{siblings}} === null) {
+            return $this;
+        }
+        $old{{Sibling}}Ids = ${{entity}}->get{{Sibling}}Ids();
+        $insert = array_diff_key(${{siblings}}, $old{{Sibling}}Ids);
+        $delete = array_diff_key($old{{Sibling}}Ids, ${{siblings}});
+        $adapter = $this->_getWriteAdapter();
+        if (!empty($delete)) {
+            $condition = array('{{sibling}}_id IN(?)' => $delete, '{{entity}}_id=?' => $id);
+            $adapter->delete($this->{{_}}{{entity}}{{Sibling}}Table, $condition);
+        }
+        if (!empty($insert)) {
+            $data = array();
+            foreach ($insert as ${{sibling}}Id) {
+                $data[] = array(
+                    '{{entity}}_id' => (int)$id,
+                    '{{sibling}}_id' => (int)${{sibling}}Id,
+                    'position' => 1
+                );
+            }
+            $adapter->insertMultiple($this->{{_}}{{entity}}{{Sibling}}Table, $data);
+        }
+        if (!empty($insert) || !empty($delete)) {
+            ${{sibling}}Ids = array_unique(array_merge(array_keys($insert), array_keys($delete)));
+            $this->{{_}}eventManager->dispatch(
+                '{{namespace}}_{{module}}_{{entity}}_change_{{siblings}}',
+                array('{{entity}}' => ${{entity}}, '{{sibling}}_ids' => ${{sibling}}Ids)
+            );
+        }
+        if (!empty($insert) || !empty($delete)) {
+            ${{entity}}->setIsChanged{{Sibling}}List(true);
+            ${{sibling}}Ids = array_keys($insert + $delete);
+            ${{entity}}->setAffected{{Sibling}}Ids(${{sibling}}Ids);
+        }
+        return $this;
+    }
+
+    /**
+     * @param \{{Namespace}}\{{Module}}\Model\{{Entity}} ${{entity}}
+     * @return array
+     */
+    public function get{{Sibling}}Ids(\{{Namespace}}\{{Module}}\Model\{{Entity}} ${{entity}})
+    {
+        $adapter = $this->_getReadAdapter();
+        $select = $adapter->select()->from(
+            $this->{{_}}{{entity}}{{Sibling}}Table,
+            '{{sibling}}_id'
+        )
+        ->where(
+            '{{entity}}_id = ?',
+            (int)${{entity}}->getId()
+        );
+        return $adapter->fetchCol($select);
+    }

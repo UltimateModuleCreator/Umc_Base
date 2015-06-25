@@ -148,6 +148,7 @@ class Module
         $this->codeMapping['entity']    = $entityInstance->getEntityCode();
         $this->codeMapping['attribute'] = $attributeInstance->getEntityCode();
         $this->codeMapping['settings']  = $settingsInstance->getEntityCode();
+        $this->codeMapping['siblings']  = "siblings";
     }
 
     /**
@@ -217,7 +218,8 @@ class Module
                         $allowedValues[] = $this->getValueLabel(
                             $fieldDepend['id'],
                             $fileConfig['scope'],
-                            $value['value']
+                            $value['value'],
+                            (isset($value['bool']) ? $value['bool'] : false)
                         );
                     }
                     if (count($allowedValues) > 0) {
@@ -326,17 +328,19 @@ class Module
     }
 
     /**
-     * get value label
-     *
      * @param $field
      * @param $scope
      * @param $value
-     * @return null|string
+     * @param bool $asBool
+     * @return \Magento\Framework\Phrase|null|string
      */
-    public function getValueLabel($field, $scope, $value)
+    public function getValueLabel($field, $scope, $value, $asBool = false)
     {
         $field = $this->findField($field, $scope);
         if (!$field) {
+            if ($asBool) {
+                return $this->getBoolValue($value);
+            }
             return $value;
         }
         if (isset($field['source'])) {
@@ -347,7 +351,19 @@ class Module
                 return $label;
             }
         }
+        if ($asBool) {
+            return $this->getBoolValue($value);
+        }
         return $value;
+    }
+
+    /**
+     * @param $val
+     * @return \Magento\Framework\Phrase
+     */
+    public function getBoolValue($val)
+    {
+        return ($val ? __('True') : __('False'));
     }
 
     /**

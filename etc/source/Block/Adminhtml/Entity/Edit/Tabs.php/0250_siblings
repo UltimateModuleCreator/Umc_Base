@@ -1,0 +1,10 @@
+        $this->addTab(
+            '{{sibling}}',
+            [
+                'label' => __('{{SiblingsLabel}}'),
+                'content' => $this->getLayout()->createBlock(
+                    '{{Namespace}}\{{Module}}\Block\Adminhtml\{{Entity}}\Edit\Tab\{{Sibling}}',
+                    '{{namespace}}_{{module}}_{{entity}}_edit_tab_{{sibling}}'
+                )->toHtml()
+            ]
+        );

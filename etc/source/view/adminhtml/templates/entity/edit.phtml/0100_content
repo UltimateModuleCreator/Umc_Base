@@ -59,7 +59,12 @@ require([
                 showLoader: true
             }).done(function(data){
                 if (data.content) {
-                    $('.page-actions').floatingHeader('destroy');
+                    var pageActions = $('.page-actions');
+                    for (var i =0;i<pageActions.length;i++) {
+                        if ($(pageActions[i]).data('floatingHeader')) {
+                            $(pageActions[i]).floatingHeader('destroy');
+                        }
+                    }
                     try {
                         $('#{{entity}}-edit-container .wysiwyg-editor').each(function(index, element) {
                             tinyMCE.execCommand('mceRemoveControl', false, $(element).attr('id'));

@@ -72,4 +72,12 @@ interface TypeInterface
      * @return bool
      */
     public function getHasAttributeType($type);
+
+    /**
+     * check if has a type attribute
+     *
+     * @param $type
+     * @return bool
+     */
+    public function getHasAttributeTypeRequired($type);
 }

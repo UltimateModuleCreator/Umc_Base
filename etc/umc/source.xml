@@ -233,6 +233,171 @@
             <part id="content" file="0600_content" sort="600" />
         </code>
     </file>
+    <file id="Block/Adminhtml/{{Entity}}/Edit/Tab/{{Sibling}}.php" type="class" sort="77" scope="siblings" translate="label description">
+        <label>Sibling relation admin tab</label>
+        <description>Sibling relation admin tab</description>
+        <extends>{{siblingTabParent}}</extends>
+        <implements>
+            <implement id="Magento\Backend\Block\Widget\Tab\TabInterface" sort="10" />
+        </implements>
+        <members>
+            <member id="{{sibling}}CollectionFactory" sort="10" construct="true" show="true" parent="false" var="{{Namespace}}\{{Module}}\Model\Resource\{{Sibling}}\CollectionFactory">
+                <doc>{{SiblingLabel}} collection factory</doc>
+                <depends id="not_tree">
+                    <depend id="e2_is_tree">
+                        <val id="0">0</val>
+                    </depend>
+                </depends>
+            </member>
+            <member id="coreRegistry" sort="20" construct="true" show="true" var="Magento\Framework\Registry" parent="false">
+                <doc>Registry</doc>
+                <depends id="not_tree">
+                    <depend id="e2_is_tree">
+                        <val id="0">0</val>
+                    </depend>
+                </depends>
+            </member>
+            <member id="{{sibling}}Factory" sort="30" construct="true" show="true" parent="false" var="{{Namespace}}\{{Module}}\Model\{{Sibling}}Factory">
+                <doc>{{SiblingLabel}} factory</doc>
+                <depends id="not_tree">
+                    <depend id="e2_is_tree">
+                        <val id="0">0</val>
+                    </depend>
+                </depends>
+            </member>
+            <member id="context" sort="40" construct="true" show="false" parent="true" var="Magento\Backend\Block\Template\Context" />
+            <member id="backendHelper" sort="50" construct="true" show="false" parent="true" var="Magento\Backend\Helper\Data" />
+            <member id="data" sort="50" construct="true" show="false" parent="true" var="array" default="[]" />
+        </members>
+        <code>
+            <part id="not_tree" file="0100_not_tree" sort="100">
+                <depends id="not_tree">
+                    <depend id="e2_is_tree">
+                        <val id="0">0</val>
+                    </depend>
+                </depends>
+            </part>
+            <part id="tree" file="0200_tree" sort="200">
+                <depends id="tree">
+                    <depend id="e2_is_tree">
+                        <val id="1">1</val>
+                    </depend>
+                </depends>
+            </part>
+        </code>
+    </file>
+    <file id="Block/Adminhtml/Helper/{{Entity}}.php" type="class" sort="75" scope="entity" translate="label description">
+        <label>Tree entities helper block</label>
+        <description>Helper block for tree entities with sibling relations</description>
+        <depends id="is_tree">
+            <depend id="is_tree">
+                <val id="1">1</val>
+            </depend>
+            <depend id="has_relation_type_sibling">
+                <val id="1" bool="true">1</val>
+            </depend>
+        </depends>
+        <extends>Magento\Framework\Data\Form\Element\Multiselect</extends>
+        <members>
+            <member id="collectionFactory" type="protected" construct="true" show="true" var="{{Namespace}}\{{Module}}\Model\Resource\{{Entity}}\CollectionFactory" sort="10">
+                <doc>Collection factory</doc>
+            </member>
+            <member id="backendData" type="protected" construct="true" show="true" var="Magento\Backend\Helper\Data" sort="20">
+                <doc>Backend helper</doc>
+            </member>
+            <member id="layout" type="protected" construct="true" show="true" var="Magento\Framework\View\LayoutInterface" sort="30">
+                <doc>Layout instance</doc>
+            </member>
+            <member id="jsonEncoder" type="protected" construct="true" show="true" var="Magento\Framework\Json\EncoderInterface" sort="40">
+                <doc>Json encoder instance</doc>
+            </member>
+            <member id="authorization" type="protected" construct="true" show="true" var="Magento\Framework\AuthorizationInterface" sort="50">
+                <doc>Authorization</doc>
+            </member>
+            <member id="factoryElement" construct="true" show="false" parent="true" var="Magento\Framework\Data\Form\Element\Factory" sort="60" />
+            <member id="factoryCollection" construct="true" show="false" parent="true" var="Magento\Framework\Data\Form\Element\CollectionFactory" sort="70" />
+            <member id="escaper" construct="true" show="false" parent="true" var="Magento\Framework\Escaper" sort="80" />
+            <member id="data" construct="true" show="false" parent="true" var="array" sort="90" default="[]" />
+        </members>
+        <code>
+            <part id="content" file="0100_content" sort="100" />
+        </code>
+    </file>
+    <file id="Block/Adminhtml/{{Entity}}/New{{Entity}}.php" type="class" sort="77" scope="entity" translate="label description">
+        <label>Tree entities quick create block</label>
+        <description>Create block for tree entities directly from the sibling entity form</description>
+        <depends id="is_tree">
+            <depend id="is_tree">
+                <val id="1">1</val>
+            </depend>
+            <depend id="has_relation_type_sibling">
+                <val id="1" bool="true">1</val>
+            </depend>
+        </depends>
+        <extends>Magento\Backend\Block\Widget\Form\Generic</extends>
+        <annotations>
+            <annotation id="setUseContainer" params="\bool $use" return="New{{Entity}}" sort="10" />
+            <annotation id="getUseContainer" return="\bool" sort="10" />
+        </annotations>
+        <members>
+            <member id="wysiwygConfig" construct="true" show="true" var="Magento\Cms\Model\Wysiwyg\Config" sort="10">
+                <doc>Wysiwyg config</doc>
+                <depends id="has_editor_required">
+                    <depend id="has_editor_required">
+                        <val id="1">1</val>
+                    </depend>
+                </depends>
+            </member>
+            <member id="countryOptions" construct="true" show="true" var="Magento\Config\Model\Config\Source\Locale\Country" sort="20">
+                <doc>Country options</doc>
+                <depends id="has_attribute_type_required_country">
+                    <depend id="has_attribute_type_required_country">
+                        <val id="1">1</val>
+                    </depend>
+                </depends>
+                <depends id="has_attribute_type_required_countrymultiselect">
+                    <depend id="has_attribute_type_required_countrymultiselect">
+                        <val id="1">1</val>
+                    </depend>
+                </depends>
+            </member>
+            <member id="booleanOptions" construct="true" show="true" var="Magento\Config\Model\Config\Source\Yesno" sort="30">
+                <doc>Country options</doc>
+                <depends id="has_attribute_type_required_yesno">
+                    <depend id="has_attribute_type_required_yesno">
+                        <val id="1">1</val>
+                    </depend>
+                </depends>
+            </member>
+            <member id="new{{Entity}}{{CodeCamelCase}}Options" construct="true" show="true" var="{{Namespace}}\{{Module}}\Model\{{Entity}}\Source\{{CodeCamelCase}}" sort="40" scope="attribute">
+                <doc>{{Label}} options</doc>
+                <depends id="has_options">
+                    <depend id="has_options">
+                        <val id="1">1</val>
+                    </depend>
+                    <depend id="required">
+                        <val id="1">1</val>
+                    </depend>
+                </depends>
+            </member>
+            <member id="jsonEncoder" type="protected" construct="true" show="true" var="Magento\Framework\Json\EncoderInterface" sort="50">
+                <doc>JSON encoder</doc>
+            </member>
+            <member id="{{entity}}CollectionFactory" type="protected" construct="true" show="true" var="{{Namespace}}\{{Module}}\Model\Resource\{{Entity}}\CollectionFactory" sort="60">
+                <doc>{{EntityLabel}} collection factory</doc>
+            </member>
+            <member id="context" construct="true" show="false" parent="true" var="Magento\Backend\Block\Template\Context" sort="70" />
+            <member id="registry" construct="true" show="false" parent="true" var="Magento\Framework\Registry" sort="80" />
+            <member id="formFactory" construct="true" show="false" parent="true" var="Magento\Framework\Data\FormFactory" sort="90" />
+            <member id="data" construct="true" show="false" parent="true" var="array" sort="100" default="[]" />
+        </members>
+        <constructs>
+            <construct id="use_container" sort="10" value="$this->setUseContainer(true);" />
+        </constructs>
+        <code>
+            <part id="content" file="0100_content" sort="100" />
+        </code>
+    </file>
     <file id="Controller/Adminhtml/{{Entity}}.php" type="class" sort="80" scope="entity" translate="label description">
         <label>Admin entity controller</label>
         <description>Base controller for admin</description>
@@ -277,10 +442,10 @@
             <member id="layoutFactory" sort="20" construct="true" show="true" var="Magento\Framework\View\LayoutFactory">
                 <doc>Layout Factory</doc>
             </member>
-            <member id="{{entity}}Factory" sort="30" construct="true" show="false" var="{{Namespace}}\{{Module}}\Model\{{Entity}}Factory" />
-            <member id="coreRegistry" sort="40" construct="true" show="false" var="Magento\Framework\Registry" />
-            <member id="resultRedirectFactory" sort="50" construct="true" show="false" var="Magento\Backend\Model\View\Result\RedirectFactory" />
-            <member id="context" sort="60" construct="true" show="false" var="Magento\Backend\App\Action\Context" />
+            <member id="{{entity}}Factory" sort="30" construct="true" show="false" parent="true" var="{{Namespace}}\{{Module}}\Model\{{Entity}}Factory" />
+            <member id="coreRegistry" sort="40" construct="true" show="false" parent="true" var="Magento\Framework\Registry" />
+            <member id="resultRedirectFactory" sort="50" construct="true" show="false" parent="true" var="Magento\Backend\Model\View\Result\RedirectFactory" />
+            <member id="context" sort="60" construct="true" show="false" parent="true" var="Magento\Backend\App\Action\Context" />
         </members>
         <code>
             <part id="content" file="0100_content" sort="100" />
@@ -309,6 +474,28 @@
             <member id="coreRegistry" sort="50" construct="true"  parent="true" show="false" var="Magento\Framework\Registry" />
             <member id="resultRedirectFactory" sort="60" construct="true"  parent="true" show="false" var="Magento\Backend\Model\View\Result\RedirectFactory" />
             <member id="context" sort="70" construct="true" show="false"  parent="true" var="Magento\Backend\App\Action\Context" />
+        </members>
+        <code>
+            <part id="content" file="0100_content" sort="100" />
+        </code>
+    </file>
+    <file id="Controller/Adminhtml/{{Entity}}/RefreshPath.php" type="class" sort="99" scope="entity" translate="label description">
+        <label>Action for refreshing tree path.</label>
+        <description>Action for refreshing tree path.</description>
+        <depends id="is_tree">
+            <depend id="is_tree">
+                <val id="1">1</val>
+            </depend>
+        </depends>
+        <extends>{{Namespace}}\{{Module}}\Controller\Adminhtml\{{Entity}}</extends>
+        <members>
+            <member id="resultJsonFactory" sort="10" construct="true" show="true" var="Magento\Framework\Controller\Result\JsonFactory">
+                <doc>JSON Result Factory</doc>
+            </member>
+            <member id="{{entity}}Factory" sort="20" construct="true" show="false" parent="true" var="{{Namespace}}\{{Module}}\Model\{{Entity}}Factory" />
+            <member id="coreRegistry" sort="30" construct="true" show="false" parent="true" var="Magento\Framework\Registry" />
+            <member id="resultRedirectFactory" sort="40" construct="true" show="false" parent="true" var="Magento\Backend\Model\View\Result\RedirectFactory" />
+            <member id="context" sort="50" construct="true" show="false" parent="true" var="Magento\Backend\App\Action\Context" />
         </members>
         <code>
             <part id="content" file="0100_content" sort="100" />
@@ -579,6 +766,14 @@
                     </depend>
                 </depends>
             </member>
+            <member id="jsHelper" construct="true" show="true" var="Magento\Backend\Helper\Js" sort="85">
+                <doc>JS helper</doc>
+                <depends id="has_non_tree_sibling">
+                    <depend id="has_non_tree_sibling">
+                        <val id="1">1</val>
+                    </depend>
+                </depends>
+            </member>
             <member id="{{entity}}Factory" type="protected" construct="true" show="false" parent="true" var="{{Namespace}}\{{Module}}\Model\{{Entity}}Factory" sort="90" />
             <member id="registry" construct="true" show="false" parent="true" var="Magento\Framework\Registry" sort="100" />
             <member id="resultRedirectFactory" construct="true" show="false" parent="true" var="Magento\Backend\Model\View\Result\RedirectFactory" sort="110" />
@@ -629,6 +824,42 @@
                 <depends id="file">
                     <depend id="type">
                         <val id="file">file</val>
+                    </depend>
+                </depends>
+            </part>
+            <part id="sibling_not_tree" file="0550_sibling_not_tree" sort="550" scope="relation">
+                <depends id="not_tree">
+                    <depend id="type">
+                        <val id="sibling">sibling</val>
+                    </depend>
+                    <depend id="e1_is_tree">
+                        <val id="0">0</val>
+                    </depend>
+                    <depend id="e2_is_tree">
+                        <val id="0">0</val>
+                    </depend>
+                </depends>
+            </part>
+            <part id="sibling_tree" file="0570_sibling_tree" sort="570" scope="relation">
+                <depends id="not_tree">
+                    <depend id="type">
+                        <val id="sibling">sibling</val>
+                    </depend>
+                    <depend id="e1_is_tree">
+                        <val id="1">1</val>
+                    </depend>
+                    <depend id="e2_is_tree">
+                        <val id="0">0</val>
+                    </depend>
+                </depends>
+            </part>
+            <part id="sibling_both_tree" file="0580_sibling_both_tree" sort="580" scope="relation">
+                <depends id="not_tree">
+                    <depend id="type">
+                        <val id="sibling">sibling</val>
+                    </depend>
+                    <depend id="e2_is_tree">
+                        <val id="1">1</val>
                     </depend>
                 </depends>
             </part>
@@ -725,12 +956,78 @@
         </code>
     </file>
 
+    <file id="Controller/Adminhtml/{{Entity}}/Suggest{{Entities}}.php" type="class" sort="175" scope="entity" translate="label description">
+        <label>Retrieve entity tree</label>
+        <description>Get the entity tree based on text</description>
+        <depends id="is_tree">
+            <depend id="is_tree">
+                <val id="1">1</val>
+            </depend>
+            <depend id="has_relation_type_sibling">
+                <val id="1" bool="true">1</val>
+            </depend>
+        </depends>
+        <extends>{{Namespace}}\{{Module}}\Controller\Adminhtml\{{Entity}}</extends>
+        <members>
+            <member id="resultJsonFactory" type="protected" construct="true" show="true" var="Magento\Framework\Controller\Result\JsonFactory" sort="10">
+                <doc>Json result factory</doc>
+            </member>
+            <member id="layoutFactory" type="protected" construct="true" show="true" var="Magento\Framework\View\LayoutFactory" sort="20">
+                <doc>Layout factory</doc>
+            </member>
+            <member id="{{entity}}Factory" construct="true" show="false" parent="true" var="{{Namespace}}\{{Module}}\Model\{{Entity}}Factory" sort="30" />
+            <member id="coreRegistry" construct="true" show="false" parent="true" var="Magento\Framework\Registry" sort="40" />
+            <member id="resultRedirectFactory" construct="true" show="false" parent="true" var="Magento\Backend\Model\View\Result\RedirectFactory" sort="50" />
+            <member id="context" construct="true" show="false" parent="true" var="Magento\Backend\App\Action\Context" sort="60" />
+        </members>
+        <code>
+            <part id="content" file="0100_content" sort="100" />
+        </code>
+    </file>
+
+    <file id="Controller/Adminhtml/{{Entity}}/{{Siblings}}.php" type="class" sort="176" scope="siblings" translate="label description">
+        <label>Siblings grid action</label>
+        <description>Siblings grid action</description>
+        <depends id="type">
+            <depend id="e2_is_tree">
+                <val id="0" bool="true">0</val>
+            </depend>
+        </depends>
+        <extends>{{Namespace}}\{{Module}}\Controller\Adminhtml\{{Entity}}</extends>
+        <members>
+            <member id="resultLayoutFactory" type="protected" construct="true" show="true" var="Magento\Framework\View\Result\LayoutFactory" sort="10">
+                <doc>Result layout factory</doc>
+            </member>
+            <member id="{{sibling}}Factory" type="protected" construct="true" show="false" parent="true" var="{{Namespace}}\{{Module}}\Model\{{Entity}}Factory" sort="20" />
+            <member id="registry" type="protected" construct="true" show="false" parent="true" var="Magento\Framework\Registry" sort="30" />
+            <member id="resultRedirectFactory" type="protected" construct="true" show="false" parent="true" var="Magento\Backend\Model\View\Result\RedirectFactory" sort="40" />
+            <member id="context" type="protected" construct="true" show="false" parent="true" var="Magento\Backend\App\Action\Context" sort="50" />
+        </members>
+        <code>
+            <part id="content" file="0100_content" sort="100" />
+        </code>
+    </file>
+
+    <file id="Controller/Adminhtml/{{Entity}}/{{Siblings}}grid.php" type="class" sort="176" scope="siblings" translate="label description">
+        <label>Siblings grid AJAX action</label>
+        <description>Siblings grid AJAX action</description>
+        <depends id="type">
+            <depend id="e2_is_tree">
+                <val id="0" bool="true">0</val>
+            </depend>
+        </depends>
+        <extends>{{Namespace}}\{{Module}}\Controller\Adminhtml\{{Entity}}\{{Siblings}}</extends>
+        <code>
+            <part id="content" file="0100_content" sort="100" />
+        </code>
+    </file>
+
     <file id="Block/Adminhtml/{{Entity}}/Helper/File.php" type="class" sort="180" scope="entity" translate="label description">
         <label>Entity admin file input renderer</label>
         <description>Used for file upload </description>
         <depends id="has_attribute_type_file">
             <depend id="has_attribute_type_file">
-                <val id="1">1</val>
+                <val id="1" bool="true">1</val>
             </depend>
         </depends>
         <extends>Magento\Framework\Data\Form\Element\File</extends>
@@ -749,7 +1046,7 @@
             <member id="data" construct="true" show="false" parent="true" var="array" sort="50" />
         </members>
         <constructs>
-            <construct id="setters"><![CDATA[$this->setType('file');###$this->setExtType('file');]]></construct>
+            <construct id="setters" sort="10" value="$this->setType('file');###$this->setExtType('file');" />
         </constructs>
         <code>
             <part id="content" file="0100_content" sort="100" />
@@ -760,7 +1057,7 @@
         <description>Used for image upload</description>
         <depends id="has_attribute_type_image">
             <depend id="has_attribute_type_image">
-                <val id="1">1</val>
+                <val id="1" bool="true">1</val>
             </depend>
         </depends>
         <extends>Magento\Framework\Data\Form\Element\Image</extends>
@@ -883,6 +1180,16 @@
                     </depend>
                 </depends>
             </part>
+            <part id="siblings" file="0250_siblings" sort="250" scope="relation">
+                <depends id="siblings">
+                    <depend id="type">
+                        <val id="sibling">sibling</val>
+                    </depend>
+                    <depend id="e1_is_tree">
+                        <val id="1">1</val>
+                    </depend>
+                </depends>
+            </part>
             <part id="bottom_tree" file="0300_bottom_tree" sort="300">
                 <depends id="is_tree">
                     <depend id="is_tree">
@@ -979,6 +1286,19 @@
                     </depend>
                 </depends>
             </part>
+            <part id="sibling" file="0300_sibling" sort="300" scope="relation">
+                <depends id="type">
+                    <depend id="type">
+                        <val id="sibling">sibling</val>
+                    </depend>
+                    <depend id="e1_is_tree">
+                        <val id="1">1</val>
+                    </depend>
+                    <depend id="e2_is_tree">
+                        <val id="0">0</val>
+                    </depend>
+                </depends>
+            </part>
         </code>
     </file>
     <file id="view/adminhtml/layout/{{namespace}}_{{module}}_{{entity}}_edit.xml" type="xml" sort="240" scope="entity" translate="label description">
@@ -986,6 +1306,18 @@
         <description>Add/Edit Action layout handle</description>
         <code>
             <part id="top" file="0100_top" sort="100" />
+            <part id="head_start" file="0125_head_start" sort="125">
+                <depends id="is_tree">
+                    <depend id="is_tree">
+                        <val id="1">1</val>
+                    </depend>
+                </depends>
+                <depends id="has_tree_sibling">
+                    <depend id="has_tree_sibling">
+                        <val id="1">1</val>
+                    </depend>
+                </depends>
+            </part>
             <part id="tree_upload" file="0150_tree_upload" sort="150">
                 <depends id="has_file_and_tree">
                     <depend id="has_file">
@@ -1004,6 +1336,29 @@
                     </depend>
                 </depends>
             </part>
+            <part id="tree_sibling_css" file="0175_tree_sibling_css" sort="175" scope="relation">
+                <depends id="tree_related">
+                    <depend id="type">
+                        <val id="sibling">sibling</val>
+                    </depend>
+                    <depend id="e2_is_tree">
+                        <val id="1">1</val>
+                    </depend>
+                </depends>
+            </part>
+            <part id="head_end" file="0187_head_end" sort="187">
+                <depends id="is_tree">
+                    <depend id="is_tree">
+                        <val id="1">1</val>
+                    </depend>
+                </depends>
+                <depends id="has_tree_sibling">
+                    <depend id="has_tree_sibling">
+                        <val id="1">1</val>
+                    </depend>
+                </depends>
+            </part>
+
             <part id="editor" file="0200_editor" sort="200">
                 <depends id="has_editor">
                     <depend id="has_editor">
@@ -1035,6 +1390,16 @@
                     </depend>
                 </depends>
             </part>
+            <part id="tree_sibling" file="0475_tree_sibling" sort="475" scope="relation">
+                <depends id="type">
+                    <depend id="type">
+                        <val id="sibling">sibling</val>
+                    </depend>
+                    <depend id="e2_is_tree">
+                        <val id="1">1</val>
+                    </depend>
+                </depends>
+            </part>
             <part id="content_bottom" file="0500_content_bottom" sort="500" />
             <part id="left_top" file="0600_left_top" sort="600">
                 <depends id="is_tree">
@@ -1053,6 +1418,19 @@
                     </depend>
                 </depends>
             </part>
+            <part id="siblings" file="0750_siblings" sort="750" scope="relation">
+                <depends id="type">
+                    <depend id="type">
+                        <val id="sibling">sibling</val>
+                    </depend>
+                    <depend id="e1_type">
+                        <val id="flat">flat</val>
+                    </depend>
+                    <depend id="e1_is_tree">
+                        <val id="1">0</val>
+                    </depend>
+                </depends>
+            </part>
             <part id="left_add_main_tab" file="0800_left_add_main_tab" sort="800">
                 <depends id="type">
                     <depend id="type">
@@ -1060,6 +1438,19 @@
                     </depend>
                     <depend id="is_tree">
                         <val id="0">0</val>
+                    </depend>
+                </depends>
+            </part>
+            <part id="left_add_siblings_tab" file="0850_left_add_siblings_tab" sort="850" scope="relation">
+                <depends id="type">
+                    <depend id="type">
+                        <val id="sibling">sibling</val>
+                    </depend>
+                    <depend id="e1_type">
+                        <val id="flat">flat</val>
+                    </depend>
+                    <depend id="e1_is_tree">
+                        <val id="1">0</val>
                     </depend>
                 </depends>
             </part>
@@ -1164,12 +1555,39 @@
             <part id="content" file="0100_content" sort="100" />
         </code>
     </file>
+
+    <file id="view/adminhtml/layout/{{namespace}}_{{module}}_{{entity}}_{{siblings}}.xml" type="xml" sort="295" scope="siblings" translate="label description">
+        <label>Siblings grid action layout</label>
+        <description>Siblings grid action layout</description>
+        <depends id="e2_is_tree">
+            <depend id="e2_is_tree">
+                <val id="0" bool="true">0</val>
+            </depend>
+        </depends>
+        <code>
+            <part id="content" file="0100_content" sort="100" />
+        </code>
+    </file>
+
+    <file id="view/adminhtml/layout/{{namespace}}_{{module}}_{{entity}}_{{siblings}}grid.xml" type="xml" sort="296" scope="siblings" translate="label description">
+        <label>Siblings grid AJAX action layout</label>
+        <description>Siblings grid AJAX action layout</description>
+        <depends id="e2_is_tree">
+            <depend id="e2_is_tree">
+                <val id="0" bool="true">0</val>
+            </depend>
+        </depends>
+        <code>
+            <part id="content" file="0100_content" sort="100" />
+        </code>
+    </file>
+
     <file id="Model/Upload.php" type="class" sort="300" scope="global" translate="label description">
         <label>Model for uploading files</label>
         <description>Model for uploading files</description>
         <depends id="has_flat_upload">
             <depend id="has_flat_upload">
-                <val id="1">1</val>
+                <val id="1" bool="true">1</val>
             </depend>
         </depends>
         <members>
@@ -1262,6 +1680,74 @@
                     </depend>
                 </depends>
             </annotation>
+            <annotation id="set{{Siblings}}Data" return="{{Entity}}" params="array $data" sort="170" scope="relation">
+                <depends id="sibling_not_tree">
+                    <depend id="type">
+                        <val id="sibling">sibling</val>
+                    </depend>
+                    <depend id="e2_is_tree">
+                        <val id="0">0</val>
+                    </depend>
+                </depends>
+            </annotation>
+            <annotation id="get{{Siblings}}Data" return="array" sort="180" scope="relation">
+                <depends id="sibling_not_tree">
+                    <depend id="type">
+                        <val id="sibling">sibling</val>
+                    </depend>
+                    <depend id="e2_is_tree">
+                        <val id="0">0</val>
+                    </depend>
+                </depends>
+            </annotation>
+            <annotation id="setIsChanged{{Sibling}}List" return="{{Entity}}" params="\bool $flag" sort="190" scope="relation">
+                <depends id="type">
+                    <depend id="type">
+                        <val id="sibling">sibling</val>
+                    </depend>
+                </depends>
+            </annotation>
+            <annotation id="getIsChanged{{Sibling}}List" return="bool" sort="200" scope="relation">
+                <depends id="type">
+                    <depend id="type">
+                        <val id="sibling">sibling</val>
+                    </depend>
+                </depends>
+            </annotation>
+            <annotation id="setAffected{{Sibling}}Ids" return="{{Entity}}" params="array $ids" sort="210" scope="relation">
+                <depends id="type">
+                    <depend id="type">
+                        <val id="sibling">sibling</val>
+                    </depend>
+                </depends>
+            </annotation>
+            <annotation id="getAffected{{Sibling}}Ids" return="bool" sort="220" scope="relation">
+                <depends id="type">
+                    <depend id="type">
+                        <val id="sibling">sibling</val>
+                    </depend>
+                </depends>
+            </annotation>
+            <annotation id="get{{Siblings}}Ids" return="array" sort="230" scope="relation">
+                <depends id="sibling_tree">
+                    <depend id="type">
+                        <val id="sibling">sibling</val>
+                    </depend>
+                    <depend id="e2_is_tree">
+                        <val id="1">1</val>
+                    </depend>
+                </depends>
+            </annotation>
+            <annotation id="set{{Siblings}}Ids" return="{{Entity}}" params="array ${{sibling}}Ids" sort="240" scope="relation">
+                <depends id="sibling_tree">
+                    <depend id="type">
+                        <val id="sibling">sibling</val>
+                    </depend>
+                    <depend id="e2_is_tree">
+                        <val id="1">1</val>
+                    </depend>
+                </depends>
+            </annotation>
         </annotations>
         <members>
             <member id="TREE_ROOT_ID" constant="true" var="string" sort="5" default="1">
@@ -1281,6 +1767,14 @@
             <member id="_eventPrefix" construct="false" show="true" var="string" sort="30" core="true" default="'{{namespace}}_{{module}}_{{entity}}'">
                 <doc>Event prefix</doc>
             </member>
+            <member id="{{sibling}}Collection" construct="false" show="true" var="{{Namespace}}\{{Module}}\Model\Resource\{{Sibling}}\Collection" sort="35" scope="relation">
+                <doc>{{SiblingLabel}} Collection</doc>
+                <depends id="sibling">
+                    <depend id="type">
+                        <val id="sibling">sibling</val>
+                    </depend>
+                </depends>
+            </member>
             <member id="{{entity}}Factory" construct="true" show="true" parent="false" var="{{Namespace}}\{{Module}}\Model\{{Entity}}Factory" sort="55">
                 <doc>{{EntityLabel}} Factory</doc>
                 <depends id="is_tree">
@@ -1289,10 +1783,18 @@
                     </depend>
                 </depends>
             </member>
+            <member id="{{sibling}}CollectionFactory" construct="true" show="true" var="{{Namespace}}\{{Module}}\Model\Resource\{{Sibling}}\CollectionFactory" sort="57" scope="relation">
+                <doc>{{SiblingLabel}} Collection Factory</doc>
+                <depends id="sibling">
+                    <depend id="type">
+                        <val id="sibling">sibling</val>
+                    </depend>
+                </depends>
+            </member>
             <member id="context" construct="true" show="false" parent="true" var="Magento\Framework\Model\Context" sort="60" />
             <member id="registry" construct="true" show="false" parent="true" var="Magento\Framework\Registry" sort="70" />
             <member id="resource" construct="true" show="false" parent="true" var="Magento\Framework\Model\Resource\AbstractResource" sort="80" default="null" />
-            <member id="resourceCollection" construct="true" show="false" parent="true" var="Magento\Framework\Data\Collection\Db" sort="90" default="null" />
+            <member id="resourceCollection" construct="true" show="false" parent="true" var="Magento\Framework\Data\Collection\AbstractDb" sort="90" default="null" />
             <member id="data" construct="true" show="false" parent="true" var="array" sort="100" default="[]" />
         </members>
         <code>
@@ -1300,6 +1802,23 @@
             <part id="tree" file="0200_tree" sort="200">
                 <depends id="is_tree">
                     <depend id="is_tree">
+                        <val id="1">1</val>
+                    </depend>
+                </depends>
+            </part>
+            <part id="sibling" file="0300_sibling" sort="300" scope="relation">
+                <depends id="sibling">
+                    <depend id="type">
+                        <val id="sibling">sibling</val>
+                    </depend>
+                </depends>
+            </part>
+            <part id="sibling_tree" file="0400_sibling_tree" sort="400" scope="relation">
+                <depends id="sibling">
+                    <depend id="type">
+                        <val id="sibling">sibling</val>
+                    </depend>
+                    <depend id="e2_is_tree">
                         <val id="1">1</val>
                     </depend>
                 </depends>
@@ -1312,7 +1831,7 @@
         <description>Entity Image model class</description>
         <depends id="has_attribute_type_image">
             <depend id="has_attribute_type_image">
-                <val id="1">1</val>
+                <val id="1" bool="true">1</val>
             </depend>
         </depends>
         <members>
@@ -1336,7 +1855,7 @@
         <description>Entity File model class</description>
         <depends id="has_attribute_type_file">
             <depend id="has_attribute_type_file">
-                <val id="1">1</val>
+                <val id="1" bool="true">1</val>
             </depend>
         </depends>
         <members>
@@ -1379,8 +1898,33 @@
                     </depend>
                 </depends>
             </member>
+            <member id="eventManager" show="true" construct="true" var="Magento\Framework\Event\ManagerInterface" sort="25">
+                <doc>Event Manager</doc>
+                <depends id="has_relation_type_sibling">
+                    <depend id="has_relation_type_sibling">
+                        <val id="1">1</val>
+                    </depend>
+                </depends>
+            </member>
+            <member id="{{entity}}{{Sibling}}Table" show="true" construct="false" var="string" sort="25" scope="relation">
+                <doc>{{SiblingLabel}} relation model</doc>
+                <depends id="type">
+                    <depend id="type">
+                        <val id="sibling">sibling</val>
+                    </depend>
+                </depends>
+            </member>
             <member id="context" show="false" construct="true" parent="true" var="Magento\Framework\Model\Resource\Db\Context" sort="30" />
         </members>
+        <constructs>
+            <construct id="table_init" sort="10" scope="relation" value="$this->{{_}}{{entity}}{{Sibling}}Table = $this->getTable('{{relation_table}}');">
+                <depends id="type">
+                    <depend id="type">
+                        <val id="sibling">sibling</val>
+                    </depend>
+                </depends>
+            </construct>
+        </constructs>
         <code>
             <part id="top" file="0100_top" sort="100" />
             <part id="before_save_top" file="0200_before_save_top" sort="200" />
@@ -1415,10 +1959,86 @@
                     </depend>
                 </depends>
             </part>
-            <part id="tree" file="0700_tree" sort="700">
+
+            <part id="after_save_top" file="0700_after_save_top" sort="700">
                 <depends id="is_tree">
                     <depend id="is_tree">
                         <val id="1">1</val>
+                    </depend>
+                </depends>
+                <depends id="has_sibling_relation">
+                    <depend id="has_relation_type_sibling">
+                        <val id="1">1</val>
+                    </depend>
+                </depends>
+            </part>
+            <part id="after_save_tree" file="0800_after_save_tree" sort="800">
+                <depends id="is_tree">
+                    <depend id="is_tree">
+                        <val id="1">1</val>
+                    </depend>
+                </depends>
+            </part>
+            <part id="after_save_sibling" file="0900_after_save_sibling" sort="800" scope="relation">
+                <depends id="type">
+                    <depend id="type">
+                        <val id="sibling">sibling</val>
+                    </depend>
+                </depends>
+            </part>
+            <part id="after_save_bottom" file="1000_after_save_bottom" sort="1000">
+                <depends id="is_tree">
+                    <depend id="is_tree">
+                        <val id="1">1</val>
+                    </depend>
+                </depends>
+                <depends id="has_sibling_relation">
+                    <depend id="has_relation_type_sibling">
+                        <val id="1">1</val>
+                    </depend>
+                </depends>
+            </part>
+
+            <part id="tree" file="1100_tree" sort="1100">
+                <depends id="is_tree">
+                    <depend id="is_tree">
+                        <val id="1">1</val>
+                    </depend>
+                </depends>
+            </part>
+            <part id="sibling_not_tree" file="1200_sibling_not_tree" sort="1200" scope="relation">
+                <depends id="is_not_tree">
+                    <depend id="type">
+                        <val id="sibling">sibling</val>
+                    </depend>
+                    <depend id="e1_is_tree">
+                        <val id="0">0</val>
+                    </depend>
+                    <depend id="e2_is_tree">
+                        <val id="0">0</val>
+                    </depend>
+                </depends>
+            </part>
+            <part id="sibling_tree" file="1300_sibling_tree" sort="1300" scope="relation">
+                <depends id="is_tree">
+                    <depend id="type">
+                        <val id="sibling">sibling</val>
+                    </depend>
+                    <depend id="e2_is_tree">
+                        <val id="1">1</val>
+                    </depend>
+                </depends>
+            </part>
+            <part id="sibling_entity_not_tree" file="1400_sibling_entity_not_tree" sort="1400" scope="relation">
+                <depends id="is_not_tree">
+                    <depend id="type">
+                        <val id="sibling">sibling</val>
+                    </depend>
+                    <depend id="e1_is_tree">
+                        <val id="1">1</val>
+                    </depend>
+                    <depend id="e2_is_tree">
+                        <val id="0">0</val>
                     </depend>
                 </depends>
             </part>
@@ -1546,7 +2166,7 @@
         <description>Model used for listing entities in dropdowns</description>
         <depends id="is_parent">
             <depend id="is_parent">
-                <val id="1">1</val>
+                <val id="1" bool="true">1</val>
             </depend>
         </depends>
         <implements>
@@ -1585,6 +2205,13 @@
                     </depend>
                 </depends>
             </part>
+            <part id="siblings" file="0300_siblings" sort="300" scope="relation">
+                <depends id="type">
+                    <depend id="type">
+                        <val id="sibling">sibling</val>
+                    </depend>
+                </depends>
+            </part>
             <part id="footer" file="0400_footer" sort="400" />
         </code>
     </file>
@@ -1594,7 +2221,7 @@
         <description>Install data script</description>
         <depends id="has_tree">
             <depend id="entity_flag_is_tree">
-                <val id="1">1</val>
+                <val id="1" bool="true">1</val>
             </depend>
         </depends>
         <implements>
@@ -1649,7 +2276,7 @@
         <description>Source model for option attributes</description>
         <depends id="has_options">
             <depend id="has_options">
-                <val id="1">1</val>
+                <val id="1" bool="true">1</val>
             </depend>
             <depend id="entity_type">
                 <val id="flat">flat</val>
@@ -1677,9 +2304,26 @@
                 </depends>
             </part>
             <part id="attribute" file="0400_attribute" sort="400" scope="attribute" />
-            <part id="entity_tree" file="0500_entity_tree" sort="400" scope="entity">
+            <part id="entity_tree" file="0500_entity_tree" sort="500" scope="entity">
                 <depends id="is_tree">
                     <depend id="is_tree">
+                        <val id="1">1</val>
+                    </depend>
+                </depends>
+            </part>
+            <part id="sibling" file="0600_sibling" sort="600" scope="relation">
+                <depends id="type">
+                    <depend id="type">
+                        <val id="sibling">sibling</val>
+                    </depend>
+                </depends>
+            </part>
+            <part id="sibling_tree" file="0700_sibling_tree" sort="600" scope="entity">
+                <depends id="is_tree">
+                    <depend id="is_tree">
+                        <val id="1">1</val>
+                    </depend>
+                    <depend id="has_tree_relation">
                         <val id="1">1</val>
                     </depend>
                 </depends>
@@ -1720,7 +2364,44 @@
             </depend>
         </depends>
         <code>
-            <part id="content" file="0100_content" sort="10" />
+            <part id="top" file="0100_top" sort="10" />
+            <part id="sibling_inputs" file="0200_sibling_inputs" sort="20" scope="relation">
+                <depends id="type">
+                    <depend id="type">
+                        <val id="sibling">sibling</val>
+                    </depend>
+                    <depend id="e2_is_tree">
+                        <val id="0">0</val>
+                    </depend>
+                </depends>
+            </part>
+            <part id="form" file="0300_form" sort="30" />
+            <part id="siblings" file="0400_siblings" sort="40" scope="relation">
+                <depends id="type">
+                    <depend id="type">
+                        <val id="sibling">sibling</val>
+                    </depend>
+                    <depend id="e2_is_tree">
+                        <val id="0">0</val>
+                    </depend>
+                </depends>
+            </part>
+            <part id="footer" file="0500_footer" sort="50" />
+        </code>
+    </file>
+    <file id="view/adminhtml/templates/{{entity}}/new.phtml" type="phtml" sort="405" scope="entity" translate="label description">
+        <label>Inline template for tree entities</label>
+        <description>Template for creating a new tree entity from a sibling related entity.</description>
+        <depends id="is_tree">
+            <depend id="is_tree">
+                <val id="1">1</val>
+            </depend>
+            <depend id="has_relation_type_sibling">
+                <val id="1" bool="true">1</val>
+            </depend>
+        </depends>
+        <code>
+            <part id="top" file="0100_content" sort="10" />
         </code>
     </file>
 
@@ -1737,6 +2418,84 @@
         </code>
     </file>
 
+    <file id="view/adminhtml/web/{{entity}}/images/spinner.gif" type="image" sort="420" scope="entity" translate="label description">
+        <label>Spinner gif for tree entities with sibling relations</label>
+        <description>Spinner gif for tree entities with sibling relations</description>
+        <depends id="is_tree">
+            <depend id="is_tree">
+                <val id="1">1</val>
+            </depend>
+            <depend id="has_relation_type_sibling">
+                <val id="1" bool="true">1</val>
+            </depend>
+        </depends>
+        <code>
+            <part id="spinner.gif" file="spinner.gif" sort="10" />
+        </code>
+    </file>
+
+    <file id="view/adminhtml/web/{{entity}}/{{entity}}-selector.css" type="js" sort="430" scope="entity" translate="label description">
+        <label>Css for tree entities with sibling relations</label>
+        <description>Css for tree entities with sibling relations</description>
+        <depends id="is_tree">
+            <depend id="is_tree">
+                <val id="1">1</val>
+            </depend>
+            <depend id="has_relation_type_sibling">
+                <val id="1" bool="true">1</val>
+            </depend>
+        </depends>
+        <code>
+            <part id="0100_content" file="0100_content" sort="10" />
+        </code>
+    </file>
+
+    <file id="view/adminhtml/web/{{entity}}/new-{{entity}}-dialog.js" type="js" sort="440" scope="entity" translate="label description">
+        <label>Js for tree entities with sibling relations</label>
+        <description>Js for tree entities with sibling relations</description>
+        <depends id="is_tree">
+            <depend id="is_tree">
+                <val id="1">1</val>
+            </depend>
+            <depend id="has_relation_type_sibling">
+                <val id="1" bool="true">1</val>
+            </depend>
+        </depends>
+        <code>
+            <part id="0100_content" file="0100_content" sort="10" />
+        </code>
+    </file>
+    <file id="view/adminhtml/web/{{entity}}/form.js" type="js" sort="435" scope="entity" translate="label description">
+        <label>Js for tree entities forms</label>
+        <description>Js for tree entities forms</description>
+        <depends id="is_tree">
+            <depend id="is_tree">
+                <val id="1">1</val>
+            </depend>
+        </depends>
+        <code>
+            <part id="0100_content" file="0100_content" sort="10" />
+        </code>
+    </file>
+
+    <file id="view/adminhtml/requirejs-config.js" type="js" sort="440" scope="global" translate="label description">
+        <label>Require Js config</label>
+        <description>Require Js config</description>
+        <depends id="has_tree">
+            <depend id="has_tree">
+                <val id="1" bool="true">1</val>
+            </depend>
+        </depends>
+        <depends id="has_tree_related_entities">
+            <depend id="has_tree_related_entities">
+                <val id="1" bool="true">1</val>
+            </depend>
+        </depends>
+        <code>
+            <part id="0100_content" file="0100_content" sort="10" />
+        </code>
+    </file>
+
     <scope id="global" translate="label">
         <label>Global</label>
     </scope>
@@ -1746,6 +2505,12 @@
     <scope id="attribute" translate="label">
         <label>Attribute</label>
     </scope>
+    <scope id="relation" translate="label">
+        <label>Relation</label>
+    </scope>
+    <scope id="siblings" translate="label">
+        <label>Sibling relation</label>
+    </scope>
     <depend_labels id="umc_entity">
         <depend_label id="has_attribute_type_file" translate="label">
             <label>has at least one file type attribute</label>
@@ -1753,10 +2518,38 @@
         <depend_label id="has_attribute_type_image" translate="label">
             <label>has at least one image type attribute</label>
         </depend_label>
+        <depend_label id="has_relation_type_sibling" translate="label">
+            <label>The entity has at least one "many to many" relation with an other entity</label>
+        </depend_label>
+        <depend_label id="is_parent" translate="label">
+            <label>Entity acts as parent for other entity</label>
+        </depend_label>
     </depend_labels>
     <depend_labels id="umc_module">
         <depend_label id="has_flat_upload" translate="label">
             <label>Has at least one flat entity that requires file uploads</label>
+        </depend_label>
+        <depend_label id="entity_flag_is_tree" translate="label">
+            <label>Has at least one entity whe the setting "Is Tree"</label>
+        </depend_label>
+        <depend_label id="has_tree" translate="label">
+            <label>Has at least one entity whe the setting "Is Tree"</label>
+        </depend_label>
+        <depend_label id="has_tree_related_entities" translate="label">
+            <label>At least an entity behaves as tree and has a sibling relation</label>
+        </depend_label>
+    </depend_labels>
+    <depend_labels id="siblings">
+        <depend_label id="e2_is_tree" translate="label">
+            <label>The second entity's setting "Is Tree" is</label>
+        </depend_label>
+    </depend_labels>
+    <depend_labels id="umc_attribute">
+        <depend_label id="entity_type" translate="label">
+            <label>The entity type</label>
+        </depend_label>
+        <depend_label id="has_options" translate="label">
+            <label>Attribute is a type that contains options (select, multiselect)</label>
         </depend_label>
     </depend_labels>
 </source>

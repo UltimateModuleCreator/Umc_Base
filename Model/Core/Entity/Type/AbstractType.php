@@ -116,7 +116,7 @@ class AbstractType extends Umc implements TypeInterface
     }
 
     /**
-     * check if has attrbute type
+     * check if has attribute type
      *
      * @param $type
      * @return bool
@@ -125,6 +125,22 @@ class AbstractType extends Umc implements TypeInterface
     {
         foreach ($this->getEntity()->getAttributes() as $attribute) {
             if ($attribute->getType() == $type) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * check if has attribute type
+     *
+     * @param $type
+     * @return bool
+     */
+    public function getHasAttributeTypeRequired($type)
+    {
+        foreach ($this->getEntity()->getAttributes() as $attribute) {
+            if ($attribute->getType() == $type && $attribute->getRequired()) {
                 return true;
             }
         }

@@ -17,62 +17,15 @@
  */
 namespace Umc\Base\Model\Generator;
 
-class JsGenerator extends AbstractGenerator implements GeneratorInterface
+class JsGenerator extends TemplateGenerator implements GeneratorInterface
 {
 
-    /**
-     * license text
-     *
-     * @var string
-     */
-    protected $license;
-
-    /**
-     * add license
-     *
-     * @param string $content
-     * @return string
-     */
-    public function postProcess($content)
+    public function getLicensePrefix()
     {
-        return $this->getLicense().$content;
+        return '';
     }
-    /**
-     * get license text
-     *
-     * @return string
-     */
-    protected function getLicense()
+    public function getLicenseSuffix()
     {
-        if (is_null($this->license)) {
-            $license    = trim($this->module->getSettings()->getLicense());
-            if (!$license) {
-                $this->license = '';
-                return $this->license;
-            }
-            while (strpos($license, '*/') !== false) {
-                $license = str_replace('*/', '', $license);
-            }
-            while (strpos($license, '/*') !== false) {
-                $license = str_replace('/*', '', $license);
-            }
-            while (strpos($license, '<!--') !== false) {
-                $license = str_replace('<!--', '', $license);
-            }
-            while (strpos($license, '-->') !== false) {
-                $license = str_replace('-->', '', $license);
-            }
-            $lines = explode("\n", $license);
-            $eol = $this->getEol();
-            $top = '<!--'.$eol;
-            $footer = $eol.'-->'.$eol;
-            $processed = $top.'/**'.$eol;
-            foreach ($lines as $line) {
-                $processed .= ' * '.$line.$eol;
-            }
-            $processed .= ' */'.$footer;
-            $this->license = $this->license = $this->module->filterContent($processed);
-        }
-        return $this->license;
+        return '';
     }
 }
