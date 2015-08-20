@@ -196,7 +196,7 @@ class Builder extends Umc
         $basePath = trim($this->getBaseWritePath(true), '/');
         $destination = $this->module->getSettings()->getXmlRootPath().'/'.
             $this->module->getNamespace().'_'.
-            $this->module->getModuleName().'.gz';
+            $this->module->getModuleName().'.tar.gz';
         $this->archive->pack($basePath,
             $destination,
             false

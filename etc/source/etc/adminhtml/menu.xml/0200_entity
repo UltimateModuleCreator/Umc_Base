@@ -1,1 +1,1 @@
-        <add id="{{Namespace}}_{{Module}}::{{entity}}" title="{{EntitiesLabel}}" module="{{Namespace}}_{{Module}}" sortOrder="{{sort_order}}" action="{{namespace}}_{{module}}/{{entity}}" resource="{{Namespace}}_{{Module}}::{{entity}}" parent="{{Namespace}}_{{Module}}::{{module}}" />
+        <add id="{{Namespace}}_{{Module}}::{{entity}}" title="{{EntitiesLabel}}" module="{{Namespace}}_{{Module}}" sortOrder="{{sortOrder}}" action="{{namespace}}_{{module}}/{{entity}}" resource="{{Namespace}}_{{Module}}::{{entity}}" parent="{{Namespace}}_{{Module}}::{{module}}" />

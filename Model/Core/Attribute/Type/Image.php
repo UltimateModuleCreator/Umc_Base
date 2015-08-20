@@ -39,4 +39,11 @@ class Image extends AbstractType
      * @var string
      */
     protected $editFormType = 'image';
+
+    /**
+     * attribute can be searched full text
+     *
+     * @var bool
+     */
+    protected $fullText = true;
 }

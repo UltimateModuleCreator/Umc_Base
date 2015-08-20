@@ -14,7 +14,7 @@
         $old{{Sibling}}Ids = ${{entity}}->get{{Sibling}}Ids();
         $insert = array_diff_key(${{siblings}}, $old{{Sibling}}Ids);
         $delete = array_diff_key($old{{Sibling}}Ids, ${{siblings}});
-        $adapter = $this->_getWriteAdapter();
+        $adapter = $this->getConnection();
         if (!empty($delete)) {
             $condition = array('{{sibling}}_id IN(?)' => $delete, '{{entity}}_id=?' => $id);
             $adapter->delete($this->{{_}}{{entity}}{{Sibling}}Table, $condition);
@@ -51,7 +51,7 @@
      */
     public function get{{Sibling}}Ids(\{{Namespace}}\{{Module}}\Model\{{Entity}} ${{entity}})
     {
-        $adapter = $this->_getReadAdapter();
+        $adapter = $this->getConnection();
         $select = $adapter->select()->from(
             $this->{{_}}{{entity}}{{Sibling}}Table,
             '{{sibling}}_id'

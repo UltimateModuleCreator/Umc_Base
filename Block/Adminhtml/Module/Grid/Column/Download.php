@@ -22,7 +22,7 @@ use Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Data\CollectionDataSourceInterface;
 use Magento\Framework\Filesystem;
-use Magento\Framework\Object;
+use Magento\Framework\DataObject;
 use Magento\Framework\Url\Decoder;
 use Umc\Base\Model\Core\Settings;
 use Umc\Base\Model\Downloader;
@@ -101,10 +101,10 @@ class Download extends AbstractRenderer implements CollectionDataSourceInterface
     }
 
     /**
-     * @param Object $row
+     * @param DataObject $row
      * @return string
      */
-    public function render(Object $row)
+    public function render(DataObject $row)
     {
         $download = $this->getColumn()->getData('download');
         $id =  $row->getSafeId();

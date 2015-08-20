@@ -21,7 +21,7 @@ use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\View\Result\PageFactory;
 
-class Module extends Action
+abstract class Module extends Action
 {
     /**
      * page factory reference

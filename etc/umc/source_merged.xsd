@@ -23,11 +23,11 @@
             <xs:documentation>Root node</xs:documentation>
         </xs:annotation>
         <xs:complexType>
-            <xs:sequence>
-                <xs:element ref="file" minOccurs="1" maxOccurs="unbounded" />
-                <xs:element ref="scope" minOccurs="1" maxOccurs="unbounded" />
-                <xs:element ref="depend_labels" minOccurs="1" maxOccurs="unbounded" />
-            </xs:sequence>
+            <xs:choice minOccurs="0" maxOccurs="unbounded">
+                <xs:element ref="file" minOccurs="0" maxOccurs="unbounded" />
+                <xs:element ref="scope" minOccurs="0" maxOccurs="unbounded" />
+                <xs:element ref="depend_labels" minOccurs="0" maxOccurs="unbounded" />
+            </xs:choice>
         </xs:complexType>
         <xs:unique name="uniqueFileId">
             <xs:annotation>
@@ -57,7 +57,7 @@
             <xs:documentation>All files</xs:documentation>
         </xs:annotation>
         <xs:complexType>
-            <xs:sequence>
+            <xs:choice minOccurs="0" maxOccurs="unbounded">
                 <xs:element name="label" type="xs:string" minOccurs="0" maxOccurs="1" />
                 <xs:element name="description" type="xs:string" minOccurs="0" maxOccurs="1" />
                 <xs:element ref="depends" maxOccurs="unbounded" minOccurs="0" />
@@ -68,7 +68,7 @@
                 <xs:element name="parent_construct_extra" type="xs:string" minOccurs="0" maxOccurs="1" />
                 <xs:element ref="constructs" maxOccurs="unbounded" minOccurs="0"/>
                 <xs:element ref="code" maxOccurs="unbounded" minOccurs="0"/>
-            </xs:sequence>
+            </xs:choice>
             <xs:attributeGroup ref="fileAttributeGroup"/>
         </xs:complexType>
     </xs:element>
@@ -360,6 +360,7 @@
         <xs:attribute name="source" type="xs:string" use="optional" />
         <xs:attribute name="destination" type="xs:string" use="optional" />
         <xs:attribute name="translate" type="xs:string" use="optional" />
+        <xs:attribute name="abstract" type="xs:string" use="optional" />
     </xs:attributeGroup>
 
     <xs:attributeGroup name="dependsAttributeGroup">
@@ -406,6 +407,7 @@
         <xs:attribute type="xs:int" name="sort" use="required"/>
         <xs:attribute type="xs:boolean" name="constant" use="optional"/>
         <xs:attribute type="xs:string" name="scope" use="optional"/>
+        <xs:attribute type="xs:boolean" name="skip" use="optional"/>
     </xs:attributeGroup>
 
     <xs:attributeGroup name="implementAttributeGroup">

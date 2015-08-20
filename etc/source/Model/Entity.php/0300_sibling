@@ -23,7 +23,7 @@
             $collection = $this->{{_}}{{sibling}}CollectionFactory->create();
             $collection->join(
                 '{{relation_table}}',
-                'main_table.{{sibling}}_id={{relation_table}}.{{sibling}}_id AND main_table.{{entity}}_id='.$this->getId(),
+                'main_table.{{sibling}}_id={{relation_table}}.{{sibling}}_id AND {{relation_table}}.{{entity}}_id='.$this->getId(),
                 ['position']
             );
             $this->{{_}}{{sibling}}Collection = $collection;

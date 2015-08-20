@@ -27,6 +27,22 @@ class Module implements DownloaderInterface
      */
     public function getRelativePath($file)
     {
-        return $file. '.gz';
+        return $file. '.tar.gz';
+    }
+
+    /**
+     * @return \Magento\Framework\Phrase
+     */
+    public function getLabel()
+    {
+        return __('Download Module Archive');
+    }
+
+    /**
+     * @return \Magento\Framework\Phrase
+     */
+    public function getErrorLabel()
+    {
+        return __('Module archive is not available');
     }
 }

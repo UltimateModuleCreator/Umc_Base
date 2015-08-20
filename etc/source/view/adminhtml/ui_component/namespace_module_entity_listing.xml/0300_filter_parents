@@ -1,0 +1,12 @@
+            <filterSelect name="{{entity}}_id">
+                <argument name="optionsProvider" xsi:type="configurableObject">
+                    <argument name="class" xsi:type="string">{{Namespace}}\{{Module}}\Model\Source\{{Entity}}</argument>
+                </argument>
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="dataScope" xsi:type="string">{{Entity}}_id</item>
+                        <item name="label" xsi:type="string" translate="true">{{EntityLabel}}</item>
+                        <item name="caption" xsi:type="string" translate="true">Select...</item>
+                    </item>
+                </argument>
+            </filterSelect>

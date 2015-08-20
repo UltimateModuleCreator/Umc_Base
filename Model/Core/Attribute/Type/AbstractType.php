@@ -18,7 +18,6 @@
 namespace Umc\Base\Model\Core\Attribute\Type;
 
 use Magento\Framework\Escaper;
-use Magento\Framework\Object;
 use Umc\Base\Model\Core\Attribute;
 use Umc\Base\Model\Umc;
 
@@ -32,19 +31,10 @@ class AbstractType extends Umc implements TypeInterface
     protected $escaper;
 
     /**
-     * constructor
-     *
-     * @param Escaper $escaper
-     * @param array $data
+     * @var string
      */
-    public function __construct(
-        Escaper $escaper,
-        array $data = []
-    )
-    {
-        $this->escaper = $escaper;
-        parent::__construct($data);
-    }
+    protected $columnComponent = 'column';
+
     /**
      * attribute is multiple select
      *
@@ -88,9 +78,36 @@ class AbstractType extends Umc implements TypeInterface
     protected $hasOptions = false;
 
     /**
+     * attribute can be searched full text
+     *
+     * @var bool
+     */
+    protected $fullText = false;
+
+    /**
+     * @var string
+     */
+    protected $filterInput = 'filterInput';
+
+    /**
      * @var Attribute
      */
     protected $attribute;
+
+    /**
+     * constructor
+     *
+     * @param Escaper $escaper
+     * @param array $data
+     */
+    public function __construct(
+        Escaper $escaper,
+        array $data = []
+    )
+    {
+        $this->escaper = $escaper;
+        parent::__construct($data);
+    }
 
     /**
      * set the attribute instance
@@ -139,7 +156,12 @@ class AbstractType extends Umc implements TypeInterface
      */
     public function getAdminColumnOptions()
     {
-        return '<argument name="type" xsi:type="string">'.$this->getAdminColumnType().'</argument>';
+        return '';
+    }
+
+    public function getColumnComponent()
+    {
+        return $this->columnComponent;
     }
 
     /**
@@ -286,6 +308,24 @@ class AbstractType extends Umc implements TypeInterface
     public function getHasOptions()
     {
         return $this->hasOptions;
+    }
+
+    /**
+     * @return bool|mixed
+     */
+    public function isFullText()
+    {
+        return $this->fullText;
+    }
+
+    public function getFilterRangeClass()
+    {
+        return '';
+    }
+
+    public function getFilterInput()
+    {
+        return $this->filterInput;
     }
 }
 

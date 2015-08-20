@@ -304,17 +304,6 @@
         </arguments>
     </virtualType>
 
-    <virtualType name="Umc\Base\Model\Config\Source\Mapper\Sorting" type="Umc\Base\Model\Config\Mapper\Sorting">
-        <arguments>
-            <argument name="paths" xsi:type="array">
-                <item name="types/entity" xsi:type="array">
-                    <item name="0" xsi:type="string">type</item>
-                    <item name="1" xsi:type="string">group</item>
-                </item>
-            </argument>
-        </arguments>
-    </virtualType>
-
     <virtualType name="Umc\Base\Model\Config\Source\Reader" type="Magento\Framework\Config\Reader\Filesystem">
         <arguments>
             <argument name="schemaLocator" xsi:type="object">Umc\Base\Model\Config\Source\SchemaLocator</argument>
@@ -323,6 +312,9 @@
             <argument name="idAttributes" xsi:type="array">
                 <item name="/source/file" xsi:type="string">id</item>
                 <item name="/source/file/code/part" xsi:type="string">id</item>
+                <item name="/source/file/code/part/depends" xsi:type="string">id</item>
+                <item name="/source/file/code/part/depends/depend" xsi:type="string">id</item>
+                <item name="/source/file/code/part/depends/depend/val" xsi:type="string">id</item>
                 <item name="/source/scope" xsi:type="string">id</item>
                 <item name="/source/file/depends" xsi:type="string">id</item>
                 <item name="/source/file/depends/depend" xsi:type="string">id</item>
@@ -377,7 +369,7 @@
             <argument name="converter" xsi:type="object">Umc\Base\Model\Config\ClassConfig\Converter</argument>
             <argument name="fileName" xsi:type="string">class.xml</argument>
             <argument name="idAttributes" xsi:type="array">
-                <item name="/class" xsi:type="string">id</item>
+                <item name="/classes/class" xsi:type="string">id</item>
             </argument>
             <argument name="defaultScope" xsi:type="string">umc</argument>
         </arguments>

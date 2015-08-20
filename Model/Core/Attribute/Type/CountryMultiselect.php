@@ -52,6 +52,13 @@ class CountryMultiselect extends AbstractType
     protected $editFormType = 'multiselect';
 
     /**
+     * attribute can be searched full text
+     *
+     * @var bool
+     */
+    protected $fullText = true;
+
+    /**
      * get additional options for edit form
      *
      * @return array

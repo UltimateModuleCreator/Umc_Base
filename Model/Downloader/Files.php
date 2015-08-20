@@ -31,4 +31,20 @@ class Files implements DownloaderInterface
     {
         return Settings::MODULES_DIR_NAME . '/' . $file . '/files.log';
     }
+
+    /**
+     * @return \Magento\Framework\Phrase
+     */
+    public function getLabel()
+    {
+        return __('Download Module Files List');
+    }
+
+    /**
+     * @return \Magento\Framework\Phrase
+     */
+    public function getErrorLabel()
+    {
+        return __('Module files list is not available');
+    }
 }

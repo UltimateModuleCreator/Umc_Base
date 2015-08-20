@@ -1,0 +1,16 @@
+        <column name="actions" class="{{Namespace}}\{{Module}}\Ui\Component\Listing\Column\{{Entity}}Actions">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="draggable" xsi:type="boolean">false</item>
+                    <item name="dataType" xsi:type="string">actions</item>
+                    <item name="indexField" xsi:type="string">{{entity}}_id</item>
+                    <item name="align" xsi:type="string">left</item>
+                    <item name="label" xsi:type="string" translate="true">Action</item>
+                    <item name="data_type" xsi:type="string">actions</item>
+                    <item name="filterable" xsi:type="boolean">false</item>
+                    <item name="sortable" xsi:type="boolean">false</item>
+                </item>
+            </argument>
+        </column>
+    </columns>
+</listing>

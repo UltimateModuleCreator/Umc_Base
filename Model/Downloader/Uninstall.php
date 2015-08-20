@@ -31,4 +31,20 @@ class Uninstall implements DownloaderInterface
     {
         return Settings::MODULES_DIR_NAME . '/' . $file . '/uninstall.sql';
     }
+
+    /**
+     * @return \Magento\Framework\Phrase
+     */
+    public function getLabel()
+    {
+        return __('Download Module Uninstall Script');
+    }
+
+    /**
+     * @return \Magento\Framework\Phrase
+     */
+    public function getErrorLabel()
+    {
+        return __('Module uninstall script is not available');
+    }
 }

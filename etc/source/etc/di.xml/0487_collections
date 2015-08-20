@@ -1,0 +1,1 @@
+                <item name="{{namespace}}_{{module}}_{{entity}}_listing_data_source" xsi:type="string">{{Namespace}}\{{Module}}\Model\Resource\{{Entity}}\Grid\Collection</item>

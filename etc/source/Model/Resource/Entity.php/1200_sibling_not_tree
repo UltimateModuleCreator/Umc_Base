@@ -5,7 +5,7 @@
      */
     public function get{{Siblings}}Position(\{{Namespace}}\{{Module}}\Model\{{Entity}} ${{entity}})
     {
-        $select = $this->_getWriteAdapter()->select()->from(
+        $select = $this->getConnection()->select()->from(
             $this->{{_}}{{entity}}{{Sibling}}Table,
             ['{{sibling}}_id', 'position']
         )
@@ -13,7 +13,7 @@
             '{{entity}}_id = :{{entity}}_id'
         );
         $bind = ['{{entity}}_id' => (int)${{entity}}->getId()];
-        return $this->_getWriteAdapter()->fetchPairs($select, $bind);
+        return $this->getConnection()->fetchPairs($select, $bind);
     }
 
     /**
@@ -39,7 +39,7 @@
             }
         }
         $update = $_update;
-        $adapter = $this->_getWriteAdapter();
+        $adapter = $this->getConnection();
         if (!empty($delete)) {
             $condition = ['{{sibling}}_id IN(?)' => array_keys($delete), '{{entity}}_id=?' => $id];
             $adapter->delete($this->{{_}}{{entity}}{{Sibling}}Table, $condition);

@@ -44,7 +44,6 @@ class Sorting extends AbstractSorting
      */
     protected function processConfig($data)
     {
-
         if (isset($data['code']['part'])) {
             uasort($data['code']['part'], [$this, 'cmp']);
         }

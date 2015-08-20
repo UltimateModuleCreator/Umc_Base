@@ -56,6 +56,9 @@ class Source extends Config
         if (!isset($config['scope'])) {
             $config['scope'] = 'global'; //TODO: use constant here
         }
+        if (!isset($config['abstract'])) {
+            $config['abstract'] = false;
+        }
         return $config;
     }
 }

@@ -17,11 +17,11 @@
  */
 namespace Umc\Base\Model;
 
-use Magento\Framework\Object;
+use Magento\Framework\DataObject;
 use Magento\Framework\ObjectManagerInterface;
 use Umc\Base\Model\Downloader\DownloaderInterface;
 
-class Downloader extends Object
+class Downloader extends DataObject
 {
     /**
      * default download item
@@ -85,5 +85,13 @@ class Downloader extends Object
             );
         }
         return $download;
+    }
+
+    /**
+     * @return array
+     */
+    public function getDownloaderTypes()
+    {
+        return array_keys($this->downloaderMap);
     }
 }

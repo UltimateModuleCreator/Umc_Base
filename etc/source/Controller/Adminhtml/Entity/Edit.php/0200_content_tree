@@ -54,7 +54,7 @@
                 }
             }
 
-            $eventResponse = new {{class Magento\Framework\Object}}([
+            $eventResponse = new {{class Magento\Framework\DataObject}}([
                 'content' => $resultPage->getLayout()->getBlock('{{namespace}}.{{module}}.{{entity}}.edit')->getFormHtml()
                     . $resultPage->getLayout()->getBlock('{{namespace}}.{{module}}.{{entity}}.tree')
                         ->getBreadcrumbsJavascript($breadcrumbsPath, 'editing{{Entity}}Breadcrumbs'),

@@ -79,6 +79,7 @@ class Member
         $data['constant']   = $constant;
         $data['parent']     = $this->classConfig->getBoolValue($member, 'parent');
         $data['show']       = $this->classConfig->getBoolValue($member, 'show');
+        $data['skip']       = $this->classConfig->getBoolValue($member, 'skip');
         $data['doc']        = (isset($member['doc']) ? $this->filterContent($member['doc']) : '') ;
         if (isset($member['var'])) {
             $classData = $this->classConfig->getClassData($member['var']);

@@ -29,4 +29,20 @@ class Config implements DownloaderInterface
     {
         return $file. '.xml';
     }
+
+    /**
+     * @return \Magento\Framework\Phrase
+     */
+    public function getLabel()
+    {
+        return __('Download Module Config');
+    }
+
+    /**
+     * @return \Magento\Framework\Phrase
+     */
+    public function getErrorLabel()
+    {
+        return __('Module config is not available. You are not even supposed to see this');
+    }
 }

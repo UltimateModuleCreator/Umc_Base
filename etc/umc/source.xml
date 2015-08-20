@@ -60,6 +60,30 @@
                     </depend>
                 </depends>
             </part>
+            <part id="grid_filter_pool" file="0450_grid_filter_pool" sort="450" />
+            <part id="data_provider" file="0475_data_provider" sort="475" scope="entity">
+                <depends id="is_not_tree">
+                    <depend id="is_tree">
+                        <val id="0">0</val>
+                    </depend>
+                </depends>
+            </part>
+            <part id="grid_collection" file="0480_grid_collection" sort="480" scope="entity">
+                <depends id="is_not_tree">
+                    <depend id="is_tree">
+                        <val id="0">0</val>
+                    </depend>
+                </depends>
+            </part>
+            <part id="collections_top" file="0485_collections_top" sort="485" />
+            <part id="collections" file="0487_collections" sort="487" scope="entity">
+                <depends id="not_is_tree">
+                    <depend id="is_tree">
+                        <val id="0">0</val>
+                    </depend>
+                </depends>
+            </part>
+            <part id="collections_bottom" file="0490_collections_bottom" sort="490" />
             <part id="footer" file="0500_footer" sort="500"/>
         </code>
     </file>
@@ -230,6 +254,7 @@
                     </depend>
                 </depends>
             </part>
+            <part id="form_fields" file="0550_form_fields" sort="550" />
             <part id="content" file="0600_content" sort="600" />
         </code>
     </file>
@@ -267,7 +292,7 @@
             </member>
             <member id="context" sort="40" construct="true" show="false" parent="true" var="Magento\Backend\Block\Template\Context" />
             <member id="backendHelper" sort="50" construct="true" show="false" parent="true" var="Magento\Backend\Helper\Data" />
-            <member id="data" sort="50" construct="true" show="false" parent="true" var="array" default="[]" />
+            <member id="data" sort="60" construct="true" show="false" parent="true" var="array" default="[]" />
         </members>
         <code>
             <part id="not_tree" file="0100_not_tree" sort="100">
@@ -398,7 +423,7 @@
             <part id="content" file="0100_content" sort="100" />
         </code>
     </file>
-    <file id="Controller/Adminhtml/{{Entity}}.php" type="class" sort="80" scope="entity" translate="label description">
+    <file id="Controller/Adminhtml/{{Entity}}.php" abstract="true" type="class" sort="80" scope="entity" translate="label description">
         <label>Admin entity controller</label>
         <description>Base controller for admin</description>
         <extends>Magento\Backend\App\Action</extends>
@@ -581,14 +606,14 @@
             <part id="content" file="0100_content" sort="100" />
         </code>
     </file>
-    <file id="Controller/Adminhtml/{{Entity}}/Grid.php" type="class" sort="130" scope="entity" translate="label description">
-        <label>Entity admin grid action</label>
-        <description>Grid AJAX actions should call this</description>
-        <extends>{{Namespace}}\{{Module}}\Controller\Adminhtml\{{Entity}}\Index</extends>
-        <code>
-            <part id="content" file="0100_content" sort="100" />
-        </code>
-    </file>
+    <!--<file id="Controller/Adminhtml/{{Entity}}/Grid.php" type="class" sort="130" scope="entity" translate="label description">-->
+        <!--<label>Entity admin grid action</label>-->
+        <!--<description>Grid AJAX actions should call this</description>-->
+        <!--<extends>{{Namespace}}\{{Module}}\Controller\Adminhtml\{{Entity}}\Index</extends>-->
+        <!--<code>-->
+            <!--<part id="content" file="0100_content" sort="100" />-->
+        <!--</code>-->
+    <!--</file>-->
     <file id="Controller/Adminhtml/{{Entity}}/Index.php" type="class" sort="140" scope="entity" translate="label description">
         <label>Default admin action for an entity</label>
         <description>Default admin action for an entity</description>
@@ -645,7 +670,16 @@
                 <val id="0">0</val>
             </depend>
         </depends>
-        <extends>{{Namespace}}\{{Module}}\Controller\Adminhtml\{{Entity}}</extends>
+        <extends>Magento\Backend\App\Action</extends>
+        <members>
+            <member id="filter" sort="10" var="Magento\Ui\Component\MassAction\Filter" parent="false" construct="true" show="true">
+                <doc>Mass Action Filter</doc>
+            </member>
+            <member id="collectionFactory" sort="20" var="{{Namespace}}\{{Module}}\Model\Resource\{{Entity}}\CollectionFactory" parent="false" construct="true" show="true">
+                <doc>Collection Factory</doc>
+            </member>
+            <member id="context" sort="30" var="Magento\Backend\App\Action\Context" construct="true" parent="true" show="false" />
+        </members>
         <code>
             <part id="content" file="0100_content" sort="100" />
         </code>
@@ -1301,6 +1335,112 @@
             </part>
         </code>
     </file>
+    <file id="view/adminhtml/ui_component/{{namespace}}_{{module}}_{{entity}}_listing.xml" type="xml" scope="entity" translate="label description" sort="135">
+        <label>Grid UI component</label>
+        <description>Admin grid UI component</description>
+        <depends id="not_is_tree">
+            <depend id="is_tree">
+                <val id="0">0</val>
+            </depend>
+        </depends>
+        <code>
+            <part id="top" file="0100_top" sort="100" />
+            <part id="filters_top" file="0200_filters_top" sort="200" />
+            <part id="filter_parents" file="0300_filter_parents" sort="300" scope="parent_entity" />
+            <part id="filter_input" file="0400_filter_input" sort="400" scope="attribute">
+                <depends id="type">
+                    <depend id="admin_grid_not_restricted">
+                        <val id="1">1</val>
+                    </depend>
+                    <depend id="type">
+                        <val id="text">text</val>
+                    </depend>
+                </depends>
+            </part>
+            <part id="filter_select" file="0430_filter_select" sort="430" scope="attribute">
+                <depends id="type">
+                    <depend id="admin_grid_not_restricted">
+                        <val id="1">1</val>
+                    </depend>
+                    <depend id="type">
+                        <val id="dropdown">dropdown</val>
+                        <val id="country">country</val>
+                        <val id="yesno">yesno</val>
+                    </depend>
+                </depends>
+            </part>
+            <part id="filter_range" file="0470_filter_range" sort="470" scope="attribute">
+                <depends id="type">
+                    <depend id="admin_grid_not_restricted">
+                        <val id="1">1</val>
+                    </depend>
+                    <depend id="type">
+                        <val id="int">int</val>
+                        <val id="country">decimal</val>
+                        <val id="date">date</val>
+                    </depend>
+                </depends>
+            </part>
+            <part id="filter_created_at" file="0480_filter_created_at" sort="480">
+                <depends id="type">
+                    <depend id="admin_grid">
+                        <val id="1">1</val>
+                    </depend>
+                    <depend id="add_created_to_grid">
+                        <val id="1">1</val>
+                    </depend>
+                </depends>
+            </part>
+            <part id="filter_updated_at" file="0490_filter_updated_at" sort="490">
+                <depends id="type">
+                    <depend id="admin_grid">
+                        <val id="1">1</val>
+                    </depend>
+                    <depend id="add_updated_to_grid">
+                        <val id="1">1</val>
+                    </depend>
+                </depends>
+            </part>
+            <part id="filters_bottom" file="0500_filters_bottom" sort="500" />
+            <part id="massaction_top" file="0600_massaction_top" sort="600" />
+            <part id="massaction_bottom" file="0700_massaction_bottom" sort="700" />
+            <part id="paging" file="0800_paging" sort="800" />
+            <part id="columns_top" file="0900_columns_top" sort="900" />
+            <part id="parent_columns" file="1000_parent_columns" sort="1000" scope="parent_entity" />
+            <part id="name_attribute_column" file="1100_name_attribute_column" sort="1100" />
+            <part id="column" file="1200_column" sort="1200" scope="attribute">
+                <depends id="admin_grid">
+                    <depend id="admin_grid">
+                        <val id="1">1</val>
+                    </depend>
+                    <depend id="is_name">
+                        <val id="0">0</val>
+                    </depend>
+                </depends>
+            </part>
+            <part id="created_at" file="1300_created_at" sort="1300">
+                <depends id="type">
+                    <depend id="admin_grid">
+                        <val id="1">1</val>
+                    </depend>
+                    <depend id="add_created_to_grid">
+                        <val id="1">1</val>
+                    </depend>
+                </depends>
+            </part>
+            <part id="updated_at" file="1400_updated_at" sort="1400">
+                <depends id="type">
+                    <depend id="admin_grid">
+                        <val id="1">1</val>
+                    </depend>
+                    <depend id="add_updated_to_grid">
+                        <val id="1">1</val>
+                    </depend>
+                </depends>
+            </part>
+            <part id="footer" file="1500_footer" sort="1500" />
+        </code>
+    </file>
     <file id="view/adminhtml/layout/{{namespace}}_{{module}}_{{entity}}_edit.xml" type="xml" sort="240" scope="entity" translate="label description">
         <label>Add/Edit Action layout handle</label>
         <description>Add/Edit Action layout handle</description>
@@ -1495,54 +1635,54 @@
             <part id="content" file="0100_content" sort="100" />
         </code>
     </file>
-    <file id="view/adminhtml/layout/{{namespace}}_{{module}}_{{entity}}_grid.xml" type="xml" sort="270" scope="entity" translate="label description">
-        <label>Layout handle for grid action</label>
-        <description>Layout handle for grid action</description>
-        <depends id="is_tree">
-            <depend id="is_tree">
-                <val id="0">0</val>
-            </depend>
-        </depends>
-        <code>
-            <part id="content" file="0100_content" sort="100" />
-        </code>
-    </file>
-    <file id="view/adminhtml/layout/{{namespace}}_{{module}}_{{entity}}_grid_block.xml" type="xml" sort="280" scope="entity" translate="label description">
-        <label>Grid layout handle</label>
-        <description>Grid layout handle</description>
-        <depends id="is_tree">
-            <depend id="is_tree">
-                <val id="0">0</val>
-            </depend>
-        </depends>
-        <code>
-            <part id="top" file="0100_top" sort="100" />
-            <part id="parents" file="0150_parents" sort="150" scope="parent_entity" />
-            <part id="name_column" file="0200_name_column" sort="200" />
-            <part id="columns" file="0300_columns" sort="300" scope="attribute">
-                <depends id="admin_grid">
-                    <depend id="admin_grid">
-                        <val id="1">1</val>
-                    </depend>
-                </depends>
-            </part>
-            <part id="created_at" file="0400_created_at" sort="400">
-                <depends id="add_created_to_grid">
-                    <depend id="add_created_to_grid">
-                        <val id="1">1</val>
-                    </depend>
-                </depends>
-            </part>
-            <part id="updated_at" file="0500_updated_at" sort="500">
-                <depends id="add_updated_to_grid">
-                    <depend id="add_updated_to_grid">
-                        <val id="1">1</val>
-                    </depend>
-                </depends>
-            </part>
-            <part id="footer" file="0600_footer" sort="600" />
-        </code>
-    </file>
+    <!--<file id="view/adminhtml/layout/{{namespace}}_{{module}}_{{entity}}_grid.xml" type="xml" sort="270" scope="entity" translate="label description">-->
+        <!--<label>Layout handle for grid action</label>-->
+        <!--<description>Layout handle for grid action</description>-->
+        <!--<depends id="is_tree">-->
+            <!--<depend id="is_tree">-->
+                <!--<val id="0">0</val>-->
+            <!--</depend>-->
+        <!--</depends>-->
+        <!--<code>-->
+            <!--<part id="content" file="0100_content" sort="100" />-->
+        <!--</code>-->
+    <!--</file>-->
+    <!--<file id="view/adminhtml/layout/{{namespace}}_{{module}}_{{entity}}_grid_block.xml" type="xml" sort="280" scope="entity" translate="label description">-->
+        <!--<label>Grid layout handle</label>-->
+        <!--<description>Grid layout handle</description>-->
+        <!--<depends id="is_tree">-->
+            <!--<depend id="is_tree">-->
+                <!--<val id="0">0</val>-->
+            <!--</depend>-->
+        <!--</depends>-->
+        <!--<code>-->
+            <!--<part id="top" file="0100_top" sort="100" />-->
+            <!--<part id="parents" file="0150_parents" sort="150" scope="parent_entity" />-->
+            <!--<part id="name_column" file="0200_name_column" sort="200" />-->
+            <!--<part id="columns" file="0300_columns" sort="300" scope="attribute">-->
+                <!--<depends id="admin_grid">-->
+                    <!--<depend id="admin_grid">-->
+                        <!--<val id="1">1</val>-->
+                    <!--</depend>-->
+                <!--</depends>-->
+            <!--</part>-->
+            <!--<part id="created_at" file="0400_created_at" sort="400">-->
+                <!--<depends id="add_created_to_grid">-->
+                    <!--<depend id="add_created_to_grid">-->
+                        <!--<val id="1">1</val>-->
+                    <!--</depend>-->
+                <!--</depends>-->
+            <!--</part>-->
+            <!--<part id="updated_at" file="0500_updated_at" sort="500">-->
+                <!--<depends id="add_updated_to_grid">-->
+                    <!--<depend id="add_updated_to_grid">-->
+                        <!--<val id="1">1</val>-->
+                    <!--</depend>-->
+                <!--</depends>-->
+            <!--</part>-->
+            <!--<part id="footer" file="0600_footer" sort="600" />-->
+        <!--</code>-->
+    <!--</file>-->
     <file id="view/adminhtml/layout/{{namespace}}_{{module}}_{{entity}}_index.xml" type="xml" sort="290" scope="entity" translate="label description">
         <label>Index Action layout handle</label>
         <description>Index Action layout handle</description>
@@ -1581,7 +1721,34 @@
             <part id="content" file="0100_content" sort="100" />
         </code>
     </file>
-
+    <file id="Ui/Component/Listing/Column/{{Entity}}Actions.php" type="class" sort="344" scope="entity" translate="label description">
+        <label>Actions column</label>
+        <description>Actions grid column</description>
+        <depends id="not_is_tree">
+            <depend id="is_tree">
+                <val id="0">0</val>
+            </depend>
+        </depends>
+        <extends>Magento\Ui\Component\Listing\Columns\Column</extends>
+        <members>
+            <member id="URL_PATH_EDIT" sort="10" constant="true" show="true" parent="false" construct="false" var="string" default="'{{namespace}}_{{module}}/{{entity}}/edit'">
+                <doc>Url path  to edit</doc>
+            </member>
+            <member id="URL_PATH_DELETE" sort="20" constant="true" show="true" parent="false" construct="false" var="string" default="'{{namespace}}_{{module}}/{{entity}}/delete'">
+                <doc>Url path  to delete</doc>
+            </member>
+            <member id="urlBuilder" sort="30" show="true" parent="false" construct="true" var="Magento\Framework\UrlInterface">
+                <doc>URL builder</doc>
+            </member>
+            <member id="context" sort="40" show="false" parent="true" construct="true" var="Magento\Framework\View\Element\UiComponent\ContextInterface" />
+            <member id="uiComponentFactory" sort="50" show="false" parent="true" construct="true" var="Magento\Framework\View\Element\UiComponentFactory" />
+            <member id="components" sort="60" show="false" parent="true" construct="true" var="array" default="[]" />
+            <member id="data" sort="70" show="false" parent="true" construct="true" var="array" default="[]" />
+        </members>
+        <code>
+            <part id="0100_content" file="0100_content" sort="100" />
+        </code>
+    </file>
     <file id="Model/Upload.php" type="class" sort="300" scope="global" translate="label description">
         <label>Model for uploading files</label>
         <description>Model for uploading files</description>
@@ -1979,7 +2146,7 @@
                     </depend>
                 </depends>
             </part>
-            <part id="after_save_sibling" file="0900_after_save_sibling" sort="800" scope="relation">
+            <part id="after_save_sibling" file="0900_after_save_sibling" sort="900" scope="relation">
                 <depends id="type">
                     <depend id="type">
                         <val id="sibling">sibling</val>
@@ -2042,6 +2209,42 @@
                     </depend>
                 </depends>
             </part>
+        </code>
+    </file>
+
+    <file id="Model/Resource/{{Entity}}/Grid/Collection.php" type="class" sort="327" scope="entity" translate="label description">
+        <label>Grid collection</label>
+        <description>Collection used for grid</description>
+        <depends id="is_not_tree">
+            <depend id="is_tree">
+                <val id="0">0</val>
+            </depend>
+        </depends>
+        <extends>{{Namespace}}\{{Module}}\Model\Resource\{{Entity}}\Collection</extends>
+        <implements>
+            <implement id="Magento\Framework\Api\Search\SearchResultInterface" sort="10" />
+        </implements>
+        <members>
+            <member id="aggregations" sort="10" construct="false" show="true" var="Magento\Framework\Search\AggregationInterface" parent="false">
+                <doc>Aggregations</doc>
+            </member>
+            <member id="entityFactory" sort="20" construct="true" show="false" var="Magento\Framework\Data\Collection\EntityFactoryInterface" parent="true" />
+            <member id="logger" sort="30" construct="true" show="false" var="Psr\Log\LoggerInterface" parent="true" />
+            <member id="fetchStrategy" sort="40" construct="true" show="false" var="Magento\Framework\Data\Collection\Db\FetchStrategyInterface" parent="true" />
+            <member id="eventManager" sort="50" construct="true" show="false" var="Magento\Framework\Event\ManagerInterface" parent="true" />
+            <member id="mainTable" sort="60" construct="true" show="false" var="" parent="false" skip="true" />
+            <member id="eventPrefix" sort="70" construct="true" show="false" var="" parent="false" skip="true" />
+            <member id="eventObject" sort="80" construct="true" show="false" var="" parent="false" skip="true" />
+            <member id="resourceModel" sort="90" construct="true" show="false" var="" parent="false" skip="true"/>
+            <member id="model" sort="100" construct="true" show="false" parent="false" var="" skip="true" default="'Magento\Framework\View\Element\UiComponent\DataProvider\Document'" />
+            <member id="connection" sort="110" construct="true" show="false" parent="true" var="" default="null" />
+            <member id="resource" sort="120" construct="true" show="false" parent="true" var="Magento\Framework\Model\Resource\Db\AbstractDb" default="null" />
+        </members>
+        <constructs>
+            <construct id="init" sort="10" value="$this->_eventPrefix = $eventPrefix;###$this->_eventObject = $eventObject;###$this->_init($model, $resourceModel);###$this->setMainTable($mainTable);" />
+        </constructs>
+        <code>
+            <part id="content" file="0100_content" sort="100" />
         </code>
     </file>
 
@@ -2113,13 +2316,16 @@
         <description>Entity Collection model</description>
         <extends>Magento\Framework\Model\Resource\Db\Collection\AbstractCollection</extends>
         <members>
+            <member id="_idFieldName" construct="false" show="true" var="string" sort="5" core="true" default="'{{entity}}_id'">
+                <doc>ID Field Name</doc>
+            </member>
             <member id="_eventPrefix" construct="false" show="true" var="string" sort="10" core="true" default="'{{namespace}}_{{module}}_{{entity}}_collection'">
                 <doc>Event prefix</doc>
             </member>
             <member id="_eventObject" construct="false" show="true" var="string" sort="20" core="true" default="'{{entity}}_collection'">
                 <doc>Event object</doc>
             </member>
-            <member id="entityFactory" show="false" construct="true" parent="true" var="Magento\Core\Model\EntityFactory" sort="30" />
+            <member id="entityFactory" show="false" construct="true" parent="true" var="Magento\Framework\Data\Collection\EntityFactoryInterface" sort="30" />
             <member id="logger" show="false" construct="true" parent="true" var="Psr\Log\LoggerInterface" sort="40" />
             <member id="fetchStrategy" show="false" construct="true" parent="true" var="Magento\Framework\Data\Collection\Db\FetchStrategyInterface" sort="50" />
             <member id="eventManager" show="false" construct="true" parent="true" var="Magento\Framework\Event\ManagerInterface" sort="60" />
@@ -2147,7 +2353,7 @@
                 <val id="1">1</val>
             </depend>
         </depends>
-        <extends>Magento\Framework\Object</extends>
+        <extends>Magento\Framework\DataObject</extends>
         <members>
             <member id="collectionFactory" construct="true" show="true" var="{{Namespace}}\{{Module}}\Model\Resource\{{Entity}}\CollectionFactory" sort="10">
                 <doc>{{EntityLabel}} Collection factory</doc>

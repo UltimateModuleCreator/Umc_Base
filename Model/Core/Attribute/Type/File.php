@@ -39,4 +39,11 @@ class File extends AbstractType
      * @var string
      */
     protected $editFormType = 'file';
+
+    /**
+     * attribute can be searched full text
+     *
+     * @var bool
+     */
+    protected $fullText = true;
 }

@@ -250,13 +250,15 @@ class AbstractGenerator extends Umc implements GeneratorInterface
     }
 
     /**
-     * read source file
-     *
      * @param $file
      * @return bool|string
+     * @throws \Exception
      */
     protected function readSourceFile($file)
     {
+        if (!is_file($file)) {
+            throw new \Exception("Trying to load file '$file' that does not exist.");
+        }
         return $this->io->read($file);
     }
 

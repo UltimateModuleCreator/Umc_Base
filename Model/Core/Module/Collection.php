@@ -18,6 +18,7 @@
 namespace Umc\Base\Model\Core\Module;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Data\Collection\EntityFactoryInterface;
 use Magento\Framework\Data\Collection\Filesystem as FilesystemCollection;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Url\Encoder;
@@ -57,10 +58,13 @@ class Collection extends FilesystemCollection
      *
      * @param Filesystem $filesystem
      * @param Encoder $encoder
+     * @param EntityFactoryInterface $entityFactoryInterface
+     * @throws \Exception
      */
     public function __construct(
         Filesystem $filesystem,
-        Encoder $encoder
+        Encoder $encoder,
+        EntityFactoryInterface $entityFactoryInterface
     )
     {
         $this->filesystem       = $filesystem;
@@ -69,6 +73,7 @@ class Collection extends FilesystemCollection
         $this->connectDirectory->create(Settings::VAR_DIR_NAME);
         $this->addTargetDir($this->connectDirectory->getAbsolutePath(Settings::VAR_DIR_NAME));
         $this->setCollectRecursively(false);
+        parent::__construct($entityFactoryInterface);
     }
 
     /**
@@ -111,16 +116,12 @@ class Collection extends FilesystemCollection
     }
 
     /**
-     * @param string $field
-     * @param mixed $filterValue
-     * @param array $row
-     * @return bool
-     * //TODO: remove this when Magento fixes the 'like' filter in the parent collection
+     * @param $field
+     * @param $direction
+     * @return \Magento\Framework\Data\Collection
      */
-    public function filterCallbackLike($field, $filterValue, $row)
+    public function addOrder($field, $direction)
     {
-        $filterValueRegex = str_replace(['%', "'"], ['(.*?)',''], preg_quote($filterValue, '/'));
-        return (bool)preg_match("/^{$filterValueRegex}\$/i", $row[$field]);
-
+        return $this->setOrder($field, $direction);
     }
 }

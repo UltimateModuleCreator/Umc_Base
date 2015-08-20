@@ -1,0 +1,29 @@
+            <filterRange name="{{code}}"{{filterRangeClass}}>
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="dataScope" xsi:type="string">{{code}}</item>
+                        <item name="label" xsi:type="string" translate="true">{{Label}}</item>
+                        <item name="childDefaults" xsi:type="array">
+                            <item name="provider" xsi:type="string">{{namespace}}_{{module}}_{{entity}}_listing.{{namespace}}_{{module}}_{{entity}}_listing.listing_top.listing_filters</item>
+                        </item>
+                    </item>
+                </argument>
+                <{{filterInput}} name="from">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="dataScope" xsi:type="string">from</item>
+                            <item name="label" xsi:type="string" translate="true">from</item>
+                            <item name="placeholder" xsi:type="string" translate="true">From</item>
+                        </item>
+                    </argument>
+                </{{filterInput}}>
+                <{{filterInput}} name="to">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="dataScope" xsi:type="string">to</item>
+                            <item name="label" xsi:type="string" translate="true">to</item>
+                            <item name="placeholder" xsi:type="string" translate="true">To</item>
+                        </item>
+                    </argument>
+                </{{filterInput}}>
+            </filterRange>

@@ -1,0 +1,5 @@
+                    </item>
+                    <item name="indexField" xsi:type="string">{{entity}}_id</item>
+                </item>
+            </argument>
+        </massaction>

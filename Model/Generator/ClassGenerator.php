@@ -412,7 +412,7 @@ class ClassGenerator extends AbstractGenerator
             $tab.' * @var '.$className.$eol.
             $tab.' */'.$eol.
             $tab.$access.' '.$prefix.$underscore.$name.
-            (($default) ? ' = '.$default : '').';'.$eol.$eol;
+            (($default != '') ? ' = '.$default : '').';'.$eol.$eol;
     }
 
     /**
@@ -473,11 +473,19 @@ class ClassGenerator extends AbstractGenerator
         return $this->getProcessor(self::ANNOTATION_PROCESSOR_KEY, $type);
     }
 
+    /**
+     * @param $type
+     * @return ProcessorInterface
+     */
     protected function getImplementProcessor($type)
     {
         return $this->getProcessor(self::IMPLEMENT_PROCESSOR_KEY, $type);
     }
 
+    /**
+     * @param $type
+     * @return ProcessorInterface
+     */
     protected function getConstructProcessor($type)
     {
         return $this->getProcessor(self::CONSTRUCT_PROCESSOR_KEY, $type);
@@ -500,7 +508,12 @@ class ClassGenerator extends AbstractGenerator
         if ($this->module->getSettings()->getAnnotation() && count($this->annotations)) {
             $content .= '/**'.$this->getEol().implode($this->getEol(), $this->annotations).$this->getEol().' */'.$this->getEol();
         }
-        $classLine = 'class '.$this->className;
+        if ($this->config['abstract']) {
+            $classLine = 'abstract ';
+        } else {
+            $classLine = '';
+        }
+        $classLine .= 'class '.$this->className;
         if ($this->extends) {
             $classLine .= ' extends '.$this->getClassName($this->extends);
             if (!$this->getQualified() ) {
@@ -586,7 +599,7 @@ class ClassGenerator extends AbstractGenerator
             $lines[] = '{';
             $constructAssign = [];
             foreach ($forConstruct as $param) {
-                if (!$param['parent']) {
+                if (!$param['parent'] && !$param['skip']) {
                     $underscore = $this->getUnderscoreValue($param);
                     $constructAssign[] = $tab.'$this->'.$underscore.$param['id'].' = '.'$'.$param['id'].';';
                 }

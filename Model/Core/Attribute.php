@@ -229,7 +229,11 @@ class Attribute extends AbstractModel implements ModelInterface
                 '{{grid_column_class}}'     => $this->getGridColumnClass(),
                 '{{OptionConstants}}'       => $this->getOptionConstants(),
                 '{{toOptionArray}}'         => $this->getToOptionsArray(),
-                '{{options_i18n}}'          => $this->getOptionsI18n()
+                '{{optionsI18n}}'           => $this->getOptionsI18n(),
+                '{{adminColumnType}}'       => $this->getAdminColumnType(),
+                '{{columnComponent}}'       => $this->getColumnComponent(),
+                '{{filterRangeClass}}'      => $this->getFilterRangeClass(),
+                '{{filterInput}}'           => $this->getFilterInput()
             ];
             $this->placeholders = array_merge($this->placeholders, $this->getTypeInstance()->getPlaceholders());
             $this->placeholders = array_merge($this->getEntity()->getPlaceholders(), $this->placeholders);
@@ -283,6 +287,14 @@ class Attribute extends AbstractModel implements ModelInterface
     public function getEntityType()
     {
         return $this->getEntity()->getType();
+    }
+
+    /**
+     * @return bool
+     */
+    public function getAdminGridNotRestricted()
+    {
+        return $this->getAdminGrid() || $this->getIsName();
     }
 
     /**
@@ -516,5 +528,36 @@ class Attribute extends AbstractModel implements ModelInterface
             $texts[] = '"'.$value.'","'.$value.'"';
         }
         return implode($this->getEol(), $texts);
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getFullText()
+    {
+        return $this->getTypeInstance()->isFullText();
+    }
+
+    /**
+     * @return string
+     */
+    public function getAdminColumnType()
+    {
+        return $this->getTypeInstance()->getAdminColumnType();
+    }
+
+    public function getColumnComponent()
+    {
+        return $this->getTypeInstance()->getColumnComponent();
+    }
+
+    public function getFilterRangeClass()
+    {
+        return $this->getTypeInstance()->getFilterRangeClass();
+    }
+
+    public function getFilterInput()
+    {
+        return $this->getTypeInstance()->getFilterInput();
     }
 }

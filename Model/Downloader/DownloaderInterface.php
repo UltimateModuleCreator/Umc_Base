@@ -26,4 +26,14 @@ interface DownloaderInterface
      * @return string
      */
     public function getRelativePath($file);
+
+    /**
+     * @return string
+     */
+    public function getLabel();
+
+    /**
+     * @return string
+     */
+    public function getErrorLabel();
 }

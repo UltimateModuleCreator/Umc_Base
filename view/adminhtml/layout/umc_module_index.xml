@@ -17,12 +17,30 @@
  * @author    Marius Strajeru <ultimate.module.creator@gmail.com>
  */
 -->
+<!--<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">-->
+    <!--<update handle="formkey"/>-->
+    <!--<update handle="umc_module_grid_block"/>-->
+    <!--<body>-->
+        <!--<referenceContainer name="content">-->
+            <!--<block class="Umc\Base\Block\Adminhtml\Module" name="adminhtml.umc_base.module.grid.container" />-->
+        <!--</referenceContainer>-->
+    <!--</body>-->
+<!--</page>-->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
-    <update handle="formkey"/>
-    <update handle="umc_module_grid_block"/>
+    <update handle="styles"/>
     <body>
+        <referenceBlock name="menu">
+            <action method="setActive">
+                <argument name="itemId" xsi:type="string">Umc_Base::umc_list</argument>
+            </action>
+        </referenceBlock>
+        <referenceBlock name="page.title">
+            <action method="setTitleClass">
+                <argument name="class" xsi:type="string">complex</argument>
+            </action>
+        </referenceBlock>
         <referenceContainer name="content">
-            <block class="Umc\Base\Block\Adminhtml\Module" name="adminhtml.umc_base.module.grid.container" />
+            <uiComponent name="umc_module_listing"/>
         </referenceContainer>
     </body>
 </page>

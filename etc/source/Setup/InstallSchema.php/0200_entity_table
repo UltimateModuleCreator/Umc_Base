@@ -31,4 +31,15 @@
             )
             ->setComment('{{EntityLabel}} Table');
             $installer->getConnection()->createTable($table);
+
+            $installer->getConnection()->addIndex(
+                $installer->getTable('{{namespace}}_{{module}}_{{entity}}'),
+                $setup->getIdxName(
+                    $installer->getTable('{{namespace}}_{{module}}_{{entity}}'),
+                    [{{fullTextFields}}],
+                    {{class Magento\Framework\DB\Adapter\AdapterInterface}}::INDEX_TYPE_FULLTEXT
+                ),
+                [{{fullTextFields}}],
+                {{class Magento\Framework\DB\Adapter\AdapterInterface}}::INDEX_TYPE_FULLTEXT
+            );
         }

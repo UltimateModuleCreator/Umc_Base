@@ -439,10 +439,11 @@ class Entity extends AbstractModel implements ModelInterface
                 '{{EntitiesLabel}}'         => $this->getLabelPlural(true),
                 '{{entities}}'              => $this->getNamePlural(),
                 '{{Entities}}'              => $this->getNamePlural(true),
-                '{{sort_order}}'            => $this->getSortOrder(),
+                '{{sortOrder}}'             => $this->getSortOrder(),
                 '{{nameAttributeCode}}'     => $this->getNameAttributeCode(),
                 '{{NameAttributeCode}}'     => $this->getNameAttributeCode(true),
                 '{{NameAttributeLabel}}'    => $this->getNameAttribute()->getLabel(),
+                '{{nameAttributeType}}'     => $this->getNameAttribute()->getTypeInstance()->getAdminColumnType(),
                 '{{dateAttributeCodes}}'    => $this->getDateAttributeCodes(),
                 '{{columnsSetup}}'          => $this->getColumnsSetup(),
                 '{{editFormFields}}'        => $this->getEditFormFields(),
@@ -454,6 +455,7 @@ class Entity extends AbstractModel implements ModelInterface
                 '{{editFormFieldsAsNew}}'   => $this->getEditFormFieldsAsNew(),
                 '{{quickSaveAttributes}}'   => $this->getQuickSaveAttributes(),
                 '{{clearAttributes}}'       => $this->getClearAttributes(),
+                '{{fullTextFields}}'        => $this->getFullTextFields(),
             ];
             $this->placeholders = array_merge($this->placeholders, $this->getTypeInstance()->getPlaceholders());
             $this->placeholders = array_merge($this->getModule()->getPlaceholders(), $this->placeholders);
@@ -923,5 +925,20 @@ class Entity extends AbstractModel implements ModelInterface
             }
         }
         return implode(', ', $lines);
+    }
+
+    /**
+     * @return string
+     */
+    public function getFullTextFields()
+    {
+        $fields = [];
+        $fields[$this->getNameAttribute()->getCode()] = 1;
+        foreach ($this->getAttributes() as $attribute) {
+            if ($attribute->getFullText()) {
+                $fields[$attribute->getCode()] = 1;
+            }
+        }
+        return "'".implode("','", array_keys($fields))."'";
     }
 }

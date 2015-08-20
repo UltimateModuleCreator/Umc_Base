@@ -5,7 +5,7 @@
      */
     protected function {{_}}getMaxPosition($path)
     {
-        $adapter = $this->getReadConnection();
+        $adapter = $this->getConnection();
         $positionField = $adapter->quoteIdentifier('position');
         $level = count(explode('/', $path));
         $bind = ['c_level' => $level, 'c_path' => $path . '/%'];
@@ -34,7 +34,7 @@
     protected function {{_}}savePath($object)
     {
         if ($object->getId()) {
-            $this->_getWriteAdapter()->update(
+            $this->getConnection()->update(
                 $this->getMainTable(),
                 ['path' => $object->getPath()],
                 ['{{entity}}_id = ?' => $object->getId()]
@@ -62,19 +62,19 @@
             // +1 is itself
             $data = ['children_count' => new \Zend_Db_Expr('children_count - ' . $childDecrease)];
             $where = ['{{entity}}_id IN(?)' => $parentIds];
-            $this->_getWriteAdapter()->update($this->getMainTable(), $data, $where);
+            $this->getConnection()->update($this->getMainTable(), $data, $where);
         }
         $this->deleteChildren($object);
         return $this;
     }
 
     /**
-     * @param \Magento\Framework\Object $object
+     * @param \Magento\Framework\DataObject $object
      * @return $this
      */
-    public function deleteChildren({{class Magento\Framework\Object}} $object)
+    public function deleteChildren({{class Magento\Framework\DataObject}} $object)
     {
-        $adapter = $this->_getWriteAdapter();
+        $adapter = $this->getConnection();
         $pathField = $adapter->quoteIdentifier('path');
 
         $select = $adapter->select()->from(
@@ -111,7 +111,7 @@
     ) {
         $childrenCount = $this->getChildrenCount(${{entity}}->getId()) + 1;
         $table = $this->getMainTable();
-        $adapter = $this->_getWriteAdapter();
+        $adapter = $this->getConnection();
         $levelFiled = $adapter->quoteIdentifier('level');
         $pathField = $adapter->quoteIdentifier('path');
 
@@ -187,7 +187,7 @@
     )
     {
         $table = $this->getMainTable();
-        $adapter = $this->_getWriteAdapter();
+        $adapter = $this->getConnection();
         $positionField = $adapter->quoteIdentifier('position');
 
         $bind = ['position' => new \Zend_Db_Expr($positionField . ' - 1')];
@@ -221,7 +221,7 @@
      */
     public function getChildrenCount(${{entity}}Id)
     {
-        $select = $this->_getReadAdapter()->select()->from(
+        $select = $this->getConnection()->select()->from(
             $this->getMainTable(),
             'children_count'
         )->where(
@@ -229,5 +229,5 @@
             );
         $bind = ['{{entity}}_id' => ${{entity}}Id];
 
-        return $this->_getReadAdapter()->fetchOne($select, $bind);
+        return $this->getConnection()->fetchOne($select, $bind);
     }

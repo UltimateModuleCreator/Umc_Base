@@ -24,7 +24,12 @@ class Date extends AbstractType
      *
      * @var string
      */
-    protected $adminColumnType = 'datetime';
+    protected $adminColumnType = 'date';
+
+    /**
+     * @var string
+     */
+    protected $columnComponent = 'date';
 
     /**
      * setup script constant name
@@ -46,6 +51,11 @@ class Date extends AbstractType
      * @var string
      */
     protected $editFormType = 'date';
+
+    /**
+     * @var string
+     */
+    protected $filterInput = 'filterDate';
 
     /**
      * get addition option for edit form
@@ -70,5 +80,13 @@ class Date extends AbstractType
     public function getGridHeaderClass()
     {
         return trim('col-period '.parent::getGridHeaderClass());
+    }
+
+    /**
+     * @return string
+     */
+    public function getFilterRangeClass()
+    {
+        return ' class="Magento\Ui\Component\Filters\Type\DateRange"';
     }
 }

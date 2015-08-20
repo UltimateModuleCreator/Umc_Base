@@ -24,7 +24,12 @@ class Country extends AbstractType
      *
      * @var string
      */
-    protected $adminColumnType = 'country';
+    protected $adminColumnType = 'select';
+
+    /**
+     * @var string
+     */
+    protected $columnComponent = 'select';
 
     /**
      * setup script constant name
@@ -48,6 +53,13 @@ class Country extends AbstractType
     protected $editFormType = 'select';
 
     /**
+     * attribute can be searched full text
+     *
+     * @var bool
+     */
+    protected $fullText = true;
+
+    /**
      * get admin column options
      *
      * @return string
@@ -55,7 +67,7 @@ class Country extends AbstractType
     public function getAdminColumnOptions()
     {
         $options = parent::getAdminColumnOptions();
-        $options .= '<argument name="options" xsi:type="options" model="Magento\Config\Model\Config\Source\Locale\Country"/>';
+        $options .= $this->getEol().$this->getPadding(5).'<item name="options" xsi:type="object">'.$this->getSourceModel().'</item>';
         return $options;
     }
 
@@ -70,5 +82,21 @@ class Country extends AbstractType
         $underscore = $this->getUnderscore();
         $options[] = '\'values\' => array_merge([\'\' => \'\'], $this->'.$underscore.'countryOptions->toOptionArray()),';
         return $options;
+    }
+
+    /**
+     * @return array
+     */
+    public function getPlaceholders()
+    {
+        $placeholders = parent::getPlaceholders();
+        $placeholders['{{GridFilterSourceClass}}'] = $this->getSourceModel();
+
+        return $placeholders;
+    }
+
+    public function getSourceModel()
+    {
+        return 'Magento\Config\Model\Config\Source\Locale\Country';
     }
 }

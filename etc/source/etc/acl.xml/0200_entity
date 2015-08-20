@@ -1,1 +1,1 @@
-<resource id="{{Namespace}}_{{Module}}::{{entity}}" title="{{EntitiesLabel}}" sortOrder="{{sort_order}}" />
+<resource id="{{Namespace}}_{{Module}}::{{entity}}" title="{{EntitiesLabel}}" sortOrder="{{sortOrder}}" />

@@ -28,7 +28,7 @@
     protected function {{_}}setPageData()
     {
         $resultPage = $this->getResultPage();
-        $resultPage->setActiveMenu('{{Namespace}}_{{Module}}::{{entity}}');
+        //$resultPage->setActiveMenu('{{Namespace}}_{{Module}}::{{entity}}');
         $resultPage->getConfig()->getTitle()->prepend((__('{{EntitiesLabel}}')));
         return $this;
     }

@@ -17,7 +17,7 @@
  */
 namespace Umc\Base\Model;
 
-use Magento\Framework\Object;
+use Magento\Framework\DataObject;
 
 /**
  * @method Umc setError(\bool $error)
@@ -26,7 +26,7 @@ use Magento\Framework\Object;
  * @method Umc setHtmlMessage(\string $message)
  * @method Umc setGlue(\string $glue)
  */
-class Umc extends Object
+class Umc extends DataObject
 {
     /**
      * indentation

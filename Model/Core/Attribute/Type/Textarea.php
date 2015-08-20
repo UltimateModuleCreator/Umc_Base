@@ -68,4 +68,11 @@ class Textarea extends AbstractType
         }
         return parent::getAdditionalEditFormOptions();
     }
+
+    /**
+     * attribute can be searched full text
+     *
+     * @var bool
+     */
+    protected $fullText = true;
 }

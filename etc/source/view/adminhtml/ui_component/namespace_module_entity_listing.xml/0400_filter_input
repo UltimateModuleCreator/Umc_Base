@@ -1,0 +1,8 @@
+            <filterInput name="{{code}}">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="dataScope" xsi:type="string">{{code}}</item>
+                        <item name="label" xsi:type="string" translate="true">{{Label}}</item>
+                    </item>
+                </argument>
+            </filterInput>

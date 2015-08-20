@@ -51,6 +51,18 @@ interface TypeInterface
     public function getAdminColumnOptions();
 
     /**
+     * @return string
+     */
+    public function getColumnComponent();
+
+    /**
+     * get admin column type
+     *
+     * @return string
+     */
+    public function getAdminColumnType();
+
+    /**
      * get sql type constant
      *
      * @return string
@@ -98,4 +110,19 @@ interface TypeInterface
      * @return bool
      */
     public function getHasOptions();
+
+    /**
+     * @return mixed
+     */
+    public function isFullText();
+
+    /**
+     * @return string
+     */
+    public function getFilterRangeClass();
+
+    /**
+     * @return string
+     */
+    public function getFilterInput();
 }

@@ -1,0 +1,13 @@
+        <column name="{{entity_id}}">
+            <argument name="data" xsi:type="array">
+                <item name="options" xsi:type="object">{{Namespace}}\{{Module}}\Model\Source\{{Entity}}</item>
+                <item name="js_config" xsi:type="array">
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/select</item>
+                </item>
+                <item name="config" xsi:type="array">
+                    <item name="dataType" xsi:type="string">select</item>
+                    <item name="align" xsi:type="string">left</item>
+                    <item name="label" xsi:type="string" translate="true">{{EntityLabel}}</item>
+                </item>
+            </argument>
+        </column>

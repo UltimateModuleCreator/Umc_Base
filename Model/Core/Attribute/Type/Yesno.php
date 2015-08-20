@@ -24,7 +24,12 @@ class Yesno extends AbstractType
      *
      * @var string
      */
-    protected $adminColumnType = 'options';
+    protected $adminColumnType = 'select';
+
+    /**
+     * @var string
+     */
+    protected $columnComponent = 'select';
 
     /**
      * setup script constant name
@@ -55,7 +60,7 @@ class Yesno extends AbstractType
     public function getAdminColumnOptions()
     {
         $options = parent::getAdminColumnOptions();
-        $options .= '<argument name="options" xsi:type="options" model="Magento\Config\Model\Config\Source\Yesno"/>';
+        $options .= $this->getEol().$this->getPadding(5).'<item name="options" xsi:type="object">'.$this->getSourceModel().'</item>';
         return $options;
     }
 
@@ -70,5 +75,20 @@ class Yesno extends AbstractType
         $underscore = $this->getUnderscore();
         $options[] = '\'values\' => $this->'.$underscore.'booleanOptions->toOptionArray(),';
         return $options;
+    }
+
+    protected function getSourceModel()
+    {
+        return 'Magento\Config\Model\Config\Source\Yesno';
+    }
+
+    /**
+     * @return array
+     */
+    public function getPlaceholders()
+    {
+        $placeholders = parent::getPlaceholders();
+        $placeholders['{{GridFilterSourceClass}}'] = $this->getSourceModel();
+        return $placeholders;
     }
 }

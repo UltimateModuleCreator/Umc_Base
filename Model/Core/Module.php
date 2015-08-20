@@ -367,10 +367,10 @@ class Module extends AbstractModel implements ModelInterface
                 '{{version}}'           => $this->getVersion(),
                 '{{sequence}}'          => $this->getSequenceAsString(),
                 '{{module}}'            => $this->getModuleName(true),
-                '{{menu_text}}'         => $this->getMenuText(),
-                '{{menu_sort_order}}'   => $this->getSortOrder(),
+                '{{menuText}}'          => $this->getMenuText(),
+                '{{menuSortOrder}}'     => $this->getSortOrder(),
                 '{{namespace}}'         => $this->getNamespace(true),
-                '{{menu_parent_value}}' => $this->getParentMenuValue(),
+                '{{menuParentValue}}' => $this->getParentMenuValue(),
                 '{{requireJsDialogs}}'  => $this->getRequireJsDialogs(),
             ];
             $this->placeholders = array_merge($this->placeholders, $this->getSettings()->getPlaceholders());

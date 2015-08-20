@@ -49,4 +49,5 @@
     <class id="{{Namespace}}\{{Module}}\Model\Resource\{{Sibling}}\Collection" class="{{Namespace}}\{{Module}}\Model\Resource\{{Sibling}}\Collection" alias="{{Sibling}}Collection" />
     <class id="{{Namespace}}\{{Module}}\Model\Resource\{{Sibling}}\CollectionFactory" class="{{Namespace}}\{{Module}}\Model\Resource\{{Sibling}}\CollectionFactory" alias="{{Sibling}}CollectionFactory" />
     <class id="{{siblingTabParent}}" class="{{siblingTabParent}}" alias="{{siblingTabParentAlias}}" />
+    <class id="{{Namespace}}\{{Module}}\Model\Resource\{{Entity}}\Collection" class="{{Namespace}}\{{Module}}\Model\Resource\{{Entity}}\Collection" alias="{{Entity}}Collection" />
 </classes>

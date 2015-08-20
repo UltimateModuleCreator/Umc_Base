@@ -17,10 +17,10 @@
  */
 namespace Umc\Base\Model;
 
-use Magento\Framework\Object;
+use Magento\Framework\DataObject;
 use Magento\Framework\Config\Reader\Filesystem;
 
-class Config extends Object
+class Config extends DataObject
 {
     /**
      * config

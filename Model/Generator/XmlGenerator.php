@@ -29,6 +29,7 @@ class XmlGenerator extends AbstractGenerator implements GeneratorInterface
     /**
      * @param string $content
      * @return string
+     * @throws \Exception
      */
     public function postProcess($content)
     {

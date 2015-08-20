@@ -24,7 +24,12 @@ class Dropdown extends AbstractType
      *
      * @var string
      */
-    protected $adminColumnType = 'options';
+    protected $adminColumnType = 'select';
+
+    /**
+     * @var string
+     */
+    protected $columnComponent = 'select';
 
     /**
      * setup script constant name
@@ -62,7 +67,15 @@ class Dropdown extends AbstractType
     public function getAdminColumnOptions()
     {
         $options = parent::getAdminColumnOptions();
+        $options .= $this->getEol().$this->getPadding(5).'<item name="options" xsi:type="object">'.$this->getSourceModel().'</item>';
+        return $options;
+    }
 
+    /**
+     * @return string
+     */
+    protected function getSourceModel()
+    {
         $attribute  = $this->getAttribute();
         $entity     = $attribute->getEntity();
         $module     = $entity->getModule();
@@ -73,8 +86,7 @@ class Dropdown extends AbstractType
             $entity->getNameSingular(true).
             '\\Source\\'.
             $attribute->getCodeCamelCase(true);
-        $options .= '<argument name="options" xsi:type="options" model="'.$model.'"/>';
-        return $options;
+        return $model;
     }
 
     /**
@@ -117,4 +129,22 @@ class Dropdown extends AbstractType
         }
         return '';
     }
+
+    /**
+     * @return array
+     */
+    public function getPlaceholders()
+    {
+        $placeholders = parent::getPlaceholders();
+        $attribute = $this->getAttribute();
+        $entity = $attribute->getEntity();
+        $module = $entity->getModule();
+        $placeholders['{{GridFilterSourceClass}}'] = $module->getNamespace().'\\'.
+            $module->getModuleName().'\\Model\\'.
+            $entity->getNameSingular(true).'\\Source\\'.
+            $attribute->getCodeCamelCase(true);
+
+        return $placeholders;
+    }
+
 }

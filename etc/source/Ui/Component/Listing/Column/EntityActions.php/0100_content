@@ -1,0 +1,40 @@
+
+    /**
+     * Prepare Data Source
+     *
+     * @param array $dataSource
+     * @return void
+     */
+    public function prepareDataSource(array & $dataSource)
+    {
+        if (isset($dataSource['data']['items'])) {
+            foreach ($dataSource['data']['items'] as & $item) {
+                if (isset($item['{{entity}}_id'])) {
+                    $item[$this->getData('name')] = [
+                        'edit' => [
+                            'href' => $this->{{_}}urlBuilder->getUrl(
+                                static::URL_PATH_EDIT,
+                                [
+                                    '{{entity}}_id' => $item['{{entity}}_id']
+                                ]
+                            ),
+                            'label' => __('Edit')
+                        ],
+                        'delete' => [
+                            'href' => $this->{{_}}urlBuilder->getUrl(
+                                static::URL_PATH_DELETE,
+                                [
+                                    '{{entity}}_id' => $item['{{entity}}_id']
+                                ]
+                            ),
+                            'label' => __('Delete'),
+                            'confirm' => [
+                                'title' => __('Delete "${ $.$data.{{nameAttributeCode}} }"'),
+                                'message' => __('Are you sure you wan\'t to delete the {{EntityLabel}} "${ $.$data.{{nameAttributeCode}} }" ?')
+                            ]
+                        ]
+                    ];
+                }
+            }
+        }
+    }

@@ -284,7 +284,7 @@
     /**
      * Get {{EntityLabel}} {{NameAttributeLabel}}
      *
-     * @param \Magento\Framework\Object $node
+     * @param \Magento\Framework\DataObject $node
      * @return string
      */
     public function buildNodeName($node)
@@ -299,7 +299,7 @@
      */
     protected function {{_}}is{{Entity}}Moveable($node)
     {
-        $options = new {{class Magento\Framework\Object}}(['is_moveable' => true, '{{entity}}' => $node]);
+        $options = new {{class Magento\Framework\DataObject}}(['is_moveable' => true, '{{entity}}' => $node]);
         $this->_eventManager->dispatch('adminhtml_{{namespace}}_{{module}}_{{entity}}_tree_is_moveable', ['options' => $options]);
         return $options->getIsMoveable();
     }
@@ -337,7 +337,7 @@
      */
     public function canAddRoot{{Entity}}()
     {
-        $options = new {{class Magento\Framework\Object}}(['is_allow' => true]);
+        $options = new {{class Magento\Framework\DataObject}}(['is_allow' => true]);
         $this->_eventManager->dispatch(
             'adminhtml_{{namespace}}_{{module}}_{{entity}}_tree_can_add_root_{{entity}}',
             ['{{entity}}' => $this->get{{Entity}}(), 'options' => $options]
@@ -353,7 +353,7 @@
      */
     public function canAddChild{{Entity}}()
     {
-        $options = new {{class Magento\Framework\Object}}(['is_allow' => true]);
+        $options = new {{class Magento\Framework\DataObject}}(['is_allow' => true]);
         $this->_eventManager->dispatch(
             'adminhtml_{{namespace}}_{{module}}_{{entity}}_tree_can_add_child_{{entity}}',
             ['{{entity}}' => $this->get{{Entity}}(), 'options' => $options]

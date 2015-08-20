@@ -1,4 +1,3 @@
-{{editFormFields}}
         ${{entity}}Data = $this->_session->getData('{{namespace}}_{{module}}_{{entity}}_data', true);
         if (${{entity}}Data) {
             ${{entity}}->addData(${{entity}}Data);

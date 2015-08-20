@@ -46,4 +46,11 @@ class Text extends AbstractType
      * @var string
      */
     protected $editFormType = 'text';
+
+    /**
+     * attribute can be searched full text
+     *
+     * @var bool
+     */
+    protected $fullText = true;
 }

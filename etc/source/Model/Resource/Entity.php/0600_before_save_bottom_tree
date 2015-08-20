@@ -25,7 +25,7 @@
                 $object->setPath($object->getPath() . '/');
             }
             if (!$object->getInitialSetupFlag()) {
-                $this->_getWriteAdapter()->update(
+                $this->getConnection()->update(
                     $this->getMainTable(),
                     ['children_count' => new \Zend_Db_Expr('children_count+1')],
                     ['{{entity}}_id IN(?)' => $toUpdateChild]

@@ -30,6 +30,7 @@ class CsvGenerator extends AbstractGenerator implements GeneratorInterface
     {
         $parts = explode($this->getEol(), $content);
         asort($parts);
+        $parts = array_unique($parts);
         //remove empty lines
         $parts = array_diff($parts, ['', '"",""']);
         return implode($this->getEol(), $parts).$this->getEol();
