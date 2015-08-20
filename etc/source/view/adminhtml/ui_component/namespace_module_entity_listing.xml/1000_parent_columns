@@ -1,4 +1,4 @@
-        <column name="{{entity_id}}">
+        <column name="{{entity}}_id">
             <argument name="data" xsi:type="array">
                 <item name="options" xsi:type="object">{{Namespace}}\{{Module}}\Model\Source\{{Entity}}</item>
                 <item name="js_config" xsi:type="array">
