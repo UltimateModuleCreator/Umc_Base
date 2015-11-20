@@ -195,7 +195,6 @@ define([
             var that = this;
             $(this.options.entityContainer).append(mageTemplate(this.options.entityTemplate)({entity_id:this.entityIndex}));
             var newEntityContainer = $('#entity-container-' + this.entityIndex);
-            this.cssFix(newEntityContainer);
             this.registerEntity(newEntityContainer, false);
             $(this.options.tabsSelector).tabs("option", "active", this.options.entityTabIndex);
             $('html, body').animate({
@@ -360,7 +359,6 @@ define([
             };
             $(this.getAttributesContainer()).append(mageTemplate(this.options.attributeTemplate)(vars));
             var newAttributeContainer = $('#attribute_' + this.getIndex() + '_' + this.attributeIndex);
-            this.module.cssFix(newAttributeContainer);
             this.registerAttribute(newAttributeContainer);
             this.initAttributesSort(true);
             $(this.getAttributesContainer().parent()).collapse('show');
