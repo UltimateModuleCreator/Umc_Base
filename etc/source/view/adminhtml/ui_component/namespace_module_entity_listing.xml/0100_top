@@ -1,4 +1,4 @@
-<listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../Magento/Ui/etc/ui_configuration.xsd">
+<listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
     <argument name="data" xsi:type="array">
         <item name="js_config" xsi:type="array">
             <item name="provider" xsi:type="string">{{namespace}}_{{module}}_{{entity}}_listing.{{namespace}}_{{module}}_{{entity}}_listing_data_source</item>
@@ -36,22 +36,19 @@
         <argument name="data" xsi:type="array">
             <item name="config" xsi:type="array">
                 <item name="template" xsi:type="string">ui/grid/toolbar</item>
+                <item name="stickyTmpl" xsi:type="string">ui/grid/sticky/toolbar</item>
             </item>
         </argument>
         <bookmark name="bookmarks">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="component" xsi:type="string">Magento_Ui/js/grid/controls/bookmarks/bookmarks</item>
-                    <item name="displayArea" xsi:type="string">dataGridActions</item>
                     <item name="storageConfig" xsi:type="array">
-                        <item name="saveUrl" xsi:type="url" path="mui/bookmark/save"/>
-                        <item name="deleteUrl" xsi:type="url" path="mui/bookmark/delete"/>
                         <item name="namespace" xsi:type="string">{{namespace}}_{{module}}_{{entity}}_listing</item>
                     </item>
                 </item>
             </argument>
         </bookmark>
-        <container name="columns_controls">
+        <component name="columns_controls">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="columnsData" xsi:type="array">
@@ -61,12 +58,17 @@
                     <item name="displayArea" xsi:type="string">dataGridActions</item>
                 </item>
             </argument>
-        </container>
+        </component>
+        <exportButton name="export_button">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="selectProvider" xsi:type="string">{{namespace}}_{{module}}_{{entity}}_listing.{{namespace}}_{{module}}_{{entity}}_listing.{{namespace}}_{{module}}_{{entity}}_columns.ids</item>
+                </item>
+            </argument>
+        </exportButton>
         <filterSearch name="fulltext">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="component" xsi:type="string">Magento_Ui/js/grid/search/search</item>
-                    <item name="displayArea" xsi:type="string">dataGridFilters</item>
                     <item name="provider" xsi:type="string">{{namespace}}_{{module}}_{{entity}}_listing.{{namespace}}_{{module}}_{{entity}}_listing_data_source</item>
                     <item name="chipsProvider" xsi:type="string">{{namespace}}_{{module}}_{{entity}}_listing.{{namespace}}_{{module}}_{{entity}}_listing.listing_top.listing_filters_chips</item>
                     <item name="storageConfig" xsi:type="array">
@@ -76,3 +78,31 @@
                 </item>
             </argument>
         </filterSearch>
+        <filters name="listing_filters">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="columnsProvider" xsi:type="string">{{namespace}}_{{module}}_{{entity}}_listing.{{namespace}}_{{module}}_{{entity}}_listing.{{namespace}}_{{module}}_{{entity}}_columns</item>
+                    <item name="storageConfig" xsi:type="array">
+                        <item name="provider" xsi:type="string">{{namespace}}_{{module}}_{{entity}}_listing.{{namespace}}_{{module}}_{{entity}}_listing.listing_top.bookmarks</item>
+                        <item name="namespace" xsi:type="string">current.filters</item>
+                    </item>
+                    <item name="templates" xsi:type="array">
+                        <item name="filters" xsi:type="array">
+                            <item name="select" xsi:type="array">
+                                <item name="component" xsi:type="string">Magento_Ui/js/form/element/ui-select</item>
+                                <item name="template" xsi:type="string">ui/grid/filters/elements/ui-select</item>
+                            </item>
+                        </item>
+                    </item>
+                    <item name="childDefaults" xsi:type="array">
+                        <item name="provider" xsi:type="string">{{namespace}}_{{module}}_{{entity}}_listing.{{namespace}}_{{module}}_{{entity}}_listing.listing_top.listing_filters</item>
+                        <item name="imports" xsi:type="array">
+                            <item name="visible" xsi:type="string">{{namespace}}_{{module}}_{{entity}}_listing.{{namespace}}_{{module}}_{{entity}}_listing.{{namespace}}_{{module}}_{{entity}}_columns.${ $.index }:visible</item>
+                        </item>
+                    </item>
+                </item>
+                <item name="observers" xsi:type="array">
+                    <item name="column" xsi:type="string">column</item>
+                </item>
+            </argument>
+        </filters>

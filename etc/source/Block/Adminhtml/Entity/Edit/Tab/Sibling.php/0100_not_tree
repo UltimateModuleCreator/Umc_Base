@@ -21,7 +21,7 @@
      */
     protected function _prepareCollection()
     {
-        /** @var \{{Namespace}}\{{Module}}\Model\Resource\{{Sibling}}\Collection $collection */
+        /** @var \{{Namespace}}\{{Module}}\Model\ResourceModel\{{Sibling}}\Collection $collection */
         $collection = $this->{{_}}{{sibling}}CollectionFactory->create();
         if ($this->get{{Entity}}()->getId()) {
             $constraint = 'related.{{entity}}_id='.$this->get{{Entity}}()->getId();

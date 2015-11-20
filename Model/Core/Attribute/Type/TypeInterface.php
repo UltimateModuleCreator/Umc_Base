@@ -19,6 +19,17 @@ namespace Umc\Base\Model\Core\Attribute\Type;
 
 use Umc\Base\Model\Core\Attribute;
 
+/**
+ * @method string getAdminColumnType()
+ * @method string getColumnComponent()
+ * @method string getEditFormType()
+ * @method string getFilterType()
+ * @method bool getFullText()
+ * @method string getInlineEditType()
+ * @method bool getMulti()
+ * @method string getSetupLength()
+ * @method string getSqlTypeConst()
+ */
 interface TypeInterface
 {
     /**
@@ -37,13 +48,6 @@ interface TypeInterface
     public function setAttribute(Attribute $attribute);
 
     /**
-     * check if attribute is multiple select
-     *
-     * @return bool
-     */
-    public function isMulti();
-
-    /**
      * get admin column options
      *
      * @return string
@@ -53,35 +57,7 @@ interface TypeInterface
     /**
      * @return string
      */
-    public function getColumnComponent();
-
-    /**
-     * get admin column type
-     *
-     * @return string
-     */
-    public function getAdminColumnType();
-
-    /**
-     * get sql type constant
-     *
-     * @return string
-     */
-    public function getSqlTypeConst();
-
-    /**
-     * get sql setup lenth
-     *
-     * @return string
-     */
-    public function getSetupLength();
-
-    /**
-     * get code for admin add/edit form
-     *
-     * @return string
-     */
-    public function getEditFormField();
+    public function getAdminColumnConfig();
 
     /**
      * get class for grid header
@@ -112,11 +88,6 @@ interface TypeInterface
     public function getHasOptions();
 
     /**
-     * @return mixed
-     */
-    public function isFullText();
-
-    /**
      * @return string
      */
     public function getFilterRangeClass();
@@ -125,4 +96,14 @@ interface TypeInterface
      * @return string
      */
     public function getFilterInput();
+
+    /**
+     * @return string
+     */
+    public function getEditFormField();
+
+    /**
+     * @return string
+     */
+    public function getGridDataType();
 }

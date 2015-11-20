@@ -19,16 +19,29 @@ namespace Umc\Base\Model\Processor;
 
 use Umc\Base\Model\Core\AbstractModel;
 use Umc\Base\Model\Core\Module;
-use Umc\Base\Model\Processor\ProcessorInterface;
+use Umc\Base\Model\Provider\Processor\ProviderInterface;
 
 abstract class AbstractProcessor implements ProcessorInterface
 {
+    /**
+     * @var ProviderInterface
+     */
+    protected $modelProvider;
+
     /**
      * current model
      *
      * @var AbstractModel
      */
     protected $model;
+
+    /**
+     * @param ProviderInterface $modelProvider
+     */
+    public function __construct(ProviderInterface $modelProvider)
+    {
+        $this->modelProvider = $modelProvider;
+    }
 
     /**
      * process element

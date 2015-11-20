@@ -23,6 +23,7 @@ use Magento\Framework\ObjectManagerInterface;
 use Umc\Base\Model\Config\ClassConfig;
 use Umc\Base\Model\Core\AbstractModel;
 use Umc\Base\Model\Processor\ProcessorInterface;
+use Umc\Base\Model\Provider\ProviderInterface;
 
 class ClassGenerator extends AbstractGenerator
 {
@@ -123,6 +124,9 @@ class ClassGenerator extends AbstractGenerator
      */
     protected $license;
 
+    /**
+     * @var string
+     */
     protected $parentConstructExtraParams = '';
 
     /**
@@ -133,7 +137,10 @@ class ClassGenerator extends AbstractGenerator
      * @param ModuleReader $moduleReader
      * @param IoFile $io
      * @param BaseTypes $types
+     * @param ProviderInterface $modelProvider
+     * @param array $defaultScope
      * @param array $processors
+     * @param array $data
      */
     public function __construct(
         ClassConfig $classConfig,
@@ -141,12 +148,15 @@ class ClassGenerator extends AbstractGenerator
         ModuleReader $moduleReader,
         IoFile $io,
         BaseTypes $types,
-        array $processors = []
+        ProviderInterface $modelProvider,
+        $defaultScope,
+        array $processors = [],
+        array $data = []
     )
     {
         $this->classConfig = $classConfig;
         $this->baseTypes   = $types->getTypes();
-        parent::__construct($objectManager, $moduleReader, $io, $processors);
+        parent::__construct($objectManager, $moduleReader, $io, $modelProvider, $defaultScope, $processors, $data);
     }
 
     /**

@@ -77,7 +77,7 @@
     }
 
     /**
-     * @return \{{Namespace}}\{{Module}}\Model\Resource\{{Entity}}\Collection
+     * @return \{{Namespace}}\{{Module}}\Model\ResourceModel\{{Entity}}\Collection
      */
     public function get{{Entity}}Collection()
     {

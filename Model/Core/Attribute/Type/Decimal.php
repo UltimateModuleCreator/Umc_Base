@@ -19,24 +19,5 @@ namespace Umc\Base\Model\Core\Attribute\Type;
 
 class Decimal extends Int
 {
-    /**
-     * admin column type
-     *
-     * @var string
-     */
-    protected $adminColumnType = 'number';
 
-    /**
-     * setup script constant name
-     *
-     * @var string
-     */
-    protected $sqlTypeConst = 'TYPE_DECIMAL';
-
-    /**
-     * setup script length
-     *
-     * @var string
-     */
-    protected $setupLength = '\'12,4\'';
 }

@@ -20,46 +20,6 @@ namespace Umc\Base\Model\Core\Attribute\Type;
 class Dropdown extends AbstractType
 {
     /**
-     * admin column type
-     *
-     * @var string
-     */
-    protected $adminColumnType = 'select';
-
-    /**
-     * @var string
-     */
-    protected $columnComponent = 'select';
-
-    /**
-     * setup script constant name
-     *
-     * @var string
-     */
-    protected $sqlTypeConst = 'TYPE_INTEGER';
-
-    /**
-     * setup script length
-     *
-     * @var string
-     */
-    protected $setupLength = 'null';
-
-    /**
-     * edit for field type
-     *
-     * @var string
-     */
-    protected $editFormType = 'select';
-
-    /**
-     * attribute has options
-     *
-     * @var bool
-     */
-    protected $hasOptions = true;
-
-    /**
      * get admin column options
      *
      * @return string

@@ -1,8 +1,8 @@
-    <type name="{{Namespace}}\{{Module}}\Model\Resource\{{Entity}}\Grid\Collection">
+    <type name="{{Namespace}}\{{Module}}\Model\ResourceModel\{{Entity}}\Grid\Collection">
         <arguments>
             <argument name="mainTable" xsi:type="string">{{namespace}}_{{module}}_{{entity}}</argument>
             <argument name="eventPrefix" xsi:type="string">{{namespace}}_{{module}}_{{entity}}_grid_collection</argument>
             <argument name="eventObject" xsi:type="string">{{entity}}_grid_collection</argument>
-            <argument name="resourceModel" xsi:type="string">{{Namespace}}\{{Module}}\Model\Resource\{{Entity}}</argument>
+            <argument name="resourceModel" xsi:type="string">{{Namespace}}\{{Module}}\Model\ResourceModel\{{Entity}}</argument>
         </arguments>
     </type>

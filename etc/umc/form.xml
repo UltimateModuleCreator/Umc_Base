@@ -17,9 +17,9 @@
  * @author    Marius Strajeru <ultimate.module.creator@gmail.com>
  */
 -->
-<forms xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="form.xsd">
+<forms xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Umc_Base:etc/umc/form.xsd">
     <form id="umc_settings">
-        <fieldset id="settings" sort="10" collapsible="true" translate="label">
+        <fieldset id="settings" sort="10" collapsible="false" translate="label">
             <label>Module Settings</label>
             <field id="qualified" type="select" required="true" sort="10" system="true" translate="label tooltip">
                 <label>Fully qualified class names</label>
@@ -44,13 +44,13 @@
         </fieldset>
     </form>
     <form id="umc_module">
-        <fieldset id="general" sort="10" collapsible="true" translate="label">
+        <fieldset id="general" sort="10" collapsible="false" translate="label">
             <label>Module Information</label>
-            <field id="namespace" type="text" required="true" sort="10" system="true" translate="label tooltip">
+            <field id="namespace" type="text" required="true" sort="10" system="true" translate="label tooltip" class="validate-module-name">
                 <label>Namespace</label>
                 <tooltip>This is the folder name of your new extension. Your company name should go here. Use only letters and numbers. Start with a capital letter.</tooltip>
             </field>
-            <field id="module_name" type="text" required="true" sort="20" system="false" translate="label tooltip">
+            <field id="module_name" type="text" required="true" sort="20" system="false" translate="label tooltip" class="validate-module-name">
                 <label>Module name</label>
                 <tooltip><![CDATA[This is your extension/module name. It should be something meaningful and not very long.<br />Try to use a noun in singular form. Start with a capital letter.]]></tooltip>
             </field>
@@ -110,7 +110,7 @@
             <field id="add_created_to_grid" type="select" sort="30" required="true" system="true" translate="label tooltip">
                 <label>Add 'Created at' to admin grid</label>
                 <tooltip><![CDATA[The entities created with UMC will have a field called 'created_at' with the creation date of any entity instance.<br />If this is set to 'Yes' the 'Created at' field will be added to the admin grid.]]></tooltip>
-                <source>Magento\Config\Model\Config\Source\Yesno</source>
+                <source>\Umc\Base\Model\Source\Attribute\Grid</source>
                 <depends id="is_tree">
                     <depend id="is_tree" type="entity">
                         <val id="0">0</val>
@@ -120,6 +120,16 @@
             <field id="add_updated_to_grid" type="select" sort="40" required="true" system="true" translate="label tooltip">
                 <label>Add 'Updated at' to admin grid</label>
                 <tooltip><![CDATA[The entities created with UMC will have a field called 'updated_at' with the last update date of any entity instance.<br />If this is set to 'Yes' the 'Updated at' field will be added to the admin grid.]]></tooltip>
+                <source>\Umc\Base\Model\Source\Attribute\Grid</source>
+                <depends id="is_tree">
+                    <depend id="is_tree" type="entity">
+                        <val id="0">0</val>
+                    </depend>
+                </depends>
+            </field>
+            <field id="inline_edit" type="select" sort="20" required="true" system="true" reloader-class="entity-reloader attribute-reloader" translate="label tooltip">
+                <label>Inline edit</label>
+                <tooltip><![CDATA[The admin grid system allows inline editing for listed entities. Setting this to Yes will enable this feature for your module]]></tooltip>
                 <source>Magento\Config\Model\Config\Source\Yesno</source>
                 <depends id="is_tree">
                     <depend id="is_tree" type="entity">
@@ -157,7 +167,6 @@
                     <depend id="type" type="attribute">
                         <val id="text">text</val>
                         <val id="decimal">decimal</val>
-                        <val id="date">date</val>
                         <val id="int">int</val>
                     </depend>
                 </depends>
@@ -202,10 +211,10 @@
                 <label>Note</label>
                 <tooltip><![CDATA[This will be added as a comment under the field in the admin add/edit form.]]></tooltip>
             </field>
-            <field id="admin_grid" required="true" type="select" sort="80" system="true" translate="label tooltip">
+            <field id="admin_grid" required="true" type="select" sort="80" system="true" reloader-class="attribute-reloader" translate="label tooltip">
                 <label>Show in admin grid</label>
                 <tooltip><![CDATA[This allows you to display the attribute as a column in the admin grid of the entity. The attribute set to behave as 'Name' will be included by default in the grid.]]></tooltip>
-                <source>\Magento\Config\Model\Config\Source\Yesno</source>
+                <source>\Umc\Base\Model\Source\Attribute\Grid</source>
                 <depends id="type">
                     <depend id="is_tree" type="entity">
                         <val id="0">0</val>
@@ -218,6 +227,55 @@
                         <val id="dropdown">dropdown</val>
                         <val id="country">country</val>
                         <val id="yesno">yesno</val>
+                    </depend>
+                </depends>
+            </field>
+            <field id="admin_grid_filter" required="true" type="select" sort="85" system="true" translate="label tooltip">
+                <label>Make filtrable in admin grid</label>
+                <tooltip><![CDATA[If this is set to yes, your field will be filtrable in the admin grid]]></tooltip>
+                <source>\Magento\Config\Model\Config\Source\Yesno</source>
+                <depends id="admin_grid">
+                    <depend id="is_tree" type="entity">
+                        <val id="0">0</val>
+                    </depend>
+                    <depend id="type" type="attribute">
+                        <val id="text">text</val>
+                        <val id="decimal">decimal</val>
+                        <val id="date">date</val>
+                        <val id="int">int</val>
+                        <val id="dropdown">dropdown</val>
+                        <val id="country">country</val>
+                        <val id="yesno">yesno</val>
+                    </depend>
+                    <depend id="admin_grid" type="attribute">
+                        <val id="1">1</val>
+                        <val id="2">2</val>
+                    </depend>
+                </depends>
+            </field>
+            <field id="inline_edit" required="true" type="select" sort="87" system="true" translate="label tooltip">
+                <label>Edit inline in grid</label>
+                <tooltip><![CDATA[if you enable this you can edit the value of this field directly from the grid]]></tooltip>
+                <source>\Magento\Config\Model\Config\Source\Yesno</source>
+                <depends id="admin_grid">
+                    <depend id="is_tree" type="entity">
+                        <val id="0">0</val>
+                    </depend>
+                    <depend id="inline_edit" type="entity">
+                        <val id="1">1</val>
+                    </depend>
+                    <depend id="type" type="attribute">
+                        <val id="text">text</val>
+                        <val id="decimal">decimal</val>
+                        <val id="date">date</val>
+                        <val id="int">int</val>
+                        <val id="dropdown">dropdown</val>
+                        <val id="country">country</val>
+                        <val id="yesno">yesno</val>
+                    </depend>
+                    <depend id="admin_grid" type="attribute">
+                        <val id="1">1</val>
+                        <val id="2">2</val>
                     </depend>
                 </depends>
             </field>

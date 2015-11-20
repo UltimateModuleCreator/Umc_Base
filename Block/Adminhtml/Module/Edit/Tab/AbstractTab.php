@@ -148,7 +148,7 @@ class AbstractTab extends GenericForm
                 }
                 if ($this->_scopeConfig->isSetFlag(self::XML_TOOLTIPS_ENABLED_PATH)) {
                     if (isset($fieldSettings['tooltip']) && $fieldType != 'hidden') {
-                        $fieldConfig['after_element_html'] = $this->getTooltipHtml(
+                        $fieldConfig['before_element_html'] = $this->getTooltipHtml(
                             $this->model->getEntityCode(),
                             $fieldSettings['id']
                         );
@@ -158,6 +158,7 @@ class AbstractTab extends GenericForm
                     $fieldConfig['note'] = $fieldSettings['note'];
                 }
                 $fieldConfig['class'] = (($index % 2 == 0 ) ? 'even' : 'odd').' '.$hasTooltip;
+                $fieldConfig['css_class'] = $fieldConfig['class'];
                 $index++;
 
                 if (isset($fieldSettings['class'])) {

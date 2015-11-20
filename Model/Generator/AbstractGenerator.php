@@ -23,7 +23,9 @@ use Magento\Framework\ObjectManagerInterface;
 use Umc\Base\Model\Core\AbstractModel;
 use Umc\Base\Model\Core\Module;
 use Umc\Base\Model\Processor\ProcessorInterface;
+use Umc\Base\Model\Provider\ProviderInterface;
 use Umc\Base\Model\Umc;
+
 
 class AbstractGenerator extends Umc implements GeneratorInterface
 {
@@ -67,7 +69,7 @@ class AbstractGenerator extends Umc implements GeneratorInterface
      *
      * @var string
      */
-    protected $defaultScope = 'global';
+    protected $defaultScope;
 
     /**
      * config to parse
@@ -112,24 +114,38 @@ class AbstractGenerator extends Umc implements GeneratorInterface
     protected $io;
 
     /**
+     * @var ProviderInterface
+     */
+    protected $modelProvider;
+
+    /**
      * cosntructor
      *
      * @param ObjectManagerInterface $objectManager
      * @param ModuleReader $moduleReader
      * @param IoFile $io
+     * @param ProviderInterface $modelProvider,
+     * @param string $defaultScope
      * @param array $processors
+     * @param array $data
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
         ModuleReader $moduleReader,
         IoFile $io,
-        array $processors = []
+        ProviderInterface $modelProvider,
+        $defaultScope = 'global',
+        array $processors = [],
+        array $data = []
     )
     {
         $this->objectManager    = $objectManager;
         $this->moduleReader     = $moduleReader;
         $this->io               = $io;
         $this->processors       = $processors;
+        $this->defaultScope     = $defaultScope;
+        $this->modelProvider    = $modelProvider;
+        parent::__construct($data);
     }
 
     /**
@@ -335,8 +351,6 @@ class AbstractGenerator extends Umc implements GeneratorInterface
      */
     protected function getModelsForProcessor()
     {
-        return [
-            $this->module
-        ];
+        return $this->modelProvider->setModule($this->module)->getModels();
     }
 }

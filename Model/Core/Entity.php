@@ -27,11 +27,16 @@ use Umc\Base\Model\Core\Entity\Type\Factory as TypeFactory;
 use Umc\Base\Model\Core\Entity\Type\TypeInterface;
 use Umc\Base\Model\Core\Relation\Type\ParentRelation;
 use Umc\Base\Model\Core\Relation\Type\SiblingRelation;
+use Umc\Base\Model\Source\Attribute\Grid; //TODO: move grid class outside the attribute folder
 
 /**
  * @method int getSortOrder()
  * @method int getIsTree()
  * @method Entity setIsParent(\bool $parent)
+ * @method Entity setNameSingular(\string $name)
+ * @method bool getInlineEdit()
+ * @method bool getAddCreatedToGrid()
+ * @method bool getAddUpdatedToGrid()
  */
 class Entity extends AbstractModel implements ModelInterface
 {
@@ -456,6 +461,8 @@ class Entity extends AbstractModel implements ModelInterface
                 '{{quickSaveAttributes}}'   => $this->getQuickSaveAttributes(),
                 '{{clearAttributes}}'       => $this->getClearAttributes(),
                 '{{fullTextFields}}'        => $this->getFullTextFields(),
+                '{{createdAtHidden}}'       => $this->getCreatedAtHidden(),
+                '{{updatedAtHidden}}'       => $this->getUpdatedAtHidden(),
             ];
             $this->placeholders = array_merge($this->placeholders, $this->getTypeInstance()->getPlaceholders());
             $this->placeholders = array_merge($this->getModule()->getPlaceholders(), $this->placeholders);
@@ -567,6 +574,9 @@ class Entity extends AbstractModel implements ModelInterface
                 $attributes[] = $attribute->getCode();
             }
         }
+        if (!count($attributes)) {
+            return '[]';
+        }
         return '[\''.implode('\', \'', $attributes).'\']';
     }
 
@@ -656,6 +666,7 @@ class Entity extends AbstractModel implements ModelInterface
     /**
      * TODO: add events for different types
      * @return string
+     * @deprecated
      */
     public function getUninstallLines()
     {
@@ -689,6 +700,7 @@ class Entity extends AbstractModel implements ModelInterface
     {
         $attributes = [];
         if ($this->getIsTree()) {
+            /** @var Attribute $attribute */
             $attribute = $this->attributeFactory->create();
             $attribute->setCode('parent_id');
             $attribute->setLabel('Parent id');
@@ -940,5 +952,50 @@ class Entity extends AbstractModel implements ModelInterface
             }
         }
         return "'".implode("','", array_keys($fields))."'";
+    }
+
+    /**
+     * @return string
+     */
+    public function getCreatedAtHidden()
+    {
+        if ($this->getAddCreatedToGrid() == Grid::HIDDEN) {
+            return $this->getEol().$this->getPadding(5).'<item name="visible" xsi:type="boolean">false</item>';
+        }
+        return '';
+    }
+
+    /**
+     * @return string
+     */
+    public function getUpdatedAtHidden()
+    {
+        if ($this->getAddUpdatedToGrid() == Grid::HIDDEN) {
+            return $this->getEol().$this->getPadding(5).'<item name="visible" xsi:type="boolean">false</item>';
+        }
+        return '';
+    }
+
+    /**
+     * @return array|bool
+     */
+    public function getRequireJsConfig()
+    {
+        if (!$this->getIsTree()) {
+            return false;
+        }
+        $config = [];
+        $module = $this->getModule();
+        $config[] = $this->getPadding(3).$this->getNameSingular().'Form: \''.$this->getModule()->getExtensionName().'/'.$this->getNameSingular().'/form\'';
+        if ($this->hasRelationType(SiblingRelation::RELATION_TYPE_SIBLING)) {
+            $config[] = $this->getPadding(3).
+                "new".
+                $this->getNameSingular(true)."Dialog: '".
+                $module->getNamespace().'_'.
+                $module->getModuleName()."/".
+                $this->getNameSingular()."/new-".
+                $this->getNameSingular()."-dialog'";
+        }
+        return $config;
     }
 }

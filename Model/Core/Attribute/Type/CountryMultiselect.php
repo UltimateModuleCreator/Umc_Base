@@ -23,40 +23,6 @@ class CountryMultiselect extends AbstractType
      * @var string
      */
     const OPTION_SEPARATOR = "\n";
-    /**
-     * setup script constant name
-     *
-     * @var string
-     */
-    protected $sqlTypeConst = 'TYPE_TEXT';
-
-    /**
-     * setup script length
-     *
-     * @var string
-     */
-    protected $setupLength = '255';
-
-    /**
-     * attribute is multiple select
-     *
-     * @var bool
-     */
-    protected $multi = true;
-
-    /**
-     * edit for field type
-     *
-     * @var string
-     */
-    protected $editFormType = 'multiselect';
-
-    /**
-     * attribute can be searched full text
-     *
-     * @var bool
-     */
-    protected $fullText = true;
 
     /**
      * get additional options for edit form

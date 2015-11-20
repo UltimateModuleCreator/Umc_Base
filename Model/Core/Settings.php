@@ -23,6 +23,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
  * @method string getLicense()
  * @method bool getQualified()
  * @method bool getUnderscore()
+ * @method $this setUnderscore()
  * @method bool getAnnotation()
  */
 class Settings extends AbstractModel implements ModelInterface

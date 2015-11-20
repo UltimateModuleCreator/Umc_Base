@@ -17,7 +17,7 @@
  * @author    Marius Strajeru <ultimate.module.creator@gmail.com>
  */
 -->
-<classes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="class.xsd">
+<classes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Umc_Base:etc/umc/class.xsd">
     <class id="Magento\Backend\Block\Widget\Grid\Container" class="Magento\Backend\Block\Widget\Grid\Container" alias="GridContainer"/>
     <class id="Magento\Backend\Block\Widget\Grid" class="Magento\Backend\Block\Widget\Grid" alias="WidgetGrid" />
     <class id="Magento\Backend\Block\Widget\Tabs" class="Magento\Backend\Block\Widget\Tabs" alias="WidgetTabs" />
@@ -40,14 +40,14 @@
     <class id="Magento\Framework\DB\Helper" class="Magento\Framework\DB\Helper" alias="DbHelper" />
     <class id="Magento\Framework\Json\EncoderInterface" class="Magento\Framework\Json\EncoderInterface" alias="JsonEncoderInterface" />
     <class id="Magento\Backend\Model\Auth\Session" class="Magento\Backend\Model\Auth\Session" alias="AuthSession" />
-    <class id="{{Namespace}}\{{Module}}\Model\Resource\{{Entity}}\CollectionFactory" class="{{Namespace}}\{{Module}}\Model\Resource\{{Entity}}\CollectionFactory" alias="{{Entity}}CollectionFactory" />
-    <class id="{{Namespace}}\{{Module}}\Model\Resource\{{Entity}}\Tree" class="{{Namespace}}\{{Module}}\Model\Resource\{{Entity}}\Tree" alias="{{Entity}}Tree" />
+    <class id="{{Namespace}}\{{Module}}\Model\ResourceModel\{{Entity}}\CollectionFactory" class="{{Namespace}}\{{Module}}\Model\ResourceModel\{{Entity}}\CollectionFactory" alias="{{Entity}}CollectionFactory" />
+    <class id="{{Namespace}}\{{Module}}\Model\ResourceModel\{{Entity}}\Tree" class="{{Namespace}}\{{Module}}\Model\ResourceModel\{{Entity}}\Tree" alias="{{Entity}}Tree" />
     <class id="Magento\Framework\Data\Tree" class="Magento\Framework\Data\Tree" alias="DataTree" />
     <class id="Magento\Framework\DB\Select" class="Magento\Framework\DB\Select" alias="DbSelect" />
     <class id="{{Namespace}}\{{Module}}\Controller\Adminhtml\{{Entity}}" class="{{Namespace}}\{{Module}}\Controller\Adminhtml\{{Entity}}" alias="{{Entity}}Controller" />
     <class id="Magento\Backend\Helper\Js" class="Magento\Backend\Helper\Js" alias="JsHelper" />
-    <class id="{{Namespace}}\{{Module}}\Model\Resource\{{Sibling}}\Collection" class="{{Namespace}}\{{Module}}\Model\Resource\{{Sibling}}\Collection" alias="{{Sibling}}Collection" />
-    <class id="{{Namespace}}\{{Module}}\Model\Resource\{{Sibling}}\CollectionFactory" class="{{Namespace}}\{{Module}}\Model\Resource\{{Sibling}}\CollectionFactory" alias="{{Sibling}}CollectionFactory" />
+    <class id="{{Namespace}}\{{Module}}\Model\ResourceModel\{{Sibling}}\Collection" class="{{Namespace}}\{{Module}}\Model\ResourceModel\{{Sibling}}\Collection" alias="{{Sibling}}Collection" />
+    <class id="{{Namespace}}\{{Module}}\Model\ResourceModel\{{Sibling}}\CollectionFactory" class="{{Namespace}}\{{Module}}\Model\ResourceModel\{{Sibling}}\CollectionFactory" alias="{{Sibling}}CollectionFactory" />
     <class id="{{siblingTabParent}}" class="{{siblingTabParent}}" alias="{{siblingTabParentAlias}}" />
-    <class id="{{Namespace}}\{{Module}}\Model\Resource\{{Entity}}\Collection" class="{{Namespace}}\{{Module}}\Model\Resource\{{Entity}}\Collection" alias="{{Entity}}Collection" />
+    <class id="{{Namespace}}\{{Module}}\Model\ResourceModel\{{Entity}}\Collection" class="{{Namespace}}\{{Module}}\Model\ResourceModel\{{Entity}}\Collection" alias="{{Entity}}Collection" />
 </classes>

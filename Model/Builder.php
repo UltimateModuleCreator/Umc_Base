@@ -107,6 +107,7 @@ class Builder extends Umc
         $this->archive          = $archive;
         $this->io               = $io;
         $this->generatorMap     = $generatorMap;
+
         parent::__construct($data);
     }
 
@@ -165,6 +166,11 @@ class Builder extends Umc
         return $this;
     }
 
+    /**
+     * write uninstall script
+     *
+     * @return $this
+     */
     public function writeUninstall()
     {
         $content = $this->module->getUninstallScript();
@@ -177,6 +183,12 @@ class Builder extends Umc
         $this->writer->setPath($oldPath);
         return $this;
     }
+
+    /**
+     * write generated files log
+     *
+     * @return $this
+     */
     public function writeLog()
     {
         $files = array_keys($this->files);
@@ -191,6 +203,12 @@ class Builder extends Umc
         $this->writer->setPath($oldPath);
         return $this;
     }
+
+    /**
+     * create the archive
+     *
+     * @return $this
+     */
     public function createArchive()
     {
         $basePath = trim($this->getBaseWritePath(true), '/');

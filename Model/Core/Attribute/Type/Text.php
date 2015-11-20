@@ -19,38 +19,5 @@ namespace Umc\Base\Model\Core\Attribute\Type;
 
 class Text extends AbstractType
 {
-    /**
-     * admin column type
-     *
-     * @var string
-     */
-    protected $adminColumnType = 'text';
 
-    /**
-     * setup script constant name
-     *
-     * @var string
-     */
-    protected $sqlTypeConst = 'TYPE_TEXT';
-
-    /**
-     * setup script length
-     *
-     * @var string
-     */
-    protected $setupLength = '255';
-
-    /**
-     * edit for field type
-     *
-     * @var string
-     */
-    protected $editFormType = 'text';
-
-    /**
-     * attribute can be searched full text
-     *
-     * @var bool
-     */
-    protected $fullText = true;
 }

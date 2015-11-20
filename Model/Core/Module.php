@@ -22,10 +22,8 @@ use Magento\Framework\Event\ManagerInterface;
 use Umc\Base\Model\Config\Form as FormConfig;
 use Umc\Base\Model\Config\Restriction as RestrictionConfig;
 use Umc\Base\Model\Config\SaveAttributes as SaveAttributesConfig;
-use Umc\Base\Model\Core\AttributeFactory;
-use Umc\Base\Model\Core\EntityFactory;
 use Umc\Base\Model\Core\Relation\Type\SiblingRelation;
-use Umc\Base\Model\Core\SettingsFactory;
+
 
 /**
  * @method string getVersion()
@@ -33,6 +31,8 @@ use Umc\Base\Model\Core\SettingsFactory;
  * @method int getSortOrder()
  * @method string getMenuParent()
  * @method string getUnderscore()
+ * @method $this setNamespace(\string $namespace)
+ * @method $this setMenuParent(\string $menuParent)
  */
 class Module extends AbstractModel implements ModelInterface
 {
@@ -260,7 +260,7 @@ class Module extends AbstractModel implements ModelInterface
      */
     public function getValidationErrorKey($field)
     {
-        return 'module'.$field;
+        return 'umc_module'.$field;
     }
 
     /**
@@ -370,7 +370,7 @@ class Module extends AbstractModel implements ModelInterface
                 '{{menuText}}'          => $this->getMenuText(),
                 '{{menuSortOrder}}'     => $this->getSortOrder(),
                 '{{namespace}}'         => $this->getNamespace(true),
-                '{{menuParentValue}}' => $this->getParentMenuValue(),
+                '{{menuParentValue}}'   => $this->getParentMenuValue(),
                 '{{requireJsDialogs}}'  => $this->getRequireJsDialogs(),
             ];
             $this->placeholders = array_merge($this->placeholders, $this->getSettings()->getPlaceholders());
@@ -518,6 +518,7 @@ class Module extends AbstractModel implements ModelInterface
 
     /**
      * @return string
+     * @deprecated
      */
     public function getUninstallScript()
     {
@@ -526,6 +527,7 @@ class Module extends AbstractModel implements ModelInterface
 
     /**
      * @return array
+     * @deprecated
      */
     public function getUninstallLines()
     {
@@ -616,20 +618,24 @@ class Module extends AbstractModel implements ModelInterface
     {
         $config = [];
         foreach ($this->getEntities() as $entity) {
-            if ($entity->getIsTree() && $entity->hasRelationType(SiblingRelation::RELATION_TYPE_SIBLING)) {
-                $config[] = $this->getPadding(3).
-                    "new".
-                    $entity->getNameSingular(true)."Dialog: '".
-                    $this->getNamespace().'_'.
-                    $this->getModuleName()."/".
-                    $entity->getNameSingular()."/new-".
-                    $entity->getNameSingular()."-dialog'";
-                $config[] = $this->getPadding(3).
-                    $entity->getNameSingular()."Form: '".
-                    $this->getNamespace().'_'.
-                    $this->getModuleName()."/".
-                    $entity->getNameSingular()."/form'";
+            $entityConfig = $entity->getRequireJsConfig();
+            if ($entityConfig) {
+                $config = array_merge($config, $entityConfig);
             }
+//            if ($entity->getIsTree() && $entity->hasRelationType(SiblingRelation::RELATION_TYPE_SIBLING)) {
+//                $config[] = $this->getPadding(3).
+//                    "new".
+//                    $entity->getNameSingular(true)."Dialog: '".
+//                    $this->getNamespace().'_'.
+//                    $this->getModuleName()."/".
+//                    $entity->getNameSingular()."/new-".
+//                    $entity->getNameSingular()."-dialog'";
+//                $config[] = $this->getPadding(3).
+//                    $entity->getNameSingular()."Form: '".
+//                    $this->getNamespace().'_'.
+//                    $this->getModuleName()."/".
+//                    $entity->getNameSingular()."/form'";
+//            }
         }
         return implode(','.$this->getEol(), $config);
     }

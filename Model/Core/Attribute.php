@@ -33,6 +33,7 @@ use Umc\Base\Model\Core\Attribute\Type\Factory as AttributeTypeFactory;
  * @method Attribute setType(\string $type)
  * @method Attribute setForcedSourceModel(\string $forcedSourceModel)
  * @method string getForcedSourceModel()
+ * @method bool getAdminGridFilter()
  */
 class Attribute extends AbstractModel implements ModelInterface
 {
@@ -233,7 +234,9 @@ class Attribute extends AbstractModel implements ModelInterface
                 '{{adminColumnType}}'       => $this->getAdminColumnType(),
                 '{{columnComponent}}'       => $this->getColumnComponent(),
                 '{{filterRangeClass}}'      => $this->getFilterRangeClass(),
-                '{{filterInput}}'           => $this->getFilterInput()
+                '{{filterInput}}'           => $this->getFilterInput(),
+                '{{adminColumnConfig}}'     => $this->getAdminColumnConfig(),
+                '{{gridDataType}}'          => $this->getGridDataType(),
             ];
             $this->placeholders = array_merge($this->placeholders, $this->getTypeInstance()->getPlaceholders());
             $this->placeholders = array_merge($this->getEntity()->getPlaceholders(), $this->placeholders);
@@ -276,7 +279,7 @@ class Attribute extends AbstractModel implements ModelInterface
      */
     public function getIsMulti()
     {
-        return $this->getTypeInstance()->isMulti();
+        return $this->getTypeInstance()->getMulti();
     }
 
     /**
@@ -327,6 +330,11 @@ class Attribute extends AbstractModel implements ModelInterface
     public function getAdminColumnOptions()
     {
         return $this->getTypeInstance()->getAdminColumnOptions();
+    }
+
+    public function getAdminColumnConfig()
+    {
+        return $this->getTypeInstance()->getAdminColumnConfig();
     }
 
     /**
@@ -382,6 +390,14 @@ class Attribute extends AbstractModel implements ModelInterface
     public function getEditFormField()
     {
         return $this->getTypeInstance()->getEditFormField();
+    }
+
+    /**
+     * @return string
+     */
+    public function getEditFormType()
+    {
+        return $this->getTypeInstance()->getEditFormType();
     }
 
     /**
@@ -535,7 +551,7 @@ class Attribute extends AbstractModel implements ModelInterface
      */
     public function getFullText()
     {
-        return $this->getTypeInstance()->isFullText();
+        return $this->getTypeInstance()->getFullText();
     }
 
     /**
@@ -559,5 +575,15 @@ class Attribute extends AbstractModel implements ModelInterface
     public function getFilterInput()
     {
         return $this->getTypeInstance()->getFilterInput();
+    }
+
+    public function getInlineEdit()
+    {
+        return $this->getEntity()->getInlineEdit() && $this->getData('inline_edit');
+    }
+
+    public function getGridDataType()
+    {
+        return $this->getTypeInstance()->getGridDataType();
     }
 }

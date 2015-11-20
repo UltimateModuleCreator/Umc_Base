@@ -1,0 +1,9 @@
+        <column name="{{entity}}_id">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="filter" xsi:type="string">textRange</item>
+                    <item name="sorting" xsi:type="string">asc</item>
+                    <item name="label" xsi:type="string" translate="true">ID</item>
+                </item>
+            </argument>
+        </column>

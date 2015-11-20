@@ -20,7 +20,7 @@ namespace Umc\Base\Model;
 use Magento\Framework\DataObject;
 use Magento\Framework\Config\Reader\Filesystem;
 
-class Config extends DataObject
+class Config extends Umc
 {
     /**
      * config
@@ -54,10 +54,12 @@ class Config extends DataObject
      * constructor
      *
      * @param Filesystem $reader
+     * @param array $data
      */
-    public function __construct(Filesystem $reader)
+    public function __construct(Filesystem $reader, array $data = [])
     {
         $this->reader = $reader;
+        parent::__construct($data);
     }
 
     /**
@@ -87,6 +89,7 @@ class Config extends DataObject
         } else {
             $config = $this->config;
         }
+
         foreach ($parts as $part) {
             if (isset($config[$part])) {
                 $config = $config[$part];
@@ -113,6 +116,9 @@ class Config extends DataObject
             return false;
         }
         if ($settings[$key] === 'false') {
+            return false;
+        }
+        if (!is_string($settings[$key]) && !is_bool($settings[$key])) {
             return false;
         }
         return true;

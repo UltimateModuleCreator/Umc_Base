@@ -17,7 +17,7 @@
  * @author    Marius Strajeru <ultimate.module.creator@gmail.com>
  */
 -->
-<save_attributes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="save_attributes.xsd">
+<save_attributes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Umc_Base:etc/umc/save_attributes.xsd">
     <entity id="umc_settings">
         <attribute id="install" />
         <attribute id="license" />
@@ -43,5 +43,6 @@
         <attribute id="add_updated_to_grid" />
         <attribute id="type" />
         <attribute id="search" />
+        <attribute id="inline_edit" />
     </entity>
 </save_attributes>

@@ -20,34 +20,6 @@ namespace Umc\Base\Model\Core\Attribute\Type;
 class Multiselect extends Dropdown
 {
     /**
-     * attribute is multiple select
-     *
-     * @var bool
-     */
-    protected $multi = true;
-
-    /**
-     * setup script constant name
-     *
-     * @var string
-     */
-    protected $sqlTypeConst = 'TYPE_TEXT';
-
-    /**
-     * setup script length
-     *
-     * @var string
-     */
-    protected $setupLength = '255';
-
-    /**
-     * edit for field type
-     *
-     * @var string
-     */
-    protected $editFormType = 'multiselect';
-
-    /**
      * get default value
      *
      * @return int|mixed|string

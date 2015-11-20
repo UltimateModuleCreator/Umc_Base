@@ -19,31 +19,5 @@ namespace Umc\Base\Model\Core\Attribute\Type;
 
 class Int extends AbstractType
 {
-    /**
-     * admin column type
-     *
-     * @var string
-     */
-    protected $adminColumnType = 'number';
 
-    /**
-     * setup script constant name
-     *
-     * @var string
-     */
-    protected $sqlTypeConst = 'TYPE_INTEGER';
-
-    /**
-     * setup script length
-     *
-     * @var string
-     */
-    protected $setupLength = 'null';
-
-    /**
-     * edit for field type
-     *
-     * @var string
-     */
-    protected $editFormType = 'text';
 }

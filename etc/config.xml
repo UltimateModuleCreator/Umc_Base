@@ -17,45 +17,46 @@
  * @author    Marius Strajeru <ultimate.module.creator@gmail.com>
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../Magento/Store/etc/config.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
     <default>
         <umc>
             <umc_general>
                 <tooltips>1</tooltips>
             </umc_general>
             <umc_settings>
-                <qualified>0</qualified>
+                <qualified>1</qualified>
                 <underscore>0</underscore>
                 <annotation>1</annotation>
+                <license>{{Namespace}}_{{Module}} extension
+                    NOTICE OF LICENSE
+
+                    This source file is subject to the MIT License
+                    that is bundled with this package in the file LICENSE.txt.
+                    It is also available through the world-wide-web at this URL:
+                    http://opensource.org/licenses/mit-license.php
+
+                    @category  {{Namespace}}
+                    @package   {{Namespace}}_{{Module}}
+                    @copyright Copyright (c) {{Y}}
+                    @license   http://opensource.org/licenses/mit-license.php MIT License</license>
             </umc_settings>
             <umc_module>
                 <version>1.0.0</version>
             </umc_module>
-            <umc_settings>
-                <license>{{Namespace}}_{{Module}} extension
-NOTICE OF LICENSE
-
-This source file is subject to the MIT License
-that is bundled with this package in the file LICENSE.txt.
-It is also available through the world-wide-web at this URL:
-http://opensource.org/licenses/mit-license.php
-
-@category  {{Namespace}}
-@package   {{Namespace}}_{{Module}}
-@copyright Copyright (c) {{Y}}
-@license   http://opensource.org/licenses/mit-license.php MIT License</license>
-            </umc_settings>
             <umc_entity>
                 <type>flat</type>
                 <add_created_to_grid>1</add_created_to_grid>
                 <add_updated_to_grid>1</add_updated_to_grid>
                 <search>0</search>
+                <inline_edit>1</inline_edit>
             </umc_entity>
             <umc_attribute>
                 <type>text</type>
                 <required>1</required>
                 <editor>0</editor>
                 <admin_grid>1</admin_grid>
+                <admin_grid_filter>1</admin_grid_filter>
+                <inline_edit>1</inline_edit>
             </umc_attribute>
         </umc>
     </default>

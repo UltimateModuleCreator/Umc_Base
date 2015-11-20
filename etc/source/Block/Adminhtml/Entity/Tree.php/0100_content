@@ -49,10 +49,10 @@
      */
     public function getSuggested{{Entities}}Json(${{nameAttributeCode}}Part)
     {
-        /* @var $collection \{{Namespace}}\{{Module}}\Model\Resource\{{Entity}}\Collection */
+        /* @var $collection \{{Namespace}}\{{Module}}\Model\ResourceModel\{{Entity}}\Collection */
         $collection = $this->{{_}}{{entity}}CollectionFactory->create();
 
-        /* @var $matching{{NameAttributeCode}}Collection \{{Namespace}}\{{Module}}\Model\Resource\{{Entity}}\Collection */
+        /* @var $matching{{NameAttributeCode}}Collection \{{Namespace}}\{{Module}}\Model\ResourceModel\{{Entity}}\Collection */
         $matching{{NameAttributeCode}}Collection = clone $collection;
         $escaped{{NameAttributeCode}}Part = $this->{{_}}resourceHelper->addLikeEscape(
             ${{nameAttributeCode}}Part,

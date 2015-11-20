@@ -15,7 +15,7 @@
     }
 
     /**
-     * @return \{{Namespace}}\{{Module}}\Model\Resource\{{Sibling}}\Collection
+     * @return \{{Namespace}}\{{Module}}\Model\ResourceModel\{{Sibling}}\Collection
      */
     public function getSelected{{Siblings}}Collection()
     {

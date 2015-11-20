@@ -24,6 +24,7 @@ use Umc\Base\Model\Builder;
 use Umc\Base\Model\Core\ModuleFactory;
 use Umc\Base\Model\UmcFactory;
 use Umc\Base\Model\Writer\WriterInterface;
+use Magento\Framework\App\RequestInterface;
 
 class Validate extends Action
 {
@@ -56,6 +57,9 @@ class Validate extends Action
      */
     protected $writer;
 
+    /**
+     * @var Builder
+     */
     protected $builder;
 
     /**
@@ -85,7 +89,8 @@ class Validate extends Action
     }
 
     /**
-     * validate & save module
+     * validate and save module
+     *
      * @return void
      */
     public function execute()

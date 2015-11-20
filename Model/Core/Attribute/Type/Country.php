@@ -20,46 +20,6 @@ namespace Umc\Base\Model\Core\Attribute\Type;
 class Country extends AbstractType
 {
     /**
-     * admin column type
-     *
-     * @var string
-     */
-    protected $adminColumnType = 'select';
-
-    /**
-     * @var string
-     */
-    protected $columnComponent = 'select';
-
-    /**
-     * setup script constant name
-     *
-     * @var string
-     */
-    protected $sqlTypeConst = 'TYPE_TEXT';
-
-    /**
-     * setup script length
-     *
-     * @var string
-     */
-    protected $setupLength = '3';
-
-    /**
-     * edit for field type
-     *
-     * @var string
-     */
-    protected $editFormType = 'select';
-
-    /**
-     * attribute can be searched full text
-     *
-     * @var bool
-     */
-    protected $fullText = true;
-
-    /**
      * get admin column options
      *
      * @return string

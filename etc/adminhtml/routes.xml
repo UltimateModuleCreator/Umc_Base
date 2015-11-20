@@ -17,7 +17,7 @@
  * @author    Marius Strajeru <ultimate.module.creator@gmail.com>
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../lib/internal/Magento/Framework/App/etc/routes.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:App/etc/routes.xsd">
     <router id="admin">
         <route id="umc" frontName="umc">
             <module name="Umc_Base" before="Magento_Adminhtml" />

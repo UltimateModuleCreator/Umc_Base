@@ -1,0 +1,9 @@
+                <item name="editorConfig" xsi:type="array">
+                    <item name="selectProvider" xsi:type="string">{{namespace}}_{{module}}_{{entity}}_listing.{{namespace}}_{{module}}_{{entity}}_listing.{{namespace}}_{{module}}_{{entity}}_columns.ids</item>
+                    <item name="enabled" xsi:type="boolean">true</item>
+                    <item name="indexField" xsi:type="string">{{entity}}_id</item>
+                    <item name="clientConfig" xsi:type="array">
+                        <item name="saveUrl" xsi:type="url" path="{{namespace}}_{{module}}/{{entity}}/inlineEdit"/>
+                        <item name="validateBeforeSave" xsi:type="boolean">false</item>
+                    </item>
+                </item>

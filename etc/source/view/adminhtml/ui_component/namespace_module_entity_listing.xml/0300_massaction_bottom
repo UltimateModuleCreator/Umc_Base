@@ -1,0 +1,12 @@
+        </massaction>
+        <paging name="listing_paging">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="storageConfig" xsi:type="array">
+                        <item name="provider" xsi:type="string">{{namespace}}_{{module}}_{{entity}}_listing.{{namespace}}_{{module}}_{{entity}}_listing.listing_top.bookmarks</item>
+                        <item name="namespace" xsi:type="string">current.paging</item>
+                    </item>
+                    <item name="selectProvider" xsi:type="string">{{namespace}}_{{module}}_{{entity}}_listing.{{namespace}}_{{module}}_{{entity}}_listing.{{namespace}}_{{module}}_{{entity}}_columns.ids</item>
+                </item>
+            </argument>
+        </paging>

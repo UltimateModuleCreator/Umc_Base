@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../Magento/Ui/etc/ui_configuration.xsd">
+<listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
     <argument name="data" xsi:type="array">
         <item name="js_config" xsi:type="array">
             <item name="provider" xsi:type="string">umc_module_listing.umc_module_listing_data_source</item>
@@ -161,7 +161,7 @@
                 </item>
             </argument>
         </column>
-        <column name="actions" class="Umc\Base\Ui\Component\Listing\Columns\ModuleActions">
+        <actionsColumn name="actions" class="Umc\Base\Ui\Component\Listing\Columns\ModuleActions">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="sortOrder" xsi:type="number">200</item>
@@ -173,6 +173,6 @@
                     <item name="sortable" xsi:type="boolean">false</item>
                 </item>
             </argument>
-        </column>
+        </actionsColumn>
     </columns>
 </listing>

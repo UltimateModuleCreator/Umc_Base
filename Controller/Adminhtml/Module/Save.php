@@ -64,6 +64,7 @@ class Save extends Action
     public function execute()
     {
         $redirectBack = $this->getRequest()->getParam('back', false);
+        /** @var \Umc\Base\Model\Core\Module $module */
         $module = $this->moduleFactory->create();
         try {
             $module->initFromData($this->getRequest()->getPost()->toArray());
@@ -77,7 +78,7 @@ class Save extends Action
             $pageRedirect->setPath(
                 '*/*/edit',
                 [
-                    'id'       => strtr(
+                    'id' => strtr(
                         base64_encode($module->getNamespace(). '_'. $module->getModuleName()),
                         '+/=',
                         '-_,'

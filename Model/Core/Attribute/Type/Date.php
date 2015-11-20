@@ -20,44 +20,6 @@ namespace Umc\Base\Model\Core\Attribute\Type;
 class Date extends AbstractType
 {
     /**
-     * admin column type
-     *
-     * @var string
-     */
-    protected $adminColumnType = 'date';
-
-    /**
-     * @var string
-     */
-    protected $columnComponent = 'date';
-
-    /**
-     * setup script constant name
-     *
-     * @var string
-     */
-    protected $sqlTypeConst = 'TYPE_DATETIME';
-
-    /**
-     * setup script length
-     *
-     * @var string
-     */
-    protected $setupLength = 'null';
-
-    /**
-     * edit for field type
-     *
-     * @var string
-     */
-    protected $editFormType = 'date';
-
-    /**
-     * @var string
-     */
-    protected $filterInput = 'filterDate';
-
-    /**
      * get addition option for edit form
      *
      * @return array

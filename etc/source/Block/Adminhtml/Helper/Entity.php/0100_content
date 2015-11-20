@@ -33,7 +33,7 @@
     /**
      * Get {{EntityLabel}} collection
      *
-     * @return \{{Namespace}}\{{Module}}\Model\Resource\{{Entity}}\Collection
+     * @return \{{Namespace}}\{{Module}}\Model\ResourceModel\{{Entity}}\Collection
      */
     protected function {{_}}get{{Entities}}Collection()
     {

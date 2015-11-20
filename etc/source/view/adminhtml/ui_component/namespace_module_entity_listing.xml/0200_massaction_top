@@ -1,0 +1,20 @@
+        <massaction name="listing_massaction">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="selectProvider" xsi:type="string">{{namespace}}_{{module}}_{{entity}}_listing.{{namespace}}_{{module}}_{{entity}}_listing.{{namespace}}_{{module}}_{{entity}}_columns.ids</item>
+                    <item name="indexField" xsi:type="string">{{entity}}_id</item>
+                </item>
+            </argument>
+            <action name="delete">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="type" xsi:type="string">delete</item>
+                        <item name="label" xsi:type="string" translate="true">Delete</item>
+                        <item name="url" xsi:type="url" path="{{namespace}}_{{module}}/{{entity}}/massDelete"/>
+                        <item name="confirm" xsi:type="array">
+                            <item name="title" xsi:type="string" translate="true">Delete {{EntitiesLabel}}</item>
+                            <item name="message" xsi:type="string" translate="true">Are you sure you wan't to delete selected {{EntitiesLabel}}?</item>
+                        </item>
+                    </item>
+                </argument>
+            </action>

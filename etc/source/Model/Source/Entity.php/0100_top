@@ -3,5 +3,5 @@
      */
     public function toOptionArray()
     {
-        /** @var \{{Namespace}}\{{Module}}\Model\Resource\{{Entity}}\Collection $collection */
+        /** @var \{{Namespace}}\{{Module}}\Model\ResourceModel\{{Entity}}\Collection $collection */
         $collection = $this->{{_}}{{entity}}CollectionFactory->create();

@@ -20,27 +20,6 @@ namespace Umc\Base\Model\Core\Attribute\Type;
 class Textarea extends AbstractType
 {
     /**
-     * setup script constant name
-     *
-     * @var string
-     */
-    protected $sqlTypeConst = 'TYPE_TEXT';
-
-    /**
-     * setup script length
-     *
-     * @var string
-     */
-    protected $setupLength = '\'64k\'';
-
-    /**
-     * edit for field type
-     *
-     * @var string
-     */
-    protected $editFormType = 'textarea';
-
-    /**
      * get edit form type
      *
      * @return string

@@ -4,7 +4,7 @@
             <block class="{{Namespace}}\{{Module}}\Block\Adminhtml\{{Entity}}\Grid" name="{{namespace}}_{{module}}.{{entity}}.grid" as="grid">
                 <arguments>
                     <argument name="id" xsi:type="string">{{namespace}}_{{module}}_{{entity}}_grid</argument>
-                    <argument name="dataSource" xsi:type="object">{{Namespace}}\{{Module}}\Model\Resource\{{Entity}}\Collection</argument>
+                    <argument name="dataSource" xsi:type="object">{{Namespace}}\{{Module}}\Model\ResourceModel\{{Entity}}\Collection</argument>
                     <argument name="use_ajax" xsi:type="string">true</argument>
                     <argument name="default_sort" xsi:type="string">{{entity}}_id</argument>
                     <argument name="default_dir" xsi:type="string">DESC</argument>

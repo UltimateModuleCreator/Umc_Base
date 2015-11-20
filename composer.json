@@ -1,10 +1,9 @@
 {
     "name": "umc/umc-base",
     "description": "Magento 2 Ultimate Module Creator - Base Package",
-    "version": "2.0.0-alpha1",
+    "version": "2.0.0",
     "require": {
-        "magento/module-backend": "~0.74.0-beta7",
-        "magento/magento-composer-installer": "*"
+        "magento/module-backend": "~100.0.0"
     },
     "type": "magento2-module",
     "repositories": [

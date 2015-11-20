@@ -17,7 +17,7 @@
  * @author    Marius Strajeru <ultimate.module.creator@gmail.com>
  */
 -->
-<help xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="help.xsd">
+<help xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Umc_Base:etc/umc/help.xsd">
     <section id="general" sort="10" translate="label">
         <label>General Information</label>
         <fieldset id="modules" translate="label description" sort="10">

@@ -20,11 +20,13 @@
     margin-bottom: 0;
 }
 /*.umc-module-edit .field:nth-child(even):after {*/
-.umc-module-edit .field.odd:after {
-    content: ".";
+.admin__field.odd:after {
     visibility: hidden;
+    display: block;
+    font-size: 0;
+    content: " ";
+    clear: both;
     height: 0;
-    /*clear: both;*/
 }
 
 .umc-module-edit .field label.addafter{
@@ -50,6 +52,10 @@
 .umc-module-edit .field textarea.has-tooltip{
     width: calc(100% - 22px)!important;
     float:left!important;
+}
+
+.admin__scope-old label.mage-error {
+    margin-top:12px;
 }
 
 .umc-nav-bar ul{

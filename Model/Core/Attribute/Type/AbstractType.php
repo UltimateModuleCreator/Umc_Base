@@ -20,6 +20,7 @@ namespace Umc\Base\Model\Core\Attribute\Type;
 use Magento\Framework\Escaper;
 use Umc\Base\Model\Core\Attribute;
 use Umc\Base\Model\Umc;
+use Umc\Base\Model\Source\Attribute\Grid;
 
 class AbstractType extends Umc implements TypeInterface
 {
@@ -29,65 +30,6 @@ class AbstractType extends Umc implements TypeInterface
      * @var \Magento\Framework\Escaper
      */
     protected $escaper;
-
-    /**
-     * @var string
-     */
-    protected $columnComponent = 'column';
-
-    /**
-     * attribute is multiple select
-     *
-     * @var bool
-     */
-    protected $multi = false;
-
-    /**
-     * admin column type
-     *
-     * @var string
-     */
-    protected $adminColumnType = '';
-
-    /**
-     * setup script constant name
-     *
-     * @var string
-     */
-    protected $sqlTypeConst = '';
-
-    /**
-     * setup script length
-     *
-     * @var string
-     */
-    protected $setupLength = '';
-
-    /**
-     * edit for field type
-     *
-     * @var string
-     */
-    protected $editFormType = '';
-
-    /**
-     * attribute type has options
-     *
-     * @var bool
-     */
-    protected $hasOptions = false;
-
-    /**
-     * attribute can be searched full text
-     *
-     * @var bool
-     */
-    protected $fullText = false;
-
-    /**
-     * @var string
-     */
-    protected $filterInput = 'filterInput';
 
     /**
      * @var Attribute
@@ -144,9 +86,9 @@ class AbstractType extends Umc implements TypeInterface
     /**
      * @return bool
      */
-    public function isMulti()
+    public function getMulti()
     {
-        return $this->multi;
+        return $this->getData('multi');
     }
 
     /**
@@ -159,9 +101,47 @@ class AbstractType extends Umc implements TypeInterface
         return '';
     }
 
+    public function getAdminColumnConfig()
+    {
+        $content = '';
+        if ($this->getAttribute()->getAdminGridFilter()) {
+            $content .= $this->getEol().$this->getPadding(5).'<item name="filter" xsi:type="string">'.$this->getFilterType().'</item>';
+        }
+        if ($this->getAttribute()->getInlineEdit()) {
+            if ($this->getAttribute()->getRequired()) {
+                $content .= $this->getEol(). $this->getPadding(5).'<item name="editor" xsi:type="array">'.$this->getEol();
+                $content .= $this->getPadding(6).'<item name="editorType" xsi:type="string">'.$this->getInlineEditType().'</item>'.$this->getEol();;
+                $content .= $this->getPadding(6).'<item name="validation" xsi:type="array">'.$this->getEol();;
+                $content .= $this->getPadding(7).'<item name="required-entry" xsi:type="boolean">true</item>'.$this->getEol();;
+                $content .= $this->getPadding(6).'</item>'.$this->getEol();;
+                $content .= $this->getPadding(5).'</item>';
+            } else {
+                $content .= $this->getEol().$this->getPadding(5).'<item name="editor" xsi:type="string">'.$this->getInlineEditType().'</item>';
+            }
+        }
+        if ($this->getAttribute()->getAdminGrid() == Grid::HIDDEN) {
+            $content .= $this->getEol().$this->getPadding(5).'<item name="visible" xsi:type="boolean">false</item>';
+        }
+        return $content;
+    }
+
+    public function getFilterType()
+    {
+        return $this->getData('filter_type');
+    }
+
+    public function getInlineEditType()
+    {
+        return $this->getData('inline_edit_type');
+    }
+
     public function getColumnComponent()
     {
-        return $this->columnComponent;
+        $component = $this->getData('column_component');
+        if ($component) {
+            return $this->getEol().$this->getPadding(5).'<item name="component" xsi:type="string">Magento_Ui/js/grid/columns/'.$component.'</item>';
+        }
+        return '';
     }
 
     /**
@@ -171,7 +151,12 @@ class AbstractType extends Umc implements TypeInterface
      */
     public function getAdminColumnType()
     {
-        return $this->adminColumnType;
+        return $this->getData('admin_column_type');
+    }
+
+    public function getFullText()
+    {
+        return $this->getData('full_text');
     }
 
     /**
@@ -181,7 +166,7 @@ class AbstractType extends Umc implements TypeInterface
      */
     public function getSqlTypeConst()
     {
-        return $this->sqlTypeConst;
+        return $this->getData('sql_type_const');
     }
 
     /**
@@ -191,7 +176,7 @@ class AbstractType extends Umc implements TypeInterface
      */
     public function getSetupLength()
     {
-        return $this->setupLength;
+        return $this->getData('setup_length');
     }
 
     public function getEditFormField()
@@ -237,7 +222,7 @@ class AbstractType extends Umc implements TypeInterface
      */
     public function getEditFormType()
     {
-        return $this->editFormType;
+        return $this->getData('edit_form_type');
     }
 
     /**
@@ -307,16 +292,9 @@ class AbstractType extends Umc implements TypeInterface
      */
     public function getHasOptions()
     {
-        return $this->hasOptions;
+        return $this->getData('has_options');
     }
 
-    /**
-     * @return bool|mixed
-     */
-    public function isFullText()
-    {
-        return $this->fullText;
-    }
 
     public function getFilterRangeClass()
     {
@@ -325,7 +303,16 @@ class AbstractType extends Umc implements TypeInterface
 
     public function getFilterInput()
     {
-        return $this->filterInput;
+        return $this->getData('filter_input');
+    }
+
+    public function getGridDataType()
+    {
+        $dataType = $this->getData('grid_data_type');
+        if ($dataType) {
+            return $this->getEol().$this->getPadding(5).'<item name="dataType" xsi:type="string">'.$dataType.'</item>';
+        }
+        return '';
     }
 }
 

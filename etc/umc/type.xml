@@ -17,7 +17,7 @@
  * @author    Marius Strajeru <ultimate.module.creator@gmail.com>
  */
 -->
-<types xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="type.xsd">
+<types xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Umc_Base:etc/umc/type.xsd">
     <entity id="umc_entity">
         <type id="flat" model="Umc\Base\Model\Core\Entity\Type\Flat" sort="10" translate="label">
             <label>Flat</label>

@@ -1,0 +1,26 @@
+                <item name="childDefaults" xsi:type="array">
+                    <item name="fieldAction" xsi:type="array">
+                        <item name="provider" xsi:type="string">{{namespace}}_{{module}}_{{entity}}_listing.{{namespace}}_{{module}}_{{entity}}_listing.{{namespace}}_{{module}}_{{entity}}_columns_editor</item>
+                        <item name="target" xsi:type="string">startEdit</item>
+                        <item name="params" xsi:type="array">
+                            <item name="0" xsi:type="string">${ $.$data.rowIndex }</item>
+                            <item name="1" xsi:type="boolean">true</item>
+                        </item>
+                    </item>
+                    <item name="storageConfig" xsi:type="array">
+                        <item name="provider" xsi:type="string">{{namespace}}_{{module}}_{{entity}}_listing.{{namespace}}_{{module}}_{{entity}}_listing.listing_top.bookmarks</item>
+                        <item name="root" xsi:type="string">columns.${ $.index }</item>
+                        <item name="namespace" xsi:type="string">current.${ $.storageConfig.root}</item>
+                    </item>
+                </item>
+            </item>
+        </argument>
+        <selectionsColumn name="ids">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="resizeEnabled" xsi:type="boolean">false</item>
+                    <item name="resizeDefaultWidth" xsi:type="string">55</item>
+                    <item name="indexField" xsi:type="string">{{entity}}_id</item>
+                </item>
+            </argument>
+        </selectionsColumn>

@@ -19,31 +19,5 @@ namespace Umc\Base\Model\Core\Attribute\Type;
 
 class Image extends AbstractType
 {
-    /**
-     * setup script constant name
-     *
-     * @var string
-     */
-    protected $sqlTypeConst = 'TYPE_TEXT';
 
-    /**
-     * setup script length
-     *
-     * @var string
-     */
-    protected $setupLength = '255';
-
-    /**
-     * edit for field type
-     *
-     * @var string
-     */
-    protected $editFormType = 'image';
-
-    /**
-     * attribute can be searched full text
-     *
-     * @var bool
-     */
-    protected $fullText = true;
 }

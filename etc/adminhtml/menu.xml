@@ -17,7 +17,7 @@
  * @author    Marius Strajeru <ultimate.module.creator@gmail.com>
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Magento/Backend/etc/menu.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
     <menu>
         <add id="Umc_Base::umc" title="UMC" module="Umc_Base" sortOrder="200" resource="Umc_Base::umc" />
         <add id="Umc_Base::umc_list" title="View Modules" module="Umc_Base" sortOrder="10" resource="Umc_Base::umc" parent="Umc_Base::umc" action="umc/module/" />

@@ -1,0 +1,8 @@
+    /**
+     * Define resource model
+     *
+     * @return void
+     */
+    protected function _construct()
+    {
+        $this->_init('{{Namespace}}\{{Module}}\Model\{{Entity}}', '{{Namespace}}\{{Module}}\Model\ResourceModel\{{Entity}}');

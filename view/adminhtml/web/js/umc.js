@@ -18,6 +18,7 @@ define([
     'jquery',
     'mage/template',
     'jquery/ui',
+    'jquery/validate',
     'Magento_Ui/js/modal/modal',
     'jquery/jstree/jquery.jstree',
     'useDefault',
@@ -30,24 +31,46 @@ define([
         if (!response.error) {
             this._submit();
         } else {
-            this._showErrors(response);
+            var attributes = response.attributes || {};
+            if (response.attribute) {
+                attributes[response.attribute] = response.message;
+            }
+            for (var attributeCode in attributes) {
+                if (attributes.hasOwnProperty(attributeCode)) {
+                    $('#' + attributeCode)
+                        .addClass('validate-ajax-error')
+                        .data('msg-validate-ajax-error', attributes[attributeCode]);
+                    this.validate.element("#" + attributeCode);
+                }
+            }
             var body = $('body');
+            body.notification('clear');
             if (response.message) {
-                if ($('#messages').length == 0) {
-                    $('#page\\:main-container').before('<div id="messages"></div>');
+                if ($('#umc_messages').length == 0) {
+                    $('#page\\:main-container').before('<div id="umc_messages"></div>');
+                } else {
+                    $('#umc_messages').html('');
                 }
                 var glue = (typeof response.glue != "undefined") ? response.glue : '####';
                 var messages = response.message.split(glue);
                 for (var i = 0; i < messages.length; i++) {
                     body.notification('add', {
                         error:'error',
-                        message:messages[i]
+                        message:messages[i],
+                        messageContainer: '#umc_messages'
                     });
                 }
             }
             body.trigger('processStop');
         }
     };
+    $.validator.addMethod("validate-module-name",
+        function (value, element, params) {
+            return this.optional(element) || /^[A-Z]{1}[a-zA-Z]+$/.test(value);
+        },
+        $.mage.__('Please use only letters and start with a capital letter'),
+        true
+    );
     $.widget("umc_base.umctooltip", {
         /**
          * widget options
@@ -66,8 +89,6 @@ define([
                 type: 'slide',
                 modalClass: 'form-inline',
                 title: $(that.element).attr('title'),
-//                autoOpen: that.options.autoOpen,
-//                modal: true,
                 buttons: that.getButtons(),
                 width: 500
             });
@@ -85,9 +106,6 @@ define([
                         $(that.element).trigger("closeModal");
                     }
                 }];
-//                this.buttons[this.options.buttonLabel] = function() {
-//
-//                }
             }
             return this.buttons;
         }
@@ -152,10 +170,6 @@ define([
                 that.registerEntity(this, true);
             });
             this._super();
-            this.cssFix(this.element);
-        },
-        cssFix: function(element){
-            $(element).find('input.odd, select.odd, textarea.odd').closest('.field').addClass('odd');
         },
         makeTree: function() {
             var that = this;

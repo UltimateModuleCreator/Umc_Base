@@ -76,10 +76,17 @@ class TemplateGenerator extends AbstractGenerator implements GeneratorInterface
         return $this->license;
     }
 
+    /**
+     * @return string
+     */
     public function getLicensePrefix()
     {
         return '<?php '.$this->getEol();
     }
+
+    /**
+     * @return string
+     */
     public function getLicenseSuffix()
     {
         return '?>';
