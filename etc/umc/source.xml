@@ -241,8 +241,8 @@
                 </depends>
             </part>
             <part id="file" file="0300_file" sort="300">
-                <depends id="has_attribute_type_image">
-                    <depend id="has_attribute_type_image">
+                <depends id="has_attribute_type_file">
+                    <depend id="has_attribute_type_file">
                         <val id="1">1</val>
                     </depend>
                 </depends>
