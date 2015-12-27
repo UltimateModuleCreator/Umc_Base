@@ -10,5 +10,5 @@ After installing magento 2, run these commands:
 
  - `composer config repositories.ultimatemodulecreator-umc-base git git@github.com:UltimateModuleCreator/Umc_Base.git`
  - `sudo composer require ultimatemodulecreator/umc-base:dev-master`
- - `php bin/magento setup:upgade`
+ - `php bin/magento setup:upgrade`
 
