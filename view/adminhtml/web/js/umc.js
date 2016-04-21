@@ -66,9 +66,9 @@ define([
     };
     $.validator.addMethod("validate-module-name",
         function (value, element, params) {
-            return this.optional(element) || /^[A-Z]{1}[a-zA-Z]+$/.test(value);
+            return this.optional(element) || /^[A-Z]{1}[a-zA-Z0-9]+$/.test(value);
         },
-        $.mage.__('Please use only letters and start with a capital letter'),
+        $.mage.__('Please use only letters and numbers, and start with a capital letter'),
         true
     );
     $.widget("umc_base.umctooltip", {
