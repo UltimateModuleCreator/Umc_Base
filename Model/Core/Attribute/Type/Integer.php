@@ -17,7 +17,7 @@
  */
 namespace Umc\Base\Model\Core\Attribute\Type;
 
-class Int extends AbstractType
+class Integer extends AbstractType
 {
 
 }
