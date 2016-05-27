@@ -17,7 +17,7 @@
  */
 namespace Umc\Base\Model\Core\Attribute\Type;
 
-class Decimal extends Int
+class Decimal extends Integer
 {
 
 }
