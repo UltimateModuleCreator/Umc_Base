@@ -3,7 +3,7 @@
     "description": "Magento 2 Ultimate Module Creator - Base Package",
     "version": "2.0.0",
     "require": {
-        "magento/module-backend": "~100.0.0"
+        "magento/framework": "100.0.*"
     },
     "type": "magento2-module",
     "repositories": [
@@ -12,12 +12,12 @@
             "url": "https://github.com/UltimateModuleCreator/Umc_Base"
         }
     ],
-    "extra": {
-        "map": [
-            [
-                "*",
-                "Umc/Base"
-            ]
-        ]
+    "autoload": {
+        "files": [
+            "registration.php"
+        ],
+        "psr-4": {
+            "Umc\\Base\\": ""
+        }
     }
 }
