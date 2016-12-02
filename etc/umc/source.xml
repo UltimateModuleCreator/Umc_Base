@@ -441,6 +441,7 @@
             <member id="coreRegistry" type="protected" construct="true" show="true" var="Magento\Framework\Registry" sort="20">
                 <doc>Core registry</doc>
             </member>
+
 			<!--
             <member id="resultRedirectFactory" type="protected" construct="true" show="true" var="Magento\Backend\Model\View\Result\RedirectFactory" sort="30">
                 <doc>Result redirect factory</doc>
@@ -503,7 +504,7 @@
             </member>
             <member id="{{entity}}Factory" sort="30" construct="true" show="false" parent="true" var="{{Namespace}}\{{Module}}\Model\{{Entity}}Factory" />
             <member id="coreRegistry" sort="40" construct="true" show="false" parent="true" var="Magento\Framework\Registry" />
-			<!--
+	<!--
             <member id="resultRedirectFactory" sort="50" construct="true" show="false" parent="true" var="Magento\Backend\Model\View\Result\RedirectFactory" />
 			-->
             <member id="context" sort="60" construct="true" show="false" parent="true" var="Magento\Backend\App\Action\Context" />
@@ -533,7 +534,7 @@
             </member>
             <member id="{{entity}}Factory" sort="40" construct="true" parent="true" show="false" var="{{Namespace}}\{{Module}}\Model\{{Entity}}Factory" />
             <member id="coreRegistry" sort="50" construct="true"  parent="true" show="false" var="Magento\Framework\Registry" />
-			<!-- 
+	<!-- 
             <member id="resultRedirectFactory" sort="60" construct="true"  parent="true" show="false" var="Magento\Backend\Model\View\Result\RedirectFactory" />
 			-->
             <member id="context" sort="70" construct="true" show="false"  parent="true" var="Magento\Backend\App\Action\Context" />
@@ -557,6 +558,7 @@
             </member>
             <member id="{{entity}}Factory" sort="20" construct="true" show="false" parent="true" var="{{Namespace}}\{{Module}}\Model\{{Entity}}Factory" />
             <member id="coreRegistry" sort="30" construct="true" show="false" parent="true" var="Magento\Framework\Registry" />
+
 			<!--
             <member id="resultRedirectFactory" sort="40" construct="true" show="false" parent="true" var="Magento\Backend\Model\View\Result\RedirectFactory" />
 			-->
@@ -571,7 +573,7 @@
         <description>Edit an entity instance in the backend</description>
         <extends>{{Namespace}}\{{Module}}\Controller\Adminhtml\{{Entity}}</extends>
         <members>
-			<!--
+<!--
             <member id="backendSession" type="protected" construct="true" show="true" var="Magento\Backend\Model\Session" sort="10">
                 <doc>Backend session</doc>
             </member>
@@ -584,7 +586,7 @@
             </member>
             <member id="{{entity}}Factory" construct="true" show="false" parent="true" var="{{Namespace}}\{{Module}}\Model\{{Entity}}Factory" sort="30" />
             <member id="registry" construct="true" show="false" parent="true" var="Magento\Framework\Registry" sort="40" />
-			<!--
+<!--
             <member id="resultRedirectFactory" construct="true" show="false" parent="true" var="Magento\Backend\Model\View\Result\RedirectFactory" sort="50" />
 			-->
             <member id="context" construct="true" show="false" parent="true" var="Magento\Backend\App\Action\Context" sort="60" />
@@ -749,6 +751,7 @@
                     </depend>
                 </depends>
             </member>
+
 			<!--
             <member id="backendSession" construct="true" show="true" var="Magento\Backend\Model\Session" sort="40">
                 <doc>Backend session</doc>
@@ -804,7 +807,7 @@
             </member>
             <member id="{{entity}}Factory" type="protected" construct="true" show="false" parent="true" var="{{Namespace}}\{{Module}}\Model\{{Entity}}Factory" sort="90" />
             <member id="registry" construct="true" show="false" parent="true" var="Magento\Framework\Registry" sort="100" />
-			<!--
+<!--
             <member id="resultRedirectFactory" construct="true" show="false" parent="true" var="Magento\Backend\Model\View\Result\RedirectFactory" sort="110" />
 			-->
             <member id="context" construct="true" show="false" parent="true" var="Magento\Backend\App\Action\Context" sort="120" />
@@ -1007,7 +1010,7 @@
             </member>
             <member id="{{entity}}Factory" construct="true" show="false" parent="true" var="{{Namespace}}\{{Module}}\Model\{{Entity}}Factory" sort="30" />
             <member id="coreRegistry" construct="true" show="false" parent="true" var="Magento\Framework\Registry" sort="40" />
-			<!--
+<!--
             <member id="resultRedirectFactory" construct="true" show="false" parent="true" var="Magento\Backend\Model\View\Result\RedirectFactory" sort="50" />
 			-->
             <member id="context" construct="true" show="false" parent="true" var="Magento\Backend\App\Action\Context" sort="60" />
@@ -1032,7 +1035,7 @@
             </member>
             <member id="{{sibling}}Factory" type="protected" construct="true" show="false" parent="true" var="{{Namespace}}\{{Module}}\Model\{{Entity}}Factory" sort="20" />
             <member id="registry" type="protected" construct="true" show="false" parent="true" var="Magento\Framework\Registry" sort="30" />
-			<!--
+<!--
             <member id="resultRedirectFactory" type="protected" construct="true" show="false" parent="true" var="Magento\Backend\Model\View\Result\RedirectFactory" sort="40" />
 			-->
             <member id="context" type="protected" construct="true" show="false" parent="true" var="Magento\Backend\App\Action\Context" sort="50" />

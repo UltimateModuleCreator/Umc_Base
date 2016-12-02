@@ -5,7 +5,7 @@
      */
     public function getNoDisplay()
     {
-        $isNotAllowed = !$this->{{_}}authorization->isAllowed('{{Namespace}}_{{Module}}::{{entity}}');
+        $isNotAllowed = !$this->{{_}}authorization->isAllowed('{{Namespace}}_{{Module}}::entity_{{entity}}');
         return $this->getData('no_display') || $isNotAllowed;
     }
 

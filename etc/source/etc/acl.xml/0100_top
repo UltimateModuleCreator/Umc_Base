@@ -2,6 +2,6 @@
     <acl>
         <resources>
             <resource id="Magento_Backend::admin">
-                <resource id="{{Namespace}}_{{Module}}::{{module}}" title="{{menuText}}" sortOrder="{{menuSortOrder}}">
+                <resource id="{{Namespace}}_{{Module}}::module_{{module}}" title="{{menuText}}" sortOrder="{{menuSortOrder}}">
 
 
