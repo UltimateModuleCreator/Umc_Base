@@ -18,11 +18,9 @@
 namespace Umc\Base\Controller\Adminhtml\Module;
 
 use Magento\Backend\App\Action;
-use Magento\Backend\App\Action\Context;
-use Magento\Backend\Model\View\Result\RedirectFactory as ResultRedirectFactory;
+use Magento\Backend\App\Action\Context; 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\Response\Http\FileFactory;
-use Magento\Framework\Controller\Result\RawFactory as ResultRawFactory;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Url\Decoder;
 use Umc\Base\Model\Core\Settings;
@@ -30,19 +28,7 @@ use Umc\Base\Model\Downloader;
 
 class Download extends Action
 {
-    /**
-     * raw result factory
-     *
-     * @var \Magento\Framework\Controller\Result\RawFactory
-     */
-    protected $resultRawFactory;
-
-    /**
-     * redirect resutl factory
-     *
-     * @var \Magento\Backend\Model\View\Result\RedirectFactory
-     */
-    protected $resultRedirectFactory;
+ 
     /**
      * file factory
      *
@@ -70,12 +56,11 @@ class Download extends Action
      * @var \Magento\Framework\Url\Decoder
      */
     protected $decoder;
+    protected $_handle = null;
 
     /**
      * constructor
      *
-     * @param ResultRawFactory $resultRawFactory
-     * @param ResultRedirectFactory $resultRedirectFactory
      * @param FileFactory $fileFactory
      * @param Decoder $decoder
      * @param Downloader $downloader
@@ -83,23 +68,20 @@ class Download extends Action
      * @param Context $context
      */
     public function __construct(
-        ResultRawFactory $resultRawFactory,
-        ResultRedirectFactory $resultRedirectFactory,
         FileFactory $fileFactory,
         Decoder $decoder,
         Downloader $downloader,
         Filesystem $filesystem,
         Context $context
     ) {
-        $this->resultRawFactory      = $resultRawFactory;
-        $this->resultRedirectFactory = $resultRedirectFactory;
         $this->fileFactory           = $fileFactory;
         $this->decoder               = $decoder;
         $this->downloader            = $downloader;
         $this->filesystem            = $filesystem;
         parent::__construct($context);
     }
-
+ 
+	
     /**
      * run the action
      *
@@ -124,10 +106,40 @@ class Download extends Action
                 'application/octet-stream',
                 $rootDir->stat($relativeFile)['size']
             );
+			
+			
+			$contentType = 'application/octet-stream';
 
-            $resultRaw = $this->resultRawFactory->create();
-            $resultRaw->setContents($rootDir->readFile($relativeFile));
-            return $resultRaw;
+			$this->getResponse()->setHttpResponseCode(
+				200
+			)->setHeader(
+				'Pragma',
+				'public',
+				true
+			)->setHeader(
+				'Cache-Control',
+				'must-revalidate, post-check=0, pre-check=0',
+				true
+			)->setHeader(
+				'Content-type',
+				$contentType,
+				true
+			);
+            $this->getResponse()->setHeader('Content-Length', $rootDir->stat($relativeFile)['size']);
+			
+			 
+			$this->getResponse()->clearBody();
+			$this->getResponse()->sendHeaders();
+			
+			
+			$handle = $this->filesystem->getDirectoryRead(DirectoryList::VAR_DIR)->openFile($relativeFile);
+			
+			while (true == ($buffer = $handle->read(1024))) {
+				echo $buffer;
+			}
+		
+		 
+			exit();
         } else {
             $result = $this->resultRedirectFactory->create();
             $result->setPath('umc/module/index');

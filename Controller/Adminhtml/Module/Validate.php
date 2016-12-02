@@ -18,8 +18,7 @@
 namespace Umc\Base\Controller\Adminhtml\Module;
 
 use Magento\Backend\App\Action;
-use Magento\Backend\App\Action\Context;
-use Magento\Backend\Model\View\Result\RedirectFactory;
+use Magento\Backend\App\Action\Context; 
 use Umc\Base\Model\Builder;
 use Umc\Base\Model\Core\ModuleFactory;
 use Umc\Base\Model\UmcFactory;
@@ -28,13 +27,7 @@ use Magento\Framework\App\RequestInterface;
 
 class Validate extends Action
 {
-    const ERROR_GLUE  = '####';
-    /**
-     * page redirect factory
-     *
-     * @var \Magento\Framework\View\Result\PageFactory
-     */
-    protected $pageRedirectFactory;
+    const ERROR_GLUE  = '####'; 
 
     /**
      * model factory
@@ -64,23 +57,20 @@ class Validate extends Action
 
     /**
      * constructor
-     *
-     * @param RedirectFactory $pageRedirectFactory
+     * 
      * @param UmcFactory $umcFactory
      * @param ModuleFactory $moduleFactory
      * @param WriterInterface $writer
      * @param Builder $builder
      * @param Context $context
      */
-    public function __construct(
-        RedirectFactory $pageRedirectFactory,
+    public function __construct( 
         UmcFactory $umcFactory,
         ModuleFactory $moduleFactory,
         WriterInterface $writer,
         Builder $builder,
         Context $context
-    ) {
-        $this->pageRedirectFactory  = $pageRedirectFactory;
+    ) { 
         $this->umcFactory           = $umcFactory;
         $this->moduleFactory        = $moduleFactory;
         $this->writer               = $writer;
