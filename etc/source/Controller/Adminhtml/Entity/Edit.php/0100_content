@@ -37,7 +37,7 @@
         }
         $title = ${{entity}}->getId() ? ${{entity}}->get{{NameAttributeCode}}() : __('New {{EntityLabel}}');
         $resultPage->getConfig()->getTitle()->prepend($title);
-        $data = $this->{{_}}backendSession->getData('{{namespace}}_{{module}}_{{entity}}_data', true);
+        $data = $this->_session->getData('{{namespace}}_{{module}}_{{entity}}_data', true);
         if (!empty($data)) {
             ${{entity}}->setData($data);
         }

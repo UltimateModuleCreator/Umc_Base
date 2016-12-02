@@ -8,7 +8,7 @@
             try {
                 ${{entity}}->save();
                 $this->messageManager->addSuccess(__('The {{EntityLabel}} has been saved.'));
-                $this->{{_}}backendSession->set{{Namespace}}{{Module}}{{Entity}}Data(false);
+                $this->_session->set{{Namespace}}{{Module}}{{Entity}}Data(false);
                 if ($this->getRequest()->getParam('back')) {
                     $resultRedirect->setPath(
                         '{{namespace}}_{{module}}/*/edit',
