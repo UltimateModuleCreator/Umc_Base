@@ -23,13 +23,7 @@ use Magento\Backend\Model\View\Result\RedirectFactory;
 use Umc\Base\Model\Core\ModuleFactory;
 
 class Save extends Action
-{
-    /**
-     * page redirect factory
-     *
-     * @var \Magento\Framework\View\Result\PageFactory
-     */
-    protected $pageRedirectFactory;
+{ 
 
     /**
      * module factory
@@ -45,12 +39,10 @@ class Save extends Action
      * @param ModuleFactory $moduleFactory
      * @param Context $context
      */
-    public function __construct(
-        RedirectFactory $pageRedirectFactory,
+    public function __construct( 
         ModuleFactory $moduleFactory,
         Context $context
-    ) {
-        $this->pageRedirectFactory  = $pageRedirectFactory;
+    ) { 
         $this->moduleFactory        = $moduleFactory;
         parent::__construct($context);
     }
@@ -73,7 +65,7 @@ class Save extends Action
             $this->messageManager->addError($e->getMessage());
             $redirectBack = true;
         }
-        $pageRedirect = $this->pageRedirectFactory->create();
+        $pageRedirect = $this->resultRedirectFactory->create();
         if ($redirectBack) {
             $pageRedirect->setPath(
                 '*/*/edit',

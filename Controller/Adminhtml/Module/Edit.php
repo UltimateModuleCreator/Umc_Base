@@ -80,21 +80,14 @@ class Edit extends Module
      * @var \Magento\Framework\Filesystem
      */
     protected $filesystem;
-
-    /**
-     * page redirect factory
-     *
-     * @var RedirectFactory
-     */
-    protected $pageRedirectFactory;
+ 
 
     /**
      * constructor
      *
      * @param Registry $coreRegistry
      * @param ScopeConfigInterface $scopeConfig
-     * @param Parser $xmlParser
-     * @param RedirectFactory $pageRedirectFactory
+     * @param Parser $xmlParser 
      * @param ModuleFactory $moduleFactory
      * @param Settings $settings
      * @param Decoder $decoder
@@ -105,8 +98,7 @@ class Edit extends Module
     public function __construct(
         Registry $coreRegistry,
         ScopeConfigInterface $scopeConfig,
-        Parser $xmlParser,
-        RedirectFactory $pageRedirectFactory,
+        Parser $xmlParser, 
         ModuleFactory $moduleFactory,
         Settings $settings,
         Decoder $decoder,
@@ -116,8 +108,7 @@ class Edit extends Module
     ) {
         $this->coreRegistry         = $coreRegistry;
         $this->scopeConfig          = $scopeConfig;
-        $this->xmlParser            = $xmlParser;
-        $this->pageRedirectFactory  = $pageRedirectFactory;
+        $this->xmlParser            = $xmlParser; 
         $this->moduleFactory        = $moduleFactory;
         $this->settings             = $settings;
         $this->decoder              = $decoder;
@@ -208,7 +199,7 @@ class Edit extends Module
                 }
             } catch (\Exception $e) {
                 $this->messageManager->addError($e->getMessage());
-                $pageRedirect = $this->pageRedirectFactory->create();
+                $pageRedirect = $this->resultRedirectFactory->create();
                 $pageRedirect->setPath('umc/*/index');
                 return $pageRedirect;
             }

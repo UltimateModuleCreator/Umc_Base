@@ -120,7 +120,13 @@ class Converter implements ConverterInterface
                 if ($key) {
                     $result[$childName][$key] = $convertedChild;
                 } else {
-                    $result[$childName][] = $convertedChild;
+					try{
+						$result[$childName][] = $convertedChild;
+					}catch(Exception $e){
+						print_r($result[$childName]);
+						exit();
+					}
+                    
                 }
                 $processedSubLists[] = $childName;
             } else {
