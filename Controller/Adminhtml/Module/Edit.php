@@ -11,7 +11,7 @@
  *
  * @category  Umc
  * @package   Umc_Base
- * @copyright 2015 Marius Strajeru
+ * @copyright Marius Strajeru
  * @license   http://opensource.org/licenses/mit-license.php MIT License
  * @author    Marius Strajeru <ultimate.module.creator@gmail.com>
  */
@@ -26,9 +26,12 @@ use Magento\Framework\Registry;
 use Magento\Framework\View\Result\PageFactory;
 use Magento\Framework\Url\Decoder;
 use Magento\Framework\Xml\Parser;
+use Umc\Base\Api\Data\AttributeInterface;
+use Umc\Base\Api\Data\EntityInterface;
+use Umc\Base\Api\Data\ModuleInterface;
 use Umc\Base\Controller\Adminhtml\Module;
-use Umc\Base\Model\Core\Settings;
-use Umc\Base\Model\Core\ModuleFactory;
+use Umc\Base\Api\Data\ModuleInterfaceFactory;
+use Umc\Base\Writer\Filesystem as UmcFilesystem;
 
 class Edit extends Module
 {
@@ -56,16 +59,9 @@ class Edit extends Module
     /**
      * module factory
      *
-     * @var \Umc\Base\Model\Core\ModuleFactory
+     * @var ModuleInterfaceFactory
      */
     protected $moduleFactory;
-
-    /**
-     * settings
-     *
-     * @var \Umc\Base\Model\Core\Settings
-     */
-    protected $settings;
 
     /**
      * url decoder
@@ -82,133 +78,62 @@ class Edit extends Module
     protected $filesystem;
 
     /**
-     * page redirect factory
+     * UMC filesystem
      *
      * @var RedirectFactory
      */
-    protected $pageRedirectFactory;
+    protected $umcFilesystem;
 
     /**
-     * constructor
-     *
+     * @param PageFactory $resultPageFactory
+     * @param Context $context
      * @param Registry $coreRegistry
      * @param ScopeConfigInterface $scopeConfig
      * @param Parser $xmlParser
-     * @param RedirectFactory $pageRedirectFactory
-     * @param ModuleFactory $moduleFactory
-     * @param Settings $settings
+     * @param ModuleInterfaceFactory $moduleFactory
      * @param Decoder $decoder
      * @param Filesystem $filesystem
-     * @param PageFactory $resultPageFactory
-     * @param Context $context
+     * @param UmcFilesystem $umcFilesystem
      */
     public function __construct(
+        Context $context,
+        PageFactory $resultPageFactory,
         Registry $coreRegistry,
         ScopeConfigInterface $scopeConfig,
         Parser $xmlParser,
-        RedirectFactory $pageRedirectFactory,
-        ModuleFactory $moduleFactory,
-        Settings $settings,
+        ModuleInterfaceFactory $moduleFactory,
         Decoder $decoder,
         Filesystem $filesystem,
-        PageFactory $resultPageFactory,
-        Context $context
+        UmcFilesystem $umcFilesystem
     ) {
         $this->coreRegistry         = $coreRegistry;
         $this->scopeConfig          = $scopeConfig;
         $this->xmlParser            = $xmlParser;
-        $this->pageRedirectFactory  = $pageRedirectFactory;
         $this->moduleFactory        = $moduleFactory;
-        $this->settings             = $settings;
         $this->decoder              = $decoder;
         $this->filesystem           = $filesystem;
-        parent::__construct($resultPageFactory, $context);
+        $this->umcFilesystem        = $umcFilesystem;
+        parent::__construct($context, $resultPageFactory);
     }
 
     /**
      * run action
      *
-     * @return \Magento\Framework\View\Result\Page
+     * @return \Magento\Framework\View\Result\Page | \Magento\Framework\Controller\Result\Redirect
      */
     public function execute()
     {
         $pageResult = $this->resultPageFactory->create();
         $pageResult->getConfig()->getTitle()->set(__('Ultimate Module Creator'));
         $id = $this->getRequest()->getParam('id');
+        /** @var \Umc\Base\Api\Data\ModuleInterface $module */
         $module = $this->moduleFactory->create();
         if ($id) {
             try {
-                $moduleName = $this->decoder->decode($id);
-                $path = $this->settings->getXmlRootPath();
-                $moduleName = basename($moduleName);
-                $xmlFile = $moduleName . '.xml';
-                $rootDir = $this->filesystem->getDirectoryRead(DirectoryList::VAR_DIR);
-                $file = $rootDir->getRelativePath(Settings::VAR_DIR_NAME . '/' .$xmlFile);
-                if ($rootDir->isFile($file) && $rootDir->isReadable($file)) {
-                    $this->xmlParser->load($path.'/'.$xmlFile);
-                    $data = $this->xmlParser->xmlToArray();
-                    $data = $data[$module->getEntityCode()];
-                    $entityIdsByCode = [];
-                    if (isset($data['entities']['entity'][0])) {
-                        $entities = $data['entities']['entity'];
-                    } else {
-                        $entities = [$data['entities']['entity']];
-                    }
-                    if (isset($data[$this->settings->getEntityCode()])) {
-                        $settings = $data[$this->settings->getEntityCode()];
-                        unset($data[$this->settings->getEntityCode()]);
-                    } else {
-                        $settings = [];
-                    }
-
-                    foreach ($entities as $key => $entity) {
-                        if (isset($entity['attributes']['attribute'])) {
-                            if (isset($entity['attributes']['attribute'][0])) {
-                                $entities[$key]['attributes'] = $entity['attributes']['attribute'];
-                            } else {
-                                $entities[$key]['attributes'] = [$entity['attributes']['attribute']];
-                            }
-                        }
-                        $entityIdsByCode[$entity['name_singular']] = $key;
-                    }
-                    unset($data['entities']);
-                    $relationsByCode = [];
-                    if (isset($data['relations'])) {
-                        if (isset($data['relations']['relation'][0])) {
-                            foreach ($data['relations']['relation'] as $relationArray) {
-                                $relationsByCode = array_merge($relationsByCode, $relationArray);
-                            }
-                        } else {
-                            $relationsByCode = $data['relations']['relation'];
-                        }
-
-                    }
-
-                    $relations = [];
-                    foreach ($relationsByCode as $code => $value) {
-                        $parts = explode('_', $code);
-                        if (count($parts) != 2) {
-                            continue;
-                        }
-                        if (isset($entityIdsByCode[$parts[0]]) && isset($entityIdsByCode[$parts[1]])) {
-                            $entity0 = $entityIdsByCode[$parts[0]];
-                            $entity1 = $entityIdsByCode[$parts[1]];
-                            $relations[$entity0][$entity1] = $value;
-                        }
-                    }
-                    unset($data['relations']);
-                    $data = [
-                        $module->getEntityCode()         => $data,
-                        'entity'                         => $entities,
-                        $this->settings->getEntityCode() => $settings,
-                        'relation'                       => $relations
-                    ];
-                } else {
-                    $data = [];
-                }
+                $data = $this->initModuleData($id);
             } catch (\Exception $e) {
-                $this->messageManager->addError($e->getMessage());
-                $pageRedirect = $this->pageRedirectFactory->create();
+                $this->messageManager->addErrorMessage($e->getMessage());
+                $pageRedirect = $this->resultRedirectFactory->create();
                 $pageRedirect->setPath('umc/*/index');
                 return $pageRedirect;
             }
@@ -218,7 +143,7 @@ class Edit extends Module
         $module->initFromData($data);
         $this->coreRegistry->register('current_module', $module);
         if ($id) {
-            $title = __('Edit Module "%1"', $module->getNamespace().'_'.$module->getModuleName());
+            $title = __('Edit Module "%1"', $module->getExtensionName());
         } else {
             $title = __('Create module');
         }
@@ -232,5 +157,55 @@ class Edit extends Module
                 $title
             );
         return $pageResult;
+    }
+
+    /**
+     * @param string $id
+     * @return array
+     */
+    protected function initModuleData($id)
+    {
+        $data = [];
+        $moduleName = $this->decoder->decode($id);
+        $path = $this->umcFilesystem->getXmlRootPath();
+        $moduleName = $this->sanitizeModuleFileName($moduleName);
+        $xmlFile = $moduleName . '.xml';
+        $rootDir = $this->filesystem->getDirectoryRead(DirectoryList::VAR_DIR);
+        $file = $rootDir->getRelativePath(UmcFilesystem::VAR_DIR_NAME . '/' .$xmlFile);
+        if ($rootDir->isFile($file) && $rootDir->isReadable($file)) {
+            $this->xmlParser->load($path.'/'.$xmlFile);
+            $data = $this->xmlParser->xmlToArray();
+            $data = $data[ModuleInterface::ENTITY_CODE];
+            if (isset($data['entities'][EntityInterface::ENTITY_CODE][0])) {
+                $entities = $data['entities'][EntityInterface::ENTITY_CODE];
+            } else {
+                $entities = [$data['entities'][EntityInterface::ENTITY_CODE]];
+            }
+            foreach ($entities as $key => $entity) {
+                if (isset($entity['attributes'][AttributeInterface::ENTITY_CODE])) {
+                    if (isset($entity['attributes'][AttributeInterface::ENTITY_CODE][0])) {
+                        $entities[$key]['attributes'] = $entity['attributes'][AttributeInterface::ENTITY_CODE];
+                    } else {
+                        $entities[$key]['attributes'] = [$entity['attributes'][AttributeInterface::ENTITY_CODE]];
+                    }
+                }
+            }
+            unset($data['entities']);
+            $data = [
+                ModuleInterface::ENTITY_CODE     => $data,
+                'entity'                         => $entities,
+            ];
+        }
+        return $data;
+    }
+
+    /**
+     * @param string $file
+     * @return string
+     */
+    protected function sanitizeModuleFileName($file)
+    {
+        $parts = explode('/', str_replace('\\', '/', $file));
+        return $parts[count($parts) - 1];
     }
 }

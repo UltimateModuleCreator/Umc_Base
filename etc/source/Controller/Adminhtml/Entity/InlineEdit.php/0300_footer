@@ -1,0 +1,34 @@
+                $this->{{_}}dataObjectHelper->populateWithArray(${{entity}}, ${{entity}}Data, {{class {{Namespace}}\{{Module}}\Api\Data\{{Entity}}Interface}}::class);
+                $this->{{_}}{{entity}}ResourceModel->saveAttribute(${{entity}}, array_keys(${{entity}}Data));
+            } catch ({{class Magento\Framework\Exception\LocalizedException}} $e) {
+                $messages[] = $this->{{_}}getErrorWith{{Entity}}Id(${{entity}}, $e->getMessage());
+                $error = true;
+            } catch (\RuntimeException $e) {
+                $messages[] = $this->{{_}}getErrorWith{{Entity}}Id(${{entity}}, $e->getMessage());
+                $error = true;
+            } catch (\Exception $e) {
+                $messages[] = $this->{{_}}getErrorWith{{Entity}}Id(
+                    ${{entity}},
+                    __('Something went wrong while saving the {{EntityLabelEscaped}}.')
+                );
+                $error = true;
+            }
+        }
+
+        return $resultJson->setData([
+            'messages' => $messages,
+            'error' => $error
+        ]);
+    }
+
+    /**
+     * Add {{EntityLabelEscaped}} id to error message
+     *
+     * @param \{{Namespace}}\{{Module}}\Api\Data\{{Entity}}Interface ${{entity}}
+     * @param string $errorText
+     * @return string
+     */
+    protected function {{_}}getErrorWith{{Entity}}Id({{class {{Namespace}}\{{Module}}\Api\Data\{{Entity}}Interface}} ${{entity}}, $errorText)
+    {
+        return '[{{EntityLabelEscaped}} ID: ' . ${{entity}}->getId() . '] ' . $errorText;
+    }

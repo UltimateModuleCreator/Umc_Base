@@ -1,4 +1,0 @@
-            if (${{siblings}} = $this->getRequest()->getPost('{{entity}}_{{siblings}}')) {
-                ${{siblings}} = json_decode(${{siblings}}, true);
-                ${{entity}}->set{{Siblings}}Data(${{siblings}});
-            }

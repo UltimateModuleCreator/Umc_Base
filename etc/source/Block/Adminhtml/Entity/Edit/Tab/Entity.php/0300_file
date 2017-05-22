@@ -1,1 +1,0 @@
-        $fieldset->addType('file', '{{Namespace}}\{{Module}}\Block\Adminhtml\{{Entity}}\Helper\File');

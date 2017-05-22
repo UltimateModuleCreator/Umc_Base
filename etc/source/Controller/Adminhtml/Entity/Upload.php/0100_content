@@ -1,0 +1,30 @@
+    /**
+     * Upload file controller action
+     *
+     * @return \Magento\Framework\Controller\ResultInterface
+     */
+    public function execute()
+    {
+        try {
+            $result = $this->{{_}}uploader->saveFileToTmpDir($this->{{_}}getFieldName());
+
+            $result['cookie'] = [
+                'name' => $this->_getSession()->getName(),
+                'value' => $this->_getSession()->getSessionId(),
+                'lifetime' => $this->_getSession()->getCookieLifetime(),
+                'path' => $this->_getSession()->getCookiePath(),
+                'domain' => $this->_getSession()->getCookieDomain(),
+            ];
+        } catch (\Exception $e) {
+            $result = ['error' => $e->getMessage(), 'errorcode' => $e->getCode()];
+        }
+        return $this->resultFactory->create({{class Magento\Framework\Controller\ResultFactory}}::TYPE_JSON)->setData($result);
+    }
+
+    /**
+     * @return string
+     */
+    protected function {{_}}getFieldName()
+    {
+        return $this->_request->getParam('field');
+    }

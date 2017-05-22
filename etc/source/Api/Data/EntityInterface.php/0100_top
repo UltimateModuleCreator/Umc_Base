@@ -1,0 +1,7 @@
+    /**
+     * Get ID
+     *
+     * @return int|null
+     */
+    public function getId();
+

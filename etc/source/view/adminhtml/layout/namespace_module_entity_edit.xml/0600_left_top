@@ -1,2 +1,0 @@
-        <referenceContainer name="left">
-            <block class="{{Namespace}}\{{Module}}\Block\Adminhtml\{{Entity}}\Edit\Tabs" name="{{namespace}}_{{module}}_{{entity}}_tabs">

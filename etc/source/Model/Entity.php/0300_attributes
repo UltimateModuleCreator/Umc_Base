@@ -1,0 +1,21 @@
+
+    /**
+     * set {{Label}}
+     *
+     * @param mixed ${{codeCamelCase}}
+     * @return {{class {{Namespace}}\{{Module}}\Api\Data\{{Entity}}Interface}}
+     */
+    public function set{{CodeCamelCase}}(${{codeCamelCase}})
+    {
+        return $this->setData({{class {{Namespace}}\{{Module}}\Api\Data\{{Entity}}Interface}}::{{CODE}}, ${{codeCamelCase}});
+    }
+
+    /**
+     * get {{Label}}
+     *
+     * @return string
+     */
+    public function get{{CodeCamelCase}}()
+    {
+        return $this->getData({{class {{Namespace}}\{{Module}}\Api\Data\{{Entity}}Interface}}::{{CODE}});
+    }

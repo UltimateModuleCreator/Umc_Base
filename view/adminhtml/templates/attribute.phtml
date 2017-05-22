@@ -11,46 +11,52 @@
  *
  * @category  Umc
  * @package   Umc_Base
- * @copyright 2015 Marius Strajeru
+ * @copyright Marius Strajeru
  * @license   http://opensource.org/licenses/mit-license.php MIT License
  * @author    Marius Strajeru <ultimate.module.creator@gmail.com>
  */
 ?>
-<?php /** @var \Umc\Base\Block\Adminhtml\Attribute $this */ ?>
-<?php $_id = $this->getEntityId().'_'.$this->getIncrement();?>
-<?php $_attribute = $this->getAttributeInstance();?>
-<?php if ($this->getIsTemplate()) : ?>
+<?php /** @var \Umc\Base\Block\Adminhtml\Attribute $block */ ?>
+<?php $_id = $block->getEntityId().'_'.$block->getIncrement();?>
+<?php $_attribute = $block->getAttributeInstance();?>
+<?php if ($block->getIsTemplate()) : ?>
 <script id="attribute-template" type="text/x-magento-template">
 <?php endif;?>
-    <div class="entry-edit umc-attribute" id="attribute_<?php echo $this->getEntityId()?>_<?php echo $this->getIncrement();?>">
-        <div id="attribute-<?php echo $this->getEntityId()?>-<?php echo $this->getIncrement() ?>-wrapper" class="fieldset-wrapper admin__collapsible-block-wrapper opened">
+    <div class="entry-edit umc-attribute"
+         id="attribute_<?php echo $block->escapeHtml($block->getEntityId())?>_<?php echo $block->escapeHtml($block->getIncrement()); ?>">
+        <div id="attribute-<?php echo $block->escapeHtml($block->getEntityId())?>-<?php echo $block->escapeHtml($block->getIncrement()); ?>-wrapper"
+             class="left-collapsible-fieldset fieldset-wrapper admin__collapsible-block-wrapper opened">
             <div class="fieldset-wrapper-title">
                 <strong
                     class="admin__collapsible-title"
                     data-toggle="collapse"
-                    data-target="#attribute-<?php echo $this->getEntityId()?>-<?php echo $this->getIncrement() ?>-content">
+                    data-target="#attribute-<?php echo $block->escapeHtml($block->getEntityId())?>-<?php echo $block->escapeHtml($block->getIncrement()); ?>-content">
                     <span class="attribute-title">
-                        <?php echo ($this->getAttributeInstance()) ? $this->getAttributeInstance()->getLabel() : __('Attribute %1', $this->getIncrement());?>
+                        <?php echo ($block->getAttributeInstance())
+                            ? $block->escapeHtml($block->getAttributeInstance()->getLabel())
+                            : $block->escapeHtml(__('Attribute %1', $block->getIncrement()));?>
                     </span>
                 </strong>
                 <div class="actions">
-                    <button type="button" title="<?php echo __('Remove attribute') ?>" class="action-delete remove-attribute">
-                        <span><?php echo __('Remove attribute') ?></span>
+                    <button type="button" title="<?php echo $block->escapeHtml(__('Remove attribute')); ?>"
+                            class="action-delete remove-attribute">
+                        <span><?php echo $block->escapeHtml(__('Remove attribute')) ?></span>
                     </button>
                 </div>
-                <div id="attribute-<?php echo $this->getEntityId()?>-<?php echo $this->getIncrement() ?>-move"
+                <div id="attribute-<?php echo $block->escapeHtml($block->getEntityId());?>-<?php echo $block->escapeHtml($block->getIncrement()); ?>-move"
                      data-role="draggable-handle"
                      class="draggable-handle"
-                     title="<?php echo __('Sort Attributes'); ?>">
+                     title="<?php echo $block->escapeHtml(__('Sort Attributes')); ?>">
                  </div>
             </div>
-            <div id="attribute-<?php echo $this->getEntityId()?>-<?php echo $this->getIncrement() ?>-content" class="fieldset-wrapper-content in collapse">
+            <div id="attribute-<?php echo $block->escapeHtml($block->getEntityId());?>-<?php echo $block->escapeHtml($block->getIncrement()); ?>-content"
+                 class="fieldset-wrapper-content in collapse">
                 <fieldset class="fieldset">
-                    <?php echo $this->getFormHtml();?>
+                    <?php echo $block->getFormHtml();?>
                 </fieldset>
             </div>
         </div>
     </div>
-<?php if ($this->getIsTemplate()) : ?>
+<?php if ($block->getIsTemplate()) : ?>
 </script>
 <?php endif;

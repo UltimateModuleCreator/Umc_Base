@@ -1,0 +1,33 @@
+<?php
+/**
+ * Umc_Base extension
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the MIT License
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/mit-license.php
+ *
+ * @category  Umc
+ * @package   Umc_Base
+ * @copyright Marius Strajeru
+ * @license   http://opensource.org/licenses/mit-license.php MIT License
+ * @author    Marius Strajeru <ultimate.module.creator@gmail.com>
+ */
+?>
+<?php /** @var \Umc\Base\Block\Adminhtml\SessionProlong $block */ ?>
+<script type="text/javascript">
+    require(["jquery"],
+        function(jQuery) {
+            jQuery(document).ready(function() {
+                setInterval(function(){
+                    jQuery.ajax({
+                        type: 'GET',
+                        url: '<?php echo $block->escapeUrl($block->getSessionProlongUrl()) ?>'
+                    });
+                }, 60000)
+            });
+        }
+    );
+</script>

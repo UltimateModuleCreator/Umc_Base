@@ -1,0 +1,2 @@
+            ${{codeCamelCase}} = $this->{{_}}getUploader('image')->uploadFileAndGetName('{{code}}', $data);
+            $data['{{code}}'] = ${{codeCamelCase}};

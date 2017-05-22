@@ -1,0 +1,11 @@
+        }
+        $data = $this->{{_}}dataPersistor->get('{{namespace}}_{{module}}_{{entity}}');
+        if (!empty($data)) {
+            ${{entity}} = $this->collection->getNewEmptyItem();
+            ${{entity}}->setData($data);
+            $this->{{_}}loadedData[${{entity}}->getId()] = ${{entity}}->getData();
+            $this->{{_}}dataPersistor->clear('{{namespace}}_{{module}}_{{entity}}');
+        }
+        return $this->{{_}}loadedData;
+    }
+

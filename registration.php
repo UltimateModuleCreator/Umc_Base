@@ -11,7 +11,7 @@
  *
  * @category  Umc
  * @package   Umc_Base
- * @copyright 2015 Marius Strajeru
+ * @copyright Marius Strajeru
  * @license   http://opensource.org/licenses/mit-license.php MIT License
  * @author    Marius Strajeru <ultimate.module.creator@gmail.com>
  */

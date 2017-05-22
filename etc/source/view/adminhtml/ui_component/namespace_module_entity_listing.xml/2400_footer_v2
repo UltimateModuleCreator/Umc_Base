@@ -1,0 +1,9 @@
+        <actionsColumn name="actions" class="{{Namespace}}\{{Module}}\Ui\Component\Listing\Column\{{Entity}}Actions">
+            <settings>
+                <indexField>{{entity}}_id</indexField>
+                <resizeEnabled>false</resizeEnabled>
+                <resizeDefaultWidth>107</resizeDefaultWidth>
+            </settings>
+        </actionsColumn>
+    </columns>
+</listing>

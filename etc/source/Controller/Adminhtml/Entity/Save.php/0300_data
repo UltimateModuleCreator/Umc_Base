@@ -1,0 +1,9 @@
+        $id = !empty($data['{{entity}}_id']) ? $data['{{entity}}_id'] : null;
+        $resultRedirect = $this->resultRedirectFactory->create();
+        try {
+            if ($id) {
+                ${{entity}} = $this->{{_}}{{entity}}Repository->getById((int)$id);
+            } else {
+                unset($data['{{entity}}_id']);
+                ${{entity}} = $this->{{_}}{{entity}}Factory->create();
+            }

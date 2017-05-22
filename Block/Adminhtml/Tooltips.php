@@ -11,7 +11,7 @@
  *
  * @category  Umc
  * @package   Umc_Base
- * @copyright 2015 Marius Strajeru
+ * @copyright Marius Strajeru
  * @license   http://opensource.org/licenses/mit-license.php MIT License
  * @author    Marius Strajeru <ultimate.module.creator@gmail.com>
  */
@@ -20,9 +20,12 @@ namespace Umc\Base\Block\Adminhtml;
 use Magento\Backend\Block\Template;
 use Magento\Backend\Block\Template\Context;
 use Umc\Base\Block\Adminhtml\Module\Edit\Tab\AbstractTab;
-use Umc\Base\Model\Config\Form as FormConfig;
+use Umc\Base\Config\Form as FormConfig;
 use Umc\Base\Model\TooltipFactory;
 
+/**
+ * @api
+ */
 class Tooltips extends Template
 {
     /**
@@ -42,23 +45,20 @@ class Tooltips extends Template
     /**
      * form config
      *
-     * @var \Umc\Base\Model\Config\Form
+     * @var \Umc\Base\Config\Form
      */
     protected $formConfig;
 
     /**
-     * constructor
-     *
+     * @param Context $context
      * @param FormConfig $formConfig
      * @param TooltipFactory $factory
-     * @param Context $context
      */
     public function __construct(
+        Context $context,
         FormConfig $formConfig,
-        TooltipFactory $factory,
-        Context $context
-    )
-    {
+        TooltipFactory $factory
+    ) {
         $this->formConfig = $formConfig;
         $this->factory    = $factory;
         parent::__construct($context);
@@ -74,27 +74,42 @@ class Tooltips extends Template
         if (!$this->_scopeConfig->isSetFlag(AbstractTab::XML_TOOLTIPS_ENABLED_PATH)) {
             return [];
         }
-        if (is_null($this->tooltips)) {
+        if ($this->tooltips === null) {
             $this->tooltips = [];
             foreach ($this->formConfig->getConfig('form') as $entityId => $entitySettings) {
                 if (isset($entitySettings['fieldset'])) {
                     foreach ($entitySettings['fieldset'] as $fieldsetSettings) {
-                        if (isset($fieldsetSettings['field'])) {
-                            foreach ($fieldsetSettings['field'] as $fieldId => $fieldSettings) {
-                                if (isset($fieldSettings['tooltip']) && isset($fieldSettings['label'])) {
-                                    /** @var \Umc\Base\Model\Tooltip  $tooltip */
-                                    $tooltip = $this->factory->create();
-                                    $tooltip->setTitle(__($fieldSettings['label']));
-                                    $tooltip->setMessage(__($fieldSettings['tooltip']));
-                                    $tooltip->setId($entityId.'_'.$fieldId);
-                                    $this->tooltips[] = $tooltip;
-                                }
-                            }
-                        }
+                        $this->tooltips = array_merge(
+                            $this->tooltips,
+                            $this->generateTooltips($fieldsetSettings, $entityId)
+                        );
                     }
                 }
             }
         }
         return $this->tooltips;
+    }
+
+    /**
+     * @param array $fieldset
+     * @param string $entityId
+     * @return \Umc\Base\Model\Tooltip[]
+     */
+    protected function generateTooltips($fieldset, $entityId)
+    {
+        $tooltips = [];
+        if (isset($fieldset['field'])) {
+            foreach ($fieldset['field'] as $fieldId => $fieldSettings) {
+                if (isset($fieldSettings['tooltip']) && isset($fieldSettings['label'])) {
+                    /** @var \Umc\Base\Model\Tooltip  $tooltip */
+                    $tooltip = $this->factory->create();
+                    $tooltip->setTitle($fieldSettings['label']);
+                    $tooltip->setMessage($fieldSettings['tooltip']);
+                    $tooltip->setData('id', $entityId.'_'.$fieldId);
+                    $tooltips[] = $tooltip;
+                }
+            }
+        }
+        return $tooltips;
     }
 }

@@ -1,6 +1,5 @@
-
     /**
-     * @return {{class Magento\Framework\Search\AggregationInterface}}
+     * @return {{class Magento\Framework\Api\Search\AggregationInterface}}
      */
     public function getAggregations()
     {
@@ -8,14 +7,13 @@
     }
 
     /**
-     * @param {{class Magento\Framework\Search\AggregationInterface}} $aggregations
+     * @param {{class Magento\Framework\Api\Search\AggregationInterface}} $aggregations
      * @return $this
      */
     public function setAggregations($aggregations)
     {
         $this->{{_}}aggregations = $aggregations;
     }
-
 
     /**
      * Retrieve all ids for collection
@@ -27,7 +25,7 @@
      */
     public function getAllIds($limit = null, $offset = null)
     {
-        return $this->getConnection()->fetchCol($this->_getAllIdsSelect($limit, $offset), $this->_bindParams);
+        return $this->getConnection()->fetchCol($this->{{_}}getAllIdsSelect($limit, $offset), $this->_bindParams);
     }
 
     /**

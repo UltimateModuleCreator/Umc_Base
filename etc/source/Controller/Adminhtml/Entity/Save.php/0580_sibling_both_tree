@@ -1,3 +1,0 @@
-            if (!isset($data['{{siblings}}_ids'])) {
-                ${{entity}}->set{{Siblings}}Ids([]);
-            }

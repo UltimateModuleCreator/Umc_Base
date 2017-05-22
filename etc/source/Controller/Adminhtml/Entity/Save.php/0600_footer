@@ -1,0 +1,30 @@
+            $this->{{_}}dataObjectHelper->populateWithArray(${{entity}}, $data, {{class {{Namespace}}\{{Module}}\Api\Data\{{Entity}}Interface}}::class);
+            $this->{{_}}{{entity}}Repository->save(${{entity}});
+            $this->messageManager->addSuccessMessage(__('You saved the {{EntityLabelEscaped}}'));
+            $this->{{_}}dataPersistor->clear('{{namespace}}_{{module}}_{{entity}}');
+            if ($this->getRequest()->getParam('back')) {
+                $resultRedirect->setPath('{{namespace}}_{{module}}/{{entity}}/edit', ['{{entity}}_id' => ${{entity}}->getId()]);
+            } else {
+                $resultRedirect->setPath('{{namespace}}_{{module}}/{{entity}}');
+            }
+        } catch ({{class Magento\Framework\Exception\LocalizedException}} $e) {
+            $this->messageManager->addErrorMessage($e->getMessage());
+            $this->{{_}}dataPersistor->set('{{namespace}}_{{module}}_{{entity}}', $postData);
+            $resultRedirect->setPath('{{namespace}}_{{module}}/{{entity}}/edit', ['{{entity}}_id' => $id]);
+        } catch (\Exception $e) {
+            $this->messageManager->addErrorMessage(__('There was a problem saving the {{EntityLabelEscaped}}'));
+            $this->{{_}}dataPersistor->set('{{namespace}}_{{module}}_{{entity}}', $postData);
+            $resultRedirect->setPath('{{namespace}}_{{module}}/{{entity}}/edit', ['{{entity}}_id' => $id]);
+        }
+        return $resultRedirect;
+    }
+
+    /**
+     * @param string $type
+     * @return \{{Namespace}}\{{Module}}\Model\Uploader
+     * @throws \Exception
+     */
+    protected function {{_}}getUploader($type)
+    {
+        return $this->{{_}}uploaderPool->getUploader($type);
+    }

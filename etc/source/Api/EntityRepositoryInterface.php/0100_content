@@ -1,0 +1,45 @@
+    /**
+     * Save {{EntityLabel}}.
+     *
+     * @param \{{Namespace}}\{{Module}}\Api\Data\{{Entity}}Interface ${{entity}}
+     * @return \{{Namespace}}\{{Module}}\Api\Data\{{Entity}}Interface
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function save({{class {{Namespace}}\{{Module}}\Api\Data\{{Entity}}Interface}} ${{entity}});
+
+    /**
+     * Retrieve {{EntityLabel}}
+     *
+     * @param int ${{entity}}Id
+     * @return \{{Namespace}}\{{Module}}\Api\Data\{{Entity}}Interface
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function getById(${{entity}}Id);
+
+    /**
+     * Retrieve {{EntitiesLabel}} matching the specified criteria.
+     *
+     * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
+     * @return \{{Namespace}}\{{Module}}\Api\Data\{{Entity}}SearchResultInterface
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function getList({{class Magento\Framework\Api\SearchCriteriaInterface}} $searchCriteria);
+
+    /**
+     * Delete {{EntityLabel}}.
+     *
+     * @param \{{Namespace}}\{{Module}}\Api\Data\{{Entity}}Interface ${{entity}}
+     * @return bool true on success
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function delete({{class {{Namespace}}\{{Module}}\Api\Data\{{Entity}}Interface}} ${{entity}});
+
+    /**
+     * Delete {{EntityLabel}} by ID.
+     *
+     * @param int ${{entity}}Id
+     * @return bool true on success
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function deleteById(${{entity}}Id);

@@ -11,7 +11,7 @@
  *
  * @category  Umc
  * @package   Umc_Base
- * @copyright 2015 Marius Strajeru
+ * @copyright Marius Strajeru
  * @license   http://opensource.org/licenses/mit-license.php MIT License
  * @author    Marius Strajeru <ultimate.module.creator@gmail.com>
  */
@@ -31,16 +31,13 @@ abstract class Module extends Action
     protected $resultPageFactory;
 
     /**
-     * constructor
-     *
-     * @param PageFactory $resultPageFactory
      * @param Context $context
+     * @param PageFactory $resultPageFactory
      */
     public function __construct(
-        PageFactory $resultPageFactory,
-        Context $context
-    )
-    {
+        Context $context,
+        PageFactory $resultPageFactory
+    ) {
         $this->resultPageFactory = $resultPageFactory;
         parent::__construct($context);
     }

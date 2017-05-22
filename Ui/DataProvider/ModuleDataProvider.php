@@ -11,14 +11,14 @@
  *
  * @category  Umc
  * @package   Umc_Base
- * @copyright 2015 Marius Strajeru
+ * @copyright Marius Strajeru
  * @license   http://opensource.org/licenses/mit-license.php MIT License
  * @author    Marius Strajeru <ultimate.module.creator@gmail.com>
  */
 namespace Umc\Base\Ui\DataProvider;
 
 use Magento\Ui\DataProvider\AbstractDataProvider;
-use Umc\Base\Model\Core\Module\CollectionFactory;
+use Umc\Base\Model\Module\CollectionFactory;
 
 /**
  * Class ProductDataProvider
@@ -28,7 +28,7 @@ class ModuleDataProvider extends AbstractDataProvider
     /**
      * Product collection
      *
-     * @var \Magento\Catalog\Model\Resource\Product\Collection
+     * @var \Umc\Base\Model\Module\Collection
      */
     protected $collection;
 
@@ -67,7 +67,7 @@ class ModuleDataProvider extends AbstractDataProvider
     /**
      * Get collection
      *
-     * @return \Umc\Base\Model\Core\Module\Collection
+     * @return \Umc\Base\Model\Module\Collection
      */
     public function getCollection()
     {

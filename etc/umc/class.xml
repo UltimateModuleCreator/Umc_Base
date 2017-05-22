@@ -12,7 +12,7 @@
  *
  * @category  Umc
  * @package   Umc_Base
- * @copyright 2015 Marius Strajeru
+ * @copyright Marius Strajeru
  * @license   http://opensource.org/licenses/mit-license.php MIT License
  * @author    Marius Strajeru <ultimate.module.creator@gmail.com>
  */
@@ -46,8 +46,7 @@
     <class id="Magento\Framework\DB\Select" class="Magento\Framework\DB\Select" alias="DbSelect" />
     <class id="{{Namespace}}\{{Module}}\Controller\Adminhtml\{{Entity}}" class="{{Namespace}}\{{Module}}\Controller\Adminhtml\{{Entity}}" alias="{{Entity}}Controller" />
     <class id="Magento\Backend\Helper\Js" class="Magento\Backend\Helper\Js" alias="JsHelper" />
-    <class id="{{Namespace}}\{{Module}}\Model\ResourceModel\{{Sibling}}\Collection" class="{{Namespace}}\{{Module}}\Model\ResourceModel\{{Sibling}}\Collection" alias="{{Sibling}}Collection" />
-    <class id="{{Namespace}}\{{Module}}\Model\ResourceModel\{{Sibling}}\CollectionFactory" class="{{Namespace}}\{{Module}}\Model\ResourceModel\{{Sibling}}\CollectionFactory" alias="{{Sibling}}CollectionFactory" />
-    <class id="{{siblingTabParent}}" class="{{siblingTabParent}}" alias="{{siblingTabParentAlias}}" />
     <class id="{{Namespace}}\{{Module}}\Model\ResourceModel\{{Entity}}\Collection" class="{{Namespace}}\{{Module}}\Model\ResourceModel\{{Entity}}\Collection" alias="{{Entity}}Collection" />
+    <class id="{{Namespace}}\{{Module}}\Controller\Adminhtml\{{Entity}}\Upload" class="{{Namespace}}\{{Module}}\Controller\Adminhtml\{{Entity}}\Upload" alias="Generic{{Entity}}Upload" />
+    <class id="{{Namespace}}\{{Module}}\Model\ResourceModel\{{Entity}}" class="{{Namespace}}\{{Module}}\Model\ResourceModel\{{Entity}}" alias="{{Entity}}ResourceModel" />
 </classes>

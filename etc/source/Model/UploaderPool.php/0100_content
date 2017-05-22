@@ -1,0 +1,16 @@
+    /**
+     * @param string $type
+     * @return {{class {{Namespace}}\{{Module}}\Model\Uploader}}
+     * @throws \Exception
+     */
+    public function getUploader($type)
+    {
+        if (!isset($this->{{_}}uploaders[$type])) {
+            throw new \Exception("Uploader not found for type: ".$type);
+        }
+        $uploader = $this->{{_}}uploaders[$type];
+        if (!($uploader instanceof {{class {{Namespace}}\{{Module}}\Model\Uploader}})) {
+            throw new \Exception("Uploader for type {$type} not instance of ". {{class {{Namespace}}\{{Module}}\Model\Uploader}}::class);
+        }
+        return $uploader;
+    }

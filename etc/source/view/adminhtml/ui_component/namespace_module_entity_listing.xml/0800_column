@@ -1,0 +1,7 @@
+        <column name="{{code}}"{{adminColumnClass}}>
+            <argument name="data" xsi:type="array">{{adminColumnOptions}}
+                <item name="config" xsi:type="array">{{adminColumnConfig}}
+                    <item name="label" xsi:type="string" translate="true">{{Label}}</item>
+                </item>
+            </argument>
+        </column>

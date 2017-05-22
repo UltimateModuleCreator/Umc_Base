@@ -11,7 +11,7 @@
  *
  * @category  Umc
  * @package   Umc_Base
- * @copyright 2015 Marius Strajeru
+ * @copyright Marius Strajeru
  * @license   http://opensource.org/licenses/mit-license.php MIT License
  * @author    Marius Strajeru <ultimate.module.creator@gmail.com>
  */
@@ -20,7 +20,7 @@ namespace Umc\Base\Controller\Adminhtml\Module;
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
 use Magento\Backend\Model\View\Result\RedirectFactory;
-use Umc\Base\Model\Core\ModuleFactory;
+use Umc\Base\Api\Data\ModuleInterfaceFactory;
 
 class Save extends Action
 {
@@ -34,23 +34,20 @@ class Save extends Action
     /**
      * module factory
      *
-     * @var \Umc\Base\Model\Core\ModuleFactory
+     * @var \Umc\Base\Api\Data\ModuleInterfaceFactory
      */
     protected $moduleFactory;
 
     /**
      * constructor
      *
-     * @param RedirectFactory $pageRedirectFactory
-     * @param ModuleFactory $moduleFactory
+     * @param ModuleInterfaceFactory $moduleFactory
      * @param Context $context
      */
     public function __construct(
-        RedirectFactory $pageRedirectFactory,
-        ModuleFactory $moduleFactory,
+        ModuleInterfaceFactory $moduleFactory,
         Context $context
     ) {
-        $this->pageRedirectFactory  = $pageRedirectFactory;
         $this->moduleFactory        = $moduleFactory;
         parent::__construct($context);
     }
@@ -64,22 +61,22 @@ class Save extends Action
     public function execute()
     {
         $redirectBack = $this->getRequest()->getParam('back', false);
-        /** @var \Umc\Base\Model\Core\Module $module */
+        /** @var \Umc\Base\Api\Data\ModuleInterface $module */
         $module = $this->moduleFactory->create();
         try {
             $module->initFromData($this->getRequest()->getPost()->toArray());
-            $this->messageManager->addSuccess(__('Your extension has been created!'));
+            $this->messageManager->addSuccessMessage(__('Your extension has been created!'));
         } catch (\Exception $e) {
-            $this->messageManager->addError($e->getMessage());
+            $this->messageManager->addErrorMessage($e->getMessage());
             $redirectBack = true;
         }
-        $pageRedirect = $this->pageRedirectFactory->create();
+        $pageRedirect = $this->resultRedirectFactory->create();
         if ($redirectBack) {
             $pageRedirect->setPath(
                 '*/*/edit',
                 [
                     'id' => strtr(
-                        base64_encode($module->getNamespace(). '_'. $module->getModuleName()),
+                        base64_encode($module->getExtensionName()),
                         '+/=',
                         '-_,'
                     ),

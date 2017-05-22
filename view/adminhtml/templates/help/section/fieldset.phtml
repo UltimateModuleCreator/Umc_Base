@@ -1,0 +1,63 @@
+<?php
+/**
+ * Umc_Base extension
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the MIT License
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/mit-license.php
+ *
+ * @category  Umc
+ * @package   Umc_Base
+ * @copyright Marius Strajeru
+ * @license   http://opensource.org/licenses/mit-license.php MIT License
+ * @author    Marius Strajeru <ultimate.module.creator@gmail.com>
+ */
+?>
+<?php /** @var \Umc\Base\Block\Adminhtml\Help\Section\Fieldset $block */ ?>
+<?php $fieldsetId = $block->getFieldsetId(); ?>
+<?php $sectionId = $block->getSectionId(); ?>
+<?php if ($block->getDescriptionHtml()) : ?>
+    <p class="umc-help-fieldset-description"><?php echo $block->getDescriptionHtml();?></p>
+<?php endif;?>
+<fieldset class="fieldset left-collapsible-fieldset">
+    <div data-role="umc-help-fieldset-<?php echo $block->escapeHtml($sectionId); ?>-<?php echo $block->escapeHtml($fieldsetId); ?>-wrapper"
+         id="umc-help-fieldset-<?php echo $block->escapeHtml($sectionId); ?>-<?php echo $block->escapeHtml($fieldsetId); ?>-wrapper"
+         class="fieldset-wrapper admin__collapsible-block-wrapper">
+        <div class="fieldset-wrapper admin__collapsible-block-wrapper ">
+            <strong data-target="#umc-help-fieldset-<?php echo $block->escapeHtml($sectionId); ?>-<?php echo $block->escapeHtml($fieldsetId); ?>-content"
+                    data-toggle="collapse" class="admin__collapsible-title">
+                <span><?php echo $block->getLabelHtml();?></span>
+            </strong>
+        </div>
+        <div data-role="umc-help-fieldset-<?php echo $block->escapeHtml($sectionId); ?>-<?php echo $block->escapeHtml($fieldsetId); ?>-content"
+             id="umc-help-fieldset-<?php echo $block->escapeHtml($sectionId); ?>-<?php echo $block->escapeHtml($fieldsetId); ?>-content"
+             class="fieldset-wrapper-content admin__fieldset-wrapper-content in collapse">
+            <div class="grid">
+                <table id="umc-help-<?php echo $block->escapeHtml($sectionId); ?>-<?php echo $block->escapeHtml($fieldsetId); ?>-table"
+                       class="data-grid umc-help-table">
+                    <thead>
+                    <?php foreach ($block->getColumns() as $column) : ?>
+                        <th><?php echo $block->getColumnLabelHtml($column); ?></th>
+                    <?php endforeach ;?>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($block->getRows() as $field) : ?>
+                        <tr>
+                            <?php if (isset($field['__colspan'])) : ?>
+                                <td colspan="<?php echo count($block->getColumns())?>"><strong><?php echo $block->escapeHtml($field['__colspan'])?></strong></td>
+                            <?php else : ?>
+                                <?php foreach ($block->getColumns() as $column) : ?>
+                                    <td><?php echo $block->getFormatedValueHtml($field, $column); ?></td>
+                                <?php endforeach ;?>
+                            <?php endif;?>
+                        </tr>
+                    <?php endforeach ;?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</fieldset>

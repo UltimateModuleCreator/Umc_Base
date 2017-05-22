@@ -1,4 +1,3 @@
-
     /**
      * Prepare Data Source
      *
@@ -30,7 +29,7 @@
                             'label' => __('Delete'),
                             'confirm' => [
                                 'title' => __('Delete "${ $.$data.{{nameAttributeCode}} }"'),
-                                'message' => __('Are you sure you wan\'t to delete the {{EntityLabel}} "${ $.$data.{{nameAttributeCode}} }" ?')
+                                'message' => __('Are you sure you wan\'t to delete the {{EntityLabelEscaped}} "${ $.$data.{{nameAttributeCode}} }" ?')
                             ]
                         ]
                     ];

@@ -1,0 +1,2 @@
+    <columns name="{{namespace}}_{{module}}_{{entity}}_columns">
+        <settings>

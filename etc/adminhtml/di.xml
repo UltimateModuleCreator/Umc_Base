@@ -1,0 +1,65 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Sample_News extension
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the MIT License
+ * that is bundled with this package in the file LICENSE
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/mit-license.php
+ *
+ * @category  Sample
+ * @package   Sample_News
+ * @copyright 2016 Marius Strajeru
+ * @license   http://opensource.org/licenses/mit-license.php MIT License
+ * @author    Marius Strajeru
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Umc\Base\Block\Adminhtml\Help\Section">
+        <arguments>
+            <argument name="data" xsi:type="array">
+                <item name="template" xsi:type="string">Umc_Base::help/section.phtml</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Umc\Base\Block\Adminhtml\Help\Section\Fieldset">
+        <arguments>
+            <argument name="data" xsi:type="array">
+                <item name="template" xsi:type="string">Umc_Base::help/section/fieldset.phtml</item>
+            </argument>
+        </arguments>
+    </type>
+    <!--<virtualType name="UmcBaseUiDataProviderModuleFormModifierPool" type="Magento\Ui\DataProvider\Modifier\Pool">-->
+        <!--<arguments>-->
+            <!--<argument name="modifiers" xsi:type="array">-->
+                <!--<item name="umc_module" xsi:type="array">-->
+                    <!--<item name="class" xsi:type="string">UmcBaseUiDataProviderModuleFormModifierModule</item>-->
+                    <!--<item name="sortOrder" xsi:type="number">10</item>-->
+                <!--</item>-->
+                <!--<item name="umc_entities" xsi:type="array">-->
+                    <!--<item name="class" xsi:type="string">Umc\Base\Ui\DataProvider\Module\Form\Modifier\Entity</item>-->
+                    <!--<item name="sortOrder" xsi:type="number">30</item>-->
+                <!--</item>-->
+            <!--</argument>-->
+        <!--</arguments>-->
+    <!--</virtualType>-->
+    <!--<type name="Umc\Base\Ui\DataProvider\Module\Form\DataProvider">-->
+        <!--<arguments>-->
+            <!--<argument name="pool" xsi:type="object">UmcBaseUiDataProviderModuleFormModifierPool</argument>-->
+        <!--</arguments>-->
+    <!--</type>-->
+    <!--<virtualType name="UmcBaseUiDataProviderModuleFormModifierModule" type="Umc\Base\Ui\DataProvider\Module\Form\Modifier\AbstractModifier">-->
+        <!--<arguments>-->
+            <!--<argument name="section" xsi:type="const">Umc\Base\Api\Data\ModuleInterface::ENTITY_CODE</argument>-->
+        <!--</arguments>-->
+    <!--</virtualType>-->
+    <!--<type name="Umc\Base\Ui\DataProvider\Module\Form\Modifier\Entity">-->
+        <!--<arguments>-->
+            <!--<argument name="section" xsi:type="const">Umc\Base\Model\Entity::ENTITY_CODE</argument>-->
+            <!--<argument name="subsection" xsi:type="const">Umc\Base\Model\Attribute::ENTITY_CODE</argument>-->
+        <!--</arguments>-->
+    <!--</type>-->
+</config>

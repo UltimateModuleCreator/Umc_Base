@@ -1,0 +1,23 @@
+    /**
+     * @return \Magento\Framework\Controller\ResultInterface
+     */
+    public function execute()
+    {
+        /** @var \Magento\Framework\Controller\Result\Json $resultJson */
+        $resultJson = $this->{{_}}jsonFactory->create();
+        $error = false;
+        $messages = [];
+
+        $postItems = $this->getRequest()->getParam('items', []);
+        if (!($this->getRequest()->getParam('isAjax') && count($postItems))) {
+            return $resultJson->setData([
+                'messages' => [__('Please correct the data sent.')],
+                'error' => true,
+            ]);
+        }
+
+        foreach (array_keys($postItems) as ${{entity}}Id) {
+            /** @var \{{Namespace}}\{{Module}}\Model\{{Entity}}|\{{Namespace}}\{{Module}}\Api\Data\{{Entity}}Interface ${{entity}} */
+            ${{entity}} = $this->{{_}}{{entity}}Repository->getById((int)${{entity}}Id);
+            try {
+                ${{entity}}Data = $postItems[${{entity}}Id];

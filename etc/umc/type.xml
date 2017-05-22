@@ -12,82 +12,147 @@
  *
  * @category  Umc
  * @package   Umc_Base
- * @copyright 2015 Marius Strajeru
+ * @copyright Marius Strajeru
  * @license   http://opensource.org/licenses/mit-license.php MIT License
  * @author    Marius Strajeru <ultimate.module.creator@gmail.com>
  */
 -->
 <types xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Umc_Base:etc/umc/type.xsd">
     <entity id="umc_entity">
-        <type id="flat" model="Umc\Base\Model\Core\Entity\Type\Flat" sort="10" translate="label">
-            <label>Flat</label>
+        <type id="flat">
+            <arguments>
+                <argument name="model" xsi:type="string">Umc\Base\Model\Entity\Type\Flat</argument>
+                <argument name="label" xsi:type="string" translate="true">Flat</argument>
+                <argument name="sort" xsi:type="number">10</argument>
+            </arguments>
         </type>
     </entity>
     <entity id="umc_attribute">
-        <type id="country" model="Umc\Base\Model\Core\Attribute\Type\Country" sort="10" group="dropdown" translate="label">
-            <label>Country</label>
+        <type id="country">
+            <arguments>
+                <argument name="model" xsi:type="string">Umc\Base\Model\Attribute\Type\Country</argument>
+                <argument name="label" xsi:type="string" translate="true">Country</argument>
+                <argument name="group" xsi:type="string">dropdown</argument>
+                <argument name="sort" xsi:type="number">10</argument>
+            </arguments>
         </type>
-        <type id="country_multiselect" model="Umc\Base\Model\Core\Attribute\Type\CountryMultiselect" sort="15" group="multiselect" translate="label">
-            <label>Country Multiselect</label>
+        <type id="country_multiselect">
+            <arguments>
+                <argument name="model" xsi:type="string">Umc\Base\Model\Attribute\Type\CountryMultiselect</argument>
+                <argument name="label" xsi:type="string" translate="true">Country Multiselect</argument>
+                <argument name="group" xsi:type="string">multiselect</argument>
+                <argument name="sort" xsi:type="number">20</argument>
+            </arguments>
         </type>
-        <type id="date" model="Umc\Base\Model\Core\Attribute\Type\Date" sort="20" group="date" translate="label">
-            <label>Date</label>
+        <type id="date">
+            <arguments>
+                <argument name="model" xsi:type="string">Umc\Base\Model\Attribute\Type\Date</argument>
+                <argument name="label" xsi:type="string" translate="true">Date</argument>
+                <argument name="group" xsi:type="string">date</argument>
+                <argument name="sort" xsi:type="number">30</argument>
+            </arguments>
         </type>
-        <type id="decimal" model="Umc\Base\Model\Core\Attribute\Type\Decimal" sort="30" group="text" translate="label">
-            <label>Decimal</label>
+        <type id="decimal">
+            <arguments>
+                <argument name="model" xsi:type="string">Umc\Base\Model\Attribute\Type\Decimal</argument>
+                <argument name="label" xsi:type="string" translate="true">Decimal</argument>
+                <argument name="group" xsi:type="string">text</argument>
+                <argument name="sort" xsi:type="number">40</argument>
+            </arguments>
         </type>
-        <type id="dropdown" model="Umc\Base\Model\Core\Attribute\Type\Dropdown" sort="40" group="dropdown" translate="label">
-            <label>Dropdown</label>
+        <type id="dropdown">
+            <arguments>
+                <argument name="model" xsi:type="string">Umc\Base\Model\Attribute\Type\Dropdown</argument>
+                <argument name="label" xsi:type="string" translate="true">Dropdown</argument>
+                <argument name="group" xsi:type="string">dropdown</argument>
+                <argument name="sort" xsi:type="number">50</argument>
+            </arguments>
         </type>
-        <type id="file" model="Umc\Base\Model\Core\Attribute\Type\File" sort="50" group="file" translate="label">
-            <label>File</label>
+        <type id="file">
+            <arguments>
+                <argument name="model" xsi:type="string">Umc\Base\Model\Attribute\Type\File</argument>
+                <argument name="label" xsi:type="string" translate="true">File</argument>
+                <argument name="group" xsi:type="string">file</argument>
+                <argument name="sort" xsi:type="number">60</argument>
+            </arguments>
         </type>
-        <type id="image" model="Umc\Base\Model\Core\Attribute\Type\Image" sort="60" group="file" translate="label">
-            <label>Image</label>
+        <type id="image">
+            <arguments>
+                <argument name="model" xsi:type="string">Umc\Base\Model\Attribute\Type\Image</argument>
+                <argument name="label" xsi:type="string" translate="true">Image</argument>
+                <argument name="group" xsi:type="string">file</argument>
+                <argument name="sort" xsi:type="number">70</argument>
+            </arguments>
         </type>
-        <type id="int" model="Umc\Base\Model\Core\Attribute\Type\Int" sort="70" group="text" translate="label">
-            <label>Integer</label>
+        <type id="integer">
+            <arguments>
+                <argument name="model" xsi:type="string">Umc\Base\Model\Attribute\Type\Integer</argument>
+                <argument name="label" xsi:type="string" translate="true">Integer</argument>
+                <argument name="group" xsi:type="string">text</argument>
+                <argument name="sort" xsi:type="number">80</argument>
+            </arguments>
         </type>
-        <type id="multiselect" model="Umc\Base\Model\Core\Attribute\Type\Multiselect" sort="80" group="multiselect" translate="label">
-            <label>Multiselect</label>
+        <type id="multiselect">
+            <arguments>
+                <argument name="model" xsi:type="string">Umc\Base\Model\Attribute\Type\Multiselect</argument>
+                <argument name="label" xsi:type="string" translate="true">Multiselect</argument>
+                <argument name="group" xsi:type="string">multiselect</argument>
+                <argument name="sort" xsi:type="number">90</argument>
+            </arguments>
         </type>
-        <type id="text" model="Umc\Base\Model\Core\Attribute\Type\Text" sort="1" group="text" translate="label">
-            <label>Text</label>
+        <type id="text">
+            <arguments>
+                <argument name="model" xsi:type="string">Umc\Base\Model\Attribute\Type\Text</argument>
+                <argument name="label" xsi:type="string" translate="true">Text</argument>
+                <argument name="group" xsi:type="string">text</argument>
+                <argument name="sort" xsi:type="number">100</argument>
+            </arguments>
         </type>
-        <type id="textarea" model="Umc\Base\Model\Core\Attribute\Type\Textarea" sort="100" group="text" translate="label">
-            <label>Textarea</label>
+        <type id="textarea">
+            <arguments>
+                <argument name="model" xsi:type="string">Umc\Base\Model\Attribute\Type\Textarea</argument>
+                <argument name="label" xsi:type="string" translate="true">Textarea</argument>
+                <argument name="group" xsi:type="string">text</argument>
+                <argument name="sort" xsi:type="number">110</argument>
+            </arguments>
         </type>
-        <type id="yesno" model="Umc\Base\Model\Core\Attribute\Type\Yesno" sort="110" group="dropdown" translate="label">
-            <label>Yes / No</label>
+        <type id="yesno">
+            <arguments>
+                <argument name="model" xsi:type="string">Umc\Base\Model\Attribute\Type\Yesno</argument>
+                <argument name="label" xsi:type="string" translate="true">Yes / No</argument>
+                <argument name="group" xsi:type="string">dropdown</argument>
+                <argument name="sort" xsi:type="number">120</argument>
+            </arguments>
         </type>
-        <group id="text" sort="10" translate="label">
-            <label>Text</label>
+        <group id="text">
+            <arguments>
+                <argument name="label" xsi:type="string" translate="true">Text</argument>
+                <argument name="sort" xsi:type="number">10</argument>
+            </arguments>
         </group>
-        <group id="dropdown" sort="20" translate="label">
-            <label>Dropdown</label>
+        <group id="dropdown">
+            <arguments>
+                <argument name="label" xsi:type="string" translate="true">Dropdown</argument>
+                <argument name="sort" xsi:type="number">20</argument>
+            </arguments>
         </group>
-        <group id="multiselect" sort="25" translate="label">
-            <label>Multiple select</label>
+        <group id="multiselect">
+            <arguments>
+                <argument name="label" xsi:type="string" translate="true">Multiple select</argument>
+                <argument name="sort" xsi:type="number">30</argument>
+            </arguments>
         </group>
-        <group id="file" sort="30" translate="label">
-            <label>File</label>
+        <group id="file">
+            <arguments>
+                <argument name="label" xsi:type="string" translate="true">File</argument>
+                <argument name="sort" xsi:type="number">40</argument>
+            </arguments>
         </group>
-        <group id="date" sort="40" translate="label">
-            <label>Date</label>
+        <group id="date">
+            <arguments>
+                <argument name="label" xsi:type="string" translate="true">Date</argument>
+                <argument name="sort" xsi:type="number">50</argument>
+            </arguments>
         </group>
-    </entity>
-    <entity id="umc_relation">
-        <type id="none" model="Umc\Base\Model\Core\Relation\Type\NoRelation" sort="10" translate="label">
-            <label>Has No Relation with</label>
-        </type>
-        <type id="parent" model="Umc\Base\Model\Core\Relation\Type\ParentRelation" sort="20" translate="label">
-            <label>Is Parent For</label>
-        </type>
-        <type id="child" model="Umc\Base\Model\Core\Relation\Type\ChildRelation" sort="30" translate="label">
-            <label>Is Child Of</label>
-        </type>
-        <type id="sibling" model="Umc\Base\Model\Core\Relation\Type\SiblingRelation" sort="40" translate="label">
-            <label>Is Sibling WIth</label>
-        </type>
     </entity>
 </types>

@@ -11,22 +11,18 @@
  *
  * @category  Umc
  * @package   Umc_Base
- * @copyright 2015 Marius Strajeru
+ * @copyright Marius Strajeru
  * @license   http://opensource.org/licenses/mit-license.php MIT License
  * @author    Marius Strajeru <ultimate.module.creator@gmail.com>
  */
 ?>
-<?php /** @var \Umc\Base\Block\Adminhtml\Module\Edit\Tab\Entities $this */ ?>
+<?php /** @var \Umc\Base\Block\Adminhtml\Module\Edit\Tab\Entities $block */ ?>
 <?php $_entities = $this->getEntities();?>
-<div id="entities_container">
+<div id="entities_container" class="left-collapsible-fieldset">
     <?php $_increment = 0;foreach ($_entities as $_code => $_entity) : ?>
         <?php
-        /** @var \Umc\Base\Block\Adminhtml\Entity $block */
-        $block = $this->getLayout()->createBlock('Umc\Base\Block\Adminhtml\Entity');
-        echo $block->setTemplate('Umc_Base::entity.phtml')
-            ->setEntity($_entity)
-            ->setIncrement($_increment++)
-            ->toHtml();
+        $entityBlock = $block->getEntityBlock($_increment++, $_entity);
+        echo $entityBlock->toHtml();
         ?>
     <?php endforeach;?>
 </div>

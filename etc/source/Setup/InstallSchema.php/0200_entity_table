@@ -19,14 +19,20 @@
                 'created_at',
                 {{class Magento\Framework\DB\Ddl\Table}}::TYPE_TIMESTAMP,
                 null,
-                [],
+                [
+                    'nullable' => false,
+                    'default' => {{class Magento\Framework\DB\Ddl\Table}}::TIMESTAMP_INIT
+                ],
                 '{{EntityLabel}} Created At'
             )
             ->addColumn(
                 'updated_at',
                 {{class Magento\Framework\DB\Ddl\Table}}::TYPE_TIMESTAMP,
                 null,
-                [],
+                [
+                    'nullable' => false,
+                    'default' => {{class Magento\Framework\DB\Ddl\Table}}::TIMESTAMP_INIT_UPDATE
+                ],
                 '{{EntityLabel}} Updated At'
             )
             ->setComment('{{EntityLabel}} Table');

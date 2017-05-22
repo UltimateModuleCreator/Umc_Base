@@ -1,0 +1,12 @@
+        <massaction name="listing_massaction">
+            <action name="delete">
+                <settings>
+                    <confirm>
+                        <message translate="true">Are you sure you wan't to delete selected {{EntitiesLabelEscaped}}?</message>
+                        <title translate="true">Delete {{EntitiesLabelEscaped}}</title>
+                    </confirm>
+                    <url path="{{namespace}}_{{module}}/{{entity}}/massDelete"/>
+                    <type>delete</type>
+                    <label translate="true">Delete</label>
+                </settings>
+            </action>

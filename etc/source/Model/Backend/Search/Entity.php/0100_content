@@ -1,0 +1,40 @@
+    /**
+     * Load search results
+     *
+     * @return $this
+     */
+    public function load()
+    {
+        $result = [];
+        if (!$this->hasStart() || !$this->hasLimit() || !$this->hasQuery()) {
+            $this->setResults($result);
+            return $this;
+        }
+
+        $this->{{_}}searchCriteriaBuilder->setCurrentPage($this->getStart());
+        $this->{{_}}searchCriteriaBuilder->setPageSize($this->getLimit());
+        $searchFields = ['{{nameAttributeCode}}'];
+        $filters = [];
+        foreach ($searchFields as $field) {
+            $filters[] = $this->{{_}}filterBuilder
+                ->setField($field)
+                ->setConditionType('like')
+                ->setValue($this->getQuery() . '%')
+                ->create();
+        }
+        $this->{{_}}searchCriteriaBuilder->addFilters($filters);
+        $searchCriteria = $this->{{_}}searchCriteriaBuilder->create();
+        $searchResults = $this->{{_}}{{entity}}Repository->getList($searchCriteria);
+
+        foreach ($searchResults->getItems() as ${{entity}}) {
+            $result[] = [
+                'id' => '{{entity}}/' . ${{entity}}->getId(),
+                'type' => __('{{EntityLabelEscaped}}'),
+                'name' => ${{entity}}->get{{NameAttributeCode}}(),
+                'description' => ${{entity}}->get{{NameAttributeCode}}(),
+                'url' => $this->{{_}}backendData->getUrl('{{namespace}}_{{module}}/{{entity}}/edit', ['id' => ${{entity}}->getId()]),
+            ];
+        }
+        $this->setResults($result);
+        return $this;
+    }

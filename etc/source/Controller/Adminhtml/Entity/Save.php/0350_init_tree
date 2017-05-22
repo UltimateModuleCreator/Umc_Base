@@ -1,6 +1,0 @@
-            ${{entity}} = $this->{{_}}init{{Entity}}();
-
-            if (!${{entity}}) {
-                return $resultRedirect->setPath('{{namespace}}_{{module}}/*/', ['_current' => true, 'id' => null]);
-            }
-            ${{entity}}->addData($data);

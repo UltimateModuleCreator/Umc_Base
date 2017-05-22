@@ -12,7 +12,7 @@
  *
  * @category  Umc
  * @package   Umc_Base
- * @copyright 2015 Marius Strajeru
+ * @copyright Marius Strajeru
  * @license   http://opensource.org/licenses/mit-license.php MIT License
  * @author    Marius Strajeru <ultimate.module.creator@gmail.com>
  */
@@ -20,110 +20,198 @@
 <restrictions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Umc_Base:etc/umc/restriction.xsd">
     <entity id="umc_module">
         <restriction id="namespace">
-            <val id="Magento" translate="message">
-                <real_val>Magento</real_val>
-                <message><![CDATA[Don't use Magento as namespace. Be creative.]]></message>
+            <val id="Magento">
+                <arguments>
+                    <argument name="real_val" xsi:type="string">Magento</argument>
+                    <argument name="message" xsi:type="string"><![CDATA[Don't use Magento as namespace. Be creative.]]></argument>
+                </arguments>
             </val>
         </restriction>
     </entity>
     <entity id="umc_entity">
-        <restriction id="name_singular" reserved="true">
-            <val id="resource" translate="message">
-                <real_val>resource</real_val>
-                <message>You cannot use this value here. It will conflict with the Magento folder structure.</message>
+        <restriction id="name_singular">
+            <arguments>
+                <argument name="reserved" xsi:type="boolean">true</argument>
+            </arguments>
+            <val id="resource">
+                <arguments>
+                    <argument name="real_val" xsi:type="string">resource</argument>
+                    <argument name="message" xsi:type="string"><![CDATA[You cannot use this value here. It will conflict with the Magento folder structure.]]></argument>
+                </arguments>
             </val>
-            <val id="setup" translate="message">
-                <real_val>setup</real_val>
-                <message>You cannot use this value here. It will conflict with the Magento folder structure.</message>
+            <val id="result">
+                <arguments>
+                    <argument name="real_val" xsi:type="string">result</argument>
+                    <argument name="message" xsi:type="string"><![CDATA[You cannot use this value here. It will conflict with the Magento folder structure.]]></argument>
+                </arguments>
             </val>
-            <val id="attribute" translate="message">
-                <real_val>attribute</real_val>
-                <message>You cannot use this value here. It will conflict with the Magento folder structure.</message>
+            <val id="setup">
+                <arguments>
+                    <argument name="real_val" xsi:type="string">setup</argument>
+                    <argument name="message" xsi:type="string"><![CDATA[You cannot use this value here. It will conflict with the Magento folder structure.]]></argument>
+                </arguments>
             </val>
-            <val id="options" translate="message">
-                <real_val>options</real_val>
-                <message>You cannot use this value here. It will conflict with the Magento folder structure.</message>
+            <val id="attribute">
+                <arguments>
+                    <argument name="real_val" xsi:type="string">attribute</argument>
+                    <argument name="message" xsi:type="string"><![CDATA[You cannot use this value here. It will conflict with the Magento folder structure.]]></argument>
+                </arguments>
             </val>
-            <val id="system" translate="message">
-                <real_val>system</real_val>
-                <message>You cannot use this value here. It will conflict with the Magento folder structure.</message>
+            <val id="options">
+                <arguments>
+                    <argument name="real_val" xsi:type="string">options</argument>
+                    <argument name="message" xsi:type="string"><![CDATA[You cannot use this value here. It will conflict with the Magento folder structure.]]></argument>
+                </arguments>
             </val>
-            <val id="data" translate="message">
-                <real_val>data</real_val>
-                <message>You cannot use this value here. It will conflict with the Magento folder structure.</message>
+            <val id="system">
+                <arguments>
+                    <argument name="real_val" xsi:type="string">system</argument>
+                    <argument name="message" xsi:type="string"><![CDATA[You cannot use this value here. It will conflict with the Magento folder structure.]]></argument>
+                </arguments>
             </val>
-            <val id="collection" translate="message">
-                <real_val>collection</real_val>
-                <message>You cannot use this value here. It will conflict with the Magento folder structure.</message>
+            <val id="data">
+                <arguments>
+                    <argument name="real_val" xsi:type="string">data</argument>
+                    <argument name="message" xsi:type="string"><![CDATA[You cannot use this value here. It will conflict with the Magento folder structure.]]></argument>
+                </arguments>
             </val>
-            <val id="adminhtml" translate="message">
-                <real_val>adminhtml</real_val>
-                <message>You cannot use this value here. It will conflict with the Magento folder structure.</message>
+            <val id="collection">
+                <arguments>
+                    <argument name="real_val" xsi:type="string">collection</argument>
+                    <argument name="message" xsi:type="string"><![CDATA[You cannot use this value here. It will conflict with the Magento folder structure.]]></argument>
+                </arguments>
             </val>
-            <val id="observer" translate="message">
-                <real_val>observer</real_val>
-                <message>You cannot use this value here. It will conflict with the Magento folder structure.</message>
+            <val id="adminhtml">
+                <arguments>
+                    <argument name="real_val" xsi:type="string">adminhtml</argument>
+                    <argument name="message" xsi:type="string"><![CDATA[You cannot use this value here. It will conflict with the Magento folder structure.]]></argument>
+                </arguments>
             </val>
-            <val id="tree" translate="message">
-                <real_val>tree</real_val>
-                <message>You cannot use this value here. It will conflict with the Magento folder structure.</message>
-                <depend type="self" id="is_tree">
-                    <depend_val id="1">1</depend_val>
+            <val id="observer">
+                <arguments>
+                    <argument name="real_val" xsi:type="string">observer</argument>
+                    <argument name="message" xsi:type="string"><![CDATA[You cannot use this value here. It will conflict with the Magento folder structure.]]></argument>
+                </arguments>
+            </val>
+            <val id="tree">
+                <arguments>
+                    <argument name="real_val" xsi:type="string">tree</argument>
+                    <argument name="message" xsi:type="string"><![CDATA[You cannot use this value here. It will conflict with the Magento folder structure.]]></argument>
+                </arguments>
+                <depend id="is_tree">
+                    <arguments>
+                        <argument name="type" xsi:type="const">Umc\Base\Config\Form::DEPENDENCY_TYPE_SELF</argument>
+                        <argument name="depend_val" xsi:type="array">
+                            <item name="1" xsi:type="const">Umc\Base\Source\Yesno::YES</item>
+                        </argument>
+                    </arguments>
                 </depend>
             </val>
-            <val id="node" translate="message">
-                <real_val>node</real_val>
-                <message>You cannot use this value here. It will conflict with the Magento folder structure.</message>
-                <depend type="self" id="is_tree">
-                    <depend_val id="1">1</depend_val>
+            <val id="node">
+                <arguments>
+                    <argument name="real_val" xsi:type="string">node</argument>
+                    <argument name="message" xsi:type="string"><![CDATA[You cannot use this value here. It will conflict with the Magento folder structure.]]></argument>
+                </arguments>
+                <depend id="is_tree">
+                    <arguments>
+                        <argument name="type" xsi:type="const">Umc\Base\Config\Form::DEPENDENCY_TYPE_SELF</argument>
+                        <argument name="depend_val" xsi:type="array">
+                            <item name="1" xsi:type="const">Umc\Base\Source\Yesno::YES</item>
+                        </argument>
+                    </arguments>
                 </depend>
             </val>
         </restriction>
     </entity>
     <entity id="umc_attribute">
-        <restriction id="code" class="Magento\Framework\Model\AbstractModel">
-            <val id="identities" translate="message">
-                <real_val>identities</real_val>
-                <message><![CDATA[You cannot use this value here. It will conflict with the Magento class methods.]]></message>
+        <restriction id="code">
+            <arguments>
+                <argument name="class" xsi:type="string">Magento\Framework\Model\AbstractModel</argument>
+            </arguments>
+            <val id="identities">
+                <arguments>
+                    <argument name="real_val" xsi:type="string">identities</argument>
+                    <argument name="message" xsi:type="string"><![CDATA[You cannot use this value here. It will conflict with the Magento class methods.]]></argument>
+                </arguments>
             </val>
-            <val id="default_values" translate="message">
-                <real_val>default_values</real_val>
-                <message><![CDATA[You cannot use this value here. It will conflict with the Magento class methods.]]></message>
+            <val id="namespace">
+                <arguments>
+                    <argument name="real_val" xsi:type="string">namespace</argument>
+                    <argument name="message" xsi:type="string"><![CDATA[You cannot use this value here. It will conflict with the Magento class methods.]]></argument>
+                </arguments>
             </val>
-            <val id="created_at" translate="message">
-                <real_val>created_at</real_val>
-                <message><![CDATA[An attribute/field with code "created_at" will be added by default to your entity.]]></message>
+            <val id="default_values">
+                <arguments>
+                    <argument name="real_val" xsi:type="string">default_values</argument>
+                    <argument name="message" xsi:type="string"><![CDATA[You cannot use this value here. It will conflict with the Magento class methods.]]></argument>
+                </arguments>
             </val>
-            <val id="updated_at" translate="message">
-                <real_val>updated_at</real_val>
-                <message><![CDATA[An attribute/field with code "updated_at" will be added by default to your entity.]]></message>
+            <val id="created_at">
+                <arguments>
+                    <argument name="real_val" xsi:type="string">created_at</argument>
+                    <argument name="message" xsi:type="string"><![CDATA[An attribute/field with code "created_at" will be added by default to your entity.]]></argument>
+                </arguments>
             </val>
-            <val id="parent_id" translate="message">
-                <real_val>parent_id</real_val>
-                <message><![CDATA[An attribute /field with the code "parent_id" will be added by default to your entity if the behaves as tree.]]></message>
-                <depend type="parent" id="is_tree">
-                    <depend_val id="1">1</depend_val>
+            <val id="updated_at">
+                <arguments>
+                    <argument name="real_val" xsi:type="string">updated_at</argument>
+                    <argument name="message" xsi:type="string"><![CDATA[An attribute/field with code "updated_at" will be added by default to your entity.]]></argument>
+                </arguments>
+            </val>
+            <val id="parent_id">
+                <arguments>
+                    <argument name="real_val" xsi:type="string">parent_id</argument>
+                    <argument name="message" xsi:type="string"><![CDATA[An attribute/field with code "parent_id" by default to your entity if the behaves as tree.]]></argument>
+                </arguments>
+                <depend id="is_tree">
+                    <arguments>
+                        <argument name="type" xsi:type="const">Umc\Base\Config\Form::DEPENDENCY_TYPE_PARENT</argument>
+                        <argument name="depend_val" xsi:type="array">
+                            <item name="1" xsi:type="const">Umc\Base\Source\Yesno::YES</item>
+                        </argument>
+                    </arguments>
                 </depend>
             </val>
-            <val id="level" translate="message">
-                <real_val>level</real_val>
-                <message><![CDATA[An attribute /field with the code "level" will be added by default to your entity if the behaves as tree.]]></message>
-                <depend type="parent" id="is_tree">
-                    <depend_val id="1">1</depend_val>
+            <val id="level">
+                <arguments>
+                    <argument name="real_val" xsi:type="string">level</argument>
+                    <argument name="message" xsi:type="string"><![CDATA[An attribute/field with code "level" by default to your entity if the behaves as tree.]]></argument>
+                </arguments>
+                <depend id="is_tree">
+                    <arguments>
+                        <argument name="type" xsi:type="const">Umc\Base\Config\Form::DEPENDENCY_TYPE_PARENT</argument>
+                        <argument name="depend_val" xsi:type="array">
+                            <item name="1" xsi:type="const">Umc\Base\Source\Yesno::YES</item>
+                        </argument>
+                    </arguments>
                 </depend>
             </val>
-            <val id="children_count" translate="message">
-                <real_val>children_count</real_val>
-                <message><![CDATA[An attribute /field with the code "children_count" will be added by default to your entity if the behaves as tree.]]></message>
-                <depend type="parent" id="is_tree">
-                    <depend_val id="1">1</depend_val>
+            <val id="children_count">
+                <arguments>
+                    <argument name="real_val" xsi:type="string">children_count</argument>
+                    <argument name="message" xsi:type="string"><![CDATA[An attribute/field with code "children_count" by default to your entity if the behaves as tree.]]></argument>
+                </arguments>
+                <depend id="is_tree">
+                    <arguments>
+                        <argument name="type" xsi:type="const">Umc\Base\Config\Form::DEPENDENCY_TYPE_PARENT</argument>
+                        <argument name="depend_val" xsi:type="array">
+                            <item name="1" xsi:type="const">Umc\Base\Source\Yesno::YES</item>
+                        </argument>
+                    </arguments>
                 </depend>
             </val>
-            <val id="path" translate="message">
-                <real_val>path</real_val>
-                <message><![CDATA[An attribute /field with the code "path" will be added by default to your entity if the behaves as tree.]]></message>
-                <depend type="parent" id="is_tree">
-                    <depend_val id="1">1</depend_val>
+            <val id="path">
+                <arguments>
+                    <argument name="real_val" xsi:type="string">path</argument>
+                    <argument name="message" xsi:type="string"><![CDATA[An attribute/field with code "path" by default to your entity if the behaves as tree.]]></argument>
+                </arguments>
+                <depend id="is_tree">
+                    <arguments>
+                        <argument name="type" xsi:type="const">Umc\Base\Config\Form::DEPENDENCY_TYPE_PARENT</argument>
+                        <argument name="depend_val" xsi:type="array">
+                            <item name="1" xsi:type="const">Umc\Base\Source\Yesno::YES</item>
+                        </argument>
+                    </arguments>
                 </depend>
             </val>
         </restriction>

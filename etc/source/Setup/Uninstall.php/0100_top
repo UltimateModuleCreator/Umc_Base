@@ -1,0 +1,9 @@
+    /**
+     * {@inheritdoc}
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @SuppressWarnings(PHPMD.Generic.CodeAnalysis.UnusedFunctionParameter)
+     */
+    public function uninstall(
+        {{class Magento\Framework\Setup\SchemaSetupInterface}} $setup,
+        {{class Magento\Framework\Setup\ModuleContextInterface}} $context
+    ) {

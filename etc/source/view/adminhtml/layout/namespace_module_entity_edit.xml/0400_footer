@@ -1,0 +1,6 @@
+<body>
+    <referenceContainer name="content">
+        <uiComponent name="{{namespace}}_{{module}}_{{entity}}_form"/>
+    </referenceContainer>
+</body>
+</page>

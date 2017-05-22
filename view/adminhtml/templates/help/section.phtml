@@ -1,0 +1,41 @@
+<?php
+/**
+ * Umc_Base extension
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the MIT License
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/mit-license.php
+ *
+ * @category  Umc
+ * @package   Umc_Base
+ * @copyright Marius Strajeru
+ * @license   http://opensource.org/licenses/mit-license.php MIT License
+ * @author    Marius Strajeru <ultimate.module.creator@gmail.com>
+ */
+?>
+<?php /** @var \Umc\Base\Block\Adminhtml\Help\Section $block */ ?>
+<?php $sectionId = $block->getSectionId(); ?>
+<fieldset class="fieldset left-collapsible-fieldset">
+    <div data-role="umc-help-section-<?php echo $block->escapeHtml($sectionId);?>-wrapper"
+         id="umc-help-section-<?php echo $block->escapeHtml($sectionId); ?>-wrapper"
+         class="fieldset-wrapper admin__collapsible-block-wrapper">
+        <div class="fieldset-wrapper-title">
+            <strong data-target="#umc-help-section-<?php echo $block->escapeHtml($sectionId); ?>-content" data-toggle="collapse" class="admin__collapsible-title">
+                <span><?php echo $block->getLabelHtml(); ?></span>
+            </strong>
+        </div>
+        <div data-role="umc-help-section-<?php echo $block->escapeHtml($sectionId); ?>-content"
+             id="umc-help-section-<?php echo $block->escapeHtml($sectionId); ?>-content"
+             class="fieldset-wrapper-content in collapse">
+            <?php if ($block->getDescriptionHtml()) : ?>
+                <div class="umc-help-section-description"><?php echo $block->getDescriptionHtml(); ?></div>
+            <?php endif;?>
+            <?php foreach ($block->getFieldsets() as $fieldset) : ?>
+                <?php echo $fieldset->toHtml(); ?>
+            <?php endforeach; ?>
+        </div>
+    </div>
+</fieldset>

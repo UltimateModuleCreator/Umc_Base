@@ -1,0 +1,6 @@
+        <column name="{{code}}"{{adminColumnClass}}{{adminColumnComponentV2}}>
+            <settings>
+                {{adminColumnConfigV2}}
+                <label translate="true">{{Label}}</label>
+            </settings>
+        </column>

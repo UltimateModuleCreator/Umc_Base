@@ -11,7 +11,7 @@
  *
  * @category  Umc
  * @package   Umc_Base
- * @copyright 2015 Marius Strajeru
+ * @copyright Marius Strajeru
  * @license   http://opensource.org/licenses/mit-license.php MIT License
  * @author    Marius Strajeru <ultimate.module.creator@gmail.com>
  */
@@ -19,22 +19,19 @@ namespace Umc\Base\Controller\Adminhtml\Module;
 
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
-use Magento\Backend\Model\View\Result\RedirectFactory;
 use Umc\Base\Model\Builder;
-use Umc\Base\Model\Core\ModuleFactory;
+use Umc\Base\Api\Data\ModuleInterfaceFactory;
 use Umc\Base\Model\UmcFactory;
-use Umc\Base\Model\Writer\WriterInterface;
-use Magento\Framework\App\RequestInterface;
+use Umc\Base\Validator\ModuleValidator;
+use Umc\Base\Writer\Filesystem;
+use Umc\Base\Writer\WriterInterface;
 
 class Validate extends Action
 {
-    const ERROR_GLUE  = '####';
     /**
-     * page redirect factory
-     *
-     * @var \Magento\Framework\View\Result\PageFactory
+     * @var string
      */
-    protected $pageRedirectFactory;
+    const ERROR_GLUE  = '####';
 
     /**
      * model factory
@@ -46,14 +43,14 @@ class Validate extends Action
     /**
      * module factory
      *
-     * @var \Umc\Base\Model\Core\ModuleFactory
+     * @var ModuleInterfaceFactory
      */
     protected $moduleFactory;
 
     /**
      * file writer
      *
-     * @var \Umc\Base\Model\Writer\WriterInterface
+     * @var \Umc\Base\Writer\WriterInterface
      */
     protected $writer;
 
@@ -63,28 +60,39 @@ class Validate extends Action
     protected $builder;
 
     /**
-     * constructor
-     *
-     * @param RedirectFactory $pageRedirectFactory
+     * @var Filesystem
+     */
+    protected $filesystem;
+
+    /**
+     * @var ModuleValidator
+     */
+    protected $moduleValidator;
+
+    /**
+     * @param Context $context
+     * @param Filesystem $filesystem
      * @param UmcFactory $umcFactory
-     * @param ModuleFactory $moduleFactory
+     * @param ModuleInterfaceFactory $moduleFactory
      * @param WriterInterface $writer
      * @param Builder $builder
-     * @param Context $context
+     * @param ModuleValidator $moduleValidator
      */
     public function __construct(
-        RedirectFactory $pageRedirectFactory,
+        Context $context,
+        Filesystem $filesystem,
         UmcFactory $umcFactory,
-        ModuleFactory $moduleFactory,
+        ModuleInterfaceFactory $moduleFactory,
         WriterInterface $writer,
         Builder $builder,
-        Context $context
+        ModuleValidator $moduleValidator
     ) {
-        $this->pageRedirectFactory  = $pageRedirectFactory;
+        $this->filesystem           = $filesystem;
         $this->umcFactory           = $umcFactory;
         $this->moduleFactory        = $moduleFactory;
         $this->writer               = $writer;
         $this->builder              = $builder;
+        $this->moduleValidator      = $moduleValidator;
         parent::__construct($context);
     }
 
@@ -96,31 +104,32 @@ class Validate extends Action
     public function execute()
     {
         $response = $this->umcFactory->create();
-        $response->setGlue(self::ERROR_GLUE);
+        $response->setData('glue', self::ERROR_GLUE);
         try {
             /** @var \Zend\Stdlib\Parameters $data */
             $data = $this->getRequest()->getPost();
+            /** @var \Umc\Base\Api\Data\ModuleInterface $module */
             $module = $this->moduleFactory->create();
             $module->initFromData($data->toArray());
-            $errors = $module->validate();
+            $errors = $this->moduleValidator->validate($module);
             if (count($errors) == 0) {
                 $xml = $module->toXml([], $module->getEntityCode(), true, true);
-                $this->writer->setPath($module->getSettings()->getXmlRootPath());
+                $this->writer->setPath($this->filesystem->getXmlRootPath());
                 $this->writer->write($module->getExtensionName().'.xml', $xml);
-                $this->builder->setModule($module)->build();
-                $response->setError(false);
-                $response->setMessage(__('Done!!! Check you var folder'));
+                $this->builder->build($module);
+                $response->setData('error', false);
+                $response->setData('message', __('Done!!! Check you var folder'));
             } else {
                 if (isset($errors[''])) {
-                    $response->setMessage(implode(self::ERROR_GLUE, $errors['']));
+                    $response->setData('message', implode(self::ERROR_GLUE, $errors['']));
                     unset($errors['']);
                 }
-                $response->setError(true);
-                $response->setAttributes($errors);
+                $response->setData('error', true);
+                $response->setData('attributes', $errors);
             }
         } catch (\Exception $e) {
-            $response->setError(true);
-            $response->setMessage($e->getMessage());
+            $response->setData('error', true);
+            $response->setData('message', $e->getMessage());
         }
         $this->getResponse()->setBody($response->toJson());
     }

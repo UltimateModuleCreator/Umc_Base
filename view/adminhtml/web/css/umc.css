@@ -1,0 +1,192 @@
+/**
+ * Umc_Base extension
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the MIT License
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/mit-license.php
+ *
+ * @category  Umc
+ * @package   Umc_Base
+ * @copyright Marius Strajeru
+ * @license   http://opensource.org/licenses/mit-license.php MIT License
+ * @author    Marius Strajeru <ultimate.module.creator@gmail.com>
+ */
+.umc-module-edit .field, .umc-module-edit .select{
+    float:left;
+    width:49%;
+    margin-bottom: 0;
+    min-height: 35px;
+}
+/*.umc-module-edit .field:nth-child(even):after {*/
+.admin__field.odd:after,
+.umc-module-edit .field label.addafter:after{
+    visibility: hidden;
+    display: block;
+    font-size: 0;
+    content: " ";
+    clear: both;
+    height: 0;
+}
+
+.umc-module-edit .field label.addafter {
+    float:left;
+    width:20px!important;
+}
+.umc-module-edit .field label.label{
+    text-align: right;
+    width:39%!important;
+}
+.umc-module-edit .admin__scope-old .fieldset .field {
+    margin-bottom: 5px;
+}
+.umc-module-edit .field select,
+.umc-module-edit .field input:not([type="radio"]),
+.umc-module-edit .field textarea{
+    width: 100%;
+}
+
+.umc-module-edit .field select.has-tooltip,
+.umc-module-edit .field input.has-tooltip:not([type="radio"]),
+.umc-module-edit .field textarea.has-tooltip{
+    width: calc(100% - 22px)!important;
+    float:left!important;
+}
+
+.admin__scope-old label.mage-error {
+    margin-top:12px;
+}
+
+.umc-nav-bar ul{
+    list-style-type: none;
+    margin:0;
+}
+.umc-nav-bar li button.collapsed, .umc-nav-bar li button.expanded{
+    width:16px;
+    height:16px;
+    padding: 0!important
+}
+.umc-nav-bar li button.collapsed:before{
+    content: "\e02d"!important;
+}
+.umc-nav-bar li button.expanded:before{
+    content: "\e03a"!important;
+}
+.umc-nav-bar li span{
+    color:#666666;
+    font-size:16px;
+}
+.umc-nav-bar li button{
+    font-size: 12px;
+}
+.umc-nav-bar button.insert-menu:before{
+    content: "\e072"!important;
+}
+
+.umc-module-edit .attributes-container .fieldset-wrapper,
+.umc-module-edit .umc-sort-placehoder{
+    border-bottom: medium none;
+    border-left: 1px solid #cac3b4;
+    border-right: 1px solid #cac3b4;
+    border-top: medium none;
+    margin: 0 10px;
+}
+.umc-module-edit .umc-sort-placehoder {
+    height:50px;
+    background-color: #cac3b4;
+}
+.umc-module-edit .umc-attribute .draggable-handle {
+    cursor: move!important;
+}
+.umc-module-edit .admin__control-text {
+    float:left;
+}
+.umc-help .grid{
+    padding:10px;
+}
+
+#menu-selector a .jstree-icon {
+    background: none;
+}
+
+.umc-tooltip-trigger::before {
+    color: #5a534a;
+    content: "?";
+    display: inline-block;
+    font-family: "Open Sans","Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 16px;
+    overflow: hidden;
+    text-align: center;
+    vertical-align: middle;
+    width:20px;
+}
+.umc-tooltip-trigger {
+    background: none repeat scroll 0 0 rgba(194, 186, 169, 0.5);
+    border-radius: 10px;
+    cursor: pointer;
+    display: inline-block;
+    height: 16px;
+    text-align: center;
+    text-decoration: none;
+    vertical-align: middle;
+    width: 16px;
+}
+
+.addon label.addafter {
+    border:none;
+}
+#html-body[class][data-container="body"] .ui-dialog {
+    opacity: 1;
+    visibility: visible;
+}
+.collapse {
+    overflow:hidden;
+}
+.umc-attribute > .collapsable-wrapper.opened > .fieldset-wrapper-title {
+    margin-bottom: 0;
+}
+.admin__collapsible-block-wrapper .admin__collapsible-title::before
+{
+    right:auto!important;
+}
+
+.admin__collapsible-block-wrapper.fieldset-wrapper .fieldset-wrapper-content
+{
+    padding-bottom:0!important;
+}
+/*.entity-title,*/
+/*.entity-attributes-title span,*/
+/*#umc_modulegeneral-wrapper .admin__fieldset-wrapper-title span,*/
+/*#umc_settingssettings-wrapper .admin__fieldset-wrapper-title span,*/
+/*.umc-help .fieldset-wrapper-title span {*/
+    /*margin-left: 20px;*/
+/*}*/
+
+.left-collapsible-fieldset .admin__collapsible-title span,
+#umc_base_module_tabs_module_content .admin__collapsible-title span{
+    margin-left:20px;
+    padding-top:3px;
+    line-height: 1.4;
+}
+
+.add-attribute:before {
+    font-family: 'MUI-Icons';
+    font-style: normal;
+    speak: none;
+    font-weight: normal;
+    font-size: 18px;
+    -webkit-font-smoothing: antialiased;
+    content: '\e02d';
+    color: #b7b3ad;
+}
+.add-attribute span {
+    display: none;
+}
+
+.umc-help-table thead th {
+    text-align: center;
+}

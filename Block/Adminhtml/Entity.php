@@ -11,27 +11,82 @@
  *
  * @category  Umc
  * @package   Umc_Base
- * @copyright 2015 Marius Strajeru
+ * @copyright Marius Strajeru
  * @license   http://opensource.org/licenses/mit-license.php MIT License
  * @author    Marius Strajeru <ultimate.module.creator@gmail.com>
  */
 namespace Umc\Base\Block\Adminhtml;
 
+use Umc\Base\Api\Data\AttributeInterface;
+use Umc\Base\Api\Data\EntityInterface;
 use Umc\Base\Block\Adminhtml\Module\Edit\Tab\AbstractTab;
-use Umc\Base\Model\Core\Entity as EntityModel;
+use Magento\Backend\Block\Template\Context;
+use Magento\Framework\Data\FormFactory;
+use Magento\Framework\Phrase;
+use Magento\Framework\Registry;
+use Umc\Base\Config\Form as FormConfig;
+use Umc\Base\Block\Adminhtml\AttributeFactory as AttributeBlockFactory;
 
 /**
  * @method string getIncrement()
  * @method bool getIsTemplate()
  */
+/**
+ * @api
+ */
 class Entity extends AbstractTab
 {
     /**
+     * @var string
+     */
+    const ENTITY_ID = 'entity_id';
+
+    /**
+     * @var string
+     */
+    const INCREMENT = 'increment';
+
+    /**
+     * @var AttributeBlockFactory
+     */
+    protected $attributeBlockFactory;
+
+    /**
+     * @var string
+     */
+    protected $attributeBlockTemplate;
+
+    /**
      * entity instance
      *
-     * @var null|\Umc\Base\Model\Core\Entity
+     * @var null|\Umc\Base\Api\Data\EntityInterface
      */
     protected $entity;
+
+    /**
+     * @param Context $context
+     * @param Registry $registry
+     * @param FormFactory $formFactory
+     * @param FormConfig $formConfig
+     * @param string $entityCode
+     * @param AttributeFactory $attributeBlockFactory
+     * @param string $attributeBlockTemplate
+     * @param array $data
+     */
+    public function __construct(
+        Context $context,
+        Registry $registry,
+        FormFactory $formFactory,
+        FormConfig $formConfig,
+        $entityCode,
+        AttributeBlockFactory $attributeBlockFactory,
+        $attributeBlockTemplate,
+        array $data = []
+    ) {
+        $this->attributeBlockFactory  = $attributeBlockFactory;
+        $this->attributeBlockTemplate = $attributeBlockTemplate;
+        parent::__construct($context, $registry, $formFactory, $formConfig, $entityCode, $data);
+    }
 
     /**
      * prepare form
@@ -40,13 +95,13 @@ class Entity extends AbstractTab
     protected function _prepareForm()
     {
         parent::_prepareForm();
-        $this->getForm()->setHtmlIdPrefix('entity_'.$this->getIncrement().'_');
+        $this->getForm()->setData('html_id_prefix', 'entity_'.$this->getIncrement().'_');
         $this->getForm()->addFieldNameSuffix('entity['.$this->getIncrement().']');
         if ($this->getEntity()) {
             $this->getForm()->setValues($this->getEntity()->getData());
         } else {
             $this->getForm()->setValues(
-                $this->_scopeConfig->getValue('umc/'.$this->model->getEntityCode())
+                $this->_scopeConfig->getValue('umc/'.$this->entityCode)
             );
         }
         return $this;
@@ -55,10 +110,10 @@ class Entity extends AbstractTab
     /**
      * set the entity instance
      *
-     * @param \Umc\Base\Model\Core\Entity $entity
+     * @param EntityInterface|null $entity
      * @return $this
      */
-    public function setEntity(EntityModel $entity)
+    public function setEntity(EntityInterface $entity = null)
     {
         $this->entity = $entity;
         return $this;
@@ -67,7 +122,7 @@ class Entity extends AbstractTab
     /**
      * get entity instance
      *
-     * @return null|\Umc\Base\Model\Core\Entity
+     * @return null|EntityInterface
      */
     public function getEntity()
     {
@@ -77,7 +132,7 @@ class Entity extends AbstractTab
     /**
      * get entity attributes
      *
-     * @return \Umc\Base\Model\Core\Attribute[]
+     * @return AttributeInterface[]
      */
     public function getAttributes()
     {
@@ -85,5 +140,21 @@ class Entity extends AbstractTab
             return $this->getEntity()->getAttributes();
         }
         return [];
+    }
+
+    /**
+     * @param string $increment
+     * @param string $entityId
+     * @param AttributeInterface|null $attribute
+     * @return \Umc\Base\Block\Adminhtml\Attribute
+     */
+    public function getAttributeBlock($increment, $entityId, AttributeInterface $attribute = null)
+    {
+        $attributeBlock = $this->attributeBlockFactory->create();
+        $attributeBlock->setTemplate($this->attributeBlockTemplate);
+        $attributeBlock->setData(self::ENTITY_ID, $entityId);
+        $attributeBlock->setAttributeInstance($attribute);
+        $attributeBlock->setData(self::INCREMENT, $increment);
+        return $attributeBlock;
     }
 }

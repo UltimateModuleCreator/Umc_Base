@@ -1,0 +1,12 @@
+    <virtualType name="{{Namespace}}{{Module}}{{Entity}}FileUploader" type="{{Namespace}}\{{Module}}\Model\Uploader">
+        <arguments>
+            <argument name="baseTmpPath" xsi:type="const">{{Namespace}}\{{Module}}\Model\Uploader::{{ENTITY}}_FILE_TMP_PATH</argument>
+            <argument name="basePath" xsi:type="const">{{Namespace}}\{{Module}}\Model\Uploader::{{ENTITY}}_FILE_PATH</argument>
+            <argument name="allowedExtensions" xsi:type="array" />
+        </arguments>
+    </virtualType>
+    <type name="{{Namespace}}\{{Module}}\Controller\Adminhtml\{{Entity}}\File\Upload">
+        <arguments>
+            <argument name="uploader" xsi:type="object">{{Namespace}}{{Module}}{{Entity}}FileUploader</argument>
+        </arguments>
+    </type>

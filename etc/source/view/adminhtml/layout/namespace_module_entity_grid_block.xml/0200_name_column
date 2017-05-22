@@ -1,9 +1,0 @@
-                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="{{nameAttributeCode}}">
-                        <arguments>
-                            <argument name="id" xsi:type="string">{{nameAttributeCode}}</argument>
-                            <argument name="header" xsi:type="string" translate="true">{{NameAttributeLabel}}</argument>
-                            <argument name="index" xsi:type="string">{{nameAttributeCode}}</argument>
-                            <argument name="header_css_class" xsi:type="string">col-{{nameAttributeCode}}</argument>
-                            <argument name="column_css_class" xsi:type="string">col-{{nameAttributeCode}}</argument>
-                        </arguments>
-                    </block>

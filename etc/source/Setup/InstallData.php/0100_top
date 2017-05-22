@@ -1,6 +1,0 @@
-
-    /**
-     * {@inheritdoc}
-     */
-    public function install({{class Magento\Framework\Setup\ModuleDataSetupInterface}} $setup, {{class Magento\Framework\Setup\ModuleContextInterface}} $context)
-    {

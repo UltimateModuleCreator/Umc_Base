@@ -1,0 +1,7 @@
+    /**
+     * Get {{Label}} URL
+     *
+     * @return string
+     */
+    public function get{{CodeCamelCase}}Url();
+

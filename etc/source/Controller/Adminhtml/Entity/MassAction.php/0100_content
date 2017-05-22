@@ -1,0 +1,29 @@
+    /**
+     * @param \{{Namespace}}\{{Module}}\Api\Data\{{Entity}}Interface ${{entity}}
+     * @return mixed
+     */
+    abstract protected function {{_}}massAction({{class {{Namespace}}\{{Module}}\Api\Data\{{Entity}}Interface}} ${{entity}});
+
+    /**
+     * execute action
+     *
+     * @return \Magento\Framework\Controller\Result\Redirect
+     */
+    public function execute()
+    {
+        try {
+            $collection = $this->{{_}}filter->getCollection($this->{{_}}collectionFactory->create());
+            $collectionSize = $collection->getSize();
+            foreach ($collection as ${{entity}}) {
+                $this->{{_}}massAction(${{entity}});
+            }
+            $this->messageManager->addSuccessMessage(__($this->{{_}}successMessage, $collectionSize));
+        } catch ({{class Magento\Framework\Exception\LocalizedException}} $e) {
+            $this->messageManager->addErrorMessage($e->getMessage());
+        } catch (\Exception $e) {
+            $this->messageManager->addExceptionMessage($e, $this->{{_}}errorMessage);
+        }
+        $redirectResult = $this->resultRedirectFactory->create();
+        $redirectResult->setPath('{{namespace}}_{{module}}/*/index');
+        return $redirectResult;
+    }

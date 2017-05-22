@@ -1,1 +1,1 @@
-            $data = $this->{{_}}filterData($data);
+        $data = $this->{{_}}filterData($data);

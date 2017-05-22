@@ -11,18 +11,20 @@
  *
  * @category  Umc
  * @package   Umc_Base
- * @copyright 2015 Marius Strajeru
+ * @copyright Marius Strajeru
  * @license   http://opensource.org/licenses/mit-license.php MIT License
  * @author    Marius Strajeru <ultimate.module.creator@gmail.com>
  */
 ?>
-<?php /** @var \Umc\Base\Block\Adminhtml\Tooltips $this */?>
+<?php /** @var \Umc\Base\Block\Adminhtml\Tooltips $block */?>
 <div style="display:none" id="tooltips">
-    <?php foreach ($this->getTooltips() as $tooltip) : ?>
-        <div id="<?php echo $tooltip->getId();?>" title="<?php echo $tooltip->getTitle();?>" class="umc-tooltip">
+    <?php foreach ($block->getTooltips() as $tooltip) : ?>
+        <div id="<?php echo $block->escapeHtml($tooltip->getData('id'));?>"
+             title="<?php echo $block->escapeHtml($tooltip->getTitle());?>"
+             class="umc-tooltip">
             <div>
-                <?php echo $tooltip->getMessage()?>
+                <?php echo $tooltip->getMessageHtml()?>
             </div>
         </div>
-    <?php endforeach;?>
+    <?php endforeach; ?>
 </div>

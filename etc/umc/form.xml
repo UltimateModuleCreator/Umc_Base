@@ -12,299 +12,953 @@
  *
  * @category  Umc
  * @package   Umc_Base
- * @copyright 2015 Marius Strajeru
+ * @copyright Marius Strajeru
  * @license   http://opensource.org/licenses/mit-license.php MIT License
  * @author    Marius Strajeru <ultimate.module.creator@gmail.com>
  */
 -->
 <forms xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Umc_Base:etc/umc/form.xsd">
-    <form id="umc_settings">
-        <fieldset id="settings" sort="10" collapsible="false" translate="label">
-            <label>Module Settings</label>
-            <field id="qualified" type="select" required="true" sort="10" system="true" translate="label tooltip">
-                <label>Fully qualified class names</label>
-                <tooltip><![CDATA[If set to Yes then the generated code will have `use` statements at the top of the classes and only use class aliases in the code. If it's set to No then the full class path will be used in the code.]]></tooltip>
-                <source>Magento\Config\Model\Config\Source\Yesno</source>
+    <form id="umc_module">
+        <fieldset id="general">
+            <arguments>
+                <argument name="label" xsi:type="string" translate="true">Module Settings</argument>
+                <argument name="collapsible" xsi:type="boolean">true</argument>
+                <argument name="sort" xsi:type="number">10</argument>
+            </arguments>
+            <field id="namespace">
+                <arguments>
+                    <argument name="type" xsi:type="string">text</argument>
+                    <argument name="required" xsi:type="boolean">true</argument>
+                    <argument name="system" xsi:type="boolean">true</argument>
+                    <argument name="label" xsi:type="string">Namespace</argument>
+                    <argument name="tooltip" xsi:type="string">This is the folder name of your new extension. Your company name should go here. Use only letters and numbers. Start with a capital letter.</argument>
+                    <argument name="validation" xsi:type="array">
+                        <item name="validate-module-name" xsi:type="boolean">true</item>
+                        <item name="validate-namespace-restriction" xsi:type="boolean">true</item>
+                    </argument>
+                    <argument name="sort" xsi:type="number">10</argument>
+                </arguments>
             </field>
-            <field id="underscore" type="select" required="true" sort="20" system="true" translate="label tooltip">
-                <label>Underscore for protected</label>
-                <tooltip><![CDATA[This does not apply for the methods and members that come from the core code.]]></tooltip>
-                <source>Magento\Config\Model\Config\Source\Yesno</source>
+            <field id="module_name">
+                <arguments>
+                    <argument name="type" xsi:type="string">text</argument>
+                    <argument name="required" xsi:type="boolean">true</argument>
+                    <argument name="system" xsi:type="boolean">false</argument>
+                    <argument name="label" xsi:type="string">Module Name</argument>
+                    <argument name="tooltip" xsi:type="string">This is your extension/module name. It should be something meaningful and not very long. Try to use a noun in singular form. Start with a capital letter.</argument>
+                    <argument name="validation" xsi:type="array">
+                        <item name="validate-module-name" xsi:type="boolean">true</item>
+                    </argument>
+                    <argument name="sort" xsi:type="number">20</argument>
+                </arguments>
             </field>
-            <field id="annotation" type="select" required="true" sort="30" system="true" translate="label tooltip">
-                <label>Add annotations</label>
-                <tooltip><![CDATA[If set to yes, then the methods that are magically called from your classes will be added at the top of the class as reference.]]></tooltip>
-                <source>Magento\Config\Model\Config\Source\Yesno</source>
+            <field id="version">
+                <arguments>
+                    <argument name="type" xsi:type="string">text</argument>
+                    <argument name="required" xsi:type="boolean">true</argument>
+                    <argument name="system" xsi:type="boolean">true</argument>
+                    <argument name="label" xsi:type="string">Version</argument>
+                    <argument name="tooltip" xsi:type="string">This is the version of the module.</argument>
+                    <argument name="sort" xsi:type="number">30</argument>
+                </arguments>
             </field>
-            <field id="license" type="textarea" required="false" sort="40" system="true" translate="label tooltip">
-                <label><![CDATA[License]]></label>
-                <tooltip><![CDATA[The text you put here will be added at the top of (almost) each file in the module you create.<br />Use {{Namespace}} as a placeholder for namespace, {{Module}} as a placeholder for the module name and {{Y}} as placeholder for current year.<br />If you don't want any License text on your files just leave this field empty.]]></tooltip>
-                <rows>5</rows>
+            <field id="ui_version">
+                <arguments>
+                    <argument name="type" xsi:type="string">select</argument>
+                    <argument name="required" xsi:type="boolean">true</argument>
+                    <argument name="system" xsi:type="boolean">false</argument>
+                    <argument name="label" xsi:type="string" translate="true">UI components style.</argument>
+                    <argument name="tooltip" xsi:type="string" translate="true"><![CDATA[For versions before 2.2 the form and grid ui components had a different structure from the one after 2.2. <a href="https://github.com/magento/magento2/blob/2.1/app/code/Magento/Cms/view/adminhtml/ui_component/cms_page_form.xml" target="_blank">Example for 2.1 and below</a>. <a href="https://github.com/magento/magento2/blob/develop/app/code/Magento/Cms/view/adminhtml/ui_component/cms_page_form.xml">Example for 2.2</a>]]></argument>
+                    <argument name="options" xsi:type="object">Umc\Base\Source\UiVersion</argument>
+                    <argument name="sort" xsi:type="number">40</argument>
+                </arguments>
+            </field>
+            <field id="menu_parent">
+                <arguments>
+                    <argument name="type" xsi:type="string">text</argument>
+                    <argument name="required" xsi:type="boolean">false</argument>
+                    <argument name="system" xsi:type="boolean">false</argument>
+                    <argument name="label" xsi:type="string">Admin parent menu ID</argument>
+                    <argument name="readonly" xsi:type="boolean">true</argument>
+                    <argument name="tooltip" xsi:type="string">This is the parent menu id of the module menu. Leave empty to add in top menu.</argument>
+                    <argument name="note" xsi:type="string"><![CDATA[<a href="#" class="menu-selector-trigger">Select menu parent and position</a>]]></argument>
+                    <argument name="class" xsi:type="array">
+                        <item name="menu-parent-id" xsi:type="string">menu-parent-id</item>
+                    </argument>
+                    <argument name="sort" xsi:type="number">50</argument>
+                </arguments>
+            </field>
+            <field id="sort_order">
+                <arguments>
+                    <argument name="type" xsi:type="string">text</argument>
+                    <argument name="required" xsi:type="boolean">true</argument>
+                    <argument name="system" xsi:type="boolean">false</argument>
+                    <argument name="label" xsi:type="string">Admin menu sort order</argument>
+                    <argument name="readonly" xsi:type="boolean">true</argument>
+                    <argument name="tooltip" xsi:type="string">This is the sort order in the menu.</argument>
+                    <argument name="note" xsi:type="string"><![CDATA[<a href="#" class="menu-selector-trigger">Select menu parent and position</a>]]></argument>
+                    <argument name="class" xsi:type="array">
+                        <item name="menu-sort-order" xsi:type="string">menu-sort-order</item>
+                    </argument>
+                    <argument name="sort" xsi:type="number">60</argument>
+                </arguments>
+            </field>
+            <field id="menu_text">
+                <arguments>
+                    <argument name="type" xsi:type="string">text</argument>
+                    <argument name="required" xsi:type="boolean">true</argument>
+                    <argument name="system" xsi:type="boolean">true</argument>
+                    <argument name="label" xsi:type="string">Admin menu title</argument>
+                    <argument name="tooltip" xsi:type="string">This is the title that will be added to the menu.</argument>
+                    <argument name="sort" xsi:type="number">70</argument>
+                </arguments>
             </field>
         </fieldset>
-    </form>
-    <form id="umc_module">
-        <fieldset id="general" sort="10" collapsible="false" translate="label">
-            <label>Module Information</label>
-            <field id="namespace" type="text" required="true" sort="10" system="true" translate="label tooltip" class="validate-module-name">
-                <label>Namespace</label>
-                <tooltip>This is the folder name of your new extension. Your company name should go here. Use only letters and numbers. Start with a capital letter.</tooltip>
+        <fieldset id="settings">
+            <arguments>
+                <argument name="label" xsi:type="string">Coding standards</argument>
+                <argument name="collapsible" xsi:type="boolean">true</argument>
+                <argument name="sort" xsi:type="number">20</argument>
+            </arguments>
+            <field id="qualified">
+                <arguments>
+                    <argument name="type" xsi:type="string">select</argument>
+                    <argument name="required" xsi:type="boolean">true</argument>
+                    <argument name="system" xsi:type="boolean">true</argument>
+                    <argument name="label" xsi:type="string" translate="true">Fully qualified class names</argument>
+                    <argument name="tooltip" xsi:type="string" translate="true">If set to Yes then the generated code will have `use` statements at the top of the classes and only use class aliases in the code. If it's set to No then the full class path will be used in the code.</argument>
+                    <argument name="options" xsi:type="object">Umc\Base\Source\Yesno</argument>
+                    <argument name="sort" xsi:type="number">10</argument>
+                </arguments>
             </field>
-            <field id="module_name" type="text" required="true" sort="20" system="false" translate="label tooltip" class="validate-module-name">
-                <label>Module name</label>
-                <tooltip><![CDATA[This is your extension/module name. It should be something meaningful and not very long.<br />Try to use a noun in singular form. Start with a capital letter.]]></tooltip>
+            <field id="underscore">
+                <arguments>
+                    <argument name="type" xsi:type="string">select</argument>
+                    <argument name="required" xsi:type="boolean">true</argument>
+                    <argument name="system" xsi:type="boolean">true</argument>
+                    <argument name="label" xsi:type="string" translate="true">Underscore for protected</argument>
+                    <argument name="tooltip" xsi:type="string" translate="true">This does not apply for the methods and members that come from the core code.</argument>
+                    <argument name="options" xsi:type="object">Umc\Base\Source\Yesno</argument>
+                    <argument name="sort" xsi:type="number">20</argument>
+                </arguments>
             </field>
-
-            <field id="version" type="text" required="true" sort="40" system="true" translate="label tooltip">
-                <label>Version</label>
-                <tooltip><![CDATA[This is the version of the module.]]></tooltip>
+            <field id="annotation">
+                <arguments>
+                    <argument name="type" xsi:type="string">select</argument>
+                    <argument name="required" xsi:type="boolean">true</argument>
+                    <argument name="system" xsi:type="boolean">true</argument>
+                    <argument name="label" xsi:type="string" translate="true">Add annotations</argument>
+                    <argument name="tooltip" xsi:type="string" translate="true">If set to yes, then the methods that are magically called from your classes will be added at the top of the class as reference.</argument>
+                    <argument name="options" xsi:type="object">Umc\Base\Source\Yesno</argument>
+                    <argument name="sort" xsi:type="number">30</argument>
+                </arguments>
             </field>
-            <field id="menu_text" type="text" required="true" sort="50" system="false" translate="label tooltip">
-                <label>Admin menu title</label>
-                <tooltip><![CDATA[This is the title that will be added to the menu.]]></tooltip>
+            <field id="license">
+                <arguments>
+                    <argument name="type" xsi:type="string">textarea</argument>
+                    <argument name="required" xsi:type="boolean">false</argument>
+                    <argument name="system" xsi:type="boolean">true</argument>
+                    <argument name="label" xsi:type="string" translate="true">License</argument>
+                    <argument name="tooltip" xsi:type="string" translate="true">The text you put here will be added at the top of (almost) each file in the module you create. Use {{Namespace}} as a placeholder for namespace, {{Module}} as a placeholder for the module name and {{Y}} as placeholder for current year. If you don't want any License text on your files just leave this field empty.</argument>
+                    <argument name="rows" xsi:type="number">5</argument>
+                    <argument name="sort" xsi:type="number">40</argument>
+                </arguments>
             </field>
-            <field id="menu_parent" type="text" required="false" sort="60" system="false" readonly="true" class="menu-parent-id" translate="label tooltip note">
-                <label>Admin parent menu ID</label>
-                <tooltip><![CDATA[This is the parent menu id of the module menu. Leave empty to add in top menu.]]></tooltip>
-                <note><![CDATA[<a href="#" class="menu-selector-trigger">Select menu parent and position</a>]]></note>
+        </fieldset>
+        <fieldset id="distribution">
+            <arguments>
+                <argument name="label" xsi:type="string" translate="true">Module Distribution</argument>
+                <argument name="collapsible" xsi:type="boolean">true</argument>
+                <argument name="sort" xsi:type="number">30</argument>
+            </arguments>
+            <field id="create_composer">
+                <arguments>
+                    <argument name="type" xsi:type="string">select</argument>
+                    <argument name="required" xsi:type="boolean">true</argument>
+                    <argument name="system" xsi:type="boolean">true</argument>
+                    <argument name="label" xsi:type="string" translate="true">Create composer.json file</argument>
+                    <argument name="tooltip" xsi:type="string" translate="true">If set to Yes then you will also get a composer.json file skeleton that you can edit later if you want to distribute your extension and install it via composer. composer.json will contain module dependencies, but the versions of the modules are guessed. Check if you have the correct versions.</argument>
+                    <argument name="options" xsi:type="object">Umc\Base\Source\Yesno</argument>
+                    <argument name="sort" xsi:type="number">10</argument>
+                    <argument name="reloader-class" xsi:type="array">
+                        <item name="module" xsi:type="string">module-reloader</item>
+                    </argument>
+                </arguments>
             </field>
-            <field id="sort_order" type="text" required="true" sort="70" system="false" readonly="true" class="menu-sort-order" translate="label tooltip note">
-                <label>Admin menu sort order</label>
-                <tooltip><![CDATA[This is the sort order in the menu.]]></tooltip>
-                <note><![CDATA[<a href="#" class="menu-selector-trigger">Select menu parent and position</a>]]></note>
+            <field id="composer_name">
+                <arguments>
+                    <argument name="type" xsi:type="string">text</argument>
+                    <argument name="required" xsi:type="boolean">false</argument>
+                    <argument name="system" xsi:type="boolean">false</argument>
+                    <argument name="label" xsi:type="string" translate="true">Module name in composer.json</argument>
+                    <argument name="tooltip" xsi:type="string" translate="true">This is the value it will appear in composer.json as '"name": "module/name-here",'. You can leave it blank and edit it manually later.</argument>
+                    <argument name="sort" xsi:type="number">20</argument>
+                </arguments>
+                <depends id="create_composer">
+                    <depend id="create_composer">
+                        <arguments>
+                            <argument name="type" xsi:type="const">Umc\Base\Config\Form::DEPENDENCY_TYPE_SELF</argument>
+                            <argument name="val" xsi:type="array">
+                                <item name="1" xsi:type="array">
+                                    <item name="value" xsi:type="const">Umc\Base\Source\Yesno::YES</item>
+                                </item>
+                            </argument>
+                        </arguments>
+                    </depend>
+                </depends>
+            </field>
+            <field id="composer_version">
+                <arguments>
+                    <argument name="type" xsi:type="string">text</argument>
+                    <argument name="required" xsi:type="boolean">false</argument>
+                    <argument name="system" xsi:type="boolean">true</argument>
+                    <argument name="label" xsi:type="string" translate="true">Composer package version</argument>
+                    <argument name="tooltip" xsi:type="string" translate="true"><![CDATA[This is the composer semantic version of the module. It may be different from the module version as for core modules. <a href="http://devdocs.magento.com/guides/v2.0/architecture/versioning.html" target="_blank">Read more here</a>]]></argument>
+                    <argument name="sort" xsi:type="number">20</argument>
+                </arguments>
+                <depends id="create_composer">
+                    <depend id="create_composer">
+                        <arguments>
+                            <argument name="type" xsi:type="const">Umc\Base\Config\Form::DEPENDENCY_TYPE_SELF</argument>
+                            <argument name="val" xsi:type="array">
+                                <item name="1" xsi:type="array">
+                                    <item name="value" xsi:type="const">Umc\Base\Source\Yesno::YES</item>
+                                </item>
+                            </argument>
+                        </arguments>
+                    </depend>
+                </depends>
+            </field>
+            <field id="composer_description">
+                <arguments>
+                    <argument name="type" xsi:type="string">text</argument>
+                    <argument name="required" xsi:type="boolean">true</argument>
+                    <argument name="system" xsi:type="boolean">false</argument>
+                    <argument name="label" xsi:type="string" translate="true">Module description in composer.json</argument>
+                    <argument name="tooltip" xsi:type="string" translate="true">This is the value it will appear in composer.json as '"description": "module description here",'</argument>
+                    <argument name="sort" xsi:type="number">30</argument>
+                </arguments>
+                <depends id="create_composer">
+                    <depend id="create_composer">
+                        <arguments>
+                            <argument name="type" xsi:type="const">Umc\Base\Config\Form::DEPENDENCY_TYPE_SELF</argument>
+                            <argument name="val" xsi:type="array">
+                                <item name="1" xsi:type="array">
+                                    <item name="value" xsi:type="const">Umc\Base\Source\Yesno::YES</item>
+                                </item>
+                            </argument>
+                        </arguments>
+                    </depend>
+                </depends>
+            </field>
+            <field id="composer_license">
+                <arguments>
+                    <argument name="type" xsi:type="string">text</argument>
+                    <argument name="required" xsi:type="boolean">true</argument>
+                    <argument name="system" xsi:type="boolean">true</argument>
+                    <argument name="label" xsi:type="string" translate="true">License type in composer.json</argument>
+                    <argument name="tooltip" xsi:type="string" translate="true">This is the value it will appear in composer.json as '"license": "MIT",'</argument>
+                    <argument name="sort" xsi:type="number">40</argument>
+                </arguments>
+                <depends id="create_composer">
+                    <depend id="create_composer">
+                        <arguments>
+                            <argument name="type" xsi:type="const">Umc\Base\Config\Form::DEPENDENCY_TYPE_SELF</argument>
+                            <argument name="val" xsi:type="array">
+                                <item name="1" xsi:type="array">
+                                    <item name="value" xsi:type="const">Umc\Base\Source\Yesno::YES</item>
+                                </item>
+                            </argument>
+                        </arguments>
+                    </depend>
+                </depends>
+            </field>
+            <field id="create_license">
+                <arguments>
+                    <argument name="type" xsi:type="string">select</argument>
+                    <argument name="required" xsi:type="boolean">true</argument>
+                    <argument name="system" xsi:type="boolean">true</argument>
+                    <argument name="label" xsi:type="string" translate="true">Create LICENSE.txt</argument>
+                    <argument name="tooltip" xsi:type="string" translate="true">If set to Yes then you will also get a LICENSE.txt file in your module with the text you flled in in the License field. If the License field is empty then the file will not be created.</argument>
+                    <argument name="options" xsi:type="object">Umc\Base\Source\Yesno</argument>
+                    <argument name="sort" xsi:type="number">50</argument>
+                </arguments>
+            </field>
+            <field id="create_readme">
+                <arguments>
+                    <argument name="type" xsi:type="string">select</argument>
+                    <argument name="required" xsi:type="boolean">true</argument>
+                    <argument name="system" xsi:type="boolean">true</argument>
+                    <argument name="label" xsi:type="string" translate="true">Create README.md</argument>
+                    <argument name="tooltip" xsi:type="string" translate="true">If set to Yes then you will also get a README.md file in your module.</argument>
+                    <argument name="options" xsi:type="object">Umc\Base\Source\Yesno</argument>
+                    <argument name="reloader-class" xsi:type="array">
+                        <item name="module" xsi:type="string">module-reloader</item>
+                    </argument>
+                    <argument name="sort" xsi:type="number">60</argument>
+                </arguments>
+            </field>
+            <field id="readme">
+                <arguments>
+                    <argument name="type" xsi:type="string">textarea</argument>
+                    <argument name="required" xsi:type="boolean">true</argument>
+                    <argument name="system" xsi:type="boolean">true</argument>
+                    <argument name="label" xsi:type="string" translate="true">README.md text</argument>
+                    <argument name="tooltip" xsi:type="string" translate="true">Fill in the text that should appear in the readme file. Use {{Namespace}} as a placeholder for namespace, {{Module}} as a placeholder for the module name and {{Y}} as placeholder for current year.</argument>
+                    <argument name="options" xsi:type="object">Umc\Base\Source\Yesno</argument>
+                    <argument name="sort" xsi:type="number">70</argument>
+                </arguments>
+                <depends id="create_readme">
+                    <depend id="create_readme">
+                        <arguments>
+                            <argument name="type" xsi:type="const">Umc\Base\Config\Form::DEPENDENCY_TYPE_SELF</argument>
+                            <argument name="val" xsi:type="array">
+                                <item name="1" xsi:type="array">
+                                    <item name="value" xsi:type="const">Umc\Base\Source\Yesno::YES</item>
+                                </item>
+                            </argument>
+                        </arguments>
+                    </depend>
+                </depends>
             </field>
         </fieldset>
     </form>
     <form id="umc_entity">
-        <fieldset id="name_settings" collapsible="true" sort="10" translate="label">
-            <label>Name Settings</label>
-            <field id="label_singular" type="text" sort="10" required="true" class="label-singular" translate="label tooltip">
-                <label>Label singular</label>
-                <tooltip><![CDATA[Each entity must have a label used for buttons, links, messages.<br />This is the singular form of the label. For example in a blog module, the post entity will have the label in singular form 'Post']]></tooltip>
+        <fieldset id="name_settings">
+            <arguments>
+                <argument name="label" xsi:type="string" translate="true">Name Settings</argument>
+                <argument name="collapsible" xsi:type="boolean">true</argument>
+                <argument name="sort" xsi:type="number">10</argument>
+            </arguments>
+            <field id="label_singular">
+                <arguments>
+                    <argument name="type" xsi:type="string">text</argument>
+                    <argument name="required" xsi:type="boolean">true</argument>
+                    <argument name="label" xsi:type="string" translate="true">Label Singular</argument>
+                    <argument name="tooltip" xsi:type="string" translate="true"><![CDATA[Each entity must have a label used for buttons, links, messages.<br />This is the singular form of the label. For example in a blog module, the post entity will have the label in singular form 'Post']]></argument>
+                    <argument name="class" xsi:type="array">
+                        <item name="label-singular" xsi:type="string">label-singular</item>
+                    </argument>
+                    <argument name="sort" xsi:type="number">10</argument>
+                </arguments>
             </field>
-            <field id="label_plural" type="text" sort="20" required="true" translate="label tooltip">
-                <label>Label plural</label>
-                <tooltip><![CDATA[This is the plural form of the label above. It will be used for lists. (For example: 'Posts'). Try to use English words for this label. It's not mandatory, but it makes the taxonomy more readable. UMC will create a language file for the modules it generates and you can translate your module.<br /><span class="label label-info">Info:</span>I recommend the first letter to be uppercase.]]></tooltip>
+            <field id="label_plural">
+                <arguments>
+                    <argument name="type" xsi:type="string">text</argument>
+                    <argument name="required" xsi:type="boolean">true</argument>
+                    <argument name="label" xsi:type="string" translate="true">Label Plural</argument>
+                    <argument name="tooltip" xsi:type="string" translate="true"><![CDATA[This is the plural form of the label above. It will be used for lists. (For example: 'Posts'). Try to use English words for this label. It's not mandatory, but it makes the taxonomy more readable. UMC will create a language file for the modules it generates and you can translate your module.<br /><span class="label label-info">Info:</span>I recommend the first letter to be uppercase.]]></argument>
+                    <argument name="sort" xsi:type="number">20</argument>
+                </arguments>
             </field>
-            <field id="name_singular" type="text" sort="30" required="true" class="validate-alphanum validate-code" translate="label tooltip">
-                <label>Name singular</label>
-                <tooltip><![CDATA[UMC generates the code in a 'human readable' form. It's easier to figure out what the code is about when the variables and methods have a propper name.<br />For example it's easier to read foreach ($_posts as $_post){...} or $_post->getTags() than foreach ($_list as $_item){...} or $_entity->getRelated('tags');<br />The value you fill in here will be used for variable names, file names and table names.]]></tooltip>
+            <field id="name_singular">
+                <arguments>
+                    <argument name="type" xsi:type="string">text</argument>
+                    <argument name="required" xsi:type="boolean">true</argument>
+                    <argument name="label" xsi:type="string" translate="true">Name Singular</argument>
+                    <argument name="tooltip" xsi:type="string" translate="true"><![CDATA[This is the plural value of the entity code. For example 'posts'.]]></argument>
+                    <argument name="validation" xsi:type="array">
+                        <item name="validate-alphanum" xsi:type="boolean">true</item>
+                        <item name="validate-code" xsi:type="boolean">true</item>
+                    </argument>
+                    <argument name="sort" xsi:type="number">30</argument>
+                </arguments>
             </field>
-            <field id="name_plural" type="text" sort="40" required="true" class="validate-alphanum validate-code" translate="label tooltip">
-                <label>Name plural</label>
-                <tooltip><![CDATA[This is the plural value of the entity code. For example 'posts'.]]></tooltip>
+            <field id="name_plural">
+                <arguments>
+                    <argument name="type" xsi:type="string">text</argument>
+                    <argument name="required" xsi:type="boolean">true</argument>
+                    <argument name="label" xsi:type="string" translate="true">Name Plural</argument>
+                    <argument name="tooltip" xsi:type="string" translate="true"><![CDATA[UMC generates the code in a 'human readable' form. It's easier to figure out what the code is about when the variables and methods have a propper name.<br />For example it's easier to read foreach ($_posts as $_post){...} or $_post->getTags() than foreach ($_list as $_item){...} or $_entity->getRelated('tags');<br />The value you fill in here will be used for variable names, file names and table names.]]></argument>
+                    <argument name="validation" xsi:type="array">
+                        <item name="validate-alphanum" xsi:type="boolean">true</item>
+                        <item name="validate-code" xsi:type="boolean">true</item>
+                    </argument>
+                    <argument name="sort" xsi:type="number">40</argument>
+                </arguments>
             </field>
         </fieldset>
-        <fieldset id="backend_settings" collapsible="true" sort="20">
-            <label>Backend settings</label>
-            <field id="type" type="select" sort="10" required="true" system="true" reloader-class="entity-reloader attribute-reloader" translate="label tooltip">
-                <label>Entity type</label>
-                <tooltip><![CDATA[This represents the entity behavior. Flat means one entity instance is mapped to a table row.]]></tooltip>
-                <source>Umc\Base\Model\Source\Entity\Type</source>
+        <fieldset id="backend_settings">
+            <arguments>
+                <argument name="label" xsi:type="string" translate="true">Backend settings</argument>
+                <argument name="collapsible" xsi:type="boolean">true</argument>
+                <argument name="sort" xsi:type="number">20</argument>
+            </arguments>
+            <field id="type">
+                <arguments>
+                    <argument name="type" xsi:type="string">select</argument>
+                    <argument name="required" xsi:type="boolean">true</argument>
+                    <argument name="label" xsi:type="string" translate="true">Entity Type</argument>
+                    <argument name="tooltip" xsi:type="string" translate="true"><![CDATA[This represents the entity behavior. Flat means one entity instance is mapped to a table row.]]></argument>
+                    <argument name="system" xsi:type="boolean">true</argument>
+                    <argument name="reloader-class" xsi:type="array">
+                        <item name="entity" xsi:type="string">entity-reloader</item>
+                        <item name="attribute" xsi:type="string">attribute-reloader</item>
+                    </argument>
+                    <argument name="options" xsi:type="object">UmcSourceEntityType</argument>
+                    <argument name="sort" xsi:type="number">10</argument>
+                </arguments>
             </field>
-            <field id="is_tree" type="select" sort="20" required="true" system="true" reloader-class="entity-reloader attribute-reloader" translate="label tooltip">
-                <label>Behaves as tree</label>
-                <tooltip><![CDATA[If set to Yes your entity will have a tree behavior just like the catalog categories do.]]></tooltip>
-                <source>Magento\Config\Model\Config\Source\Yesno</source>
+            <field id="is_tree">
+                <arguments>
+                    <argument name="type" xsi:type="string">hidden</argument><!-- Not implemented yet -->
+                    <argument name="required" xsi:type="boolean">true</argument>
+                    <argument name="label" xsi:type="string" translate="true">Behaves As Tree</argument>
+                    <argument name="tooltip" xsi:type="string" translate="true"><![CDATA[If set to Yes your entity will have a tree behavior just like the catalog categories do.]]></argument>
+                    <argument name="system" xsi:type="boolean">true</argument>
+                    <argument name="reloader-class" xsi:type="array">
+                        <item name="entity" xsi:type="string">entity-reloader</item>
+                        <item name="attribute" xsi:type="string">attribute-reloader</item>
+                    </argument>
+                    <argument name="options" xsi:type="object">Umc\Base\Source\Yesno</argument>
+                    <argument name="sort" xsi:type="number">20</argument>
+                </arguments>
             </field>
-            <field id="add_created_to_grid" type="select" sort="30" required="true" system="true" translate="label tooltip">
-                <label>Add 'Created at' to admin grid</label>
-                <tooltip><![CDATA[The entities created with UMC will have a field called 'created_at' with the creation date of any entity instance.<br />If this is set to 'Yes' the 'Created at' field will be added to the admin grid.]]></tooltip>
-                <source>\Umc\Base\Model\Source\Attribute\Grid</source>
+            <field id="add_created_to_grid">
+                <arguments>
+                    <argument name="type" xsi:type="string">select</argument>
+                    <argument name="required" xsi:type="boolean">true</argument>
+                    <argument name="label" xsi:type="string" translate="true">Add 'Created at' to admin grid</argument>
+                    <argument name="tooltip" xsi:type="string" translate="true"><![CDATA[The entities created with UMC will have a field called 'created_at' with the creation date of any entity instance.<br />If this is set to 'Yes' the 'Created at' field will be added to the admin grid.]]></argument>
+                    <argument name="system" xsi:type="boolean">true</argument>
+                    <argument name="options" xsi:type="object">Umc\Base\Source\Grid</argument>
+                    <argument name="sort" xsi:type="number">30</argument>
+                </arguments>
                 <depends id="is_tree">
-                    <depend id="is_tree" type="entity">
-                        <val id="0">0</val>
+                    <depend id="is_tree">
+                        <arguments>
+                            <argument name="type" xsi:type="const">Umc\Base\Config\Form::DEPENDENCY_TYPE_SELF</argument>
+                            <argument name="val" xsi:type="array">
+                                <item name="0" xsi:type="array">
+                                    <item name="value" xsi:type="const">Umc\Base\Source\Yesno::NO</item>
+                                </item>
+                            </argument>
+                        </arguments>
                     </depend>
                 </depends>
             </field>
-            <field id="add_updated_to_grid" type="select" sort="40" required="true" system="true" translate="label tooltip">
-                <label>Add 'Updated at' to admin grid</label>
-                <tooltip><![CDATA[The entities created with UMC will have a field called 'updated_at' with the last update date of any entity instance.<br />If this is set to 'Yes' the 'Updated at' field will be added to the admin grid.]]></tooltip>
-                <source>\Umc\Base\Model\Source\Attribute\Grid</source>
+            <field id="add_updated_to_grid">
+                <arguments>
+                    <argument name="type" xsi:type="string">select</argument>
+                    <argument name="required" xsi:type="boolean">true</argument>
+                    <argument name="label" xsi:type="string" translate="true">Add 'Updated at' to admin grid</argument>
+                    <argument name="tooltip" xsi:type="string" translate="true"><![CDATA[The entities created with UMC will have a field called 'updated_at' with the last update date of any entity instance.<br />If this is set to 'Yes' the 'Updated at' field will be added to the admin grid.]]></argument>
+                    <argument name="system" xsi:type="boolean">true</argument>
+                    <argument name="options" xsi:type="object">Umc\Base\Source\Grid</argument>
+                    <argument name="sort" xsi:type="number">40</argument>
+                </arguments>
                 <depends id="is_tree">
-                    <depend id="is_tree" type="entity">
-                        <val id="0">0</val>
+                    <depend id="is_tree">
+                        <arguments>
+                            <argument name="type" xsi:type="const">Umc\Base\Config\Form::DEPENDENCY_TYPE_SELF</argument>
+                            <argument name="val" xsi:type="array">
+                                <item name="0" xsi:type="array">
+                                    <item name="value" xsi:type="const">Umc\Base\Source\Yesno::NO</item>
+                                </item>
+                            </argument>
+                        </arguments>
                     </depend>
                 </depends>
             </field>
-            <field id="inline_edit" type="select" sort="20" required="true" system="true" reloader-class="entity-reloader attribute-reloader" translate="label tooltip">
-                <label>Inline edit</label>
-                <tooltip><![CDATA[The admin grid system allows inline editing for listed entities. Setting this to Yes will enable this feature for your module]]></tooltip>
-                <source>Magento\Config\Model\Config\Source\Yesno</source>
+            <field id="inline_edit">
+                <arguments>
+                    <argument name="type" xsi:type="string">select</argument>
+                    <argument name="required" xsi:type="boolean">true</argument>
+                    <argument name="label" xsi:type="string" translate="true">Inline Edit</argument>
+                    <argument name="tooltip" xsi:type="string" translate="true"><![CDATA[The admin grid system allows inline editing for listed entities. Setting this to Yes will enable this feature for your module]]></argument>
+                    <argument name="system" xsi:type="boolean">true</argument>
+                    <argument name="options" xsi:type="object">Umc\Base\Source\Yesno</argument>
+                    <argument name="reloader-class" xsi:type="array">
+                        <item name="entity" xsi:type="string">entity-reloader</item>
+                        <item name="attribute" xsi:type="string">attribute-reloader</item>
+                    </argument>
+                    <argument name="sort" xsi:type="number">50</argument>
+                </arguments>
                 <depends id="is_tree">
-                    <depend id="is_tree" type="entity">
-                        <val id="0">0</val>
+                    <depend id="is_tree">
+                        <arguments>
+                            <argument name="type" xsi:type="const">Umc\Base\Config\Form::DEPENDENCY_TYPE_SELF</argument>
+                            <argument name="val" xsi:type="array">
+                                <item name="0" xsi:type="array">
+                                    <item name="value" xsi:type="const">Umc\Base\Source\Yesno::NO</item>
+                                </item>
+                            </argument>
+                        </arguments>
                     </depend>
                 </depends>
             </field>
-            <field id="search" type="select" sort="50" required="true" system="true" translate="label tooltip">
-                <label>Include in admin global search</label>
-                <tooltip><![CDATA[The Magento admin Global search (at the top of every admin page) searches for the text you enter in products, customers and orders.<br />If you set this to 'Yes' than it will search in your entity also.]]></tooltip>
-                <source>Magento\Config\Model\Config\Source\Yesno</source>
+            <field id="search">
+                <arguments>
+                    <argument name="type" xsi:type="string">select</argument>
+                    <argument name="required" xsi:type="boolean">true</argument>
+                    <argument name="label" xsi:type="string" translate="true">Include in admin global search</argument>
+                    <argument name="tooltip" xsi:type="string" translate="true"><![CDATA[The Magento admin Global search (at the top of every admin page) searches for the text you enter in products, customers and orders.<br />If you set this to 'Yes' than it will search in your entity also.]]></argument>
+                    <argument name="system" xsi:type="boolean">true</argument>
+                    <argument name="options" xsi:type="object">Umc\Base\Source\Yesno</argument>
+                    <argument name="reloader-class" xsi:type="array">
+                        <item name="entity" xsi:type="string">entity-reloader</item>
+                        <item name="attribute" xsi:type="string">attribute-reloader</item>
+                    </argument>
+                    <argument name="sort" xsi:type="number">60</argument>
+                </arguments>
+                <depends id="is_tree">
+                    <depend id="is_tree">
+                        <arguments>
+                            <argument name="type" xsi:type="const">Umc\Base\Config\Form::DEPENDENCY_TYPE_SELF</argument>
+                            <argument name="val" xsi:type="array">
+                                <item name="0" xsi:type="array">
+                                    <item name="value" xsi:type="const">Umc\Base\Source\Yesno::NO</item>
+                                </item>
+                            </argument>
+                        </arguments>
+                    </depend>
+                </depends>
             </field>
         </fieldset>
     </form>
     <form id="umc_attribute">
-        <fieldset id="attribute" collapsible="true" class="attribute-fieldset" sort="10" translate="label">
-            <label>Main Settings</label>
-            <field id="code" type="text" required="true" sort="10" class="validate-code">
-                <label>Attribute Code</label>
-                <tooltip><![CDATA[This is the attribute code. It will be used in the logic of the extension. Use only letters (a-z), numbers (0-9) or underscore(_) in this field, first character should be a letter.<br />There are some naming restriction. For example the code cannot be: 'data', 'child']]></tooltip>
+        <fieldset id="attribute">
+            <arguments>
+                <argument name="label" xsi:type="string" translate="true">Main Settings</argument>
+                <argument name="collapsible" xsi:type="boolean">true</argument>
+                <argument name="class" xsi:type="array">
+                    <item name="attribute-fieldset" xsi:type="string">attribute-fieldset</item>
+                    <item name="left-collapsible-fieldset" xsi:type="string">left-collapsible-fieldset</item>
+                </argument>
+                <argument name="sort" xsi:type="number">10</argument>
+            </arguments>
+            <field id="code">
+                <arguments>
+                    <argument name="type" xsi:type="string">text</argument>
+                    <argument name="required" xsi:type="boolean">true</argument>
+                    <argument name="label" xsi:type="string" translate="true">Attribute Code</argument>
+                    <argument name="tooltip" xsi:type="string" translate="true"><![CDATA[This is the attribute code. It will be used in the logic of the extension. Use only letters (a-z), numbers (0-9) or underscore(_) in this field, first character should be a letter.<br />There are some naming restriction. For example the code cannot be: 'data', 'child']]></argument>
+                    <argument name="validation" xsi:type="array">
+                        <item name="validate-code" xsi:type="boolean">true</item>
+                    </argument>
+                    <argument name="sort" xsi:type="number">10</argument>
+                </arguments>
             </field>
-            <field id="label" type="text" required="true" sort="20" class="attribute-label" translate="label tooltip">
-                <label>Attribute label</label>
-                <tooltip><![CDATA[This is the attribute label that will be visible in the back-end in the add/edit form and in some cases in frontend.]]></tooltip>
+            <field id="label">
+                <arguments>
+                    <argument name="type" xsi:type="string">text</argument>
+                    <argument name="required" xsi:type="boolean">true</argument>
+                    <argument name="label" xsi:type="string" translate="true">Attribute Label</argument>
+                    <argument name="tooltip" xsi:type="string" translate="true"><![CDATA[This is the attribute label that will be visible in the back-end in the add/edit form and in some cases in frontend.]]></argument>
+                    <argument name="class" xsi:type="array">
+                        <item name="attribute-label" xsi:type="string">attribute-label</item>
+                    </argument>
+                    <argument name="sort" xsi:type="number">20</argument>
+                </arguments>
             </field>
-            <field id="type" type="select" required="true" sort="30" system="true" reloader-class="attribute-reloader" translate="label tooltip">
-                <label>Attribute Type</label>
-                <tooltip><![CDATA[This is the attribute type. This wil determine the table column type for this field/attribute and its behavior.]]></tooltip>
-                <source>Umc\Base\Model\Source\Attribute\Type</source>
+            <field id="type">
+                <arguments>
+                    <argument name="type" xsi:type="string">select</argument>
+                    <argument name="required" xsi:type="boolean">true</argument>
+                    <argument name="label" xsi:type="string" translate="true">Attribute Type</argument>
+                    <argument name="tooltip" xsi:type="string" translate="true"><![CDATA[This is the attribute type. This wil determine the table column type for this field/attribute and its behavior.]]></argument>
+                    <argument name="system" xsi:type="boolean">true</argument>
+                    <argument name="options" xsi:type="object">UmcSourceAttributeType</argument>
+                    <argument name="reloader-class" xsi:type="array">
+                        <item name="attribute-reloader" xsi:type="string">attribute-reloader</item>
+                    </argument>
+                    <argument name="sort" xsi:type="number">30</argument>
+                </arguments>
             </field>
-            <field id="is_name" type="radio" sort="50" class="validate-one-required-by-name is-name" translate="label tooltip">
-                <label>Acts as name</label>
-                <tooltip><![CDATA[Each entity must have an attribute to behave as 'Name'. This attribute will be used to identify different entities among themselves. It will also be used in dropdowns with entities. This option is available only for text, number and decimal attributes.]]></tooltip>
+            <field id="is_name">
+                <arguments>
+                    <argument name="type" xsi:type="string">radio</argument>
+                    <argument name="required" xsi:type="boolean">false</argument>
+                    <argument name="label" xsi:type="string" translate="true">Acts As Name</argument>
+                    <argument name="tooltip" xsi:type="string" translate="true"><![CDATA[Each entity must have an attribute to behave as 'Name'. This attribute will be used to identify different entities among themselves. It will also be used in dropdowns with entities. This option is available only for text, number and decimal attributes.]]></argument>
+                    <argument name="class" xsi:type="array">
+                        <item name="is-name" xsi:type="string">is-name</item>
+                    </argument>
+                    <argument name="validation" xsi:type="array">
+                        <item name="validate-one-required-by-name" xsi:type="boolean">true</item>
+                    </argument>
+                    <argument name="sort" xsi:type="number">40</argument>
+                </arguments>
                 <depends id="type">
-                    <depend id="type" type="attribute">
-                        <val id="text">text</val>
-                        <val id="decimal">decimal</val>
-                        <val id="int">int</val>
+                    <depend id="type">
+                        <arguments>
+                            <argument name="type" xsi:type="const">Umc\Base\Config\Form::DEPENDENCY_TYPE_SELF</argument>
+                            <argument name="val" xsi:type="array">
+                                <item name="text" xsi:type="array">
+                                    <item name="value" xsi:type="const">Umc\Base\Model\Attribute\Type\Text::NAME</item>
+                                </item>
+                                <item name="decimal" xsi:type="array">
+                                    <item name="value" xsi:type="const">Umc\Base\Model\Attribute\Type\Decimal::NAME</item>
+                                </item>
+                                <item name="integer" xsi:type="array">
+                                    <item name="value" xsi:type="const">Umc\Base\Model\Attribute\Type\Integer::NAME</item>
+                                </item>
+                            </argument>
+                        </arguments>
                     </depend>
                 </depends>
             </field>
-            <field id="required" required="true" type="select" sort="60" system="true" translate="label tooltip">
-                <label>Required</label>
-                <tooltip><![CDATA[This sets the attribute as required in the admin add/edit form.]]></tooltip>
-                <source>\Magento\Config\Model\Config\Source\Yesno</source>
+            <field id="required">
+                <arguments>
+                    <argument name="type" xsi:type="string">select</argument>
+                    <argument name="required" xsi:type="boolean">true</argument>
+                    <argument name="label" xsi:type="string" translate="true">Required</argument>
+                    <argument name="tooltip" xsi:type="string" translate="true"><![CDATA[This sets the attribute as required in the admin add/edit form.]]></argument>
+                    <argument name="options" xsi:type="object">Umc\Base\Source\Yesno</argument>
+                    <argument name="system" xsi:type="boolean">true</argument>
+                    <argument name="sort" xsi:type="number">50</argument>
+                </arguments>
                 <depends id="type">
-                    <depend id="type" type="attribute">
-                        <val id="text">text</val>
-                        <val id="decimal">decimal</val>
-                        <val id="date">date</val>
-                        <val id="int">int</val>
-                        <val id="dropdown">dropdown</val>
-                        <val id="multiselect">multiselect</val>
-                        <val id="country">country</val>
-                        <val id="yesno">yesno</val>
-                        <val id="textarea">textarea</val>
-                        <val id="country_multiselect">country_multiselect</val>
+                    <depend id="type">
+                        <arguments>
+                            <argument name="type" xsi:type="const">Umc\Base\Config\Form::DEPENDENCY_TYPE_SELF</argument>
+                            <argument name="val" xsi:type="array">
+                                <item name="text" xsi:type="array">
+                                    <item name="value" xsi:type="const">Umc\Base\Model\Attribute\Type\Text::NAME</item>
+                                </item>
+                                <item name="decimal" xsi:type="array">
+                                    <item name="value" xsi:type="const">Umc\Base\Model\Attribute\Type\Decimal::NAME</item>
+                                </item>
+                                <item name="integer" xsi:type="array">
+                                    <item name="value" xsi:type="const">Umc\Base\Model\Attribute\Type\Integer::NAME</item>
+                                </item>
+                                <item name="date" xsi:type="array">
+                                    <item name="value" xsi:type="const">Umc\Base\Model\Attribute\Type\Date::NAME</item>
+                                </item>
+                                <item name="dropdown" xsi:type="array">
+                                    <item name="value" xsi:type="const">Umc\Base\Model\Attribute\Type\Dropdown::NAME</item>
+                                </item>
+                                <item name="multiselect" xsi:type="array">
+                                    <item name="value" xsi:type="const">Umc\Base\Model\Attribute\Type\Multiselect::NAME</item>
+                                </item>
+                                <item name="country" xsi:type="array">
+                                    <item name="value" xsi:type="const">Umc\Base\Model\Attribute\Type\Country::NAME</item>
+                                </item>
+                                <item name="yesno" xsi:type="array">
+                                    <item name="value" xsi:type="const">Umc\Base\Model\Attribute\Type\Yesno::NAME</item>
+                                </item>
+                                <item name="textarea" xsi:type="array">
+                                    <item name="value" xsi:type="const">Umc\Base\Model\Attribute\Type\Textarea::NAME</item>
+                                </item>
+                                <item name="country_multiselect" xsi:type="array">
+                                    <item name="value" xsi:type="const">Umc\Base\Model\Attribute\Type\CountryMultiselect::NAME</item>
+                                </item>
+                            </argument>
+                        </arguments>
                     </depend>
                 </depends>
             </field>
-            <field id="options" required="false" type="textarea" sort="90" system="false" translate="label tooltip">
-                <label>Options in select</label>
-                <tooltip><![CDATA[If you choose to enter the values for the dropdown or multiselect manually, input them here. Separate the options with a new line.]]></tooltip>
-                <note>One option on each row</note>
+            <field id="options">
+                <arguments>
+                    <argument name="type" xsi:type="string">textarea</argument>
+                    <argument name="required" xsi:type="boolean">true</argument>
+                    <argument name="label" xsi:type="string" translate="true">Options in select</argument>
+                    <argument name="tooltip" xsi:type="string" translate="true"><![CDATA[If you choose to enter the values for the dropdown or multiselect manually, input them here. Separate the options with a new line.]]></argument>
+                    <argument name="note" xsi:type="string">One on each row</argument>
+                    <argument name="sort" xsi:type="number">60</argument>
+                </arguments>
                 <depends id="type">
-                    <depend id="type" type="attribute">
-                        <val id="dropdown">dropdown</val>
-                        <val id="multiselect">multiselect</val>
+                    <depend id="type">
+                        <arguments>
+                            <argument name="type" xsi:type="const">Umc\Base\Config\Form::DEPENDENCY_TYPE_SELF</argument>
+                            <argument name="val" xsi:type="array">
+                                <item name="dropdown" xsi:type="array">
+                                    <item name="value" xsi:type="const">Umc\Base\Model\Attribute\Type\Dropdown::NAME</item>
+                                </item>
+                                <item name="multiselect" xsi:type="array">
+                                    <item name="value" xsi:type="const">Umc\Base\Model\Attribute\Type\Multiselect::NAME</item>
+                                </item>
+                            </argument>
+                        </arguments>
                     </depend>
                 </depends>
             </field>
-            <field id="position" type="hidden" sort="1000" system="true" class="attribute-position">
-                <label />
+            <field id="position">
+                <arguments>
+                    <argument name="type" xsi:type="string">hidden</argument>
+                    <argument name="label" xsi:type="string"/>
+                    <argument name="class" xsi:type="array">
+                        <item name="attribute-position" xsi:type="string">attribute-position</item>
+                    </argument>
+                    <argument name="sort" xsi:type="number">1000</argument>
+                </arguments>
             </field>
         </fieldset>
-        <fieldset id="additional" collapsible="true" sort="20" translate="label">
-            <label>Advanced settings</label>
-            <field id="note" type="text" sort="10" translate="label tooltip">
-                <label>Note</label>
-                <tooltip><![CDATA[This will be added as a comment under the field in the admin add/edit form.]]></tooltip>
+        <fieldset id="additional">
+            <arguments>
+                <argument name="label" xsi:type="string" translate="true">Advanced Settings</argument>
+                <argument name="collapsible" xsi:type="boolean">true</argument>
+                <argument name="sort" xsi:type="number">20</argument>
+            </arguments>
+            <field id="note">
+                <arguments>
+                    <argument name="type" xsi:type="string">text</argument>
+                    <argument name="label" xsi:type="string" translate="true">Note</argument>
+                    <argument name="tooltip" xsi:type="string" translate="true"><![CDATA[This will be added as a comment under the field in the admin add/edit form.]]></argument>
+                    <argument name="sort" xsi:type="number">10</argument>
+                 </arguments>
             </field>
-            <field id="admin_grid" required="true" type="select" sort="80" system="true" reloader-class="attribute-reloader" translate="label tooltip">
-                <label>Show in admin grid</label>
-                <tooltip><![CDATA[This allows you to display the attribute as a column in the admin grid of the entity. The attribute set to behave as 'Name' will be included by default in the grid.]]></tooltip>
-                <source>\Umc\Base\Model\Source\Attribute\Grid</source>
+            <field id="admin_grid">
+                <arguments>
+                    <argument name="type" xsi:type="string">select</argument>
+                    <argument name="label" xsi:type="string" translate="true">Show in admin grid</argument>
+                    <argument name="tooltip" xsi:type="string" translate="true"><![CDATA[This allows you to display the attribute as a column in the admin grid of the entity. The attribute set to behave as 'Name' will be included by default in the grid.]]></argument>
+                    <argument name="required" xsi:type="boolean">true</argument>
+                    <argument name="system" xsi:type="boolean">true</argument>
+                    <argument name="options" xsi:type="object">Umc\Base\Source\Grid</argument>
+                    <argument name="reloader-class" xsi:type="array">
+                        <item name="attribute-reloader" xsi:type="string">attribute-reloader</item>
+                    </argument>
+                    <argument name="sort" xsi:type="number">20</argument>
+                </arguments>
                 <depends id="type">
-                    <depend id="is_tree" type="entity">
-                        <val id="0">0</val>
+                    <depend id="is_tree">
+                        <arguments>
+                            <argument name="type" xsi:type="const">Umc\Base\Config\Form::DEPENDENCY_TYPE_PARENT</argument>
+                            <argument name="val" xsi:type="array">
+                                <item name="0" xsi:type="array">
+                                    <item name="value" xsi:type="const">Umc\Base\Source\Yesno::NO</item>
+                                </item>
+                            </argument>
+                        </arguments>
                     </depend>
-                    <depend id="type" type="attribute">
-                        <val id="text">text</val>
-                        <val id="decimal">decimal</val>
-                        <val id="date">date</val>
-                        <val id="int">int</val>
-                        <val id="dropdown">dropdown</val>
-                        <val id="country">country</val>
-                        <val id="yesno">yesno</val>
+                    <depend id="type">
+                        <arguments>
+                            <argument name="type" xsi:type="const">Umc\Base\Config\Form::DEPENDENCY_TYPE_SELF</argument>
+                            <argument name="val" xsi:type="array">
+                                <item name="text" xsi:type="array">
+                                    <item name="value" xsi:type="const">Umc\Base\Model\Attribute\Type\Text::NAME</item>
+                                </item>
+                                <item name="decimal" xsi:type="array">
+                                    <item name="value" xsi:type="const">Umc\Base\Model\Attribute\Type\Decimal::NAME</item>
+                                </item>
+                                <item name="date" xsi:type="array">
+                                    <item name="value" xsi:type="const">Umc\Base\Model\Attribute\Type\Date::NAME</item>
+                                </item>
+                                <item name="integer" xsi:type="array">
+                                    <item name="value" xsi:type="const">Umc\Base\Model\Attribute\Type\Integer::NAME</item>
+                                </item>
+                                <item name="dropdown" xsi:type="array">
+                                    <item name="value" xsi:type="const">Umc\Base\Model\Attribute\Type\Dropdown::NAME</item>
+                                </item>
+                                <item name="country" xsi:type="array">
+                                    <item name="value" xsi:type="const">Umc\Base\Model\Attribute\Type\Country::NAME</item>
+                                </item>
+                                <item name="yesno" xsi:type="array">
+                                    <item name="value" xsi:type="const">Umc\Base\Model\Attribute\Type\Yesno::NAME</item>
+                                </item>
+                            </argument>
+                        </arguments>
                     </depend>
                 </depends>
             </field>
-            <field id="admin_grid_filter" required="true" type="select" sort="85" system="true" translate="label tooltip">
-                <label>Make filtrable in admin grid</label>
-                <tooltip><![CDATA[If this is set to yes, your field will be filtrable in the admin grid]]></tooltip>
-                <source>\Magento\Config\Model\Config\Source\Yesno</source>
+            <field id="admin_grid_filter">
+                <arguments>
+                    <argument name="type" xsi:type="string">select</argument>
+                    <argument name="label" xsi:type="string" translate="true">Filtrable in admin grid</argument>
+                    <argument name="tooltip" xsi:type="string" translate="true"><![CDATA[If this is set to yes, your field will be filtrable in the admin grid]]></argument>
+                    <argument name="required" xsi:type="boolean">true</argument>
+                    <argument name="system" xsi:type="boolean">true</argument>
+                    <argument name="options" xsi:type="object">Umc\Base\Source\Yesno</argument>
+                    <argument name="sort" xsi:type="number">30</argument>
+                </arguments>
                 <depends id="admin_grid">
-                    <depend id="is_tree" type="entity">
-                        <val id="0">0</val>
+                    <depend id="is_tree">
+                        <arguments>
+                            <argument name="type" xsi:type="const">Umc\Base\Config\Form::DEPENDENCY_TYPE_PARENT</argument>
+                            <argument name="val" xsi:type="array">
+                                <item name="0" xsi:type="array">
+                                    <item name="value" xsi:type="const">Umc\Base\Source\Yesno::NO</item>
+                                </item>
+                            </argument>
+                        </arguments>
                     </depend>
-                    <depend id="type" type="attribute">
-                        <val id="text">text</val>
-                        <val id="decimal">decimal</val>
-                        <val id="date">date</val>
-                        <val id="int">int</val>
-                        <val id="dropdown">dropdown</val>
-                        <val id="country">country</val>
-                        <val id="yesno">yesno</val>
+                    <depend id="type">
+                        <arguments>
+                            <argument name="type" xsi:type="const">Umc\Base\Config\Form::DEPENDENCY_TYPE_SELF</argument>
+                            <argument name="val" xsi:type="array">
+                                <item name="text" xsi:type="array">
+                                    <item name="value" xsi:type="const">Umc\Base\Model\Attribute\Type\Text::NAME</item>
+                                </item>
+                                <item name="decimal" xsi:type="array">
+                                    <item name="value" xsi:type="const">Umc\Base\Model\Attribute\Type\Decimal::NAME</item>
+                                </item>
+                                <item name="date" xsi:type="array">
+                                    <item name="value" xsi:type="const">Umc\Base\Model\Attribute\Type\Date::NAME</item>
+                                </item>
+                                <item name="integer" xsi:type="array">
+                                    <item name="value" xsi:type="const">Umc\Base\Model\Attribute\Type\Integer::NAME</item>
+                                </item>
+                                <item name="dropdown" xsi:type="array">
+                                    <item name="value" xsi:type="const">Umc\Base\Model\Attribute\Type\Dropdown::NAME</item>
+                                </item>
+                                <item name="country" xsi:type="array">
+                                    <item name="value" xsi:type="const">Umc\Base\Model\Attribute\Type\Country::NAME</item>
+                                </item>
+                                <item name="yesno" xsi:type="array">
+                                    <item name="value" xsi:type="const">Umc\Base\Model\Attribute\Type\Yesno::NAME</item>
+                                </item>
+                            </argument>
+                        </arguments>
                     </depend>
-                    <depend id="admin_grid" type="attribute">
-                        <val id="1">1</val>
-                        <val id="2">2</val>
+                    <depend id="admin_grid">
+                        <arguments>
+                            <argument name="type" xsi:type="const">Umc\Base\Config\Form::DEPENDENCY_TYPE_SELF</argument>
+                            <argument name="val" xsi:type="array">
+                                <item name="1" xsi:type="array">
+                                    <item name="value" xsi:type="const">Umc\Base\Source\Grid::YES</item>
+                                </item>
+                                <item name="2" xsi:type="array">
+                                    <item name="value" xsi:type="const">Umc\Base\Source\Grid::HIDDEN</item>
+                                </item>
+                            </argument>
+                        </arguments>
                     </depend>
                 </depends>
             </field>
-            <field id="inline_edit" required="true" type="select" sort="87" system="true" translate="label tooltip">
-                <label>Edit inline in grid</label>
-                <tooltip><![CDATA[if you enable this you can edit the value of this field directly from the grid]]></tooltip>
-                <source>\Magento\Config\Model\Config\Source\Yesno</source>
+            <field id="inline_edit">
+                <arguments>
+                    <argument name="type" xsi:type="string">select</argument>
+                    <argument name="label" xsi:type="string" translate="true">Edit inline in grid</argument>
+                    <argument name="tooltip" xsi:type="string" translate="true"><![CDATA[if you enable this you can edit the value of this field directly from the grid]]></argument>
+                    <argument name="required" xsi:type="boolean">true</argument>
+                    <argument name="system" xsi:type="boolean">true</argument>
+                    <argument name="options" xsi:type="object">Umc\Base\Source\Yesno</argument>
+                    <argument name="sort" xsi:type="number">40</argument>
+                </arguments>
                 <depends id="admin_grid">
-                    <depend id="is_tree" type="entity">
-                        <val id="0">0</val>
+                    <depend id="is_tree">
+                        <arguments>
+                            <argument name="type" xsi:type="const">Umc\Base\Config\Form::DEPENDENCY_TYPE_PARENT</argument>
+                            <argument name="val" xsi:type="array">
+                                <item name="0" xsi:type="array">
+                                    <item name="value" xsi:type="const">Umc\Base\Source\Yesno::NO</item>
+                                </item>
+                            </argument>
+                        </arguments>
                     </depend>
-                    <depend id="inline_edit" type="entity">
-                        <val id="1">1</val>
+                    <depend id="inline_edit">
+                        <arguments>
+                            <argument name="type" xsi:type="const">Umc\Base\Config\Form::DEPENDENCY_TYPE_PARENT</argument>
+                            <argument name="val" xsi:type="array">
+                                <item name="1" xsi:type="array">
+                                    <item name="value" xsi:type="const">Umc\Base\Source\Yesno::YES</item>
+                                </item>
+                            </argument>
+                        </arguments>
                     </depend>
-                    <depend id="type" type="attribute">
-                        <val id="text">text</val>
-                        <val id="decimal">decimal</val>
-                        <val id="date">date</val>
-                        <val id="int">int</val>
-                        <val id="dropdown">dropdown</val>
-                        <val id="country">country</val>
-                        <val id="yesno">yesno</val>
+                    <depend id="type">
+                        <arguments>
+                            <argument name="type" xsi:type="const">Umc\Base\Config\Form::DEPENDENCY_TYPE_SELF</argument>
+                            <argument name="val" xsi:type="array">
+                                <item name="text" xsi:type="array">
+                                    <item name="value" xsi:type="const">Umc\Base\Model\Attribute\Type\Text::NAME</item>
+                                </item>
+                                <item name="decimal" xsi:type="array">
+                                    <item name="value" xsi:type="const">Umc\Base\Model\Attribute\Type\Decimal::NAME</item>
+                                </item>
+                                <item name="date" xsi:type="array">
+                                    <item name="value" xsi:type="const">Umc\Base\Model\Attribute\Type\Date::NAME</item>
+                                </item>
+                                <item name="integer" xsi:type="array">
+                                    <item name="value" xsi:type="const">Umc\Base\Model\Attribute\Type\Integer::NAME</item>
+                                </item>
+                                <item name="dropdown" xsi:type="array">
+                                    <item name="value" xsi:type="const">Umc\Base\Model\Attribute\Type\Dropdown::NAME</item>
+                                </item>
+                                <item name="country" xsi:type="array">
+                                    <item name="value" xsi:type="const">Umc\Base\Model\Attribute\Type\Country::NAME</item>
+                                </item>
+                                <item name="yesno" xsi:type="array">
+                                    <item name="value" xsi:type="const">Umc\Base\Model\Attribute\Type\Yesno::NAME</item>
+                                </item>
+                            </argument>
+                        </arguments>
                     </depend>
-                    <depend id="admin_grid" type="attribute">
-                        <val id="1">1</val>
-                        <val id="2">2</val>
+                    <depend id="admin_grid">
+                        <arguments>
+                            <argument name="type" xsi:type="const">Umc\Base\Config\Form::DEPENDENCY_TYPE_SELF</argument>
+                            <argument name="val" xsi:type="array">
+                                <item name="1" xsi:type="array">
+                                    <item name="value" xsi:type="const">Umc\Base\Source\Grid::YES</item>
+                                </item>
+                                <item name="2" xsi:type="array">
+                                    <item name="value" xsi:type="const">Umc\Base\Source\Grid::HIDDEN</item>
+                                </item>
+                            </argument>
+                        </arguments>
                     </depend>
                 </depends>
             </field>
-            <field id="editor" required="true" type="select" sort="20" system="true" translate="label tooltip">
-                <label>Use WYSIWYG editor</label>
-                <tooltip><![CDATA[This allows you to use a WYSIWYG editor for the attribute. It is available only for Textarea attributes.]]></tooltip>
-                <source>\Magento\Config\Model\Config\Source\Yesno</source>
+            <field id="editor">
+                <arguments>
+                    <argument name="type" xsi:type="string">select</argument>
+                    <argument name="label" xsi:type="string" translate="true">Use WYSIWYG editor</argument>
+                    <argument name="tooltip" xsi:type="string" translate="true"><![CDATA[This allows you to use a WYSIWYG editor for the attribute. It is available only for Textarea attributes.]]></argument>
+                    <argument name="required" xsi:type="boolean">true</argument>
+                    <argument name="system" xsi:type="boolean">true</argument>
+                    <argument name="options" xsi:type="object">Umc\Base\Source\Yesno</argument>
+                    <argument name="sort" xsi:type="number">50</argument>
+                </arguments>
                 <depends id="type">
-                    <depend id="type" type="attribute">
-                        <val id="textarea">textarea</val>
+                    <depend id="type">
+                        <arguments>
+                            <argument name="type" xsi:type="const">Umc\Base\Config\Form::DEPENDENCY_TYPE_SELF</argument>
+                            <argument name="val" xsi:type="array">
+                                <item name="textarea" xsi:type="array">
+                                    <item name="value" xsi:type="const">Umc\Base\Model\Attribute\Type\Textarea::NAME</item>
+                                </item>
+                            </argument>
+                        </arguments>
                     </depend>
-                </depends>
+               </depends>
             </field>
-            <field id="default_value" required="false" type="textarea" sort="40" system="false" translate="label tooltip">
-                <label>Default value</label>
-                <tooltip><![CDATA[Fill in a default value for the attribute. Leave empty for no value. For dropdown and multiselect attributes the value, must be a valid value. not valid ones will be removed. For the multiselect attributes add one default value on each line. For Yes/No attribtues enter 1 for Yes, 0 for No. For country attributes fill in the country ISO2 code. You cannot set a default value for image and file attributes.]]></tooltip>
-                <note>One option on each row for multiple selects</note>
+            <field id="default_value">
+                <arguments>
+                    <argument name="type" xsi:type="string">textarea</argument>
+                    <argument name="label" xsi:type="string" translate="true">Default value</argument>
+                    <argument name="tooltip" xsi:type="string" translate="true"><![CDATA[Fill in a default value for the attribute. Leave empty for no value. For dropdown and multiselect attributes the value, must be a valid value. not valid ones will be removed. For the multiselect attributes add one default value on each line. For Yes/No attribtues enter 1 for Yes, 0 for No. For country attributes fill in the country ISO2 code. You cannot set a default value for image and file attributes.For the moment the default values don't work for the form ui components V2.2.]]></argument>
+                    <argument name="note" xsi:type="string" translate="true">One option on each row for multiple selects</argument>
+                    <argument name="system" xsi:type="boolean">true</argument>
+                    <argument name="sort" xsi:type="number">60</argument>
+                </arguments>
                 <depends id="type">
-                    <depend id="type" type="attribute">
-                        <val id="text">text</val>
-                        <val id="textarea">textarea</val>
-                        <val id="decimal">decimal</val>
-                        <val id="date">date</val>
-                        <val id="int">int</val>
-                        <val id="dropdown">dropdown</val>
-                        <val id="country">country</val>
-                        <val id="country_multiselect">country_multiselect</val>
-                        <val id="yesno">yesno</val>
-                        <val id="multiselect">multiselect</val>
+                    <depend id="type">
+                        <arguments>
+                            <argument name="type" xsi:type="const">Umc\Base\Config\Form::DEPENDENCY_TYPE_SELF</argument>
+                            <argument name="val" xsi:type="array">
+                                <item name="text" xsi:type="array">
+                                    <item name="value" xsi:type="const">Umc\Base\Model\Attribute\Type\Text::NAME</item>
+                                </item>
+                                <item name="textarea" xsi:type="array">
+                                    <item name="value" xsi:type="const">Umc\Base\Model\Attribute\Type\Textarea::NAME</item>
+                                </item>
+                                <item name="decimal" xsi:type="array">
+                                    <item name="value" xsi:type="const">Umc\Base\Model\Attribute\Type\Decimal::NAME</item>
+                                </item>
+                                <item name="date" xsi:type="array">
+                                    <item name="value" xsi:type="const">Umc\Base\Model\Attribute\Type\Date::NAME</item>
+                                </item>
+                                <item name="integer" xsi:type="array">
+                                    <item name="value" xsi:type="const">Umc\Base\Model\Attribute\Type\Integer::NAME</item>
+                                </item>
+                                <item name="dropdown" xsi:type="array">
+                                    <item name="value" xsi:type="const">Umc\Base\Model\Attribute\Type\Dropdown::NAME</item>
+                                </item>
+                                <item name="country" xsi:type="array">
+                                    <item name="value" xsi:type="const">Umc\Base\Model\Attribute\Type\Country::NAME</item>
+                                </item>
+                                <item name="yesno" xsi:type="array">
+                                    <item name="value" xsi:type="const">Umc\Base\Model\Attribute\Type\Yesno::NAME</item>
+                                </item>
+                                <item name="multiselect" xsi:type="array">
+                                    <item name="value" xsi:type="const">Umc\Base\Model\Attribute\Type\Multiselect::NAME</item>
+                                </item>
+                                <item name="country_multiselect" xsi:type="array">
+                                    <item name="value" xsi:type="const">Umc\Base\Model\Attribute\Type\CountryMultiselect::NAME</item>
+                                </item>
+                            </argument>
+                        </arguments>
                     </depend>
                 </depends>
             </field>

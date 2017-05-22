@@ -10,23 +10,22 @@
  *
  * @category  Umc
  * @package   Umc_Base
- * @copyright 2015 Marius Strajeru
+ * @copyright Marius Strajeru
  * @license   http://opensource.org/licenses/mit-license.php MIT License
  * @author    Marius Strajeru <ultimate.module.creator@gmail.com>
  */
 define([
     'jquery',
     'mage/template',
-    'jquery/ui',
-    'jquery/validate',
-    'Magento_Ui/js/modal/modal',
-    'jquery/jstree/jquery.jstree',
-    'useDefault',
-    'mage/translate',
-    'mage/backend/form',
-    'mage/backend/validation'
-], function($, mageTemplate) {
+    'Magento_Ui/js/modal/confirm',
+    'jquery/jstree/jquery.jstree'
+], function($, mageTemplate, confirm) {
     'use strict';
+    function checkMessagesElement() {
+        if ($('#messages').length == 0) {
+            $('#page\\:main-container').before('<div id="messages"></div>');
+        }
+    }
     $.mage.validation.prototype._onSuccess = function(response) {
         if (!response.error) {
             this._submit();
@@ -46,37 +45,28 @@ define([
             var body = $('body');
             body.notification('clear');
             if (response.message) {
-                if ($('#umc_messages').length == 0) {
-                    $('#page\\:main-container').before('<div id="umc_messages"></div>');
-                } else {
-                    $('#umc_messages').html('');
-                }
-                var glue = (typeof response.glue != "undefined") ? response.glue : '####';
+                checkMessagesElement();
+                $('#messages').html('');
+                var glue = (typeof response['glue'] != "undefined") ? response['glue'] : '####';
                 var messages = response.message.split(glue);
                 for (var i = 0; i < messages.length; i++) {
                     body.notification('add', {
                         error:'error',
                         message:messages[i],
-                        messageContainer: '#umc_messages'
+                        messageContainer: '#messages'
                     });
                 }
             }
+
             body.trigger('processStop');
         }
     };
-    $.validator.addMethod("validate-module-name",
-        function (value, element, params) {
-            return this.optional(element) || /^[A-Z]{1}[a-zA-Z0-9]+$/.test(value);
-        },
-        $.mage.__('Please use only letters and numbers, and start with a capital letter'),
-        true
-    );
     $.widget("umc_base.umctooltip", {
         /**
          * widget options
          */
         options: {
-            autoOpen:false,
+            type : 'popup',
             buttonLabel: $.mage.__('OK! I got it!')
         },
         /**
@@ -85,8 +75,8 @@ define([
         _create: function() {
             var that = this;
 
-            this._dialog = this.element.modal({
-                type: 'slide',
+            this.element.modal({
+                type: that.options.type,
                 modalClass: 'form-inline',
                 title: $(that.element).attr('title'),
                 buttons: that.getButtons(),
@@ -102,7 +92,7 @@ define([
                 this.buttons = [{
                     text: this.options.buttonLabel,
                     class: 'action-primary',
-                    click: function (e) {
+                    click: function () {
                         $(that.element).trigger("closeModal");
                     }
                 }];
@@ -134,20 +124,21 @@ define([
             entitySelector:              '.umc-entity',
             entityTemplate:             '#entity-template',
             entityTitleSelector:        '.entity-title',
-            entityTabIndex:             2,
+            entityTabIndex:             1,
             menuElementSelector:        '#umc-nav',
             menuSelector:               '#menu-selector',
             menuSelectorTrigger :       '.menu-selector-trigger',
+            moduleDepends:              {},
+            moduleReloaderSelector:     '.module-reloader',
             nameAttributes:             {},
-            relationContainerSelector:  '#umc-relation-container',
-            relations :                 {},
-            relationsTabSelector:       'li[data-ui-id="umc-base-module-tabs-tab-item-relation"]',
-            relationTemplate:           '#relation-template',
             removeEntityMessage:        $.mage.__('Are you sure you want to remove this entity?'),
             removeEntityTrigger:        '.remove-entity',
             tabsSelector                :'#umc_base_module_tabs',
             tooltipSelector:            '.umc-tooltip',
-            treeMenuItemSelector:       'li.umc-menu-selector'
+            tooltipType:                'popup',
+            topLevelMenuNotice:         $.mage.__('It is not recomended to add menu items on the top level of the admin menu. Are you sure you want to do this?'),
+            treeMenuItemSelector:       'li.umc-menu-selector',
+            restrictions:               {}
 
         },
         _create: function() {
@@ -167,41 +158,99 @@ define([
                 that.addEntity();
             });
             $(this.options.entityContainer).find(this.options.entitySelector).each(function() {
-                that.registerEntity(this, true);
+                that.registerEntity(this, true, false);
             });
             this._super();
+            jQuery(document).ready(function(){
+                for (var i = 0 ;i<that.entities.length;i++) {
+                    $(that.entities[i]).umcentity('checkElements');
+                }
+            });
+
+            $(this.element).find(this.options.moduleReloaderSelector).on('change', function() {
+                that.checkElements();
+            });
+            this.checkElements();
+
+        },
+        checkElements: function() {
+            for (var id in this.options.moduleDepends) {
+                if (this.options.moduleDepends.hasOwnProperty(id)) {
+                    var depends = this.options.moduleDepends[id];
+                    var valid = false;
+                    for (var j = 0; j < depends.length; j++) {
+                        var groupValid = true;
+                        for (var k in depends[j]) {
+                            if (depends[j].hasOwnProperty(k)) {
+                                var parentElem = $(this.element).find('#umc_module' + k);
+                                var value = $(parentElem).val();
+                                if (typeof depends[j][k]['self'] != "undefined") {
+                                    if ($.inArray(value, depends[j][k]['self']) == -1) {
+                                        groupValid = false;
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                        if (groupValid) {
+                            valid = true;
+                            break;
+                        }
+                    }
+                    var mainElement = $(this.element).find('#umc_module' + id);
+                    valid ? this.enableElement(mainElement) : this.disableElement(mainElement);
+                }
+            }
+
         },
         makeTree: function() {
             var that = this;
             var tree = $(this.options.menuElementSelector).parent().jstree();
-            tree.on('select_node.jstree', function(node, selected){
+            tree.on('select_node.jstree', function(node, selected) {
+                function setParentData(values) {
+                    $('.menu-parent-id:first').val(values[0]);
+
+                    var sortOrder = '';
+                    var next = $(sel).parent().next().next();
+                    if (next.length) {
+                        var nextValues = $(next).find('a:first').attr('id').split('___');
+                        sortOrder = Math.ceil((parseInt(values[1]) + parseInt(nextValues[1])) / 2);
+                    } else {
+                        sortOrder = parseInt(values[1]) + 10;
+                    }
+                    $('.menu-sort-order:first').val(sortOrder);
+                    that.menuDialog.trigger('closeModal');
+                }
                 var sel = $(selected.args[0]);
                 var values = sel.attr('id').split('___');
-                $('.menu-parent-id:first').val(values[0]);
-
-                var sortOrder = '';
-                var next = $(sel).parent().next().next();
-                if (next.length) {
-                    var nextValues = $(next).find('a:first').attr('id').split('___');
-                    sortOrder = Math.ceil((parseInt(values[1]) + parseInt(nextValues[1]))/2);
+                if (values[0] === '') {
+                    confirm({
+                        content: that.options.topLevelMenuNotice,
+                        actions: {
+                            confirm: function () {
+                                setParentData(values);
+                            }
+                        }
+                    });
                 } else {
-                    sortOrder = parseInt(values[1]) + 10;
+                    setParentData(values);
                 }
-                $('.menu-sort-order:first').val(sortOrder);
-                that.menuDialog.trigger('closeModal');
             });
         },
+        getEntities: function() {
+            return this.entities;
+        },
         addEntity: function() {
-            var that = this;
-            $(this.options.entityContainer).append(mageTemplate(this.options.entityTemplate)({entity_id:this.entityIndex}));
-            var newEntityContainer = $('#entity-container-' + this.entityIndex);
-            this.registerEntity(newEntityContainer, false);
+            var index = this.entityIndex;
+            $(this.options.entityContainer).append(mageTemplate(this.options.entityTemplate)({entity_id:index}));
+            var newEntityContainer = $('#entity-container-' + index);
+            this.registerEntity(newEntityContainer, false, true);
             $(this.options.tabsSelector).tabs("option", "active", this.options.entityTabIndex);
             $('html, body').animate({
                 scrollTop: newEntityContainer.offset().top
             }, 1000);
         },
-        registerEntity: function(element, collapse) {
+        registerEntity: function(element, collapse, checkFields) {
             var entity = $(element).umcentity({
                 addAttributeTrigger:        this.options.addAttributeTrigger,
                 attributeContainer:         this.options.attributeContainer,
@@ -222,59 +271,29 @@ define([
                 reloaderSelector:           this.options.entityReloaderSelector,
                 nameAttribute:              this.options.nameAttributes[this.entityIndex],
                 removeEntityMessage:        this.options.removeEntityMessage,
-                removeEntityTrigger:        this.options.removeEntityTrigger
+                removeEntityTrigger:        this.options.removeEntityTrigger,
+                checkFields:                checkFields
             });
             this.entities.push(entity);
             this.entityIndex++;
             if (collapse) {
                 $(element).find('.fieldset-wrapper-content.collapse').collapse('hide');
             }
-            this.rebuildRelations();
         },
         removeEntity: function(index) {
             for (var i = 0; i < this.entities.length; i++) {
                 if (this.entities[i].umcentity('getIndex') == index) {
                     this.entities[i].umcentity('destroy');
                     this.entities.splice(i, 1);
-                    $(this.options.relationContainerSelector + ' .relation_entity_' + index).each(function() {
-                        $(this).parent().remove();
-                    });
-                    this.rebuildRelations();
                 }
             }
             return this;
         },
-        rebuildRelations: function() {
-            var entities = this.entities;
-            if (entities.length < 2) {
-                $(this.options.relationsTabSelector).hide();
-            } else {
-                $(this.options.relationsTabSelector).show();
-            }
-            var container = $(this.options.relationContainerSelector);
-            for (var i=0; i<entities.length - 1; i++) {
-                for (var j = i+1; j<entities.length; j++) {
-                    var index1 = entities[i].umcentity("getIndex");
-                    var index2 = entities[j].umcentity("getIndex");
-                    var relName = index1 + '_' + index2;
-                    var _tmp = 'relation_' + relName;
-                    if (container.find('#' + _tmp).length == 0) {
-                        var vars = {
-                            relation_id: _tmp,
-                            e1:index1,
-                            e2:index2,
-                            label1: entities[i].find(this.options.entityTitleSelector + ':first').html(),
-                            label2: entities[j].find(this.options.entityTitleSelector + ':first').html()
-                        };
-                        $(container).append(mageTemplate(this.options.relationTemplate)(vars));
-                        var relations = this.options.relations;
-                        if (typeof relations[relName] != "undefined") {
-                            $('#' + _tmp).find('option[value="' + relations[relName] +'"]:first').attr('selected', 'selected');
-                        }
-
-                    }
-                }
-            }
+        disableElement: function(elem) {
+            $(elem).attr('disabled', 'disabled');
+        },
+        enableElement: function(elem) {
+            $(elem).removeAttr('disabled');
         }
     });
     $.widget("umc_base.umcentity", {
@@ -302,24 +321,25 @@ define([
             nameAttribute:              '',
             reloaderSelector:           '.entity-reloader',
             removeEntityMessage:        $.mage.__('Are you sure you want to remove this entity?'),
-            removeEntityTrigger:        '.remove-entity'
+            removeEntityTrigger:        '.remove-entity',
+            checkFields:                true
         },
         _create: function() {
             var that = this;
             this.index = this.options.index;
             this.module = this.options.module;
             $(this.element).find(this.options.entityNameSelector).on('change', function() {
-                var val = 'Entity ' + that.getIndex();
-                if ($(this).val()) {
-                    val = $(this).val();
-                }
-                $(that.element).find(that.options.entityTitleSelector).html(val);
-                $('.relation_entity_' + that.getIndex()).html(val);
+                $(that.element).find(that.options.entityTitleSelector).html(that.getLabel());
             });
             $(this.element).find(this.options.removeEntityTrigger).on('click', function() {
-                if (confirm(that.options.removeEntityMessage)) {
-                    that.remove();
-                }
+                confirm({
+                    content: that.options.removeEntityMessage,
+                    actions: {
+                        confirm: function () {
+                            that.remove();
+                        }
+                    }
+                });
             });
             $(this.element).find(this.options.addAttributeTrigger).on('click', function() {
                 that.addAttribute();
@@ -334,10 +354,23 @@ define([
                     $(that.attributes[i]).umcattribute('checkElements');
                 }
             });
-            this.checkElements();
+            if (this.options.checkFields) {
+                this.checkElements();
+            }
+        },
+        getLabel: function() {
+            var val = 'Entity ' + this.getIndex();
+            var filledInLabel = $(this.element).find(this.options.entityNameSelector).val();
+            if (filledInLabel) {
+                val = filledInLabel
+            }
+            return val;
+        },
+        getParentEntity: function() {
+            return this.module;
         },
         setIndex: function(index) {
-           this.index = index;
+            this.index = index;
         },
         getIndex: function() {
             return this.index;
@@ -361,7 +394,9 @@ define([
             var newAttributeContainer = $('#attribute_' + this.getIndex() + '_' + this.attributeIndex);
             this.registerAttribute(newAttributeContainer);
             this.initAttributesSort(true);
-            $(this.getAttributesContainer().parent()).collapse('show');
+            var attributesContainer = this.getAttributesContainer();
+            var parentFieldset = $(attributesContainer).parent();
+            parentFieldset.collapse('show');
             $('html, body').animate({
                 scrollTop: newAttributeContainer.offset().top - 100
             }, 1000);
@@ -377,7 +412,7 @@ define([
                 tooltipSelector: this.options.tooltipSelector
             });
             if (this.attributeIndex == this.options.nameAttribute) {
-                attribute.umcattribute('getNameElement').attr('checked', 'checked');
+                attribute.umcattribute('getNameElement').prop('checked', 'checked');
             }
             this.attributes.push(attribute);
             this.attributeIndex++;
@@ -404,6 +439,7 @@ define([
                     that.updatePosition();
                 }
             });
+            that.updatePosition();
             return this;
         },
         getAttributesContainer: function() {
@@ -416,35 +452,39 @@ define([
         },
         checkElements: function() {
             for (var id in this.options.entityDepends) {
-                var depends = this.options.entityDepends[id];
-                var valid = false;
-                for (var j = 0; j < depends.length; j++) {
-                    var groupValid = true;
-                    for (var k in depends[j]) {
-                        var parentElem = $(this.element).find('#entity_' + this.getIndex() + '_' + k);
-                        var value = $(parentElem).val();
-                        if (typeof depends[j][k]['entity'] != "undefined") {
-                            if ($.inArray(value, depends[j][k]['entity']) == -1) {
-                                groupValid = false;
-                                break;
+                if (this.options.entityDepends.hasOwnProperty(id)) {
+                    var depends = this.options.entityDepends[id];
+                    var valid = false;
+                    for (var j = 0; j < depends.length; j++) {
+                        var groupValid = true;
+                        for (var k in depends[j]) {
+                            if (depends[j].hasOwnProperty(k)) {
+                                var parentElem = $(this.element).find('#entity_' + this.getIndex() + '_' + k);
+                                var value = $(parentElem).val();
+                                if (typeof depends[j][k]['self'] != "undefined") {
+                                    if ($.inArray(value, depends[j][k]['self']) == -1) {
+                                        groupValid = false;
+                                        break;
+                                    }
+                                }
                             }
                         }
+                        if (groupValid) {
+                            valid = true;
+                            break;
+                        }
                     }
-                    if (groupValid) {
-                        valid = true;
-                        break;
-                    }
+                    var mainElement = $(this.element).find('#entity_' + this.getIndex() + '_' + id);
+                    valid ? this.enableElement(mainElement) : this.disableElement(mainElement);
                 }
-                var mainElement = $(this.element).find('#entity_' + this.getIndex() + '_' + id);
-                valid ? this.enableElement(mainElement) : this.disableElement(mainElement);
             }
 
         },
         disableElement: function(elem) {
-            $(elem).attr('disabled', 'disabled');
+            this.module.disableElement(elem);
         },
         enableElement: function(elem) {
-            $(elem).removeAttr('disabled');
+            this.module.enableElement(elem);
         },
         getElement: function() {
             return this.element;
@@ -479,15 +519,23 @@ define([
             $(this.element).find(this.options.labelSelector).change();
 
             $(this.element).find('button.remove-attribute').on('click', function() {
-                if (confirm($.mage.__('Are you sure you want to remove this attribute?'))) {
-                    that.remove();
-                }
+                confirm({
+                    content: $.mage.__('Are you sure you want to remove this attribute?'),
+                    actions: {
+                        confirm: function () {
+                            that.remove();
+                        }
+                    }
+                });
             });
             $(this.element).find(this.options.reloaderSelector).on('change', function() {
                 that.checkElements();
             });
             this.checkElements();
 
+        },
+        getParentEntity: function() {
+            return this.entity;
         },
         setIndex: function(index) {
             this.index = index;
@@ -518,29 +566,33 @@ define([
         },
         checkElements: function() {
             for (var id in this.options.attributeDepends) {
-                var depends = this.options.attributeDepends[id];
-                var valid = false;
-                for (var j = 0; j < depends.length; j++) {
-                    var groupValid = true;
-                    for (var k in depends[j]) {
-                        var parentElem = '';
-                        var arrValues = '';
-                        if (typeof depends[j][k]['attribute'] != "undefined") {
-                            parentElem = $(this.element).find('#attribute_' + this.getEntity().getIndex() + '_' + this.getIndex() + '_' + k);
-                            arrValues = depends[j][k]['attribute'];
-                        } else {
-                            parentElem = $(this.getEntity().getElement()).find('#entity_' + this.getEntity().getIndex() +  '_' + k);
-                            arrValues = depends[j][k]['entity'];
+                if (this.options.attributeDepends.hasOwnProperty(id)) {
+                    var depends = this.options.attributeDepends[id];
+                    var valid = false;
+                    for (var j = 0; j < depends.length; j++) {
+                        var groupValid = true;
+                        for (var k in depends[j]) {
+                            if (depends[j].hasOwnProperty(k)) {
+                                var parentElem = '';
+                                var arrValues = '';
+                                if (typeof depends[j][k]['self'] != "undefined") {
+                                    parentElem = $(this.element).find('#attribute_' + this.getEntity().getIndex() + '_' + this.getIndex() + '_' + k);
+                                    arrValues = depends[j][k]['self'];
+                                } else {
+                                    parentElem = $(this.getEntity().getElement()).find('#entity_' + this.getEntity().getIndex() + '_' + k);
+                                    arrValues = depends[j][k]['parent'];
+                                }
+                                var value = $(parentElem).val();
+                                if ($.inArray(value, arrValues) == -1) {
+                                    groupValid = false;
+                                    break;
+                                }
+                            }
                         }
-                        var value = $(parentElem).val();
-                        if ($.inArray(value, arrValues) == -1) {
-                            groupValid = false;
+                        if (groupValid) {
+                            valid = true;
                             break;
                         }
-                    }
-                    if (groupValid) {
-                        valid = true;
-                        break;
                     }
                 }
                 var mainElement = $(this.element).find('#attribute_' + this.getEntity().getIndex() + '_' + this.getIndex() + '_' + id);

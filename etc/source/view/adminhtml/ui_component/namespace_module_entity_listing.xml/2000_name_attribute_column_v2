@@ -1,0 +1,12 @@
+        <column name="{{nameAttributeCode}}">
+            <settings>
+                <filter>text</filter>
+                <editor>
+                    <validation>
+                        <rule name="required-entry" xsi:type="boolean">true</rule>
+                    </validation>
+                    <editorType>text</editorType>
+                </editor>
+                <label translate="true">{{NameAttributeLabel}}</label>
+            </settings>
+        </column>

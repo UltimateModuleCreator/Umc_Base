@@ -1,0 +1,15 @@
+    /**
+     * Get {{Label}}
+     *
+     * @return mixed
+     */
+    public function get{{CodeCamelCase}}();
+
+    /**
+     * Set {{Label}}
+     *
+     * @param mixed ${{codeCamelCase}}
+     * @return {{Entity}}Interface
+     */
+    public function set{{CodeCamelCase}}(${{codeCamelCase}});
+

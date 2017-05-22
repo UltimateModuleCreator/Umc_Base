@@ -1,0 +1,12 @@
+        <field name="{{nameAttributeCode}}">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="dataType" xsi:type="string">text</item>
+                    <item name="label" xsi:type="string" translate="true">{{NameAttributeLabel}}</item>
+                    <item name="formElement" xsi:type="string">input</item>
+                    <item name="source" xsi:type="string">{{entity}}</item>
+                    <item name="sortOrder" xsi:type="number">{{nameAttributePosition}}</item>
+                    <item name="dataScope" xsi:type="string">{{nameAttributeCode}}</item>{{nameAttributeAdditionalFormConfig}}
+                </item>
+            </argument>
+        </field>

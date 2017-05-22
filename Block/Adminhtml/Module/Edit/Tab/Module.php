@@ -11,7 +11,7 @@
  *
  * @category  Umc
  * @package   Umc_Base
- * @copyright 2015 Marius Strajeru
+ * @copyright Marius Strajeru
  * @license   http://opensource.org/licenses/mit-license.php MIT License
  * @author    Marius Strajeru <ultimate.module.creator@gmail.com>
  */
@@ -19,6 +19,9 @@ namespace Umc\Base\Block\Adminhtml\Module\Edit\Tab;
 
 use Magento\Backend\Block\Widget\Tab\TabInterface;
 
+/**
+ * @api
+ */
 class Module extends AbstractTab implements TabInterface
 {
     /**
@@ -69,14 +72,14 @@ class Module extends AbstractTab implements TabInterface
     protected function _prepareForm()
     {
         parent::_prepareForm();
-        $this->getForm()->setHtmlIdPrefix($this->model->getEntityCode());
-        $this->getForm()->addFieldNameSuffix($this->model->getEntityCode());
-        /** @var \Umc\Base\Model\Core\Module $module */
+        $this->getForm()->setData('html_id_prefix', $this->entityCode);
+        $this->getForm()->addFieldNameSuffix($this->entityCode);
+        /** @var \Umc\Base\Api\Data\ModuleInterface $module */
         $module = $this->_coreRegistry->registry('current_module');
         if ($module && count($module->getData())) {
             $this->getForm()->addValues($module->getData());
         } else {
-            $this->getForm()->addValues($this->_scopeConfig->getValue('umc/'.$this->model->getEntityCode()));
+            $this->getForm()->addValues($this->_scopeConfig->getValue('umc/'.$this->entityCode));
         }
         return $this;
     }

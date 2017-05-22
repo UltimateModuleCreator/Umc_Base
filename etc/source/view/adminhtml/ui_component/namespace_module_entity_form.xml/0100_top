@@ -1,0 +1,56 @@
+<form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <argument name="data" xsi:type="array">
+        <item name="js_config" xsi:type="array">
+            <item name="provider" xsi:type="string">{{namespace}}_{{module}}_{{entity}}_form.{{entity}}_form_data_source</item>
+            <item name="deps" xsi:type="string">{{namespace}}_{{module}}_{{entity}}_form.{{entity}}_form_data_source</item>
+        </item>
+        <item name="label" xsi:type="string" translate="true">{{EntityLabelEscaped}} Information</item>
+        <item name="config" xsi:type="array">
+            <item name="dataScope" xsi:type="string">data</item>
+            <item name="namespace" xsi:type="string">{{namespace}}_{{module}}_{{entity}}_form</item>
+        </item>
+        <item name="template" xsi:type="string">templates/form/collapsible</item>
+        <item name="buttons" xsi:type="array">
+            <item name="back" xsi:type="string">{{Namespace}}\{{Module}}\Block\Adminhtml\{{Entity}}\Edit\Buttons\Back</item>
+            <item name="delete" xsi:type="string">{{Namespace}}\{{Module}}\Block\Adminhtml\{{Entity}}\Edit\Buttons\Delete</item>
+            <item name="reset" xsi:type="string">{{Namespace}}\{{Module}}\Block\Adminhtml\{{Entity}}\Edit\Buttons\Reset</item>
+            <item name="save" xsi:type="string">{{Namespace}}\{{Module}}\Block\Adminhtml\{{Entity}}\Edit\Buttons\Save</item>
+            <item name="save_and_continue" xsi:type="string">{{Namespace}}\{{Module}}\Block\Adminhtml\{{Entity}}\Edit\Buttons\SaveAndContinue</item>
+        </item>
+    </argument>
+    <dataSource name="{{entity}}_form_data_source">
+        <argument name="dataProvider" xsi:type="configurableObject">
+            <argument name="class" xsi:type="string">{{Namespace}}\{{Module}}\Model\{{Entity}}\DataProvider</argument>
+            <argument name="name" xsi:type="string">{{entity}}_form_data_source</argument>
+            <argument name="primaryFieldName" xsi:type="string">{{entity}}_id</argument>
+            <argument name="requestFieldName" xsi:type="string">{{entity}}_id</argument>
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="submit_url" xsi:type="url" path="{{namespace}}_{{module}}/{{entity}}/save"/>
+                </item>
+            </argument>
+        </argument>
+        <argument name="data" xsi:type="array">
+            <item name="js_config" xsi:type="array">
+                <item name="component" xsi:type="string">Magento_Ui/js/form/provider</item>
+            </item>
+        </argument>
+    </dataSource>
+    <fieldset name="general">
+        <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="label" xsi:type="string">{{EntityLabel}} Information</item>
+            </item>
+        </argument>
+        <field name="{{entity}}_id">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="visible" xsi:type="boolean">false</item>
+                    <item name="dataType" xsi:type="string">text</item>
+                    <item name="formElement" xsi:type="string">input</item>
+                    <item name="source" xsi:type="string">{{entity}}</item>
+                    <item name="dataScope" xsi:type="string">{{entity}}_id</item>
+                </item>
+            </argument>
+        </field>

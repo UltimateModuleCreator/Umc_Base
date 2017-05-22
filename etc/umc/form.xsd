@@ -12,12 +12,13 @@
  *
  * @category  Umc
  * @package   Umc_Base
- * @copyright 2015 Marius Strajeru
+ * @copyright Marius Strajeru
  * @license   http://opensource.org/licenses/mit-license.php MIT License
  * @author    Marius Strajeru <ultimate.module.creator@gmail.com>
  */
 -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:include schemaLocation="urn:magento:module:Umc_Base:etc/umc/arguments.xsd" />
     <xs:element name="forms">
         <xs:annotation>
             <xs:documentation>Form elements container</xs:documentation>
@@ -64,7 +65,13 @@
         <xs:complexType>
             <xs:sequence>
                 <xs:choice minOccurs="0" maxOccurs="unbounded">
-                    <xs:element maxOccurs="1" name="label" type="xs:string" />
+                    <xs:element name="arguments" type="argumentsType" minOccurs="0" maxOccurs="1">
+                        <xs:key name="fieldsetArgumentName">
+                            <xs:selector xpath="argument"></xs:selector>
+                            <xs:field xpath="@name"></xs:field>
+                        </xs:key>
+                    </xs:element>
+                    <!--<xs:element maxOccurs="1" name="label" type="xs:string" />-->
                     <xs:element ref="field" />
                 </xs:choice>
             </xs:sequence>
@@ -85,16 +92,18 @@
         </xs:annotation>
         <xs:complexType>
             <xs:sequence>
-                <xs:choice minOccurs="0" maxOccurs="unbounded">
-                    <xs:element maxOccurs="1" name="label" type="xs:string" />
-                    <xs:element maxOccurs="1" name="tooltip" type="xs:string" />
-                    <xs:element maxOccurs="1" name="source" type="xs:string" />
-                    <xs:element maxOccurs="1" name="note" type="xs:string" />
-                    <xs:element maxOccurs="1" name="rows" type="xs:int"  minOccurs="0" />
+                <xs:choice maxOccurs="unbounded">
+                    <xs:element name="arguments" type="argumentsType" minOccurs="0" maxOccurs="1">
+                        <xs:key name="fieldArgumentName">
+                            <xs:selector xpath="argument" />
+                            <xs:field xpath="@name" />
+                        </xs:key>
+                    </xs:element>
                     <xs:element ref="depends" />
                 </xs:choice>
             </xs:sequence>
-            <xs:attributeGroup ref="fieldAttributeGroup"/>
+            <xs:attribute name="id" type="xs:string" use="required" />
+            <!--<xs:attributeGroup ref="fieldAttributeGroup"/>-->
         </xs:complexType>
         <xs:unique name="uniqueDependsId">
             <xs:annotation>
@@ -115,7 +124,8 @@
                     <xs:element ref="depend" />
                 </xs:choice>
             </xs:sequence>
-            <xs:attributeGroup ref="dependsAttributeGroup"/>
+            <!--<xs:attributeGroup ref="dependsAttributeGroup"/>-->
+            <xs:attribute type="xs:string" name="id" use="required"/>
         </xs:complexType>
         <xs:unique name="uniqueDependId">
             <xs:annotation>
@@ -133,10 +143,16 @@
         <xs:complexType>
             <xs:sequence>
                 <xs:choice minOccurs="0" maxOccurs="unbounded">
-                    <xs:element ref="val" />
+                    <xs:element name="arguments" type="argumentsType" minOccurs="0" maxOccurs="1">
+                        <xs:key name="dependArgumentName">
+                            <xs:selector xpath="argument" />
+                            <xs:field xpath="@name" />
+                        </xs:key>
+                    </xs:element>
+                    <!--<xs:element ref="val" />-->
                 </xs:choice>
             </xs:sequence>
-            <xs:attributeGroup ref="dependAttributeGroup"/>
+            <xs:attribute type="xs:string" name="id" use="required"/>
         </xs:complexType>
         <xs:unique name="uniqueValId">
             <xs:annotation>
@@ -170,32 +186,32 @@
 
     <xs:attributeGroup name="fieldsetAttributeGroup">
         <xs:attribute name="id" type="xs:string" use="required" />
-        <xs:attribute type="xs:int" name="sort" use="optional"/>
-        <xs:attribute type="xs:boolean" name="collapsible" use="optional"/>
-        <xs:attribute type="xs:string" name="class" use="optional"/>
-        <xs:attribute type="xs:string" name="translate" use="optional"/>
+        <!--<xs:attribute type="xs:int" name="sort" use="optional"/>-->
+        <!--<xs:attribute type="xs:boolean" name="collapsible" use="optional"/>-->
+        <!--<xs:attribute type="xs:string" name="class" use="optional"/>-->
+        <!--<xs:attribute type="xs:string" name="translate" use="optional"/>-->
     </xs:attributeGroup>
 
-    <xs:attributeGroup name="fieldAttributeGroup">
-        <xs:attribute type="xs:string" name="id" use="required"/>
-        <xs:attribute type="xs:string" name="type" use="optional"/>
-        <xs:attribute type="xs:int" name="sort" use="optional"/>
-        <xs:attribute type="xs:boolean" name="required" use="optional"/>
-        <xs:attribute type="xs:boolean" name="system" use="optional"/>
-        <xs:attribute type="xs:boolean" name="readonly" use="optional"/>
-        <xs:attribute type="xs:string" name="class" use="optional"/>
-        <xs:attribute type="xs:string" name="reloader-class" use="optional"/>
-        <xs:attribute type="xs:string" name="translate" use="optional"/>
-    </xs:attributeGroup>
+    <!--<xs:attributeGroup name="fieldAttributeGroup">-->
+        <!--<xs:attribute type="xs:string" name="id" use="required"/>-->
+        <!--<xs:attribute type="xs:string" name="type" use="optional"/>-->
+        <!--<xs:attribute type="xs:int" name="sort" use="optional"/>-->
+        <!--<xs:attribute type="xs:boolean" name="required" use="optional"/>-->
+        <!--<xs:attribute type="xs:boolean" name="system" use="optional"/>-->
+        <!--<xs:attribute type="xs:boolean" name="readonly" use="optional"/>-->
+        <!--<xs:attribute type="xs:string" name="class" use="optional"/>-->
+        <!--<xs:attribute type="xs:string" name="reloader-class" use="optional"/>-->
+        <!--<xs:attribute type="xs:string" name="translate" use="optional"/>-->
+    <!--</xs:attributeGroup>-->
 
-    <xs:attributeGroup name="dependsAttributeGroup">
-        <xs:attribute type="xs:string" name="id" use="required"/>
-        <xs:attribute type="xs:boolean" name="disabled" use="optional"/>
-    </xs:attributeGroup>
+    <!--<xs:attributeGroup name="dependsAttributeGroup">-->
+        <!--<xs:attribute type="xs:string" name="id" use="required"/>-->
+        <!--<xs:attribute type="xs:boolean" name="disabled" use="optional"/>-->
+    <!--</xs:attributeGroup>-->
 
     <xs:attributeGroup name="dependAttributeGroup">
         <xs:attribute type="xs:string" name="id" use="required"/>
         <xs:attribute type="xs:boolean" name="disabled" use="optional"/>
-        <xs:attribute type="xs:string" name="type" use="optional"/>
+        <!--<xs:attribute type="xs:string" name="type" use="optional"/>-->
     </xs:attributeGroup>
 </xs:schema>

@@ -11,11 +11,10 @@
  *
  * @category  Umc
  * @package   Umc_Base
- * @copyright 2015 Marius Strajeru
+ * @copyright Marius Strajeru
  * @license   http://opensource.org/licenses/mit-license.php MIT License
  * @author    Marius Strajeru <ultimate.module.creator@gmail.com>
  */
-
 namespace Umc\Base\Test\Unit\Model;
 
 use PHPUnit_Framework_TestCase;
@@ -29,6 +28,7 @@ class TooltipTest extends \PHPUnit_Framework_TestCase
      * @var Escaper
      */
     protected $escaper;
+
     /**
      * @var Tooltip
      */
@@ -37,11 +37,11 @@ class TooltipTest extends \PHPUnit_Framework_TestCase
     /**
      * Prepares the environment before running a test.
      */
-    public function setUp()
+    protected function setUp()
     {
+        parent::setUp();
         $this->escaper = new Escaper();
         $this->tooltip = new Tooltip($this->escaper);
-        parent::setUp();
     }
 
     /**
@@ -55,7 +55,7 @@ class TooltipTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Tests Umc->getPadding()
+     * @tests Tooltip::getTitle()
      */
     public function testGetTitle()
     {

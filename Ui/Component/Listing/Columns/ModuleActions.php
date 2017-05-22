@@ -11,20 +11,21 @@
  *
  * @category  Umc
  * @package   Umc_Base
- * @copyright 2015 Marius Strajeru
+ * @copyright Marius Strajeru
  * @license   http://opensource.org/licenses/mit-license.php MIT License
  * @author    Marius Strajeru <ultimate.module.creator@gmail.com>
  */
 
 namespace Umc\Base\Ui\Component\Listing\Columns;
 
+use Magento\Framework\Filesystem;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Ui\Component\Listing\Columns\Column;
 use Magento\Framework\UrlInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Umc\Base\Model\Core\Settings;
-use Umc\Base\Model\Downloader;
+use Umc\Base\Downloader\Downloader;
+use Umc\Base\Writer\Filesystem as UmcFilesystem;
 
 class ModuleActions extends Column
 {
@@ -32,6 +33,7 @@ class ModuleActions extends Column
      * @var Downloader
      */
     protected $downloader;
+
     /**
      * @var UrlInterface
      */
@@ -46,6 +48,8 @@ class ModuleActions extends Column
      * @param ContextInterface $context
      * @param UiComponentFactory $uiComponentFactory
      * @param UrlInterface $urlBuilder
+     * @param Downloader $downloader
+     * @param Filesystem $filesystem
      * @param array $components
      * @param array $data
      */
@@ -54,7 +58,7 @@ class ModuleActions extends Column
         UiComponentFactory $uiComponentFactory,
         UrlInterface $urlBuilder,
         Downloader $downloader,
-        \Magento\Framework\Filesystem $filesystem,
+        Filesystem $filesystem,
         array $components = [],
         array $data = []
     ) {
@@ -83,10 +87,9 @@ class ModuleActions extends Column
                     'hidden' => false,
                 ];
                 $rootDir = $this->filesystem->getDirectoryRead(DirectoryList::VAR_DIR);
-                foreach ($this->downloader->getDownloaderTypes() as $type) {
-                    $downloader = $this->downloader->getDownloader($type);
+                foreach ($this->downloader->getDownloaders() as $type => $downloader) {
                     $file = $downloader->getRelativePath($item['filename_id']);
-                    $file = $rootDir->getRelativePath(Settings::VAR_DIR_NAME . '/' .$file);
+                    $file = $rootDir->getRelativePath(UmcFilesystem::VAR_DIR_NAME . '/' .$file);
                     if ($rootDir->isFile($file) && $rootDir->isReadable($file)) {
                         $url = $this->urlBuilder->getUrl(
                             'umc/module/download',

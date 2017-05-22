@@ -11,30 +11,41 @@
  *
  * @category  Umc
  * @package   Umc_Base
- * @copyright 2015 Marius Strajeru
+ * @copyright Marius Strajeru
  * @license   http://opensource.org/licenses/mit-license.php MIT License
  * @author    Marius Strajeru <ultimate.module.creator@gmail.com>
  */
 namespace Umc\Base\Block\Adminhtml;
 
 use Umc\Base\Block\Adminhtml\Module\Edit\Tab\AbstractTab;
-use Umc\Base\Model\Core\Attribute as AttributeModel;
+use Umc\Base\Api\Data\AttributeInterface;
 
 /**
- * @method int getEntityId()
- * @method string getIncrement()
- * @method bool getIsTemplate()
- * @method Attribute setEntityId()
+ * @api
  */
 class Attribute extends AbstractTab
 {
     /**
+     * @var string
+     */
+    const ENTITY_ID = 'entity_id';
+
+    /**
+     * @var string
+     */
+    const INCREMENT = 'increment';
+
+    /**
+     * @var string
+     */
+    const IS_TEMPLATE = 'is_template';
+
+    /**
      * attribute instance
      *
-     * @var \Umc\Base\Model\Core\Attribute
+     * @var AttributeInterface
      */
     protected $attribute;
-
 
     /**
      * prepare the form
@@ -44,13 +55,13 @@ class Attribute extends AbstractTab
     protected function _prepareForm()
     {
         parent::_prepareForm();
-        $this->getForm()->setHtmlIdPrefix('attribute_'.$this->getEntityId().'_'.$this->getIncrement().'_');
+        $this->getForm()->setData('html_id_prefix', 'attribute_'.$this->getEntityId().'_'.$this->getIncrement().'_');
         $this->getForm()->addFieldNameSuffix('entity['.$this->getEntityId().'][attributes]['.$this->getIncrement().']');
 
         if ($this->getAttributeInstance()) {
             $this->getForm()->setValues($this->getAttributeInstance()->getData());
         } else {
-            $this->getForm()->setValues($this->_scopeConfig->getValue('umc/'.$this->model->getEntityCode()));
+            $this->getForm()->setValues($this->_scopeConfig->getValue('umc/'.$this->entityCode));
         }
         return $this;
     }
@@ -58,7 +69,7 @@ class Attribute extends AbstractTab
     /**
      * get the attribute instance
      *
-     * @return \Umc\Base\Model\Core\Attribute
+     * @return AttributeInterface
      */
     public function getAttributeInstance()
     {
@@ -68,12 +79,45 @@ class Attribute extends AbstractTab
     /**
      * set the attribute instance
      *
-     * @param \Umc\Base\Model\Core\Attribute $attribute
+     * @param AttributeInterface $attribute
      * @return $this
      */
-    public function setAttributeInstance(AttributeModel $attribute)
+    public function setAttributeInstance(AttributeInterface $attribute)
     {
         $this->attribute = $attribute;
         return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getEntityId()
+    {
+        return $this->getData(self::ENTITY_ID);
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getIncrement()
+    {
+        return $this->getData(self::INCREMENT);
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getIsTemplate()
+    {
+        return $this->getData(self::IS_TEMPLATE);
+    }
+
+    /**
+     * @param string $entityId
+     * @return AttributeInterface | Attribute
+     */
+    public function setEntityId($entityId)
+    {
+        return $this->setData(self::ENTITY_ID, $entityId);
     }
 }

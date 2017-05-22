@@ -12,7 +12,7 @@
  *
  * @category  Umc
  * @package   Umc_Base
- * @copyright 2015 Marius Strajeru
+ * @copyright Marius Strajeru
  * @license   http://opensource.org/licenses/mit-license.php MIT License
  * @author    Marius Strajeru <ultimate.module.creator@gmail.com>
  */
@@ -22,26 +22,32 @@
         <umc>
             <umc_general>
                 <tooltips>1</tooltips>
+                <type>popup</type>
+                <prolong_session>1</prolong_session>
             </umc_general>
-            <umc_settings>
+            <umc_module>
+                <version>1.0.0</version>
                 <qualified>1</qualified>
                 <underscore>0</underscore>
                 <annotation>1</annotation>
                 <license>{{Namespace}}_{{Module}} extension
-                    NOTICE OF LICENSE
+NOTICE OF LICENSE
 
-                    This source file is subject to the MIT License
-                    that is bundled with this package in the file LICENSE.txt.
-                    It is also available through the world-wide-web at this URL:
-                    http://opensource.org/licenses/mit-license.php
+This source file is subject to the MIT License
+that is bundled with this package in the file LICENSE.txt.
+It is also available through the world-wide-web at this URL:
+http://opensource.org/licenses/mit-license.php
 
-                    @category  {{Namespace}}
-                    @package   {{Namespace}}_{{Module}}
-                    @copyright Copyright (c) {{Y}}
-                    @license   http://opensource.org/licenses/mit-license.php MIT License</license>
-            </umc_settings>
-            <umc_module>
-                <version>1.0.0</version>
+@category  {{Namespace}}
+@package   {{Namespace}}_{{Module}}
+@copyright Copyright (c) {{Y}}
+@license   http://opensource.org/licenses/mit-license.php MIT License</license>
+                <create_composer>1</create_composer>
+                <create_license>1</create_license>
+                <create_readme>1</create_readme>
+                <readme>#{{Namespace}}_{{Module}} magento extension</readme>
+                <composer_license>MIT</composer_license>
+                <composer_version>100.0.0</composer_version>
             </umc_module>
             <umc_entity>
                 <type>flat</type>
@@ -49,6 +55,7 @@
                 <add_updated_to_grid>1</add_updated_to_grid>
                 <search>0</search>
                 <inline_edit>1</inline_edit>
+                <is_tree>0</is_tree>
             </umc_entity>
             <umc_attribute>
                 <type>text</type>

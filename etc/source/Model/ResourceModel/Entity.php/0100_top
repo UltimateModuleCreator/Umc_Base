@@ -1,4 +1,3 @@
-
     /**
      * Initialize resource model
      *
@@ -23,4 +22,82 @@
             ->where('{{entity}}_id = :{{entity}}_id');
         $binds = ['{{entity}}_id' => (int)$id];
         return $adapter->fetchOne($select, $binds);
+    }
+
+    /**
+     * @param {{class Magento\Framework\Model\AbstractModel}} $object
+     * @param array $attribute
+     * @return $this
+     * @throws \Exception
+     */
+    public function saveAttribute({{class Magento\Framework\Model\AbstractModel}} $object, $attribute)
+    {
+        if (is_string($attribute)) {
+            $attributes = [$attribute];
+        } else {
+            $attributes = $attribute;
+        }
+        if (is_array($attributes) && !empty($attributes)) {
+            $this->getConnection()->beginTransaction();
+            $data = array_intersect_key($object->getData(), array_flip($attributes));
+            try {
+                $this->{{_}}beforeSaveAttribute($object, $attributes);
+                if ($object->getId() && !empty($data)) {
+                    $this->getConnection()->update(
+                        $object->getResource()->getMainTable(),
+                        $data,
+                        [$object->getResource()->getIdFieldName() . '= ?' => (int)$object->getId()]
+                    );
+                    $object->addData($data);
+                }
+                $this->{{_}}afterSaveAttribute($object, $attributes);
+                $this->getConnection()->commit();
+            } catch (\Exception $e) {
+                $this->getConnection()->rollBack();
+                throw $e;
+            }
+        }
+        return $this;
+    }
+
+    /**
+     * @param {{class Magento\Framework\Model\AbstractModel}} $object
+     * @param array $attribute
+     * @return $this
+     */
+    protected function {{_}}beforeSaveAttribute({{class Magento\Framework\Model\AbstractModel}} $object, $attribute)
+    {
+        if ($object->getEventObject() && $object->getEventPrefix()) {
+            $this->{{_}}eventManager->dispatch(
+                $object->getEventPrefix() . '_save_attribute_before',
+                [
+                    $object->getEventObject() => $this,
+                    'object' => $object,
+                    'attribute' => $attribute
+                ]
+            );
+        }
+        return $this;
+    }
+
+    /**
+     * After save object attribute
+     *
+     * @param {{class Magento\Framework\Model\AbstractModel}} $object
+     * @param string $attribute
+     * @return $this
+     */
+    protected function {{_}}afterSaveAttribute({{class Magento\Framework\Model\AbstractModel}} $object, $attribute)
+    {
+        if ($object->getEventObject() && $object->getEventPrefix()) {
+            $this->{{_}}eventManager->dispatch(
+                $object->getEventPrefix() . '_save_attribute_after',
+                [
+                    $object->getEventObject() => $this,
+                    'object' => $object,
+                    'attribute' => $attribute
+                ]
+            );
+        }
+        return $this;
     }

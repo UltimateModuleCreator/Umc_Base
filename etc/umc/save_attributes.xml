@@ -12,26 +12,32 @@
  *
  * @category  Umc
  * @package   Umc_Base
- * @copyright 2015 Marius Strajeru
+ * @copyright Marius Strajeru
  * @license   http://opensource.org/licenses/mit-license.php MIT License
  * @author    Marius Strajeru <ultimate.module.creator@gmail.com>
  */
 -->
 <save_attributes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Umc_Base:etc/umc/save_attributes.xsd">
-    <entity id="umc_settings">
-        <attribute id="install" />
-        <attribute id="license" />
-        <attribute id="qualified" />
-        <attribute id="underscore" />
-        <attribute id="annotation" />
-    </entity>
     <entity id="umc_module">
         <attribute id="namespace" />
         <attribute id="module_name" />
         <attribute id="version" />
+        <attribute id="ui_version" />
         <attribute id="menu_text" />
         <attribute id="menu_parent" />
         <attribute id="sort_order" />
+        <attribute id="license" />
+        <attribute id="qualified" />
+        <attribute id="underscore" />
+        <attribute id="annotation" />
+        <attribute id="create_composer" />
+        <attribute id="composer_name" />
+        <attribute id="composer_version" />
+        <attribute id="composer_description" />
+        <attribute id="composer_license" />
+        <attribute id="create_license" />
+        <attribute id="create_readme" />
+        <attribute id="readme" />
     </entity>
     <entity id="umc_entity">
         <attribute id="label_singular" />

@@ -1,0 +1,27 @@
+    /**
+     * Return {{EntityLabel}} ID
+     *
+     * @return int|null
+     */
+    public function get{{Entity}}Id()
+    {
+        try {
+            return $this->{{_}}{{entity}}Repository->getById(
+                $this->{{_}}context->getRequest()->getParam('{{entity}}_id')
+            )->getId();
+        } catch ({{class Magento\Framework\Exception\NoSuchEntityException}} $e) {
+            return null;
+        }
+    }
+
+    /**
+     * Generate url by route and parameters
+     *
+     * @param   string $route
+     * @param   array $params
+     * @return  string
+     */
+    public function getUrl($route = '', $params = [])
+    {
+        return $this->{{_}}context->getUrlBuilder()->getUrl($route, $params);
+    }

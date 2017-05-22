@@ -1,2 +1,0 @@
-            ${{codeCamelCase}} = $this->{{_}}uploadModel->uploadFileAndGetName('{{code}}', $this->{{_}}fileModel->getBaseDir(), $data);
-            ${{entity}}->set{{CodeCamelCase}}(${{codeCamelCase}});

@@ -1,0 +1,9 @@
+        <actionsColumn name="actions" class="{{Namespace}}\{{Module}}\Ui\Component\Listing\Column\{{Entity}}Actions">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="indexField" xsi:type="string">{{entity}}_id</item>
+                </item>
+            </argument>
+        </actionsColumn>
+    </columns>
+</listing>

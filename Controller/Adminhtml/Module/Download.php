@@ -11,7 +11,7 @@
  *
  * @category  Umc
  * @package   Umc_Base
- * @copyright 2015 Marius Strajeru
+ * @copyright Marius Strajeru
  * @license   http://opensource.org/licenses/mit-license.php MIT License
  * @author    Marius Strajeru <ultimate.module.creator@gmail.com>
  */
@@ -19,14 +19,14 @@ namespace Umc\Base\Controller\Adminhtml\Module;
 
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
-use Magento\Backend\Model\View\Result\RedirectFactory as ResultRedirectFactory;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\Response\Http\FileFactory;
 use Magento\Framework\Controller\Result\RawFactory as ResultRawFactory;
 use Magento\Framework\Filesystem;
+use \Magento\Framework\Filesystem\Io\File;
 use Magento\Framework\Url\Decoder;
-use Umc\Base\Model\Core\Settings;
-use Umc\Base\Model\Downloader;
+use Umc\Base\Downloader\Downloader;
+use Umc\Base\Writer\Filesystem as UmcFilesystem;
 
 class Download extends Action
 {
@@ -38,12 +38,6 @@ class Download extends Action
     protected $resultRawFactory;
 
     /**
-     * redirect resutl factory
-     *
-     * @var \Magento\Backend\Model\View\Result\RedirectFactory
-     */
-    protected $resultRedirectFactory;
-    /**
      * file factory
      *
      * @var \Magento\Framework\App\Response\Http\FileFactory
@@ -53,7 +47,7 @@ class Download extends Action
     /**
      * downloader reference
      *
-     * @var \Umc\Base\Model\Downloader
+     * @var \Umc\Base\Downloader\Downloader
      */
     protected $downloader;
 
@@ -72,31 +66,34 @@ class Download extends Action
     protected $decoder;
 
     /**
-     * constructor
-     *
+     * @var File
+     */
+    protected $ioFile;
+
+    /**
+     * @param Context $context
      * @param ResultRawFactory $resultRawFactory
-     * @param ResultRedirectFactory $resultRedirectFactory
      * @param FileFactory $fileFactory
      * @param Decoder $decoder
      * @param Downloader $downloader
      * @param Filesystem $filesystem
-     * @param Context $context
+     * @param File $ioFile
      */
     public function __construct(
+        Context $context,
         ResultRawFactory $resultRawFactory,
-        ResultRedirectFactory $resultRedirectFactory,
         FileFactory $fileFactory,
         Decoder $decoder,
         Downloader $downloader,
         Filesystem $filesystem,
-        Context $context
+        File $ioFile
     ) {
         $this->resultRawFactory      = $resultRawFactory;
-        $this->resultRedirectFactory = $resultRedirectFactory;
         $this->fileFactory           = $fileFactory;
         $this->decoder               = $decoder;
         $this->downloader            = $downloader;
         $this->filesystem            = $filesystem;
+        $this->ioFile                = $ioFile;
         parent::__construct($context);
     }
 
@@ -113,10 +110,11 @@ class Download extends Action
         $downloader = $this->downloader->getDownloader($type);
         $rootDir = $this->filesystem->getDirectoryRead(DirectoryList::VAR_DIR);
         $file = $downloader->getRelativePath($packageName);
-        $relativeFile = Settings::VAR_DIR_NAME . '/' .$file;
+        $relativeFile = UmcFilesystem::VAR_DIR_NAME . '/' .$file;
         $absoluteFile = $rootDir->getAbsolutePath($relativeFile);
-        if ($rootDir->isFile($relativeFile) && $rootDir->isReadable($relativeFile)){
-            $fileName = basename($absoluteFile);
+        if ($rootDir->isFile($relativeFile) && $rootDir->isReadable($relativeFile)) {
+            $fileMetaData = $this->ioFile->getPathInfo($absoluteFile);
+            $fileName = $fileMetaData['basename'];
             $this->fileFactory->create(
                 $fileName,
                 null,
@@ -131,7 +129,7 @@ class Download extends Action
         } else {
             $result = $this->resultRedirectFactory->create();
             $result->setPath('umc/module/index');
-            $this->messageManager->addError(__('The requested file does not exist or is not readable'));
+            $this->messageManager->addErrorMessage(__('The requested file does not exist or is not readable'));
             return $result;
         }
     }

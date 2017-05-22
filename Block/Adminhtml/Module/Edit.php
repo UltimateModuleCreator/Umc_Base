@@ -11,7 +11,7 @@
  *
  * @category  Umc
  * @package   Umc_Base
- * @copyright 2015 Marius Strajeru
+ * @copyright Marius Strajeru
  * @license   http://opensource.org/licenses/mit-license.php MIT License
  * @author    Marius Strajeru <ultimate.module.creator@gmail.com>
  */
@@ -20,10 +20,15 @@ namespace Umc\Base\Block\Adminhtml\Module;
 use Magento\Backend\Block\Widget\Context;
 use Magento\Backend\Block\Widget\Form\Container;
 use Magento\Framework\Registry;
-use Umc\Base\Model\Config\Form as FormConfig;
-use Umc\Base\Model\Core\Attribute;
-use Umc\Base\Model\Core\Entity;
+use Umc\Base\Api\Data\AttributeInterface;
+use Umc\Base\Api\Data\EntityInterface;
+use Umc\Base\Api\Data\ModuleInterface;
+use Umc\Base\Block\Adminhtml\Module\Edit\Tab\AbstractTab;
+use Umc\Base\Config\Form as FormConfig;
 
+/**
+ * @api
+ */
 class Edit extends Container
 {
     /**
@@ -33,42 +38,24 @@ class Edit extends Container
     protected $coreRegistry;
 
     /**
-     * @var \Umc\Base\Model\Config\Form
+     * @var \Umc\Base\Config\Form
      */
     protected $formConfig;
 
     /**
-     * @var \Umc\Base\Model\Core\Entity
-     */
-    protected $entity;
-
-    /**
-     * @var \Umc\Base\Model\Core\Attribute
-     */
-    protected $attribute;
-
-    /**
-     * constructor
-     *
+     * @param Context $context
      * @param Registry $registry
      * @param FormConfig $formConfig
-     * @param Entity $entity
-     * @param Attribute $attribute
-     * @param Context $context
      * @param array $data
      */
     public function __construct(
+        Context $context,
         Registry $registry,
         FormConfig $formConfig,
-        Entity $entity,
-        Attribute $attribute,
-        Context $context,
         array $data = []
     ) {
         $this->coreRegistry = $registry;
         $this->formConfig   = $formConfig;
-        $this->entity       = $entity;
-        $this->attribute    = $attribute;
         parent::__construct($context, $data);
     }
 
@@ -118,7 +105,7 @@ class Edit extends Container
 
         $module = $this->getModule();
         if ($module->getNamespace() && $module->getModuleName()) {
-            $title = __('Edit Module "%1"', $module->getNamespace().'_'.$module->getModuleName());
+            $title = __('Edit Module "%1"', $module->getExtensionName());
         } else {
             $title = __('Create module');
         }
@@ -126,7 +113,7 @@ class Edit extends Container
     }
 
     /**
-     * @return \Umc\Base\Model\Core\Module $module
+     * @return \Umc\Base\Api\Data\ModuleInterface $module
      */
     public function getModule()
     {
@@ -148,9 +135,19 @@ class Edit extends Container
      *
      * @return string
      */
+    public function getModuleDepends()
+    {
+        return $this->formConfig->getDepends(ModuleInterface::ENTITY_CODE);
+    }
+
+    /**
+     * get entity dependencies as json
+     *
+     * @return string
+     */
     public function getEntityDepends()
     {
-        return $this->formConfig->getDepends($this->entity->getEntityCode());
+        return $this->formConfig->getDepends(EntityInterface::ENTITY_CODE);
     }
 
     /**
@@ -160,7 +157,7 @@ class Edit extends Container
      */
     public function getAttributeDepends()
     {
-        return $this->formConfig->getDepends($this->attribute->getEntityCode());
+        return $this->formConfig->getDepends(AttributeInterface::ENTITY_CODE);
     }
 
     /**
@@ -170,13 +167,14 @@ class Edit extends Container
     {
         return $this->getModule()->getNameAttributes();
     }
-    public function getRelationsAsJson()
+
+    /**
+     * tooltips type
+     *
+     * @return string
+     */
+    public function getTooltipType()
     {
-        /** @var \Umc\Base\Model\Core\Module $module */
-        $module = $this->coreRegistry->registry('current_module');
-        if ($module) {
-            return $module->getRelationsAsJson();
-        }
-        return '{}';
+        return $this->_scopeConfig->getValue(AbstractTab::XML_TOOLTIP_TYPE_PATH);
     }
 }

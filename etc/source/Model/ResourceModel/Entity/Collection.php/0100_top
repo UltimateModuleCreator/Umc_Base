@@ -5,4 +5,7 @@
      */
     protected function _construct()
     {
-        $this->_init('{{Namespace}}\{{Module}}\Model\{{Entity}}', '{{Namespace}}\{{Module}}\Model\ResourceModel\{{Entity}}');
+        $this->_init(
+            {{class {{Namespace}}\{{Module}}\Model\{{Entity}}}}::class,
+            \{{Namespace}}\{{Module}}\Model\ResourceModel\{{Entity}}::class
+        );

@@ -12,36 +12,41 @@
  *
  * @category  Umc
  * @package   Umc_Base
- * @copyright 2015 Marius Strajeru
+ * @copyright Marius Strajeru
  * @license   http://opensource.org/licenses/mit-license.php MIT License
  * @author    Marius Strajeru <ultimate.module.creator@gmail.com>
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
     <system>
-        <tab id="umc" sortOrder="500">
+        <section id="umc" translate="label" type="text" sortOrder="5000" showInDefault="1" showInWebsite="0" showInStore="0">
             <label>Ultimate Module Creator</label>
-        </tab>
-        <section id="umc" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
-            <class>separator-top</class>
-            <label>Ultimate Module Creator</label>
-            <tab>umc</tab>
+            <tab>advanced</tab>
             <resource>Umc_Base::umc</resource>
             <group id="umc_general" type="text" sortOrder="5" showInDefault="1" showInWebsite="0" showInStore="0">
                 <label>UI settings</label>
-                <field id="tooltips" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="tooltips" translate="label tooltip" type="select" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
                     <label>Enable Tooltips</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     <tooltip>You can enabled disable the tooltips on the fields. When you get the hand of it you can disable this to make the UMC a bit faster.</tooltip>
+                </field>
+                <field id="type" translate="label tooltip" type="select" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
+                    <label>Tooltips Type</label>
+                    <source_model>Umc\Base\Source\TooltipType</source_model>
+                    <tooltip>Choose the tooltip type. Slide or popup.</tooltip>
+                    <depends>
+                        <field id="tooltips">1</field>
+                    </depends>
+                </field>
+                <field id="prolong_session" translate="label tooltip" type="select" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
+                    <label>Prolong session when creating a module</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <tooltip>Setting this to Yes will make your session not expire while you are on the add/edit module form</tooltip>
                 </field>
             </group>
             <group id="umc_module" type="text" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
                 <label>Default module values</label>
                 <frontend_model>UmcBlockSystemModule</frontend_model>
-            </group>
-            <group id="umc_settings" type="text" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
-                <label>Default settings values</label>
-                <frontend_model>UmcBlockSystemSettings</frontend_model>
             </group>
             <group id="umc_entity" type="text" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0">
                 <label>Default entity values</label>

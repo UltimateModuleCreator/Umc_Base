@@ -1,0 +1,162 @@
+    /**
+     * Save {{EntityLabel}}.
+     *
+     * @param \{{Namespace}}\{{Module}}\Api\Data\{{Entity}}Interface ${{entity}}
+     * @return \{{Namespace}}\{{Module}}\Api\Data\{{Entity}}Interface
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function save({{class {{Namespace}}\{{Module}}\Api\Data\{{Entity}}Interface}} ${{entity}})
+    {
+        /** @var {{class {{Namespace}}\{{Module}}\Api\Data\{{Entity}}Interface}}|\Magento\Framework\Model\AbstractModel ${{entity}} */
+        try {
+            $this->{{_}}resource->save(${{entity}});
+        } catch (\Exception $exception) {
+            throw new {{class Magento\Framework\Exception\CouldNotSaveException}}(__(
+                'Could not save the {{EntityLabelEscaped}}: %1',
+                $exception->getMessage()
+            ));
+        }
+        return ${{entity}};
+    }
+
+    /**
+     * Retrieve {{EntityLabel}}.
+     *
+     * @param int ${{entity}}Id
+     * @return \{{Namespace}}\{{Module}}\Api\Data\{{Entity}}Interface
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function getById(${{entity}}Id)
+    {
+        if (!isset($this->{{_}}instances[${{entity}}Id])) {
+            /** @var {{class {{Namespace}}\{{Module}}\Api\Data\{{Entity}}Interface}}|\Magento\Framework\Model\AbstractModel ${{entity}} */
+            ${{entity}} = $this->{{_}}{{entity}}InterfaceFactory->create();
+            $this->{{_}}resource->load(${{entity}}, ${{entity}}Id);
+            if (!${{entity}}->getId()) {
+                throw new {{class Magento\Framework\Exception\NoSuchEntityException}}(__('Requested {{EntityLabelEscaped}} doesn\'t exist'));
+            }
+            $this->{{_}}instances[${{entity}}Id] = ${{entity}};
+        }
+        return $this->{{_}}instances[${{entity}}Id];
+    }
+
+    /**
+     * Retrieve {{EntitiesLabel}} matching the specified criteria.
+     *
+     * @param {{class Magento\Framework\Api\SearchCriteriaInterface}} $searchCriteria
+     * @return \{{Namespace}}\{{Module}}\Api\Data\{{Entity}}SearchResultInterface
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function getList({{class Magento\Framework\Api\SearchCriteriaInterface}} $searchCriteria)
+    {
+        /** @var \{{Namespace}}\{{Module}}\Api\Data\{{Entity}}SearchResultInterface $searchResults */
+        $searchResults = $this->{{_}}searchResultsFactory->create();
+        $searchResults->setSearchCriteria($searchCriteria);
+
+        /** @var \{{Namespace}}\{{Module}}\Model\ResourceModel\{{Entity}}\Collection $collection */
+        $collection = $this->{{_}}{{entity}}CollectionFactory->create();
+
+        //Add filters from root filter group to the collection
+        /** @var \Magento\Framework\Api\Search\FilterGroup $group */
+        foreach ($searchCriteria->getFilterGroups() as $group) {
+            $this->{{_}}addFilterGroupToCollection($group, $collection);
+        }
+        $sortOrders = $searchCriteria->getSortOrders();
+        /** @var {{class Magento\Framework\Api\SortOrder}} $sortOrder */
+        if ($sortOrders) {
+            foreach ($searchCriteria->getSortOrders() as $sortOrder) {
+                $field = $sortOrder->getField();
+                $collection->addOrder(
+                    $field,
+                    ($sortOrder->getDirection() == {{class Magento\Framework\Api\SortOrder}}::SORT_ASC) ? 'ASC' : 'DESC'
+                );
+            }
+        } else {
+            // set a default sorting order since this method is used constantly in many
+            // different blocks
+            $field = '{{entity}}_id';
+            $collection->addOrder($field, 'ASC');
+        }
+        $collection->setCurPage($searchCriteria->getCurrentPage());
+        $collection->setPageSize($searchCriteria->getPageSize());
+
+        /** @var {{class {{Namespace}}\{{Module}}\Api\Data\{{Entity}}Interface}}[] ${{entities}} */
+        ${{entities}} = [];
+        /** @var \{{Namespace}}\{{Module}}\Model\{{Entity}} ${{entity}} */
+        foreach ($collection as ${{entity}}) {
+            /** @var {{class {{Namespace}}\{{Module}}\Api\Data\{{Entity}}Interface}} ${{entity}}DataObject */
+            ${{entity}}DataObject = $this->{{_}}{{entity}}InterfaceFactory->create();
+            $this->{{_}}dataObjectHelper->populateWithArray(
+                ${{entity}}DataObject,
+                ${{entity}}r->getData(),
+                {{class {{Namespace}}\{{Module}}\Api\Data\{{Entity}}Interface}}::class
+            );
+            ${{entities}}[] = ${{entity}}DataObject;
+        }
+        $searchResults->setTotalCount($collection->getSize());
+        return $searchResults->setItems(${{entities}});
+    }
+
+    /**
+     * Delete {{EntityLabel}}.
+     *
+     * @param {{class {{Namespace}}\{{Module}}\Api\Data\{{Entity}}Interface}} ${{entity}}
+     * @return bool true on success
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function delete({{class {{Namespace}}\{{Module}}\Api\Data\{{Entity}}Interface}} ${{entity}})
+    {
+        /** @var {{class {{Namespace}}\{{Module}}\Api\Data\{{Entity}}Interface}}|\Magento\Framework\Model\AbstractModel ${{entity}} */
+        $id = ${{entity}}->getId();
+        try {
+            unset($this->{{_}}instances[$id]);
+            $this->{{_}}resource->delete(${{entity}});
+        } catch ({{class Magento\Framework\Exception\ValidatorException}} $e) {
+            throw new {{class Magento\Framework\Exception\CouldNotSaveException}}(__($e->getMessage()));
+        } catch (\Exception $e) {
+            throw new {{class Magento\Framework\Exception\StateException}}(
+                __('Unable to remove {{EntityLabelEscaped}} %1', $id)
+            );
+        }
+        unset($this->{{_}}instances[$id]);
+        return true;
+    }
+
+    /**
+     * Delete {{EntityLabel}} by ID.
+     *
+     * @param int ${{entity}}Id
+     * @return bool true on success
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function deleteById(${{entity}}Id)
+    {
+        ${{entity}} = $this->getById(${{entity}}Id);
+        return $this->delete(${{entity}});
+    }
+
+    /**
+     * Helper function that adds a FilterGroup to the collection.
+     *
+     * @param {{class Magento\Framework\Api\Search\FilterGroup}} $filterGroup
+     * @param {{class {{Namespace}}\{{Module}}\Model\ResourceModel\{{Entity}}\Collection}} $collection
+     * @return $this
+     * @throws \Magento\Framework\Exception\InputException
+     */
+    protected function {{_}}addFilterGroupToCollection(
+        {{class Magento\Framework\Api\Search\FilterGroup}} $filterGroup,
+        {{class {{Namespace}}\{{Module}}\Model\ResourceModel\{{Entity}}\Collection}} $collection
+    ) {
+        $fields = [];
+        $conditions = [];
+        foreach ($filterGroup->getFilters() as $filter) {
+            $condition = $filter->getConditionType() ? $filter->getConditionType() : 'eq';
+            $fields[] = $filter->getField();
+            $conditions[] = [$condition => $filter->getValue()];
+        }
+        if ($fields) {
+            $collection->addFieldToFilter($fields, $conditions);
+        }
+        return $this;
+    }

@@ -1,0 +1,14 @@
+    /**
+     * Get {{EntitiesLabel}} list.
+     *
+     * @return \{{Namespace}}\{{Module}}\Api\Data\{{Entity}}Interface[]
+     */
+    public function getItems();
+
+    /**
+     * Set {{EntitiesLabel}} list.
+     *
+     * @param \{{Namespace}}\{{Module}}\Api\Data\{{Entity}}Interface[] $items
+     * @return $this
+     */
+    public function setItems(array $items);

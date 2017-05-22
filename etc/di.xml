@@ -12,85 +12,102 @@
  *
  * @category  Umc
  * @package   Umc_Base
- * @copyright 2015 Marius Strajeru
+ * @copyright Marius Strajeru
  * @license   http://opensource.org/licenses/mit-license.php MIT License
  * @author    Marius Strajeru <ultimate.module.creator@gmail.com>
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <preference for="Umc\Base\Model\Writer\WriterInterface" type="Umc\Base\Model\Writer\BaseWriter" />
-    <type name="Umc\Base\Model\Downloader">
+    <preference for="Umc\Base\Writer\WriterInterface" type="Umc\Base\Writer\BaseWriter" />
+    <preference for="Umc\Base\Api\Data\ModuleInterface" type="Umc\Base\Model\Module" />
+    <preference for="Umc\Base\Api\Data\EntityInterface" type="Umc\Base\Model\Entity" />
+    <preference for="Umc\Base\Api\Data\AttributeInterface" type="Umc\Base\Model\Attribute" />
+
+    <virtualType name="UmcBaseEntityInterfaceFactory" type="Umc\Base\Model\ModelInterfaceFactory">
         <arguments>
-            <argument name="downloaderMap" xsi:type="array">
-                <item name="module" xsi:type="string">Umc\Base\Model\Downloader\Module</item>
-                <item name="config" xsi:type="string">Umc\Base\Model\Downloader\Config</item>
-                <item name="files" xsi:type="string">Umc\Base\Model\Downloader\Files</item>
-                <item name="uninstall" xsi:type="string">Umc\Base\Model\Downloader\Uninstall</item>
+            <argument name="instanceName" xsi:type="string">Umc\Base\Api\Data\EntityInterface</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="UmcBaseAttributeInterfaceFactory" type="Umc\Base\Model\ModelInterfaceFactory">
+        <arguments>
+            <argument name="instanceName" xsi:type="string">Umc\Base\Api\Data\AttributeInterface</argument>
+        </arguments>
+    </virtualType>
+
+    <type name="Umc\Base\Model\Module">
+        <arguments>
+            <argument name="factories" xsi:type="array">
+                <item name="entity" xsi:type="object">UmcBaseEntityInterfaceFactory</item>
+                <item name="attribute" xsi:type="object">UmcBaseAttributeInterfaceFactory</item>
+            </argument>
+            <argument name="sequenceDependencies" xsi:type="array">
+                <item name="Magento_Backend" xsi:type="number">10</item>
+            </argument>
+            <argument name="composerDependencies" xsi:type="array">
+                <item name="backend" xsi:type="array">
+                    <item name="name" xsi:type="string">magento/module-backend</item>
+                </item>
+                <item name="ui" xsi:type="array">
+                    <item name="name" xsi:type="string">magento/module-ui</item>
+                </item>
+                <item name="framework" xsi:type="array">
+                    <item name="name" xsi:type="string">magento/framework</item>
+                    <item name="version" xsi:type="string">100.*.*</item>
+                </item>
             </argument>
         </arguments>
     </type>
-
-    <type name="Umc\Base\Block\Adminhtml\Module\Edit\Tab\Settings">
+    <type name="Umc\Base\Downloader\Downloader">
         <arguments>
-            <argument name="model" xsi:type="object">Umc\Base\Model\Core\Settings</argument>
+            <argument name="downloaderMap" xsi:type="array">
+                <item name="module" xsi:type="object">Umc\Base\Downloader\Module</item>
+                <item name="config" xsi:type="object">Umc\Base\Downloader\Config</item>
+                <item name="files" xsi:type="object">Umc\Base\Downloader\Files</item>
+            </argument>
         </arguments>
     </type>
-
     <type name="Umc\Base\Block\Adminhtml\Module\Edit\Tab\Module">
         <arguments>
-            <argument name="model" xsi:type="object">Umc\Base\Model\Core\Module</argument>
+            <argument name="entityCode" xsi:type="const">Umc\Base\Api\Data\ModuleInterface::ENTITY_CODE</argument>
         </arguments>
     </type>
 
     <type name="Umc\Base\Block\Adminhtml\Module\Edit\Tab\Entities">
         <arguments>
-            <argument name="model" xsi:type="object">Umc\Base\Model\Core\Entity</argument>
+            <argument name="entityCode" xsi:type="const">Umc\Base\Api\Data\EntityInterface::ENTITY_CODE</argument>
+            <argument name="entityBlockTemplate" xsi:type="string">Umc_Base::entity.phtml</argument>
         </arguments>
     </type>
 
     <type name="Umc\Base\Block\Adminhtml\Entity">
         <arguments>
-            <argument name="model" xsi:type="object">Umc\Base\Model\Core\Entity</argument>
+            <argument name="entityCode" xsi:type="const">Umc\Base\Api\Data\EntityInterface::ENTITY_CODE</argument>
+            <argument name="attributeBlockTemplate" xsi:type="string">Umc_Base::attribute.phtml</argument>
         </arguments>
     </type>
 
     <type name="Umc\Base\Block\Adminhtml\Attribute">
         <arguments>
-            <argument name="model" xsi:type="object">Umc\Base\Model\Core\Attribute</argument>
+            <argument name="entityCode" xsi:type="const">Umc\Base\Api\Data\AttributeInterface::ENTITY_CODE</argument>
         </arguments>
     </type>
     <type name="Umc\Base\Controller\Adminhtml\Module\Validate">
         <arguments>
-            <argument name="writer" xsi:type="object">Umc\Base\Model\Writer\BaseWriter</argument>
+            <argument name="writer" xsi:type="object">Umc\Base\Writer\BaseWriter</argument>
         </arguments>
     </type>
-
-    <type name="Umc\Base\Block\Adminhtml\Module\Edit\Tab\Relation">
-        <arguments>
-            <argument name="model" xsi:type="object">Umc\Base\Model\Core\Relation</argument>
-        </arguments>
-    </type>
-
 
     <!--[+] definitions for form config -->
-    <virtualType name="UmcConfigFormSchemaLocator" type="Umc\Base\Model\Config\SchemaLocator\SchemaLocator">
+    <virtualType name="UmcConfigFormSchemaLocator" type="Umc\Base\Config\SchemaLocator\SchemaLocator">
         <arguments>
             <argument name="fileSchema" xsi:type="string">form</argument>
-            <argument name="mergedSchema" xsi:type="string">form</argument>
         </arguments>
     </virtualType>
-    <virtualType name="UmcConfigFormMapperFactory" type="Umc\Base\Model\Config\Mapper\Factory">
+    <virtualType name="UmcConfigFormConverter" type="Umc\Base\Config\Converter\Converter">
         <arguments>
-            <argument name="typeMap" xsi:type="array">
-                <item name="sorting" xsi:type="string">Umc\Base\Model\Config\Form\Mapper\Sorting</item>
-            </argument>
-        </arguments>
-    </virtualType>
-    <virtualType name="UmcConfigFormConverter" type="Umc\Base\Model\Config\Converter\Converter">
-        <arguments>
-            <argument name="mapperFactory" xsi:type="object">UmcConfigFormMapperFactory</argument>
+            <argument name="argumentInterpreter" xsi:type="object">UmcConfigArgumentReaderInterpreter</argument>
             <argument name="mapperList" xsi:type="array">
-                <item name="0" xsi:type="string">sorting</item>
+                <item name="0" xsi:type="object">Umc\Base\Config\Form\Mapper\Sorting</item>
             </argument>
             <argument name="idNodes" xsi:type="array">
                 <item name="0" xsi:type="string">form</item>
@@ -110,35 +127,35 @@
             <argument name="idAttributes" xsi:type="array">
                 <item name="/forms/form" xsi:type="string">id</item>
                 <item name="/forms/form/fieldset" xsi:type="string">id</item>
+                <item name="/forms/form/fieldset/arguments/argument" xsi:type="string">name</item>
+                <item name="/forms/form/fieldset/arguments/argument/item" xsi:type="string">name</item>
                 <item name="/forms/form/fieldset/field" xsi:type="string">id</item>
+                <item name="/forms/form/fieldset/field/arguments/argument" xsi:type="string">name</item>
+                <item name="/forms/form/fieldset/field/arguments/argument/item" xsi:type="string">name</item>
                 <item name="/forms/form/fieldset/field/depends" xsi:type="string">id</item>
                 <item name="/forms/form/fieldset/field/depends/depend" xsi:type="string">id</item>
-                <item name="/forms/form/fieldset/field/depends/depend/val" xsi:type="string">id</item>
+                <item name="/forms/form/fieldset/field/depends/depend/arguments/argument" xsi:type="string">name</item>
+                <item name="/forms/form/fieldset/field/depends/depend/arguments/argument/item" xsi:type="string">name</item>
+                <item name="/forms/form/fieldset/field/depends/depend/arguments/argument/item/item" xsi:type="string">name</item>
             </argument>
             <argument name="defaultScope" xsi:type="string">umc</argument>
         </arguments>
     </virtualType>
-    <type name="Umc\Base\Model\Config\Form">
+    <type name="Umc\Base\Config\Form">
         <arguments>
             <argument name="reader" xsi:type="object">UmcConfigFormReader</argument>
+            <argument name="rootNode" xsi:type="string">forms</argument>
         </arguments>
     </type>
     <!--[-] definitions for form config -->
 
     <!--[+] definitions for type config -->
-    <virtualType name="UmcConfigTypeSchemaLocator" type="Umc\Base\Model\Config\SchemaLocator\SchemaLocator">
+    <virtualType name="UmcConfigTypeSchemaLocator" type="Umc\Base\Config\SchemaLocator\SchemaLocator">
         <arguments>
             <argument name="fileSchema" xsi:type="string">type</argument>
         </arguments>
     </virtualType>
-    <virtualType name="UmcConfigTypeMapperFactory" type="Umc\Base\Model\Config\Mapper\Factory">
-        <arguments>
-            <argument name="typeMap" xsi:type="array">
-                <item name="sorting" xsi:type="string">Umc\Base\Model\Config\Type\Mapper\Sorting</item>
-            </argument>
-        </arguments>
-    </virtualType>
-    <virtualType name="Umc\Base\Model\Config\Type\Mapper\Sorting" type="Umc\Base\Model\Config\Mapper\Sorting">
+    <virtualType name="UmcConfigTypeMapperSorting" type="Umc\Base\Config\Mapper\Sorting">
         <arguments>
             <argument name="paths" xsi:type="array">
                 <item name="types/entity" xsi:type="array">
@@ -148,11 +165,11 @@
             </argument>
         </arguments>
     </virtualType>
-    <virtualType name="UmcConfigTypeConverter" type="Umc\Base\Model\Config\Converter\Converter">
+    <virtualType name="UmcConfigTypeConverter" type="Umc\Base\Config\Converter\Converter">
         <arguments>
-            <argument name="mapperFactory" xsi:type="object">UmcConfigTypeMapperFactory</argument>
+            <argument name="argumentInterpreter" xsi:type="object">UmcConfigArgumentReaderInterpreter</argument>
             <argument name="mapperList" xsi:type="array">
-                <item name="0" xsi:type="string">sorting</item>
+                <item name="0" xsi:type="object">UmcConfigTypeMapperSorting</item>
             </argument>
             <argument name="idNodes" xsi:type="array">
                 <item name="0" xsi:type="string">entity</item>
@@ -169,33 +186,30 @@
             <argument name="idAttributes" xsi:type="array">
                 <item name="/types/entity" xsi:type="string">id</item>
                 <item name="/types/entity/type" xsi:type="string">id</item>
+                <item name="/types/entity/type/arguments/argument" xsi:type="string">name</item>
                 <item name="/types/entity/group" xsi:type="string">id</item>
+                <item name="/types/entity/group/arguments/argument" xsi:type="string">name</item>
             </argument>
             <argument name="defaultScope" xsi:type="string">umc</argument>
         </arguments>
     </virtualType>
-    <type name="Umc\Base\Model\Config\Type">
+    <type name="Umc\Base\Config\Type">
         <arguments>
             <argument name="reader" xsi:type="object">UmcConfigTypeReader</argument>
+            <argument name="rootNode" xsi:type="string">types</argument>
         </arguments>
     </type>
     <!--[-] definitions for type config -->
 
     <!--[+] definitions for save attributes config -->
-    <virtualType name="UmcConfigSaveAttributesSchemaLocator" type="Umc\Base\Model\Config\SchemaLocator\SchemaLocator">
+    <virtualType name="UmcConfigSaveAttributesSchemaLocator" type="Umc\Base\Config\SchemaLocator\SchemaLocator">
         <arguments>
             <argument name="fileSchema" xsi:type="string">save_attributes</argument>
-            <argument name="mergedSchema" xsi:type="string">save_attributes</argument>
         </arguments>
     </virtualType>
-    <virtualType name="UmcConfigSaveAttributesMapperFactory" type="Umc\Base\Model\Config\Mapper\Factory">
+    <virtualType name="UmcConfigSaveAttributesConverter" type="Umc\Base\Config\Converter\Converter">
         <arguments>
-            <argument name="typeMap" xsi:type="array" />
-        </arguments>
-    </virtualType>
-    <virtualType name="UmcConfigSaveAttributesConverter" type="Umc\Base\Model\Config\Converter\Converter">
-        <arguments>
-            <argument name="mapperFactory" xsi:type="object">UmcConfigSaveAttributesMapperFactory</argument>
+            <argument name="argumentInterpreter" xsi:type="object">UmcConfigArgumentReaderInterpreter</argument>
             <argument name="mapperList" xsi:type="array" />
             <argument name="idNodes" xsi:type="array">
                 <item name="0" xsi:type="string">entity</item>
@@ -215,27 +229,23 @@
             <argument name="defaultScope" xsi:type="string">umc</argument>
         </arguments>
     </virtualType>
-    <type name="Umc\Base\Model\Config\SaveAttributes">
+    <type name="Umc\Base\Config\SaveAttributes">
         <arguments>
             <argument name="reader" xsi:type="object">UmcConfigSaveAttributesReader</argument>
+            <argument name="rootNode" xsi:type="string">save_attributes</argument>
         </arguments>
     </type>
     <!--[-] definitions for save attributes config -->
 
     <!--[+] definitions for restriction config -->
-    <virtualType name="UmcConfigRestrictionSchemaLocator" type="Umc\Base\Model\Config\SchemaLocator\SchemaLocator">
+    <virtualType name="UmcConfigRestrictionSchemaLocator" type="Umc\Base\Config\SchemaLocator\SchemaLocator">
         <arguments>
             <argument name="fileSchema" xsi:type="string">restriction</argument>
         </arguments>
     </virtualType>
-    <virtualType name="UmcConfigRestrictionMapperFactory" type="Umc\Base\Model\Config\Mapper\Factory">
+    <virtualType name="UmcConfigRestrictionConverter" type="Umc\Base\Config\Converter\Converter">
         <arguments>
-            <argument name="typeMap" xsi:type="array" />
-        </arguments>
-    </virtualType>
-    <virtualType name="UmcConfigRestrictionConverter" type="Umc\Base\Model\Config\Converter\Converter">
-        <arguments>
-            <argument name="mapperFactory" xsi:type="object">UmcConfigRestrictionMapperFactory</argument>
+            <argument name="argumentInterpreter" xsi:type="object">UmcConfigArgumentReaderInterpreter</argument>
             <argument name="mapperList" xsi:type="array" />
             <argument name="idNodes" xsi:type="array">
                 <item name="0" xsi:type="string">entity</item>
@@ -255,37 +265,33 @@
                 <item name="/restrictions/entity" xsi:type="string">id</item>
                 <item name="/restrictions/entity/restriction" xsi:type="string">id</item>
                 <item name="/restrictions/entity/restriction/val" xsi:type="string">id</item>
+                <item name="/restrictions/entity/restriction/val/arguments/argument" xsi:type="string">name</item>
                 <item name="/restrictions/entity/restriction/val/depend" xsi:type="string">id</item>
-                <item name="/restrictions/entity/restriction/val/depend_val" xsi:type="string">id</item>
+                <item name="/restrictions/entity/restriction/val/depend/arguments/argument" xsi:type="string">name</item>
+                <item name="/restrictions/entity/restriction/val/depend/arguments/argument/item" xsi:type="string">name</item>
             </argument>
             <argument name="defaultScope" xsi:type="string">umc</argument>
         </arguments>
     </virtualType>
-    <type name="Umc\Base\Model\Config\Restriction">
+    <type name="Umc\Base\Config\Restriction">
         <arguments>
             <argument name="reader" xsi:type="object">UmcConfigRestrictionReader</argument>
+            <argument name="rootNode" xsi:type="string">restrictions</argument>
         </arguments>
     </type>
     <!--[-] definitions for restriction config -->
 
     <!--[+] definitions for source config -->
-    <virtualType name="UmcConfigSourceSchemaLocator" type="Umc\Base\Model\Config\SchemaLocator\SchemaLocator">
+    <virtualType name="UmcConfigSourceSchemaLocator" type="Umc\Base\Config\SchemaLocator\SchemaLocator">
         <arguments>
             <argument name="fileSchema" xsi:type="string">source</argument>
         </arguments>
     </virtualType>
-    <virtualType name="UmcConfigSourceMapperFactory" type="Umc\Base\Model\Config\Mapper\Factory">
+    <virtualType name="UmcConfigSourceConverter" type="Umc\Base\Config\Converter\Converter">
         <arguments>
-            <argument name="typeMap" xsi:type="array">
-                <item name="sorting" xsi:type="string">Umc\Base\Model\Config\Source\Mapper\Sorting</item>
-            </argument>
-        </arguments>
-    </virtualType>
-    <virtualType name="UmcConfigSourceConverter" type="Umc\Base\Model\Config\Converter\Converter">
-        <arguments>
-            <argument name="mapperFactory" xsi:type="object">UmcConfigSourceMapperFactory</argument>
+            <argument name="argumentInterpreter" xsi:type="object">UmcConfigArgumentReaderInterpreter</argument>
             <argument name="mapperList" xsi:type="array">
-                <item name="0" xsi:type="string">sorting</item>
+                <item name="0" xsi:type="object">Umc\Base\Config\Source\Mapper\Sorting</item>
             </argument>
             <argument name="idNodes" xsi:type="array">
                 <item name="0" xsi:type="string">file</item>
@@ -297,7 +303,7 @@
                 <item name="6" xsi:type="string">depend_labels</item>
                 <item name="7" xsi:type="string">depend_label</item>
                 <item name="8" xsi:type="string">annotation</item>
-                <item name="9" xsi:type="string">member</item>
+                <item name="9" xsi:type="string">member</item><!-- Member? Sure! I 'member -->
                 <item name="10" xsi:type="string">construct</item>
                 <item name="11" xsi:type="string">implement</item>
             </argument>
@@ -311,7 +317,9 @@
             <argument name="fileName" xsi:type="string">source.xml</argument>
             <argument name="idAttributes" xsi:type="array">
                 <item name="/source/file" xsi:type="string">id</item>
+                <item name="/source/file/arguments/argument" xsi:type="string">name</item>
                 <item name="/source/file/code/part" xsi:type="string">id</item>
+                <item name="/source/file/code/part/arguments/argument" xsi:type="string">name</item>
                 <item name="/source/file/code/part/depends" xsi:type="string">id</item>
                 <item name="/source/file/code/part/depends/depend" xsi:type="string">id</item>
                 <item name="/source/file/code/part/depends/depend/val" xsi:type="string">id</item>
@@ -326,37 +334,38 @@
                 <item name="/source/file/members/member/depends" xsi:type="string">id</item>
                 <item name="/source/file/members/member/depends/depend" xsi:type="string">id</item>
                 <item name="/source/file/members/member/depends/depend/val" xsi:type="string">id</item>
+                <item name="/source/file/members/member/arguments/argument" xsi:type="string">name</item>
                 <item name="/source/file/constructs/construct" xsi:type="string">id</item>
+                <item name="/source/file/constructs/construct/depends" xsi:type="string">id</item>
+                <item name="/source/file/constructs/construct/depends/depend" xsi:type="string">id</item>
+                <item name="/source/file/constructs/construct/depends/depend/val" xsi:type="string">id</item>
+                <item name="/source/file/constructs/construct/arguments/argument" xsi:type="string">name</item>
                 <item name="/source/file/implements/implement" xsi:type="string">id</item>
                 <item name="/source/file/implements/implement/depends" xsi:type="string">id</item>
                 <item name="/source/file/implements/implement/depends/depend" xsi:type="string">id</item>
                 <item name="/source/file/implements/implement/depends/depend/val" xsi:type="string">id</item>
+                <item name="/source/file/implements/implement/arguments/argument" xsi:type="string">name</item>
             </argument>
             <argument name="defaultScope" xsi:type="string">umc</argument>
         </arguments>
     </virtualType>
-    <type name="Umc\Base\Model\Config\Source">
+    <type name="Umc\Base\Config\Source">
         <arguments>
             <argument name="reader" xsi:type="object">UmcConfigSourceReader</argument>
+            <argument name="rootNode" xsi:type="string">source</argument>
         </arguments>
     </type>
     <!--[-] definitions for source config -->
 
     <!--[+] definitions for classes config -->
-    <virtualType name="UmcConfigClassConfigSchemaLocator" type="Umc\Base\Model\Config\SchemaLocator\SchemaLocator">
+    <virtualType name="UmcConfigClassConfigSchemaLocator" type="Umc\Base\Config\SchemaLocator\SchemaLocator">
         <arguments>
             <argument name="fileSchema" xsi:type="string">class</argument>
-            <argument name="mergedSchema" xsi:type="string">class</argument>
         </arguments>
     </virtualType>
-    <virtualType name="UmcConfigClassConfigMapperFactory" type="Umc\Base\Model\Config\Mapper\Factory">
+    <virtualType name="UmcConfigClassConfigConverter" type="Umc\Base\Config\Converter\Converter">
         <arguments>
-            <argument name="typeMap" xsi:type="array" />
-        </arguments>
-    </virtualType>
-    <virtualType name="UmcConfigClassConfigConverter" type="Umc\Base\Model\Config\Converter\Converter">
-        <arguments>
-            <argument name="mapperFactory" xsi:type="object">UmcConfigClassConfigMapperFactory</argument>
+            <argument name="argumentInterpreter" xsi:type="object">UmcConfigArgumentReaderInterpreter</argument>
             <argument name="mapperList" xsi:type="array" />
             <argument name="idNodes" xsi:type="array">
                 <item name="0" xsi:type="string">class</item>
@@ -374,37 +383,29 @@
             <argument name="defaultScope" xsi:type="string">umc</argument>
         </arguments>
     </virtualType>
-    <type name="Umc\Base\Model\Config\ClassConfig">
+    <type name="Umc\Base\Config\ClassConfig">
         <arguments>
             <argument name="reader" xsi:type="object">UmcConfigClassConfigReader</argument>
+            <argument name="rootNode" xsi:type="string">classes</argument>
         </arguments>
     </type>
     <!--[-] definitions for classes config -->
 
     <!--[+] definitions for help config -->
-    <virtualType name="UmcConfigHelpSchemaLocator" type="Umc\Base\Model\Config\SchemaLocator\SchemaLocator">
+    <virtualType name="UmcConfigHelpSchemaLocator" type="Umc\Base\Config\SchemaLocator\SchemaLocator">
         <arguments>
             <argument name="fileSchema" xsi:type="string">help</argument>
         </arguments>
     </virtualType>
-    <virtualType name="UmcConfigHelpMapperFactory" type="Umc\Base\Model\Config\Mapper\Factory">
+    <virtualType name="UmcConfigHelpConverter" type="Umc\Base\Config\Converter\Converter">
         <arguments>
-            <argument name="typeMap" xsi:type="array">
-                <item name="sorting" xsi:type="string">Umc\Base\Model\Config\Help\Mapper\Sorting</item>
-            </argument>
-        </arguments>
-    </virtualType>
-    <virtualType name="UmcConfigHelpConverter" type="Umc\Base\Model\Config\Converter\Converter">
-        <arguments>
-            <argument name="mapperFactory" xsi:type="object">UmcConfigHelpMapperFactory</argument>
+            <argument name="argumentInterpreter" xsi:type="object">UmcConfigArgumentReaderInterpreter</argument>
             <argument name="mapperList" xsi:type="array">
-                <item name="0" xsi:type="string">sorting</item>
+                <item name="0" xsi:type="object">Umc\Base\Config\Help\Mapper\Sorting</item>
             </argument>
             <argument name="idNodes" xsi:type="array">
                 <item name="0" xsi:type="string">section</item>
                 <item name="1" xsi:type="string">fieldset</item>
-                <item name="2" xsi:type="string">column</item>
-                <item name="3" xsi:type="string">module</item>
             </argument>
         </arguments>
     </virtualType>
@@ -416,15 +417,60 @@
             <argument name="idAttributes" xsi:type="array">
                 <item name="/help/section" xsi:type="string">id</item>
                 <item name="/help/section/fieldset" xsi:type="string">id</item>
-                <item name="/help/section/fieldset/columns/column" xsi:type="string">id</item>
-                <item name="/help/module" xsi:type="string">id</item>
             </argument>
             <argument name="defaultScope" xsi:type="string">umc</argument>
         </arguments>
     </virtualType>
-    <type name="Umc\Base\Model\Config\Help">
+    <type name="Umc\Base\Config\Help">
         <arguments>
             <argument name="reader" xsi:type="object">UmcConfigHelpReader</argument>
+            <argument name="rootNode" xsi:type="string">help</argument>
+        </arguments>
+    </type>
+    <!--[-] definitions for help config -->
+
+    <!--[+] definitions for version config -->
+    <virtualType name="UmcConfigVersionSchemaLocator" type="Umc\Base\Config\SchemaLocator\SchemaLocator">
+        <arguments>
+            <argument name="fileSchema" xsi:type="string">version</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="UmcConfigVersionMapperSorting" type="Umc\Base\Config\Mapper\Sorting">
+        <arguments>
+            <argument name="paths" xsi:type="array">
+                <item name="versions/module" xsi:type="array">
+                    <item name="0" xsi:type="string">module</item>
+                </item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="UmcConfigVersionConverter" type="Umc\Base\Config\Converter\Converter">
+        <arguments>
+            <argument name="argumentInterpreter" xsi:type="object">UmcConfigArgumentReaderInterpreter</argument>
+            <argument name="mapperList" xsi:type="array">
+                <item name="0" xsi:type="object">UmcConfigVersionMapperSorting</item>
+            </argument>
+            <argument name="idNodes" xsi:type="array">
+                <item name="0" xsi:type="string">module</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="UmcConfigVersionReader" type="Magento\Framework\Config\Reader\Filesystem">
+        <arguments>
+            <argument name="schemaLocator" xsi:type="object">UmcConfigVersionSchemaLocator</argument>
+            <argument name="converter" xsi:type="object">UmcConfigVersionConverter</argument>
+            <argument name="fileName" xsi:type="string">version.xml</argument>
+            <argument name="idAttributes" xsi:type="array">
+                <item name="/versions/module" xsi:type="string">id</item>
+                <item name="/versions/modulearguments/argument" xsi:type="string">name</item>
+            </argument>
+            <argument name="defaultScope" xsi:type="string">umc</argument>
+        </arguments>
+    </virtualType>
+    <type name="Umc\Base\Config\Version">
+        <arguments>
+            <argument name="reader" xsi:type="object">UmcConfigVersionReader</argument>
+            <argument name="rootNode" xsi:type="string">versions</argument>
         </arguments>
     </type>
     <!--[-] definitions for help config -->
@@ -432,335 +478,295 @@
     <type name="Umc\Base\Model\Builder">
         <arguments>
             <argument name="generatorMap" xsi:type="array">
-                <item name="global.xml" xsi:type="string">Umc\Base\Model\Generator\XmlGenerator</item>
-                <item name="entity.xml" xsi:type="string">UmcEntityXmlGenerator</item>
-                <item name="siblings.xml" xsi:type="string">UmcSiblingsXmlGenerator</item>
+                <item name="umc_module.xml" xsi:type="object">Umc\Base\Generator\XmlGenerator</item>
+                <item name="umc_entity.xml" xsi:type="object">UmcEntityXmlGenerator</item>
 
-                <item name="global.class" xsi:type="string">Umc\Base\Model\Generator\ClassGenerator</item>
-                <item name="entity.class" xsi:type="string">UmcEntityClassGenerator</item>
-                <item name="siblings.class" xsi:type="string">UmcSiblingsClassGenerator</item>
-                <item name="attribute.class" xsi:type="string">UmcAttributeClassGenerator</item>
+                <item name="umc_module.class" xsi:type="object">Umc\Base\Generator\ClassGenerator</item>
+                <item name="umc_entity.class" xsi:type="object">UmcEntityClassGenerator</item>
+                <item name="umc_attribute.class" xsi:type="object">UmcAttributeClassGenerator</item>
 
-                <item name="global.csv" xsi:type="string">Umc\Base\Model\Generator\CsvGenerator</item>
+                <item name="umc_module.csv" xsi:type="object">Umc\Base\Generator\CsvGenerator</item>
 
-                <item name="global.phtml" xsi:type="string">Umc\Base\Model\Generator\TemplateGenerator</item>
-                <item name="entity.phtml" xsi:type="string">UmcEntityTemplateGenerator</item>
+                <item name="umc_module.text" xsi:type="object">Umc\Base\Generator\TextGenerator</item>
 
-                <item name="global.js" xsi:type="string">Umc\Base\Model\Generator\JsGenerator</item>
-                <item name="entity.js" xsi:type="string">UmcEntityJsGenerator</item>
+                <item name="umc_module.phtml" xsi:type="object">Umc\Base\Generator\TemplateGenerator</item>
+                <item name="umc_entity.phtml" xsi:type="object">UmcEntityTemplateGenerator</item>
 
-                <item name="global.image" xsi:type="string">Umc\Base\Model\Generator\ImageGenerator</item>
-                <item name="entity.image" xsi:type="string">UmcEntityImageGenerator</item>
+                <item name="umc_module.js" xsi:type="object">Umc\Base\Generator\JsGenerator</item>
+                <item name="umc_entity.js" xsi:type="object">UmcEntityJsGenerator</item>
+
+                <item name="umc_module.image" xsi:type="object">Umc\Base\Generator\ImageGenerator</item>
+                <item name="umc_entity.image" xsi:type="object">UmcEntityImageGenerator</item>
+
+                <item name="umc_module.html" xsi:type="object">UmcHtmlGenerator</item>
             </argument>
         </arguments>
     </type>
 
-    <type name="Umc\Base\Model\Generator\XmlGenerator">
+    <virtualType name="UmcHtmlGenerator" type="Umc\Base\Generator\AbstractGenerator">
         <arguments>
-            <argument name="defaultScope" xsi:type="string">global</argument>
-            <argument name="modelProvider" xsi:type="object">Umc\Base\Model\Provider\GlobalProvider</argument>
+            <argument name="defaultScope" xsi:type="const">Umc\Base\Config\Source::MODULE_SCOPE</argument>
+            <argument name="modelProvider" xsi:type="object">Umc\Base\Provider\GlobalProvider</argument>
             <argument name="processors" xsi:type="array">
-                <item name="part.global" xsi:type="string">UmcSelfPartProcessor</item>
-                <item name="part.entity" xsi:type="string">UmcChildPartProcessor</item>
+                <item name="part.umc_module" xsi:type="object">UmcSelfPartProcessor</item>
+            </argument>
+        </arguments>
+    </virtualType>
+
+
+    <type name="Umc\Base\Generator\XmlGenerator">
+        <arguments>
+            <argument name="defaultScope" xsi:type="const">Umc\Base\Config\Source::MODULE_SCOPE</argument>
+            <argument name="modelProvider" xsi:type="object">Umc\Base\Provider\GlobalProvider</argument>
+            <argument name="processors" xsi:type="array">
+                <item name="part.umc_module" xsi:type="object">UmcSelfPartProcessor</item>
+                <item name="part.umc_entity" xsi:type="object">UmcChildPartProcessor</item>
             </argument>
         </arguments>
     </type>
 
-    <type name="Umc\Base\Model\Generator\CsvGenerator">
+    <type name="Umc\Base\Generator\CsvGenerator">
         <arguments>
-            <argument name="defaultScope" xsi:type="string">global</argument>
-            <argument name="modelProvider" xsi:type="object">Umc\Base\Model\Provider\GlobalProvider</argument>
+            <argument name="defaultScope" xsi:type="const">Umc\Base\Config\Source::MODULE_SCOPE</argument>
+            <argument name="modelProvider" xsi:type="object">Umc\Base\Provider\GlobalProvider</argument>
             <argument name="processors" xsi:type="array">
-                <item name="part.global" xsi:type="string">UmcSelfPartProcessor</item>
-                <item name="part.entity" xsi:type="string">UmcChildPartProcessor</item>
-                <item name="part.attribute" xsi:type="string">UmcGrandChildPartProcessor</item>
-                <item name="part.relation" xsi:type="string">UmcRelationPartProcessor</item>
+                <item name="part.umc_module" xsi:type="object">UmcSelfPartProcessor</item>
+                <item name="part.umc_entity" xsi:type="object">UmcChildPartProcessor</item>
+                <item name="part.umc_attribute" xsi:type="object">UmcGrandChildPartProcessor</item>
             </argument>
         </arguments>
     </type>
 
 
-    <type name="Umc\Base\Model\Generator\TemplateGenerator">
+    <type name="Umc\Base\Generator\TemplateGenerator">
         <arguments>
-            <argument name="defaultScope" xsi:type="string">global</argument>
-            <argument name="modelProvider" xsi:type="object">Umc\Base\Model\Provider\GlobalProvider</argument>
+            <argument name="defaultScope" xsi:type="const">Umc\Base\Config\Source::MODULE_SCOPE</argument>
+            <argument name="modelProvider" xsi:type="object">Umc\Base\Provider\GlobalProvider</argument>
             <argument name="processors" xsi:type="array">
-                <item name="part.entity" xsi:type="string">UmcChildPartProcessor</item>
-                <item name="part.global" xsi:type="string">UmcSelfPartProcessor</item>
+                <item name="part.umc_entity" xsi:type="object">UmcChildPartProcessor</item>
+                <item name="part.umc_module" xsi:type="object">UmcSelfPartProcessor</item>
             </argument>
         </arguments>
     </type>
 
-    <virtualType name="UmcEntityTemplateGenerator" type="Umc\Base\Model\Generator\TemplateGenerator">
+    <virtualType name="UmcEntityTemplateGenerator" type="Umc\Base\Generator\TemplateGenerator">
         <arguments>
-            <argument name="defaultScope" xsi:type="string">entity</argument>
-            <argument name="modelProvider" xsi:type="object">Umc\Base\Model\Provider\EntityProvider</argument>
+            <argument name="defaultScope" xsi:type="const">Umc\Base\Config\Source::ENTITY_SCOPE</argument>
+            <argument name="modelProvider" xsi:type="object">Umc\Base\Provider\EntityProvider</argument>
             <argument name="processors" xsi:type="array">
-                <item name="part.entity" xsi:type="string">UmcSelfPartProcessor</item>
-                <item name="part.relation" xsi:type="string">UmcEntityRelationPartProcessor</item>
+                <item name="part.umc_entity" xsi:type="object">UmcSelfPartProcessor</item>
             </argument>
         </arguments>
     </virtualType>
     
-    <type name="Umc\Base\Model\Generator\JsGenerator">
+    <type name="Umc\Base\Generator\JsGenerator">
         <arguments>
-            <argument name="defaultScope" xsi:type="string">global</argument>
-            <argument name="modelProvider" xsi:type="object">Umc\Base\Model\Provider\GlobalProvider</argument>
+            <argument name="defaultScope" xsi:type="const">Umc\Base\Config\Source::MODULE_SCOPE</argument>
+            <argument name="modelProvider" xsi:type="object">Umc\Base\Provider\GlobalProvider</argument>
             <argument name="processors" xsi:type="array">
-                <item name="part.global" xsi:type="string">UmcSelfPartProcessor</item>
-                <item name="part.entity" xsi:type="string">UmcChildPartProcessor</item>
+                <item name="part.umc_module" xsi:type="object">UmcSelfPartProcessor</item>
+                <item name="part.umc_entity" xsi:type="object">UmcChildPartProcessor</item>
             </argument>
         </arguments>
     </type>
 
-    <virtualType name="UmcEntityJsGenerator" type="Umc\Base\Model\Generator\JsGenerator">
+    <virtualType name="UmcEntityJsGenerator" type="Umc\Base\Generator\JsGenerator">
         <arguments>
-            <argument name="defaultScope" xsi:type="string">entity</argument>
-            <argument name="modelProvider" xsi:type="object">Umc\Base\Model\Provider\EntityProvider</argument>
+            <argument name="defaultScope" xsi:type="const">Umc\Base\Config\Source::ENTITY_SCOPE</argument>
+            <argument name="modelProvider" xsi:type="object">Umc\Base\Provider\EntityProvider</argument>
             <argument name="processors" xsi:type="array">
-                <item name="part.entity" xsi:type="string">UmcSelfPartProcessor</item>
+                <item name="part.umc_entity" xsi:type="object">UmcSelfPartProcessor</item>
             </argument>
         </arguments>
     </virtualType>
 
-    <type name="Umc\Base\Model\Generator\ImageGenerator">
+    <type name="Umc\Base\Generator\TextGenerator">
         <arguments>
-            <argument name="defaultScope" xsi:type="string">global</argument>
-            <argument name="modelProvider" xsi:type="object">Umc\Base\Model\Provider\GlobalProvider</argument>
+            <argument name="defaultScope" xsi:type="const">Umc\Base\Config\Source::MODULE_SCOPE</argument>
+            <argument name="modelProvider" xsi:type="object">Umc\Base\Provider\GlobalProvider</argument>
             <argument name="processors" xsi:type="array">
-                <item name="part.entity" xsi:type="string">UmcChildPartProcessor</item>
+                <item name="part.umc_module" xsi:type="object">UmcSelfPartProcessor</item>
             </argument>
         </arguments>
     </type>
 
-    <virtualType name="UmcEntityImageGenerator" type="Umc\Base\Model\Generator\ImageGenerator">
+    <type name="Umc\Base\Generator\ImageGenerator">
         <arguments>
-            <argument name="defaultScope" xsi:type="string">entity</argument>
-            <argument name="modelProvider" xsi:type="object">Umc\Base\Model\Provider\EntityProvider</argument>
+            <argument name="defaultScope" xsi:type="const">Umc\Base\Config\Source::MODULE_SCOPE</argument>
+            <argument name="modelProvider" xsi:type="object">Umc\Base\Provider\GlobalProvider</argument>
             <argument name="processors" xsi:type="array">
-                <item name="part.entity" xsi:type="string">UmcSelfPartProcessor</item>
+                <item name="part.umc_entity" xsi:type="object">UmcChildPartProcessor</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <virtualType name="UmcEntityImageGenerator" type="Umc\Base\Generator\ImageGenerator">
+        <arguments>
+            <argument name="defaultScope" xsi:type="const">Umc\Base\Config\Source::ENTITY_SCOPE</argument>
+            <argument name="modelProvider" xsi:type="object">Umc\Base\Provider\EntityProvider</argument>
+            <argument name="processors" xsi:type="array">
+                <item name="part.umc_entity" xsi:type="object">UmcSelfPartProcessor</item>
             </argument>
         </arguments>
     </virtualType>
 
 
-    <type name="Umc\Base\Model\Generator\BaseTypes">
+    <type name="Umc\Base\Generator\BaseTypes">
         <arguments>
             <argument name="types" xsi:type="array">
                 <item name="0" xsi:type="string">array</item>
                 <item name="1" xsi:type="string">string</item>
                 <item name="2" xsi:type="string">int</item>
                 <item name="3" xsi:type="string">float</item>
-                <item name="4" xsi:type="string" />
+                <item name="4" xsi:type="string">mixed</item>
+                <item name="5" xsi:type="string" />
             </argument>
         </arguments>
     </type>
 
     <virtualType name="UmcBlockSystemModule" type="Umc\Base\Block\Adminhtml\System\Config\AbstractFieldset">
         <arguments>
-            <argument name="model" xsi:type="object">Umc\Base\Model\Core\Module</argument>
-        </arguments>
-    </virtualType>
-
-    <virtualType name="UmcBlockSystemSettings" type="Umc\Base\Block\Adminhtml\System\Config\AbstractFieldset">
-        <arguments>
-            <argument name="model" xsi:type="object">Umc\Base\Model\Core\Settings</argument>
+            <argument name="entityCode" xsi:type="const">Umc\Base\Api\Data\ModuleInterface::ENTITY_CODE</argument>
         </arguments>
     </virtualType>
 
     <virtualType name="UmcBlockSystemEntity" type="Umc\Base\Block\Adminhtml\System\Config\AbstractFieldset">
         <arguments>
-            <argument name="model" xsi:type="object">Umc\Base\Model\Core\Entity</argument>
+            <argument name="entityCode" xsi:type="const">Umc\Base\Api\Data\EntityInterface::ENTITY_CODE</argument>
         </arguments>
     </virtualType>
 
     <virtualType name="UmcBlockSystemAttribute" type="Umc\Base\Block\Adminhtml\System\Config\AbstractFieldset">
         <arguments>
-            <argument name="model" xsi:type="object">Umc\Base\Model\Core\Attribute</argument>
+            <argument name="entityCode" xsi:type="const">Umc\Base\Api\Data\AttributeInterface::ENTITY_CODE</argument>
         </arguments>
     </virtualType>
 
-    <type name="Umc\Base\Model\Generator\ClassGenerator">
+    <type name="Umc\Base\Generator\ClassGenerator">
         <arguments>
-            <argument name="defaultScope" xsi:type="string">global</argument>
-            <argument name="modelProvider" xsi:type="object">Umc\Base\Model\Provider\GlobalProvider</argument>
+            <argument name="defaultScope" xsi:type="const">Umc\Base\Config\Source::MODULE_SCOPE</argument>
+            <argument name="modelProvider" xsi:type="object">Umc\Base\Provider\GlobalProvider</argument>
+            <argument name="skipConstructorTypes" xsi:type="array">
+                <item name="string" xsi:type="string">string</item>
+                <item name="mixed" xsi:type="string">mixed</item>
+                <item name="int" xsi:type="string">int</item>
+            </argument>
             <argument name="processors" xsi:type="array">
-                <item name="part.global" xsi:type="string">UmcSelfPartProcessor</item>
-                <item name="part.entity" xsi:type="string">UmcChildPartProcessor</item>
-                <item name="part.relation" xsi:type="string">UmcRelationPartProcessor</item>
-                <item name="member.global" xsi:type="string">UmcSelfMemberProcessor</item>
-                <item name="member.entity" xsi:type="string">UmcChildMemberProcessor</item>
-                <item name="annotation.global" xsi:type="string">UmcSelfAnnotationProcessor</item>
-                <item name="implement.global" xsi:type="string">UmcSelfImplementProcessor</item>
+                <item name="part.umc_module" xsi:type="object">UmcSelfPartProcessor</item>
+                <item name="part.umc_entity" xsi:type="object">UmcChildPartProcessor</item>
+                <item name="member.umc_module" xsi:type="object">UmcSelfMemberProcessor</item>
+                <item name="member.umc_entity" xsi:type="object">UmcChildMemberProcessor</item>
+                <item name="annotation.umc_module" xsi:type="object">UmcSelfAnnotationProcessor</item>
+                <item name="construct.umc_module" xsi:type="object">UmcSelfConstructorProcessor</item>
+                <item name="implement.umc_module" xsi:type="object">UmcSelfImplementProcessor</item>
             </argument>
         </arguments>
     </type>
 
-    <virtualType name="UmcEntityClassGenerator" type="Umc\Base\Model\Generator\ClassGenerator">
+    <virtualType name="UmcEntityClassGenerator" type="Umc\Base\Generator\ClassGenerator">
         <arguments>
-            <argument name="defaultScope" xsi:type="string">entity</argument>
-            <argument name="modelProvider" xsi:type="object">Umc\Base\Model\Provider\EntityProvider</argument>
+            <argument name="defaultScope" xsi:type="const">Umc\Base\Config\Source::ENTITY_SCOPE</argument>
+            <argument name="modelProvider" xsi:type="object">Umc\Base\Provider\EntityProvider</argument>
             <argument name="processors" xsi:type="array">
-                <item name="part.entity" xsi:type="string">UmcSelfPartProcessor</item>
-                <item name="part.attribute" xsi:type="string">UmcChildPartProcessor</item>
-                <item name="part.relation" xsi:type="string">UmcEntityRelationPartProcessor</item>
-                <item name="member.entity" xsi:type="string">UmcSelfMemberProcessor</item>
-                <item name="member.attribute" xsi:type="string">UmcChildMemberProcessor</item>
-                <item name="member.parent_entity" xsi:type="string">UmcEntityParentMemberProcessor</item>
-                <item name="member.relation" xsi:type="string">UmcEntityRelationMemberProcessor</item>
-                <item name="annotation.entity" xsi:type="string">UmcSelfAnnotationProcessor</item>
-                <item name="annotation.attribute" xsi:type="string">UmcChildAnnotationProcessor</item>
-                <item name="annotation.relation" xsi:type="string">UmcEntityRelationAnnotationProcessor</item>
-                <item name="implement.entity" xsi:type="string">UmcSelfImplementProcessor</item>
-                <item name="construct.entity" xsi:type="string">UmcSelfConstructorProcessor</item>
-                <item name="construct.relation" xsi:type="string">UmcEntityRelationConstructorProcessor</item>
+                <item name="part.umc_entity" xsi:type="object">UmcSelfPartProcessor</item>
+                <item name="part.umc_attribute" xsi:type="object">UmcChildPartProcessor</item>
+                <item name="member.umc_entity" xsi:type="object">UmcSelfMemberProcessor</item>
+                <item name="member.umc_attribute" xsi:type="object">UmcChildMemberProcessor</item>
+                <item name="annotation.umc_entity" xsi:type="object">UmcSelfAnnotationProcessor</item>
+                <item name="annotation.umc_attribute" xsi:type="object">UmcChildAnnotationProcessor</item>
+                <item name="implement.umc_entity" xsi:type="object">UmcSelfImplementProcessor</item>
+                <item name="construct.umc_entity" xsi:type="object">UmcSelfConstructorProcessor</item>
             </argument>
         </arguments>
     </virtualType>
 
-    <virtualType name="UmcAttributeClassGenerator" type="Umc\Base\Model\Generator\ClassGenerator">
+    <virtualType name="UmcAttributeClassGenerator" type="Umc\Base\Generator\ClassGenerator">
         <arguments>
-            <argument name="defaultScope" xsi:type="string">attribute</argument>
-            <argument name="modelProvider" xsi:type="object">Umc\Base\Model\Provider\AttributeProvider</argument>
+            <argument name="defaultScope" xsi:type="const">Umc\Base\Config\Source::ATTRIBUTE_SCOPE</argument>
+            <argument name="modelProvider" xsi:type="object">Umc\Base\Provider\AttributeProvider</argument>
             <argument name="processors" xsi:type="array">
-                <item name="part.attribute" xsi:type="string">UmcSelfPartProcessor</item>
-                <item name="member.attribute" xsi:type="string">UmcSelfMemberProcessor</item>
-                <item name="annotation.attribute" xsi:type="string">UmcSelfAnnotationProcessor</item>
-                <item name="implement.attribute" xsi:type="string">UmcSelfImplementProcessor</item>
+                <item name="part.umc_attribute" xsi:type="object">UmcSelfPartProcessor</item>
+                <item name="member.umc_attribute" xsi:type="object">UmcSelfMemberProcessor</item>
+                <item name="annotation.umc_attribute" xsi:type="object">UmcSelfAnnotationProcessor</item>
+                <item name="implement.umc_attribute" xsi:type="object">UmcSelfImplementProcessor</item>
             </argument>
         </arguments>
     </virtualType>
 
-    <virtualType name="UmcSiblingsClassGenerator" type="Umc\Base\Model\Generator\ClassGenerator">
+    <virtualType name="UmcEntityXmlGenerator" type="Umc\Base\Generator\XmlGenerator">
         <arguments>
-            <argument name="defaultScope" xsi:type="string">siblings</argument>
-            <argument name="modelProvider" xsi:type="object">Umc\Base\Model\Provider\SiblingsProvider</argument>
+            <argument name="defaultScope" xsi:type="const">Umc\Base\Config\Source::ENTITY_SCOPE</argument>
+            <argument name="modelProvider" xsi:type="object">Umc\Base\Provider\EntityProvider</argument>
             <argument name="processors" xsi:type="array">
-                <item name="part.siblings" xsi:type="string">UmcSelfPartProcessor</item>
-                <item name="implement.siblings" xsi:type="string">UmcSelfImplementProcessor</item>
-                <item name="member.siblings" xsi:type="string">UmcSelfMemberProcessor</item>
+                <item name="part.umc_entity" xsi:type="object">UmcSelfPartProcessor</item>
+                <item name="part.umc_attribute" xsi:type="object">UmcChildPartProcessor</item>
             </argument>
         </arguments>
     </virtualType>
 
-    <virtualType name="UmcEntityXmlGenerator" type="Umc\Base\Model\Generator\XmlGenerator">
+    <virtualType name="UmcSelfPartProcessor" type="Umc\Base\Processor\PartProcessor">
         <arguments>
-            <argument name="defaultScope" xsi:type="string">entity</argument>
-            <argument name="modelProvider" xsi:type="object">Umc\Base\Model\Provider\EntityProvider</argument>
-            <argument name="processors" xsi:type="array">
-                <item name="part.entity" xsi:type="string">UmcSelfPartProcessor</item>
-                <item name="part.attribute" xsi:type="string">UmcChildPartProcessor</item>
-                <item name="part.relation" xsi:type="string">UmcEntityRelationPartProcessor</item>
-                <item name="part.parent_entity" xsi:type="string">UmcEntityParentPartProcessor</item>
-            </argument>
+            <argument name="modelProvider" xsi:type="object">Umc\Base\Provider\Processor\SelfProvider</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="UmcChildPartProcessor" type="Umc\Base\Processor\PartProcessor">
+        <arguments>
+            <argument name="modelProvider" xsi:type="object">Umc\Base\Provider\Processor\ChildProvider</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="UmcGrandChildPartProcessor" type="Umc\Base\Processor\PartProcessor">
+        <arguments>
+            <argument name="modelProvider" xsi:type="object">Umc\Base\Provider\Processor\GrandChildProvider</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="UmcEntityParentPartProcessor" type="Umc\Base\Processor\PartProcessor">
+        <arguments>
+            <argument name="modelProvider" xsi:type="object">Umc\Base\Provider\Processor\EntityParentProvider</argument>
         </arguments>
     </virtualType>
 
-    <virtualType name="UmcSiblingsXmlGenerator" type="Umc\Base\Model\Generator\XmlGenerator">
+    <virtualType name="UmcSelfMemberProcessor" type="Umc\Base\Processor\MemberProcessor">
         <arguments>
-            <argument name="defaultScope" xsi:type="string">siblings</argument>
-            <argument name="modelProvider" xsi:type="object">Umc\Base\Model\Provider\SiblingsProvider</argument>
-            <argument name="processors" xsi:type="array">
-                <item name="part.siblings" xsi:type="string">UmcSelfPartProcessor</item>
-            </argument>
+            <argument name="modelProvider" xsi:type="object">Umc\Base\Provider\Processor\SelfProvider</argument>
         </arguments>
     </virtualType>
-    
-    <virtualType name="UmcSelfPartProcessor" type="Umc\Base\Model\Processor\PartProcessor">
+    <virtualType name="UmcChildMemberProcessor" type="Umc\Base\Processor\MemberProcessor">
         <arguments>
-            <argument name="modelProvider" xsi:type="object">Umc\Base\Model\Provider\Processor\SelfProvider</argument>
+            <argument name="modelProvider" xsi:type="object">Umc\Base\Provider\Processor\ChildProvider</argument>
         </arguments>
     </virtualType>
-    <virtualType name="UmcChildPartProcessor" type="Umc\Base\Model\Processor\PartProcessor">
+    <virtualType name="UmcEntityParentMemberProcessor" type="Umc\Base\Processor\MemberProcessor">
         <arguments>
-            <argument name="modelProvider" xsi:type="object">Umc\Base\Model\Provider\Processor\ChildProvider</argument>
-        </arguments>
-    </virtualType>
-    <virtualType name="UmcGrandChildPartProcessor" type="Umc\Base\Model\Processor\PartProcessor">
-        <arguments>
-            <argument name="modelProvider" xsi:type="object">Umc\Base\Model\Provider\Processor\GrandChildProvider</argument>
-        </arguments>
-    </virtualType>
-    <virtualType name="UmcRelationPartProcessor" type="Umc\Base\Model\Processor\PartProcessor">
-        <arguments>
-            <argument name="modelProvider" xsi:type="object">Umc\Base\Model\Provider\Processor\RelationProvider</argument>
-        </arguments>
-    </virtualType>
-    <virtualType name="UmcEntityRelationPartProcessor" type="Umc\Base\Model\Processor\PartProcessor">
-        <arguments>
-            <argument name="modelProvider" xsi:type="object">Umc\Base\Model\Provider\Processor\EntityRelationProvider</argument>
-        </arguments>
-    </virtualType>
-    <virtualType name="UmcEntityParentPartProcessor" type="Umc\Base\Model\Processor\PartProcessor">
-        <arguments>
-            <argument name="modelProvider" xsi:type="object">Umc\Base\Model\Provider\Processor\EntityParentProvider</argument>
+            <argument name="modelProvider" xsi:type="object">Umc\Base\Provider\Processor\EntityParentProvider</argument>
         </arguments>
     </virtualType>
 
-    <virtualType name="UmcSelfMemberProcessor" type="Umc\Base\Model\Processor\MemberProcessor">
+    <virtualType name="UmcSelfImplementProcessor" type="Umc\Base\Processor\ImplementProcessor">
         <arguments>
-            <argument name="modelProvider" xsi:type="object">Umc\Base\Model\Provider\Processor\SelfProvider</argument>
-        </arguments>
-    </virtualType>
-    <virtualType name="UmcChildMemberProcessor" type="Umc\Base\Model\Processor\MemberProcessor">
-        <arguments>
-            <argument name="modelProvider" xsi:type="object">Umc\Base\Model\Provider\Processor\ChildProvider</argument>
-        </arguments>
-    </virtualType>
-    <virtualType name="UmcRelationMemberProcessor" type="Umc\Base\Model\Processor\MemberProcessor">
-        <arguments>
-            <argument name="modelProvider" xsi:type="object">Umc\Base\Model\Provider\Processor\RelationProvider</argument>
-        </arguments>
-    </virtualType>
-    <virtualType name="UmcEntityRelationMemberProcessor" type="Umc\Base\Model\Processor\MemberProcessor">
-        <arguments>
-            <argument name="modelProvider" xsi:type="object">Umc\Base\Model\Provider\Processor\EntityRelationProvider</argument>
-        </arguments>
-    </virtualType>
-    <virtualType name="UmcEntityParentMemberProcessor" type="Umc\Base\Model\Processor\MemberProcessor">
-        <arguments>
-            <argument name="modelProvider" xsi:type="object">Umc\Base\Model\Provider\Processor\EntityParentProvider</argument>
+            <argument name="modelProvider" xsi:type="object">Umc\Base\Provider\Processor\SelfProvider</argument>
         </arguments>
     </virtualType>
 
-    <virtualType name="UmcSelfImplementProcessor" type="Umc\Base\Model\Processor\ImplementProcessor">
+    <virtualType name="UmcSelfAnnotationProcessor" type="Umc\Base\Processor\AnnotationProcessor">
         <arguments>
-            <argument name="modelProvider" xsi:type="object">Umc\Base\Model\Provider\Processor\SelfProvider</argument>
+            <argument name="modelProvider" xsi:type="object">Umc\Base\Provider\Processor\SelfProvider</argument>
         </arguments>
     </virtualType>
-
-    <virtualType name="UmcSelfAnnotationProcessor" type="Umc\Base\Model\Processor\AnnotationProcessor">
+    <virtualType name="UmcChildAnnotationProcessor" type="Umc\Base\Processor\AnnotationProcessor">
         <arguments>
-            <argument name="modelProvider" xsi:type="object">Umc\Base\Model\Provider\Processor\SelfProvider</argument>
+            <argument name="modelProvider" xsi:type="object">Umc\Base\Provider\Processor\ChildProvider</argument>
         </arguments>
     </virtualType>
-    <virtualType name="UmcChildAnnotationProcessor" type="Umc\Base\Model\Processor\AnnotationProcessor">
+    <virtualType name="UmcSelfConstructorProcessor" type="Umc\Base\Processor\ConstructorProcessor">
         <arguments>
-            <argument name="modelProvider" xsi:type="object">Umc\Base\Model\Provider\Processor\ChildProvider</argument>
+            <argument name="modelProvider" xsi:type="object">Umc\Base\Provider\Processor\SelfProvider</argument>
         </arguments>
     </virtualType>
-    <virtualType name="UmcEntityRelationAnnotationProcessor" type="Umc\Base\Model\Processor\AnnotationProcessor">
-        <arguments>
-            <argument name="modelProvider" xsi:type="object">Umc\Base\Model\Provider\Processor\EntityRelationProvider</argument>
-        </arguments>
-    </virtualType>
-
-    <virtualType name="UmcSelfConstructorProcessor" type="Umc\Base\Model\Processor\ConstructorProcessor">
-        <arguments>
-            <argument name="modelProvider" xsi:type="object">Umc\Base\Model\Provider\Processor\SelfProvider</argument>
-        </arguments>
-    </virtualType>
-    <virtualType name="UmcEntityRelationConstructorProcessor" type="Umc\Base\Model\Processor\ConstructorProcessor">
-        <arguments>
-            <argument name="modelProvider" xsi:type="object">Umc\Base\Model\Provider\Processor\EntityRelationProvider</argument>
-        </arguments>
-    </virtualType>
-
-    <type name="Umc\Base\Model\Core\Attribute\Type\Country">
+    <type name="Umc\Base\Model\Attribute\Type\Country">
         <arguments>
             <argument name="data" xsi:type="array">
                 <item name="admin_column_type" xsi:type="string">select</item>
-                <item name="column_component" xsi:type="string">select</item>
+                <item name="column_component" xsi:type="string">Magento_Ui/js/grid/columns/select</item>
                 <item name="edit_form_type" xsi:type="string">select</item>
                 <item name="filter_type" xsi:type="string">select</item>
                 <item name="full_text" xsi:type="boolean">false</item>
@@ -770,11 +776,13 @@
                 <item name="setup_length" xsi:type="string">3</item>
                 <item name="sql_type_const" xsi:type="string">TYPE_TEXT</item>
                 <item name="grid_data_type" xsi:type="string">select</item>
+                <item name="form_data_type" xsi:type="string">text</item>
+                <item name="form_element" xsi:type="string">select</item>
             </argument>
         </arguments>
     </type>
 
-    <type name="Umc\Base\Model\Core\Attribute\Type\CountryMultiselect">
+    <type name="Umc\Base\Model\Attribute\Type\CountryMultiselect">
         <arguments>
             <argument name="data" xsi:type="array">
                 <item name="admin_column_type" xsi:type="string" />
@@ -788,14 +796,16 @@
                 <item name="setup_length" xsi:type="string">'64k'</item>
                 <item name="sql_type_const" xsi:type="string">TYPE_TEXT</item>
                 <item name="grid_data_type" xsi:type="string" />
+                <item name="form_data_type" xsi:type="string">text</item>
+                <item name="form_element" xsi:type="string">multiselect</item>
             </argument>
         </arguments>
     </type>
-    <type name="Umc\Base\Model\Core\Attribute\Type\Date">
+    <type name="Umc\Base\Model\Attribute\Type\Date">
         <arguments>
             <argument name="data" xsi:type="array">
                 <item name="admin_column_type" xsi:type="string">date</item>
-                <item name="column_component" xsi:type="string">date</item>
+                <item name="column_component" xsi:type="string">Magento_Ui/js/grid/columns/date</item>
                 <item name="edit_form_type" xsi:type="string">date</item>
                 <item name="filter_type" xsi:type="string">dateRange</item>
                 <item name="full_text" xsi:type="boolean">false</item>
@@ -805,10 +815,12 @@
                 <item name="setup_length" xsi:type="string">null</item>
                 <item name="sql_type_const" xsi:type="string">TYPE_DATETIME</item>
                 <item name="grid_data_type" xsi:type="string">date</item>
+                <item name="form_data_type" xsi:type="string">text</item>
+                <item name="form_element" xsi:type="string">date</item>
             </argument>
         </arguments>
     </type>
-    <type name="Umc\Base\Model\Core\Attribute\Type\Decimal">
+    <type name="Umc\Base\Model\Attribute\Type\Decimal">
         <arguments>
             <argument name="data" xsi:type="array">
                 <item name="admin_column_type" xsi:type="string">text</item>
@@ -822,14 +834,16 @@
                 <item name="setup_length" xsi:type="string">'12,4'</item>
                 <item name="sql_type_const" xsi:type="string">TYPE_DECIMAL</item>
                 <item name="grid_data_type" xsi:type="string">text</item>
+                <item name="form_data_type" xsi:type="string">text</item>
+                <item name="form_element" xsi:type="string">input</item>
             </argument>
         </arguments>
     </type>
-    <type name="Umc\Base\Model\Core\Attribute\Type\Dropdown">
+    <type name="Umc\Base\Model\Attribute\Type\Dropdown">
         <arguments>
             <argument name="data" xsi:type="array">
                 <item name="admin_column_type" xsi:type="string">select</item>
-                <item name="column_component" xsi:type="string">select</item>
+                <item name="column_component" xsi:type="string">Magento_Ui/js/grid/columns/select</item>
                 <item name="edit_form_type" xsi:type="string">select</item>
                 <item name="filter_type" xsi:type="string">select</item>
                 <item name="full_text" xsi:type="boolean">false</item>
@@ -839,10 +853,12 @@
                 <item name="setup_length" xsi:type="string">null</item>
                 <item name="sql_type_const" xsi:type="string">TYPE_INTEGER</item>
                 <item name="grid_data_type" xsi:type="string">select</item>
+                <item name="form_data_type" xsi:type="string">int</item>
+                <item name="form_element" xsi:type="string">select</item>
             </argument>
         </arguments>
     </type>
-    <type name="Umc\Base\Model\Core\Attribute\Type\File">
+    <type name="Umc\Base\Model\Attribute\Type\File">
         <arguments>
             <argument name="data" xsi:type="array">
                 <item name="admin_column_type" xsi:type="string" />
@@ -856,10 +872,11 @@
                 <item name="setup_length" xsi:type="string">255</item>
                 <item name="sql_type_const" xsi:type="string">TYPE_TEXT</item>
                 <item name="grid_data_type" xsi:type="string" />
+                <item name="form_element" xsi:type="string">fileUploader</item>
             </argument>
         </arguments>
     </type>
-    <type name="Umc\Base\Model\Core\Attribute\Type\Image">
+    <type name="Umc\Base\Model\Attribute\Type\Image">
         <arguments>
             <argument name="data" xsi:type="array">
                 <item name="admin_column_type" xsi:type="string" />
@@ -873,10 +890,11 @@
                 <item name="setup_length" xsi:type="string">255</item>
                 <item name="sql_type_const" xsi:type="string">TYPE_TEXT</item>
                 <item name="grid_data_type" xsi:type="string" />
+                <item name="form_element" xsi:type="string">fileUploader</item>
             </argument>
         </arguments>
     </type>
-    <type name="Umc\Base\Model\Core\Attribute\Type\Int">
+    <type name="Umc\Base\Model\Attribute\Type\Integer">
         <arguments>
             <argument name="data" xsi:type="array">
                 <item name="admin_column_type" xsi:type="string">text</item>
@@ -890,10 +908,12 @@
                 <item name="setup_length" xsi:type="string">null</item>
                 <item name="sql_type_const" xsi:type="string">TYPE_INTEGER</item>
                 <item name="grid_data_type" xsi:type="string">text</item>
+                <item name="form_data_type" xsi:type="string">int</item>
+                <item name="form_element" xsi:type="string">input</item>
             </argument>
         </arguments>
     </type>
-    <type name="Umc\Base\Model\Core\Attribute\Type\Multiselect">
+    <type name="Umc\Base\Model\Attribute\Type\Multiselect">
         <arguments>
             <argument name="data" xsi:type="array">
                 <item name="admin_column_type" xsi:type="string" />
@@ -907,10 +927,12 @@
                 <item name="setup_length" xsi:type="string">'64k'</item>
                 <item name="sql_type_const" xsi:type="string">TYPE_TEXT</item>
                 <item name="grid_data_type" xsi:type="string" />
+                <item name="form_data_type" xsi:type="string">int</item>
+                <item name="form_element" xsi:type="string">multiselect</item>
             </argument>
         </arguments>
     </type>
-    <type name="Umc\Base\Model\Core\Attribute\Type\Text">
+    <type name="Umc\Base\Model\Attribute\Type\Text">
         <arguments>
             <argument name="data" xsi:type="array">
                 <item name="admin_column_type" xsi:type="string">text</item>
@@ -924,10 +946,12 @@
                 <item name="setup_length" xsi:type="string">255</item>
                 <item name="sql_type_const" xsi:type="string">TYPE_TEXT</item>
                 <item name="grid_data_type" xsi:type="string">text</item>
+                <item name="form_data_type" xsi:type="string">text</item>
+                <item name="form_element" xsi:type="string">input</item>
             </argument>
         </arguments>
     </type>
-    <type name="Umc\Base\Model\Core\Attribute\Type\Textarea">
+    <type name="Umc\Base\Model\Attribute\Type\Textarea">
         <arguments>
             <argument name="data" xsi:type="array">
                 <item name="admin_column_type" xsi:type="string" />
@@ -941,14 +965,16 @@
                 <item name="setup_length" xsi:type="string">'64k'</item>
                 <item name="sql_type_const" xsi:type="string">TYPE_TEXT</item>
                 <item name="grid_data_type" xsi:type="string" />
+                <item name="form_data_type" xsi:type="string">text</item>
+                <item name="form_element" xsi:type="string">textarea</item>
             </argument>
         </arguments>
     </type>
-    <type name="Umc\Base\Model\Core\Attribute\Type\Yesno">
+    <type name="Umc\Base\Model\Attribute\Type\Yesno">
         <arguments>
             <argument name="data" xsi:type="array">
                 <item name="admin_column_type" xsi:type="string">select</item>
-                <item name="column_component" xsi:type="string">select</item>
+                <item name="column_component" xsi:type="string">Magento_Ui/js/grid/columns/select</item>
                 <item name="edit_form_type" xsi:type="string">select</item>
                 <item name="filter_type" xsi:type="string">select</item>
                 <item name="full_text" xsi:type="boolean">false</item>
@@ -958,7 +984,259 @@
                 <item name="setup_length" xsi:type="string">1</item>
                 <item name="sql_type_const" xsi:type="string">TYPE_INTEGER</item>
                 <item name="grid_data_type" xsi:type="string">select</item>
+                <item name="form_data_type" xsi:type="string">boolean</item>
+                <item name="form_element" xsi:type="string">checkbox</item>
             </argument>
         </arguments>
     </type>
+    <!-- [+] Dragons live here. Do not enter -->
+    <virtualType name="UmcConfigArgumentReaderInterpreter" type="Magento\Framework\Data\Argument\Interpreter\Composite">
+        <arguments>
+            <argument name="interpreters" xsi:type="array">
+                <item name="options" xsi:type="object">Magento\Framework\View\Layout\Argument\Interpreter\Options</item>
+                <item name="array" xsi:type="object">UmcConfigConverterArrayArgumentInterpreterProxy</item>
+                <item name="boolean" xsi:type="object">Magento\Framework\Data\Argument\Interpreter\Boolean</item>
+                <item name="number" xsi:type="object">Magento\Framework\Data\Argument\Interpreter\Number</item>
+                <item name="string" xsi:type="object">Magento\Framework\Data\Argument\Interpreter\StringUtils</item>
+                <item name="null" xsi:type="object">Magento\Framework\Data\Argument\Interpreter\NullType</item>
+                <item name="object" xsi:type="object">Magento\Framework\View\Layout\Argument\Interpreter\DataObject</item>
+                <item name="url" xsi:type="object">Magento\Framework\View\Layout\Argument\Interpreter\Passthrough</item>
+                <item name="helper" xsi:type="object">Magento\Framework\View\Layout\Argument\Interpreter\Passthrough</item>
+                <item name="const" xsi:type="object">Magento\Framework\Data\Argument\Interpreter\Constant</item>
+            </argument>
+            <argument name="discriminator" xsi:type="const">Magento\Framework\View\Model\Layout\Merge::TYPE_ATTRIBUTE</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="UmcConfigConverterArrayArgumentInterpreterProxy" type="Magento\Framework\Data\Argument\InterpreterInterface\Proxy">
+        <arguments>
+            <argument name="instanceName" xsi:type="string">UmcConfigArrayArgumentInterpreter</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="UmcConfigArrayArgumentInterpreter" type="Magento\Framework\Data\Argument\Interpreter\ArrayType">
+        <arguments>
+            <argument name="itemInterpreter" xsi:type="object">UmcConfigArgumentInterpreterInternal</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="UmcConfigArgumentInterpreterInternal" type="Magento\Framework\Data\Argument\Interpreter\Composite">
+        <arguments>
+            <argument name="interpreters" xsi:type="array">
+                <item name="options" xsi:type="object">Magento\Framework\View\Layout\Argument\Interpreter\Options</item>
+                <item name="array" xsi:type="object">UmcConfigConverterArrayArgumentInterpreterProxy</item>
+                <item name="boolean" xsi:type="object">Magento\Framework\Data\Argument\Interpreter\Boolean</item>
+                <item name="number" xsi:type="object">Magento\Framework\Data\Argument\Interpreter\Number</item>
+                <item name="string" xsi:type="object">Magento\Framework\Data\Argument\Interpreter\StringUtils</item>
+                <item name="null" xsi:type="object">Magento\Framework\Data\Argument\Interpreter\NullType</item>
+                <item name="object" xsi:type="object">Magento\Framework\View\Layout\Argument\Interpreter\DataObject</item>
+                <item name="url" xsi:type="object">Magento\Framework\View\Layout\Argument\Interpreter\Url</item>
+                <item name="helper" xsi:type="object">Magento\Framework\View\Layout\Argument\Interpreter\HelperMethod</item>
+                <item name="const" xsi:type="object">Magento\Framework\Data\Argument\Interpreter\Constant</item>
+            </argument>
+            <argument name="discriminator" xsi:type="const">Magento\Framework\View\Model\Layout\Merge::TYPE_ATTRIBUTE</argument>
+        </arguments>
+    </virtualType>
+    <!-- [+] Dragons live here. Do not enter -->
+
+    <virtualType name="UmcSourceEntityType" type="Umc\Base\Source\Type">
+        <arguments>
+            <argument name="entityCode" xsi:type="const">Umc\Base\Api\Data\EntityInterface::ENTITY_CODE</argument>
+            <argument name="emptyLabel" xsi:type="string" translate="true">Select Entity Type</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="UmcSourceAttributeType" type="Umc\Base\Source\Type">
+        <arguments>
+            <argument name="entityCode" xsi:type="const">Umc\Base\Api\Data\AttributeInterface::ENTITY_CODE</argument>
+            <argument name="emptyLabel" xsi:type="string" translate="true">Select Attribute Type</argument>
+        </arguments>
+    </virtualType>
+    <!--[+] validators -->
+    <virtualType name="UmcModuleHasEntitiesValidator" type="Umc\Base\Validator\RequireChildValidator">
+        <arguments>
+            <argument name="errorMessage" xsi:type="string" translate="true">Each module must contain at least one entity.</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="UmcEntityHasAttributesValidator" type="Umc\Base\Validator\RequireChildValidator">
+        <arguments>
+            <argument name="errorMessage" xsi:type="string" translate="true">Each entity must contain at least one attribute.</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="UmcEntityNameValidator" type="Umc\Base\Validator\EqualsValidator">
+        <arguments>
+            <argument name="fieldOne" xsi:type="string">name_singular</argument>
+            <argument name="fieldTwo" xsi:type="string">name_plural</argument>
+            <argument name="errorMessage" xsi:type="string">%1 and %2 should not have the same value.</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="UmcEntityHasNameAttributesValidator" type="Umc\Base\Validator\MethodValidator">
+        <arguments>
+            <argument name="method" xsi:type="string">getNameAttribute</argument>
+            <argument name="errorMessage" xsi:type="string">All entities should have a name attribute.</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="UmcModuleValidatorPool" type="Umc\Base\Validator\ValidatorPool">
+        <arguments>
+            <argument name="validators" xsi:type="array">
+                <item name="fields" xsi:type="object">Umc\Base\Validator\FieldValidator</item>
+                <item name="entities" xsi:type="object">UmcModuleHasEntitiesValidator</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="UmcEntityValidatorPool" type="Umc\Base\Validator\ValidatorPool">
+        <arguments>
+            <argument name="validators" xsi:type="array">
+                <item name="fields" xsi:type="object">Umc\Base\Validator\FieldValidator</item>
+                <item name="attributes" xsi:type="object">UmcEntityHasAttributesValidator</item>
+                <item name="name" xsi:type="object">UmcEntityNameValidator</item>
+                <item name="name_attribute" xsi:type="object">UmcEntityHasNameAttributesValidator</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="UmcAttributeValidatorPool" type="Umc\Base\Validator\ValidatorPool">
+        <arguments>
+            <argument name="validators" xsi:type="array">
+                <item name="fields" xsi:type="object">Umc\Base\Validator\FieldValidator</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <type name="Umc\Base\Validator\ModuleValidator">
+        <arguments>
+            <argument name="validatorPools" xsi:type="array">
+                <item name="umc_module" xsi:type="object">UmcModuleValidatorPool</item>
+                <item name="umc_entity" xsi:type="object">UmcEntityValidatorPool</item>
+                <item name="umc_attribute" xsi:type="object">UmcAttributeValidatorPool</item>
+            </argument>
+        </arguments>
+    </type>
+    <!--[-] validators -->
+
+    <!--[+] help fieldsets -->
+    <type name="Umc\Base\Model\Help\Version">
+        <arguments>
+            <argument name="columns" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="key" xsi:type="string">module</item>
+                    <item name="sort" xsi:type="number">10</item>
+                    <item name="label" xsi:type="string" translate="true">Module</item>
+                </item>
+                <item name="1" xsi:type="array">
+                    <item name="key" xsi:type="string">version</item>
+                    <item name="sort" xsi:type="number">20</item>
+                    <item name="label" xsi:type="string" translate="true">Version</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Umc\Base\Model\Help\Fields">
+        <arguments>
+            <argument name="columns" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="key" xsi:type="string">field</item>
+                    <item name="sort" xsi:type="number">10</item>
+                    <item name="label" xsi:type="string" translate="true">Field</item>
+                </item>
+                <item name="1" xsi:type="array">
+                    <item name="key" xsi:type="string">type</item>
+                    <item name="sort" xsi:type="number">20</item>
+                    <item name="label" xsi:type="string" translate="true">Type</item>
+                </item>
+                <item name="2" xsi:type="array">
+                    <item name="key" xsi:type="string">description</item>
+                    <item name="sort" xsi:type="number">30</item>
+                    <item name="label" xsi:type="string" translate="true">Description</item>
+                </item>
+            </argument>
+            <argument name="entities" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="key" xsi:type="const">Umc\Base\Api\Data\ModuleInterface::ENTITY_CODE</item>
+                    <item name="label" xsi:type="string" translate="true">MODULE</item>
+                </item>
+                <item name="1" xsi:type="array">
+                    <item name="key" xsi:type="const">Umc\Base\Api\Data\EntityInterface::ENTITY_CODE</item>
+                    <item name="label" xsi:type="string" translate="true">ENTITY</item>
+                </item>
+                <item name="2" xsi:type="array">
+                    <item name="key" xsi:type="const">Umc\Base\Api\Data\AttributeInterface::ENTITY_CODE</item>
+                    <item name="label" xsi:type="string" translate="true">ATTRIBUTE</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+    <virtualType name="UmcModelHelpModuleRestrictions" type="Umc\Base\Model\Help\Restrictions">
+        <arguments>
+            <argument name="entityCode" xsi:type="const">Umc\Base\Api\Data\ModuleInterface::ENTITY_CODE</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="UmcModelHelpEntityRestrictions" type="Umc\Base\Model\Help\Restrictions">
+        <arguments>
+            <argument name="entityCode" xsi:type="const">Umc\Base\Api\Data\EntityInterface::ENTITY_CODE</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="UmcModelHelpAttributeRestrictions" type="Umc\Base\Model\Help\Restrictions">
+        <arguments>
+            <argument name="entityCode" xsi:type="const">Umc\Base\Api\Data\AttributeInterface::ENTITY_CODE</argument>
+        </arguments>
+    </virtualType>
+    <type name="Umc\Base\Model\Help\Restrictions">
+        <arguments>
+            <argument name="columns" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="key" xsi:type="string">field</item>
+                    <item name="sort" xsi:type="number">10</item>
+                    <item name="label" xsi:type="string" translate="true">Field</item>
+                </item>
+                <item name="1" xsi:type="array">
+                    <item name="key" xsi:type="string">value</item>
+                    <item name="sort" xsi:type="number">20</item>
+                    <item name="label" xsi:type="string" translate="true">Value</item>
+                </item>
+                <item name="2" xsi:type="array">
+                    <item name="key" xsi:type="string">message</item>
+                    <item name="sort" xsi:type="number">30</item>
+                    <item name="label" xsi:type="string" translate="true">Message</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Umc\Base\Model\Help\Files">
+         <arguments>
+             <argument name="columns" xsi:type="array">
+                 <item name="0" xsi:type="array">
+                     <item name="key" xsi:type="string">label</item>
+                     <item name="sort" xsi:type="number">10</item>
+                     <item name="label" xsi:type="string" translate="true">Label</item>
+                 </item>
+                 <item name="1" xsi:type="array">
+                     <item name="key" xsi:type="string">scope</item>
+                     <item name="sort" xsi:type="number">20</item>
+                     <item name="label" xsi:type="string" translate="true">Scope</item>
+                 </item>
+                 <item name="2" xsi:type="array">
+                     <item name="key" xsi:type="string">destination</item>
+                     <item name="sort" xsi:type="number">30</item>
+                     <item name="label" xsi:type="string" translate="true">Destination</item>
+                 </item>
+                 <item name="3" xsi:type="array">
+                     <item name="key" xsi:type="string">description</item>
+                     <item name="sort" xsi:type="number">40</item>
+                     <item name="label" xsi:type="string" translate="true">Description</item>
+                 </item>
+                 <item name="4" xsi:type="array">
+                     <item name="key" xsi:type="string">condition</item>
+                     <item name="sort" xsi:type="number">50</item>
+                     <item name="label" xsi:type="string" translate="true">Condition</item>
+                 </item>
+             </argument>
+             <argument name="conditionProcessors" xsi:type="array">
+                 <item name="global" xsi:type="object">Umc\Base\Model\Help\Condition\ModuleCondition</item>
+                 <item name="entity" xsi:type="object">Umc\Base\Model\Help\Condition\EntityCondition</item>
+                 <item name="attribute" xsi:type="object">Umc\Base\Model\Help\Condition\AttributeCondition</item>
+                 <item name="no_condition" xsi:type="object">Umc\Base\Model\Help\Condition\NoCondition</item>
+             </argument>
+        </arguments>
+    </type>
+    <type name="Umc\Base\Model\Help\Condition\NoCondition">
+        <arguments>
+            <argument name="text" xsi:type="string" translate="true">Always generated</argument>
+        </arguments>
+    </type>
+    <!--[-] help fieldsets -->
 </config>

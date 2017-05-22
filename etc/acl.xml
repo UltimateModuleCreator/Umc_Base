@@ -12,7 +12,7 @@
  *
  * @category  Umc
  * @package   Umc_Base
- * @copyright 2015 Marius Strajeru
+ * @copyright Marius Strajeru
  * @license   http://opensource.org/licenses/mit-license.php MIT License
  * @author    Marius Strajeru <ultimate.module.creator@gmail.com>
  */
@@ -21,14 +21,16 @@
     <acl>
         <resources>
             <resource id="Magento_Backend::admin">
-                <resource id="Umc_Base::umc" title="Ultimate Module Creator" sortOrder="30" />
-                <resource id="Magento_Backend::stores">
-                    <resource id="Magento_Backend::stores_settings">
-                        <resource id="Magento_Config::config">
-                            <resource id="Umc_Base::config_umc" title="Ultimate Module Creator" />
+                <!--<resource id="Magento_Backend::system">-->
+                    <resource id="Umc_Base::umc" title="Ultimate Module Creator" sortOrder="30" />
+                    <resource id="Magento_Backend::stores">
+                        <resource id="Magento_Backend::stores_settings">
+                            <resource id="Magento_Config::config">
+                                <resource id="Umc_Base::config_umc" title="Ultimate Module Creator" />
+                            </resource>
                         </resource>
                     </resource>
-                </resource>
+                <!--</resource>-->
             </resource>
         </resources>
     </acl>

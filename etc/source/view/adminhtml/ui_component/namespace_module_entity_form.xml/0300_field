@@ -1,0 +1,11 @@
+        <field name="{{code}}">
+            <argument name="data" xsi:type="array">{{uiFormOptions}}
+                <item name="config" xsi:type="array">{{formDataType}}
+                    <item name="label" xsi:type="string" translate="true">{{LabelEscaped}}</item>
+                    <item name="formElement" xsi:type="string">{{formElement}}</item>
+                    <item name="source" xsi:type="string">{{entity}}</item>
+                    <item name="sortOrder" xsi:type="number">{{position}}</item>
+                    <item name="dataScope" xsi:type="string">{{code}}</item>{{additionalFormConfig}}
+                </item>
+            </argument>
+        </field>

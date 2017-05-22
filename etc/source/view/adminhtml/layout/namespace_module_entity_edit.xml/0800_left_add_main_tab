@@ -1,4 +1,0 @@
-                <action method="addTab">
-                    <argument name="name" xsi:type="string">{{entity}}</argument>
-                    <argument name="block" xsi:type="string">{{namespace}}_{{module}}_{{entity}}_edit_tab_{{entity}}</argument>
-                </action>

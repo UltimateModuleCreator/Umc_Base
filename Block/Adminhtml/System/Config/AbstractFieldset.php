@@ -11,7 +11,7 @@
  *
  * @category  Umc
  * @package   Umc_Base
- * @copyright 2015 Marius Strajeru
+ * @copyright Marius Strajeru
  * @license   http://opensource.org/licenses/mit-license.php MIT License
  * @author    Marius Strajeru <ultimate.module.creator@gmail.com>
  */
@@ -19,16 +19,18 @@ namespace Umc\Base\Block\Adminhtml\System\Config;
 
 use Magento\Backend\Block\Context;
 use Magento\Backend\Model\Auth\Session;
+use Magento\Config\Block\System\Config\Form;
 use Magento\Config\Block\System\Config\Form\Field as FieldRenderer;
 use Magento\Config\Block\System\Config\Form\Fieldset;
 use Magento\Framework\Data\Form\Element\AbstractElement;
-use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Option\ArrayInterface;
+use Magento\Framework\Phrase;
 use Magento\Framework\View\Helper\Js as JsHelper;
-use Umc\Base\Model\Config\Form as FormConfig;
-use Umc\Base\Model\Core\AbstractModel;
+use Umc\Base\Config\Form as FormConfig;
 
 /**
- * @method getForm()
+ * @method Form getForm()
  * @method getConfigData()
  */
 class AbstractFieldset extends Fieldset
@@ -43,51 +45,36 @@ class AbstractFieldset extends Fieldset
     /**
      * form config
      *
-     * @var \Umc\Base\Model\Config\Form
+     * @var \Umc\Base\Config\Form
      */
-
     protected $formConfig;
 
     /**
-     * object manager reference
-     *
-     * @var \Magento\Framework\ObjectManagerInterface
+     * @var string
      */
-    protected $objectManager;
+    protected $entityCode;
 
     /**
-     * model in question
-     *
-     * @var \Umc\Base\Model\Core\AbstractModel
-     */
-    protected $model;
-
-    /**
-     * constructor
-     *
      * @param FormConfig $formConfig
-     * @param ObjectManagerInterface $objectManager
      * @param FieldRenderer $fieldRenderer
-     * @param AbstractModel $model
      * @param Context $context
      * @param Session $authSession
      * @param JsHelper $jsHelper
+     * @param string $entityCode
      * @param array $data
      */
     public function __construct(
-        FormConfig $formConfig,
-        ObjectManagerInterface $objectManager,
-        FieldRenderer $fieldRenderer,
-        AbstractModel $model,
         Context $context,
         Session $authSession,
         JsHelper $jsHelper,
+        $entityCode,
+        FormConfig $formConfig,
+        FieldRenderer $fieldRenderer,
         array $data = []
     ) {
         $this->formConfig    = $formConfig;
-        $this->objectManager = $objectManager;
         $this->fieldRenderer = $fieldRenderer;
-        $this->model         = $model;
+        $this->entityCode    = $entityCode;
         parent::__construct($context, $authSession, $jsHelper, $data);
     }
 
@@ -98,7 +85,7 @@ class AbstractFieldset extends Fieldset
      */
     public function getFormName()
     {
-        return $this->model->getEntityCode();
+        return $this->entityCode;
     }
 
     /**
@@ -109,29 +96,31 @@ class AbstractFieldset extends Fieldset
      */
     public function render(AbstractElement $element)
     {
-        $html = $this->_getHeaderHtml($element);
+        $html = '';
         $formName = $this->getFormName();
         $config = $this->formConfig->getConfig('form/'.$formName, true, []);
-        foreach ($config['fieldset'] as $fieldset) {
-            foreach ($fieldset['field'] as $id => $field) {
-                if ($this->formConfig->getBoolValue($field, 'system') && $field['type'] != 'hidden') {
-                    $html.= $this->getFieldHtml($element, $id, $field);
+        if (isset($config['fieldset'])) {
+            $html .= $this->_getHeaderHtml($element);
+            foreach ($config['fieldset'] as $fieldset) {
+                foreach ($fieldset['field'] as $id => $field) {
+                    if ($this->formConfig->getBoolValue($field, 'system') && $field['type'] != 'hidden') {
+                        $html .= $this->getFieldHtml($element, $id, $field);
+                    }
                 }
             }
+            $html .= $this->_getFooterHtml($element);
         }
-        $html .= $this->_getFooterHtml($element);
         return $html;
     }
 
     /**
-     * get field html
-     *
-     * @param $fieldset
-     * @param $key
-     * @param $field
-     * @return mixed
+     * @param AbstractElement $fieldset
+     * @param string $key
+     * @param string $field
+     * @return string
+     * @throws LocalizedException
      */
-    protected function getFieldHtml($fieldset, $key, $field)
+    protected function getFieldHtml(AbstractElement $fieldset, $key, $field)
     {
         $configData = $this->getConfigData();
         $formName = $this->getFormName();
@@ -145,24 +134,40 @@ class AbstractFieldset extends Fieldset
             'name'                  => 'groups['.$formName.'][fields]['.$key.'][value]',
             'label'                 => __($field['label']),
             'value'                 => $data,
-            'inherit'               => false,
+            'inherit'               => true,
+            'can_restore_to_default'=> true,
             'can_use_default_value' => false,
             'can_use_website_value' => false,
         ];
         $fieldType = $this->formConfig->getFieldType($field);
         if (in_array($fieldType, ['select', 'multiselect'])) {
-            $settings['values'] = $this->objectManager->create($field['source'])
-                ->toOptionArray(($fieldType == 'select'));
+            if (!isset($field['options'])) {
+                throw new LocalizedException(new Phrase("No options provided for field %1", $field['Label']));
+            }
+            $options = $field['options'];
+            if ($options instanceof ArrayInterface) {
+                $settings['values'] = $options->toOptionArray();
+            } elseif (is_array($options)) {
+                $settings['values'] = $options;
+            } else {
+                throw new LocalizedException(
+                    new Phrase(
+                        "Options for field %1 should be an instance of %2 or an array",
+                        $field['Label'],
+                        ArrayInterface::class
+                    )
+                );
+            }
         }
         if (isset($field['tooltip'])) {
             $settings['tooltip'] = $field['tooltip'];
         }
         $field = $fieldset->addField(
-                $formName.$key,
-                $this->formConfig->getFieldType($field),
-                $settings
-            )
-            ->setRenderer($this->fieldRenderer);
+            $formName.$key,
+            $this->formConfig->getFieldType($field),
+            $settings
+        )
+        ->setRenderer($this->fieldRenderer);
         return $field->toHtml();
     }
 }

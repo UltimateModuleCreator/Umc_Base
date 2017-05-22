@@ -11,69 +11,74 @@
  *
  * @category  Umc
  * @package   Umc_Base
- * @copyright 2015 Marius Strajeru
+ * @copyright Marius Strajeru
  * @license   http://opensource.org/licenses/mit-license.php MIT License
  * @author    Marius Strajeru <ultimate.module.creator@gmail.com>
  */
 ?>
-<?php /** @var \Umc\Base\Block\Adminhtml\Entity $this */ ?>
-<?php if ($this->getIsTemplate()) : ?>
+<?php /** @var \Umc\Base\Block\Adminhtml\Entity $block */ ?>
+<?php if ($block->getIsTemplate()) : ?>
 <script id="entity-template" type="text/x-magento-template">
 <?php endif;?>
-    <div class="entry-edit umc-entity" id="entity-container-<?php echo $this->getIncrement();?>">
-        <div id="entity-<?php echo $this->getIncrement() ?>-wrapper" class="fieldset-wrapper admin__collapsible-block-wrapper opened">
+    <div class="entry-edit umc-entity"
+         id="entity-container-<?php echo $block->escapeHtml($block->getIncrement());?>">
+        <div id="entity-<?php echo $block->escapeHtml($block->getIncrement()) ?>-wrapper"
+             class="fieldset-wrapper admin__collapsible-block-wrapper opened">
             <div class="fieldset-wrapper-title">
                 <div class="col-left">
                     <strong
                         class="admin__collapsible-title"
                         data-toggle="collapse"
-                        data-target="#entity-<?php echo $this->getIncrement() ?>-content">
+                        data-target="#entity-<?php echo $block->escapeHtml($block->getIncrement()) ?>-content">
                         <span class="entity-title">
-                            <?php echo ($this->getEntity()) ? $this->getEntity()->getLabelSingular() : __('Entity %1', $this->getIncrement());?>
+                            <?php echo ($block->getEntity())
+                                ? $block->escapeHtml($block->getEntity()->getLabelSingular())
+                                : $block->escapeHtml(__('Entity %1', $block->getIncrement()));?>
                         </span>
                     </strong>
                 </div>
                 <div class="actions col-right">
-                    <button type="button" title="<?php echo __('Remove entity') ?>" class="action-delete remove-entity">
-                        <span><?php echo __('Remove entity') ?></span>
+                    <button type="button"
+                            title="<?php echo $block->escapeHtml(__('Remove entity')); ?>"
+                            class="action-delete remove-entity">
+                        <span><?php echo $block->escapeHtml(__('Remove entity')); ?></span>
                     </button>
                 </div>
             </div>
-            <div id="entity-<?php echo $this->getIncrement() ?>-content" class="fieldset-wrapper-content in collapse">
+            <div id="entity-<?php echo $block->escapeHtml($block->getIncrement()) ?>-content"
+                 class="fieldset-wrapper-content in collapse">
                 <fieldset class="fieldset">
-                    <?php echo $this->getFormHtml();?>
-                    <div id="entity-<?php echo $this->getIncrement();?>-attributes-container" class="entry-edit">
+                    <?php echo $block->getFormHtml();?>
+                    <div id="entity-<?php echo $block->escapeHtml($block->getIncrement());?>-attributes-container"
+                         class="entry-edit">
                         <div class="fieldset-wrapper collapsable-wrapper">
                             <div class="fieldset-wrapper-title">
                                 <div class="col-left">
-                                    <strong data-target="#entity-<?php echo $this->getIncrement() ?>-attributes" data-toggle="collapse" class="admin__collapsible-title entity-attributes-title">
-                                        <span><?php echo __('Fields / Attributes');?></span>
+                                    <strong data-target="#entity-<?php echo $block->escapeHtml($block->getIncrement()); ?>-attributes"
+                                            data-toggle="collapse"
+                                            class="admin__collapsible-title entity-attributes-title">
+                                        <span><?php echo $block->escapeHtml(__('Fields / Attributes'));?></span>
                                     </strong>
                                 </div>
                                 <div class="col-right actions">
-                                    <button type="button" title="<?php echo __('Add field / attribute');?>" class="action- scalable delete icon-btn add-attribute">
-                                        <span><?php echo __('Add field / attribute');?></span>
+                                    <button type="button" title="<?php echo $block->escapeHtml(__('Add field / attribute'));?>"
+                                            class="action- scalable delete icon-btn add-attribute">
+                                        <span><?php echo $block->escapeHtml(__('Add field / attribute'));?></span>
                                     </button>
                                 </div>
                             </div>
                         </div>
-                        <div id="entity-<?php echo $this->getIncrement() ?>-attributes" class="fieldset-wrapper-content in collapse">
+                        <div id="entity-<?php echo $block->escapeHtml($block->getIncrement()); ?>-attributes"
+                             class="fieldset-wrapper-content in collapse">
                             <div class="box attributes-container">
-                                <?php $_increment = 0; foreach ($this->getAttributes() as $_attribute) : ?>
-                                    <?php
-                                    /** @var \Umc\Base\Block\Adminhtml\Attribute $block */
-                                    $block = $this->getLayout()->createBlock('Umc\Base\Block\Adminhtml\Attribute');
-                                    echo $block->setTemplate('Umc_Base::attribute.phtml')
-                                        ->setAttributeInstance($_attribute)
-                                        ->setEntityId($this->getIncrement())
-                                        ->setIncrement($_increment++)
-                                        ->toHtml();
-                                    ?>
+                                <?php $_increment = 0; foreach ($block->getAttributes() as $_attribute) : ?>
+                                    <?php /** @noEscape */ echo $block->getAttributeBlock($_increment++, $block->getIncrement(), $_attribute)->toHtml(); ?>
                                 <?php endforeach;?>
                             </div>
-                            <button type="button" title="<?php echo __('Add field / attribute');?>" class="action- scalable delete icon-btn add-attribute show-inner">
+                            <button type="button" title="<?php echo $block->escapeHtml(__('Add field / attribute'));?>"
+                                    class="action- scalable delete icon-btn add-attribute show-inner">
                             <span>
-                                <?php echo __('Add field / attribute');?>
+                                <?php echo $block->escapeHtml(__('Add field / attribute'));?>
                             </span>
                             </button>
                         </div>
@@ -82,6 +87,6 @@
             </div>
         </div>
     </div>
-<?php if ($this->getIsTemplate()) : ?>
+<?php if ($block->getIsTemplate()) : ?>
 </script>
 <?php endif;?>

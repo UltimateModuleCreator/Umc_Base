@@ -11,7 +11,7 @@
  *
  * @category  Umc
  * @package   Umc_Base
- * @copyright 2015 Marius Strajeru
+ * @copyright Marius Strajeru
  * @license   http://opensource.org/licenses/mit-license.php MIT License
  * @author    Marius Strajeru <ultimate.module.creator@gmail.com>
  */
@@ -19,13 +19,6 @@ namespace Umc\Base\Model;
 
 use Magento\Framework\DataObject;
 
-/**
- * @method Umc setError(\bool $error)
- * @method Umc setMessage(\string $message)
- * @method Umc setAttributes(array $attributes)
- * @method Umc setHtmlMessage(\string $message)
- * @method Umc setGlue(\string $glue)
- */
 class Umc extends DataObject
 {
     /**
@@ -45,7 +38,7 @@ class Umc extends DataObject
     /**
      * set indentation
      *
-     * @param $padding
+     * @param string $padding
      * @return $this
      */
     public function setPadding($padding)
@@ -68,7 +61,7 @@ class Umc extends DataObject
     /**
      * set end of line
      *
-     * @param $eol
+     * @param string $eol
      * @return $this
      */
     public function setEol($eol)
@@ -104,7 +97,7 @@ class Umc extends DataObject
         $key = array_pop($path);
         foreach ($path as $k) {
             if (!isset($data[$k])) {
-                $data[$k] = array();
+                $data[$k] = [];
             }
             $data = &$data[$k];
         }

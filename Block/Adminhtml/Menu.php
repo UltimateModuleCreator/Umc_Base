@@ -11,25 +11,30 @@
  *
  * @category  Umc
  * @package   Umc_Base
- * @copyright 2015 Marius Strajeru
+ * @copyright Marius Strajeru
  * @license   http://opensource.org/licenses/mit-license.php MIT License
  * @author    Marius Strajeru <ultimate.module.creator@gmail.com>
  */
 namespace Umc\Base\Block\Adminhtml;
 
 use Magento\Backend\Block\Menu as BackendMenu;
+use Magento\Backend\Model\Menu as MenuModel;
+use Magento\Backend\Model\Menu\Item as MenuItem;
 
+/**
+ * @api
+ */
 class Menu extends BackendMenu
 {
     /**
      * draw the menu
      *
-     * @param $menu
+     * @param MenuModel $menu
      * @param string $parentId
      * @param int $level
      * @return string
      */
-    public function renderUmcMenu($menu, $parentId = '', $level = 0)
+    public function renderUmcMenu(MenuModel $menu, $parentId = '', $level = 0)
     {
         $output = '<ul ' . (0 == $level ? 'id="umc-nav"' : '') . ' >';
         $output .= $this->renderSelector($parentId, 0);
@@ -50,21 +55,21 @@ class Menu extends BackendMenu
     /**
      * render the selection link
      *
-     * @param $parentId
-     * @param $sortOrder
+     * @param string $parentId
+     * @param string $sortOrder
      * @return string
      */
     protected function renderSelector($parentId, $sortOrder)
     {
         return '<li class="umc-menu-selector">'
             . '<a class="insert-menu" href="#"'
-            . 'id="'.$parentId.'___'.$sortOrder.'">'.__('Insert here').'</a></li>';
+            . ' id="'.$parentId.'___'.$sortOrder.'">'.__('Insert here').'</a></li>';
     }
 
     /**
      * render menu title
      *
-     * @param $menuItem
+     * @param MenuItem $menuItem
      * @return string
      */
     protected function renderAnchorWithoutLink($menuItem)

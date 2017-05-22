@@ -1,0 +1,4 @@
+    <columns name="{{namespace}}_{{module}}_{{entity}}_columns">
+        <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+

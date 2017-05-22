@@ -1,0 +1,6 @@
+            if (isset($this->{{_}}loadedData[${{entity}}->getId()]['{{code}}'])) {
+                ${{codeCamelCase}} = [];
+                ${{codeCamelCase}}[0]['name'] = ${{entity}}->get{{CodeCamelCase}}();
+                ${{codeCamelCase}}[0]['url'] = ${{entity}}->get{{CodeCamelCase}}Url();
+                $this->{{_}}loadedData[${{entity}}->getId()]['{{code}}'] = ${{codeCamelCase}};
+            }

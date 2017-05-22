@@ -11,11 +11,10 @@
  *
  * @category  Umc
  * @package   Umc_Base
- * @copyright 2015 Marius Strajeru
+ * @copyright Marius Strajeru
  * @license   http://opensource.org/licenses/mit-license.php MIT License
  * @author    Marius Strajeru <ultimate.module.creator@gmail.com>
  */
-
 namespace Umc\Base\Test\Unit\Model;
 
 use PHPUnit_Framework_TestCase;
@@ -26,7 +25,7 @@ class UmcTest extends \PHPUnit_Framework_TestCase
     /**
      * @var Umc
      */
-    private $umc;
+    protected $umc;
 
     /**
      * Prepares the environment before running a test.
@@ -47,7 +46,7 @@ class UmcTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Tests Umc->setPadding()
+     * @tests Umc::setPadding()
      */
     public function testSetPadding()
     {
@@ -56,7 +55,7 @@ class UmcTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Tests Umc->getPadding()
+     * @tests Umc::getPadding()
      */
     public function testGetPadding()
     {
@@ -66,7 +65,7 @@ class UmcTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Tests Umc->setEol()
+     * @tests Umc::setEol()
      */
     public function testSetEol()
     {
@@ -75,7 +74,7 @@ class UmcTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Tests Umc->getEol()
+     * @tests Umc::getEol()
      */
     public function testGetEol()
     {
@@ -84,7 +83,7 @@ class UmcTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Tests Umc->setDataByPath()
+     * @tests Umc::setDataByPath()
      */
     public function testSetDataByPath()
     {

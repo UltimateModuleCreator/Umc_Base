@@ -1,4 +1,0 @@
-        // dispatch event add custom tabs
-        $this->_eventManager->dispatch('adminhtml_{{namespace}}_{{module}}_{{entity}}_tabs', ['tabs' => $this]);
-        return parent::_prepareLayout();
-    }

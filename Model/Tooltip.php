@@ -11,7 +11,7 @@
  *
  * @category  Umc
  * @package   Umc_Base
- * @copyright 2015 Marius Strajeru
+ * @copyright Marius Strajeru
  * @license   http://opensource.org/licenses/mit-license.php MIT License
  * @author    Marius Strajeru <ultimate.module.creator@gmail.com>
  */
@@ -49,8 +49,7 @@ class Tooltip extends Umc
     public function __construct(
         Escaper $escaper,
         array $data = []
-    )
-    {
+    ) {
         $this->escaper = $escaper;
         parent::__construct($data);
     }
@@ -58,7 +57,7 @@ class Tooltip extends Umc
     /**
      * set tooltip title
      *
-     * @param $title
+     * @param string $title
      * @return $this
      */
     public function setTitle($title)
@@ -68,7 +67,7 @@ class Tooltip extends Umc
     }
 
     /**
-     * get toooltip title
+     * get tooltip title
      *
      * @param bool $escaped
      * @return string
@@ -84,7 +83,7 @@ class Tooltip extends Umc
     /**
      * set the tooltip message
      *
-     * @param $message
+     * @param string $message
      * @return $this
      */
     public function setMessage($message)
@@ -98,7 +97,7 @@ class Tooltip extends Umc
      *
      * @return string
      */
-    public function getMessage()
+    public function getMessageHtml()
     {
         return $this->message;
     }

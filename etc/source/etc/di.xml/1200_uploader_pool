@@ -1,0 +1,7 @@
+    <type name="{{Namespace}}\{{Module}}\Model\UploaderPool">
+        <arguments>
+            <argument name="uploaders" xsi:type="array">
+                {{SaveUploaders}}
+            </argument>
+        </arguments>
+    </type>

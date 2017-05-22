@@ -1,0 +1,6 @@
+    <type name="{{Namespace}}\{{Module}}\Controller\Adminhtml\{{Entity}}\MassDelete">
+        <arguments>
+            <argument name="successMessage" xsi:type="string">A total of %1 {{EntitiesLabelEscaped}} have been deleted.</argument>
+            <argument name="errorMessage" xsi:type="string" translate="true">An error occurred while deleting {{EntitiesLabelEscaped}}.</argument>
+        </arguments>
+    </type>

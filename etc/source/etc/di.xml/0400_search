@@ -1,0 +1,4 @@
+                <item name="{{namespace}}_{{module}}_{{entity}}" xsi:type="array">
+                    <item name="class" xsi:type="string">{{Namespace}}\{{Module}}\Model\Backend\Search\{{Entity}}</item>
+                    <item name="acl" xsi:type="string">{{Namespace}}_{{Module}}::{{module}}_{{entity}}</item>
+                </item>

@@ -1,0 +1,198 @@
+    /**
+     * Set base tmp path
+     *
+     * @param string $baseTmpPath
+     *
+     * @return void
+     */
+    public function setBaseTmpPath($baseTmpPath)
+    {
+        $this->{{_}}baseTmpPath = $baseTmpPath;
+    }
+
+    /**
+     * Set base path
+     *
+     * @param string $basePath
+     *
+     * @return void
+     */
+    public function setBasePath($basePath)
+    {
+        $this->{{_}}basePath = $basePath;
+    }
+
+    /**
+     * Set allowed extensions
+     *
+     * @param string[] $allowedExtensions
+     *
+     * @return void
+     */
+    public function setAllowedExtensions($allowedExtensions)
+    {
+        $this->{{_}}allowedExtensions = $allowedExtensions;
+    }
+
+    /**
+     * Retrieve base tmp path
+     *
+     * @return string
+     */
+    public function getBaseTmpPath()
+    {
+        return $this->{{_}}baseTmpPath;
+    }
+
+    /**
+     * Retrieve base path
+     *
+     * @return string
+     */
+    public function getBasePath()
+    {
+        return $this->{{_}}basePath;
+    }
+
+    /**
+     * Retrieve base path
+     *
+     * @return string[]
+     */
+    public function getAllowedExtensions()
+    {
+        return $this->{{_}}allowedExtensions;
+    }
+
+    /**
+     * Retrieve path
+     *
+     * @param string $path
+     * @param string $name
+     * @return string
+     */
+    public function getFilePath($path, $name)
+    {
+        return rtrim($path, '/') . '/' . ltrim($name, '/');
+    }
+
+    /**
+     * Checking file for moving and move it
+     *
+     * @param string $name
+     * @return string
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function moveFileFromTmp($name)
+    {
+        $baseTmpPath = $this->getBaseTmpPath();
+        $basePath = $this->getBasePath();
+
+        $baseFilePath = $this->getFilePath($basePath, $name);
+        $baseTmpFilePath = $this->getFilePath($baseTmpPath, $name);
+
+        try {
+            $this->{{_}}coreFileStorageDatabase->copyFile(
+                $baseTmpFilePath,
+                $baseFilePath
+            );
+            $this->{{_}}mediaDirectory->renameFile(
+                $baseTmpFilePath,
+                $baseFilePath
+            );
+        } catch (\Exception $e) {
+            throw new {{class Magento\Framework\Exception\LocalizedException}}(
+                __('Something went wrong while saving the file(s).')
+            );
+        }
+
+        return $name;
+    }
+
+    /**
+     * get base url
+     *
+     * @return string
+     */
+    public function getBaseUrl()
+    {
+        return $this->{{_}}storeManager
+            ->getStore()
+            ->getBaseUrl(
+                {{class Magento\Framework\UrlInterface}}::URL_TYPE_MEDIA
+            );
+    }
+
+    /**
+     * Checking file for save and save it to tmp dir
+     *
+     * @param string $fileId
+     *
+     * @return string[]
+     *
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function saveFileToTmpDir($fileId)
+    {
+        $baseTmpPath = $this->getBaseTmpPath();
+
+        $uploader = $this->{{_}}uploaderFactory->create(['fileId' => $fileId]);
+        $uploader->setAllowedExtensions($this->getAllowedExtensions());
+        $uploader->setAllowRenameFiles(true);
+        $uploader->setFilesDispersion(true);
+
+        $result = $uploader->save($this->{{_}}mediaDirectory->getAbsolutePath($baseTmpPath));
+
+        if (!$result) {
+            throw new {{class Magento\Framework\Exception\LocalizedException}}(
+                __('File can not be saved to the destination folder.')
+            );
+        }
+        /**
+         * Workaround for prototype 1.7 methods "isJSON", "evalJSON" on Windows OS
+         */
+        $result['tmp_name'] = str_replace('\\', '/', $result['tmp_name']);
+        $result['path'] = str_replace('\\', '/', $result['path']);
+        $result['url'] =  $this->getBaseUrl() . $this->getFilePath($baseTmpPath, $result['file']);
+
+        if (isset($result['file'])) {
+            try {
+                $relativePath = rtrim($baseTmpPath, '/') . '/' . ltrim($result['file'], '/');
+                $this->{{_}}coreFileStorageDatabase->saveFile($relativePath);
+            } catch (\Exception $e) {
+                $this->{{_}}logger->critical($e);
+                throw new {{class Magento\Framework\Exception\LocalizedException}}(
+                    __('Something went wrong while saving the file(s).')
+                );
+            }
+        }
+
+        return $result;
+    }
+
+    /**
+     * @param string $input
+     * @param array $data
+     * @return string
+     */
+    public function uploadFileAndGetName($input, $data)
+    {
+        if (!isset($data[$input])) {
+            return '';
+        }
+        if (is_array($data[$input]) && !empty($data[$input]['delete'])) {
+            return '';
+        }
+
+        if (isset($data[$input][0]['name']) && isset($data[$input][0]['tmp_name'])) {
+            try {
+                $result = $this->moveFileFromTmp($data[$input][0]['file']);
+                return $result;
+            } catch (\Exception $e) {
+                return '';
+            }
+        } elseif (isset($data[$input][0]['name'])) {
+            return $data[$input][0]['name'];
+        }
+        return '';
+    }

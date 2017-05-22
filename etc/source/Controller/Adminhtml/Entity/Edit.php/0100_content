@@ -1,45 +1,40 @@
     /**
-     * is action allowed
+     * Initialize current {{EntityLabel}} and set it in the registry.
      *
-     * @return bool
+     * @return int
      */
-    protected function _isAllowed()
+    protected function {{_}}init{{Entity}}()
     {
-        return $this->_authorization->isAllowed('{{Namespace}}_{{Module}}::{{entity}}');
+        ${{entity}}Id = $this->getRequest()->getParam('{{entity}}_id');
+        $this->{{_}}coreRegistry->register({{class {{Namespace}}\{{Module}}\Controller\RegistryConstants}}::CURRENT_{{ENTITY}}_ID, ${{entity}}Id);
+
+        return ${{entity}}Id;
     }
 
     /**
-     * @return \Magento\Backend\Model\View\Result\Page|\Magento\Backend\Model\View\Result\Redirect|\Magento\Framework\View\Result\Page
+     * Edit or create {{EntityLabel}}
+     *
+     * @return \Magento\Backend\Model\View\Result\Page
      */
     public function execute()
     {
-        $id = $this->getRequest()->getParam('{{entity}}_id');
-        /** @var \{{Namespace}}\{{Module}}\Model\{{Entity}} ${{entity}} */
-        ${{entity}} = $this->{{_}}init{{Entity}}();
-        /** @var \Magento\Backend\Model\View\Result\Page|\Magento\Framework\View\Result\Page $resultPage */
+        ${{entity}}Id = $this->{{_}}init{{Entity}}();
+
+        /** @var \Magento\Backend\Model\View\Result\Page $resultPage */
         $resultPage = $this->{{_}}resultPageFactory->create();
-        $resultPage->setActiveMenu('{{Namespace}}_{{Module}}::{{entity}}');
-        $resultPage->getConfig()->getTitle()->set(__('{{EntitiesLabel}}'));
-        if ($id) {
-            ${{entity}}->load($id);
-            if (!${{entity}}->getId()) {
-                $this->messageManager->addError(__('This {{EntityLabel}} no longer exists.'));
-                $resultRedirect = $this->{{_}}resultRedirectFactory->create();
-                $resultRedirect->setPath(
-                    '{{namespace}}_{{module}}/*/edit',
-                    [
-                        '{{entity}}_id' => ${{entity}}->getId(),
-                        '_current' => true
-                    ]
-                );
-                return $resultRedirect;
-            }
-        }
-        $title = ${{entity}}->getId() ? ${{entity}}->get{{NameAttributeCode}}() : __('New {{EntityLabel}}');
-        $resultPage->getConfig()->getTitle()->prepend($title);
-        $data = $this->{{_}}backendSession->getData('{{namespace}}_{{module}}_{{entity}}_data', true);
-        if (!empty($data)) {
-            ${{entity}}->setData($data);
+        $resultPage->setActiveMenu('{{Namespace}}_{{Module}}::{{module}}_{{entity}}');
+        $resultPage->getConfig()->getTitle()->prepend(__('{{EntitiesLabelEscaped}}'));
+        $resultPage->addBreadcrumb(__('{{menuText}}'), __('{{menuText}}'));
+        $resultPage->addBreadcrumb(__('{{EntitiesLabelEscaped}}'), __('{{EntitiesLabelEscaped}}'), $this->getUrl('{{namespace}}_{{module}}/{{entity}}'));
+
+        if (${{entity}}Id === null) {
+            $resultPage->addBreadcrumb(__('New {{EntityLabelEscaped}}'), __('New {{EntityLabelEscaped}}'));
+            $resultPage->getConfig()->getTitle()->prepend(__('New {{EntityLabelEscaped}}'));
+        } else {
+            $resultPage->addBreadcrumb(__('Edit {{EntityLabelEscaped}}'), __('Edit {{EntityLabelEscaped}}'));
+            $resultPage->getConfig()->getTitle()->prepend(
+                $this->{{_}}{{entity}}Repository->getById(${{entity}}Id)->get{{NameAttributeCode}}()
+            );
         }
         return $resultPage;
     }

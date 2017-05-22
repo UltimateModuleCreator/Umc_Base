@@ -12,12 +12,13 @@
  *
  * @category  Umc
  * @package   Umc_Base
- * @copyright 2015 Marius Strajeru
+ * @copyright Marius Strajeru
  * @license   http://opensource.org/licenses/mit-license.php MIT License
  * @author    Marius Strajeru <ultimate.module.creator@gmail.com>
  */
 -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:include schemaLocation="urn:magento:module:Umc_Base:etc/umc/arguments.xsd" />
     <xs:element name="help">
         <xs:annotation>
             <xs:documentation>All help elements</xs:documentation>
@@ -25,7 +26,7 @@
         <xs:complexType>
             <xs:sequence>
                 <xs:element ref="section" minOccurs="0" maxOccurs="unbounded" />
-                <xs:element ref="module" minOccurs="0" maxOccurs="unbounded" />
+                <!--<xs:element ref="module" minOccurs="0" maxOccurs="unbounded" />-->
             </xs:sequence>
         </xs:complexType>
     </xs:element>
@@ -36,11 +37,20 @@
         </xs:annotation>
         <xs:complexType>
             <xs:sequence>
-                <xs:element name="label" type="xs:string" minOccurs="0" maxOccurs="1" /><!--mandatory in merged file-->
-                <xs:element name="description" type="xs:string" minOccurs="0" maxOccurs="1" />
-                <xs:element ref="fieldset" minOccurs="1" maxOccurs="unbounded" />
+                <xs:choice minOccurs="0" maxOccurs="unbounded">
+                    <xs:element name="arguments" type="argumentsType" minOccurs="0" maxOccurs="1">
+                        <xs:key name="sectionArgumentName">
+                            <xs:selector xpath="argument"></xs:selector>
+                            <xs:field xpath="@name"></xs:field>
+                        </xs:key>
+                    </xs:element>
+                </xs:choice>
+                <!--<xs:element name="label" type="xs:string" minOccurs="0" maxOccurs="1" />&lt;!&ndash;mandatory in merged file&ndash;&gt;-->
+                <!--<xs:element name="description" type="xs:string" minOccurs="0" maxOccurs="1" />-->
+                <xs:element ref="fieldset" minOccurs="0" maxOccurs="unbounded" />
             </xs:sequence>
-            <xs:attributeGroup ref="sectionAttributeGroup"/>
+            <xs:attribute name="id" type="xs:string" use="required" />
+            <!--<xs:attributeGroup ref="sectionAttributeGroup"/>-->
         </xs:complexType>
         <xs:unique name="uniqueSectionId">
             <xs:annotation>
@@ -51,34 +61,43 @@
         </xs:unique>
     </xs:element>
 
-    <xs:element name="module">
-        <xs:annotation>
-            <xs:documentation>Declared modules</xs:documentation>
-        </xs:annotation>
-        <xs:complexType>
-            <xs:attributeGroup ref="moduleAttributeGroup"/>
-        </xs:complexType>
-        <xs:unique name="uniqueModuleId">
-            <xs:annotation>
-                <xs:documentation>Attribute id is unique under all modules</xs:documentation>
-            </xs:annotation>
-            <xs:selector xpath="help/module"/>
-            <xs:field xpath="@id"/>
-        </xs:unique>
-    </xs:element>
+    <!--<xs:element name="module">-->
+        <!--<xs:annotation>-->
+            <!--<xs:documentation>Declared modules</xs:documentation>-->
+        <!--</xs:annotation>-->
+        <!--<xs:complexType>-->
+            <!--<xs:attribute type="xs:string" name="id" use="required"/>-->
+        <!--</xs:complexType>-->
+        <!--<xs:unique name="uniqueModuleId">-->
+            <!--<xs:annotation>-->
+                <!--<xs:documentation>Attribute id is unique under all modules</xs:documentation>-->
+            <!--</xs:annotation>-->
+            <!--<xs:selector xpath="help/module"/>-->
+            <!--<xs:field xpath="@id"/>-->
+        <!--</xs:unique>-->
+    <!--</xs:element>-->
 
     <xs:element name="fieldset">
         <xs:annotation>
             <xs:documentation>Help sections fieldsets</xs:documentation>
         </xs:annotation>
         <xs:complexType>
-            <xs:sequence>
-                <xs:element name="label" type="xs:string" minOccurs="0" maxOccurs="1" /><!--mandatory in merged file-->
-                <xs:element name="description" type="xs:string" minOccurs="0" maxOccurs="1" />
-                <xs:element ref="source" minOccurs="0" maxOccurs="1" /><!--mandatory in merged file-->
-                <xs:element ref="columns" minOccurs="0" maxOccurs="1" /><!--mandatory in merged file-->
-            </xs:sequence>
-            <xs:attributeGroup ref="fieldsetAttributeGroup"/>
+            <xs:choice minOccurs="0" maxOccurs="unbounded">
+                <xs:element name="arguments" type="argumentsType" minOccurs="0" maxOccurs="1">
+                    <xs:key name="fieldsetArgumentName">
+                        <xs:selector xpath="argument"></xs:selector>
+                        <xs:field xpath="@name"></xs:field>
+                    </xs:key>
+                </xs:element>
+            </xs:choice>
+            <!--<xs:sequence>-->
+                <!--<xs:element name="label" type="xs:string" minOccurs="0" maxOccurs="1" />&lt;!&ndash;mandatory in merged file&ndash;&gt;-->
+                <!--<xs:element name="description" type="xs:string" minOccurs="0" maxOccurs="1" />-->
+                <!--<xs:element ref="source" minOccurs="0" maxOccurs="1" />&lt;!&ndash;mandatory in merged file&ndash;&gt;-->
+                <!--<xs:element ref="columns" minOccurs="0" maxOccurs="1" />&lt;!&ndash;mandatory in merged file&ndash;&gt;-->
+            <!--</xs:sequence>-->
+            <!--<xs:attributeGroup ref="fieldsetAttributeGroup"/>-->
+            <xs:attribute type="xs:string" name="id" use="required"/>
         </xs:complexType>
         <xs:unique name="uniqueFieldsetId">
             <xs:annotation>
@@ -89,83 +108,83 @@
         </xs:unique>
     </xs:element>
 
-    <xs:element name="source">
-        <xs:annotation>
-            <xs:documentation>Help sections fieldset source</xs:documentation>
-        </xs:annotation>
-        <xs:complexType>
-            <xs:attributeGroup ref="sourceAttributeGroup"/>
-        </xs:complexType>
-        <xs:unique name="uniqueSourceId">
-            <xs:annotation>
-                <xs:documentation>Attribute id is unique under all fieldsets inside a section</xs:documentation>
-            </xs:annotation>
-            <xs:selector xpath="help/section/fieldset/source"/>
-            <xs:field xpath="@id"/>
-        </xs:unique>
-    </xs:element>
+    <!--<xs:element name="source">-->
+        <!--<xs:annotation>-->
+            <!--<xs:documentation>Help sections fieldset source</xs:documentation>-->
+        <!--</xs:annotation>-->
+        <!--<xs:complexType>-->
+            <!--<xs:attributeGroup ref="sourceAttributeGroup"/>-->
+        <!--</xs:complexType>-->
+        <!--<xs:unique name="uniqueSourceId">-->
+            <!--<xs:annotation>-->
+                <!--<xs:documentation>Attribute id is unique under all fieldsets inside a section</xs:documentation>-->
+            <!--</xs:annotation>-->
+            <!--<xs:selector xpath="help/section/fieldset/source"/>-->
+            <!--<xs:field xpath="@id"/>-->
+        <!--</xs:unique>-->
+    <!--</xs:element>-->
 
-    <xs:element name="columns">
-        <xs:annotation>
-            <xs:documentation>Help sections fieldset source columns</xs:documentation>
-        </xs:annotation>
-        <xs:complexType>
-            <xs:sequence>
-                <xs:element ref="column" maxOccurs="unbounded" minOccurs="0" /><!-- mandatory in merged schema -->
-            </xs:sequence>
-        </xs:complexType>
-    </xs:element>
+    <!--<xs:element name="columns">-->
+        <!--<xs:annotation>-->
+            <!--<xs:documentation>Help sections fieldset source columns</xs:documentation>-->
+        <!--</xs:annotation>-->
+        <!--<xs:complexType>-->
+            <!--<xs:sequence>-->
+                <!--<xs:element ref="column" maxOccurs="unbounded" minOccurs="0" />&lt;!&ndash; mandatory in merged schema &ndash;&gt;-->
+            <!--</xs:sequence>-->
+        <!--</xs:complexType>-->
+    <!--</xs:element>-->
 
-    <xs:element name="column">
-        <xs:annotation>
-            <xs:documentation>Help sections fieldset column</xs:documentation>
-        </xs:annotation>
-        <xs:complexType>
-            <xs:sequence>
-                <xs:element name="label" type="xs:string" minOccurs="0" maxOccurs="1" /><!--mandatory in merged file-->
-                <xs:element name="key" type="xs:string" minOccurs="0" maxOccurs="1" /><!--mandatory in merged file-->
-            </xs:sequence>
-            <xs:attributeGroup ref="columnAttributeGroup"/>
-        </xs:complexType>
-        <xs:unique name="uniqueColumnId">
-            <xs:annotation>
-                <xs:documentation>Attribute id is unique under all columns</xs:documentation>
-            </xs:annotation>
-            <xs:selector xpath="help/section/fieldset/source/columns/column"/>
-            <xs:field xpath="@id"/>
-        </xs:unique>
-    </xs:element>
+    <!--<xs:element name="column">-->
+        <!--<xs:annotation>-->
+            <!--<xs:documentation>Help sections fieldset column</xs:documentation>-->
+        <!--</xs:annotation>-->
+        <!--<xs:complexType>-->
+            <!--<xs:sequence>-->
+                <!--<xs:element name="label" type="xs:string" minOccurs="0" maxOccurs="1" />&lt;!&ndash;mandatory in merged file&ndash;&gt;-->
+                <!--<xs:element name="key" type="xs:string" minOccurs="0" maxOccurs="1" />&lt;!&ndash;mandatory in merged file&ndash;&gt;-->
+            <!--</xs:sequence>-->
+            <!--<xs:attributeGroup ref="columnAttributeGroup"/>-->
+        <!--</xs:complexType>-->
+        <!--<xs:unique name="uniqueColumnId">-->
+            <!--<xs:annotation>-->
+                <!--<xs:documentation>Attribute id is unique under all columns</xs:documentation>-->
+            <!--</xs:annotation>-->
+            <!--<xs:selector xpath="help/section/fieldset/source/columns/column"/>-->
+            <!--<xs:field xpath="@id"/>-->
+        <!--</xs:unique>-->
+    <!--</xs:element>-->
 
-    <xs:attributeGroup name="sectionAttributeGroup">
-        <xs:attribute name="id" type="xs:string" use="required" />
-        <xs:attribute type="xs:int" name="sort" use="optional"/>
-        <xs:attribute type="xs:string" name="translate" use="optional"/>
-    </xs:attributeGroup>
+    <!--<xs:attributeGroup name="sectionAttributeGroup">-->
+        <!--<xs:attribute name="id" type="xs:string" use="required" />-->
+        <!--<xs:attribute type="xs:int" name="sort" use="optional"/>-->
+        <!--<xs:attribute type="xs:string" name="translate" use="optional"/>-->
+    <!--</xs:attributeGroup>-->
 
-    <xs:attributeGroup name="fieldsetAttributeGroup">
-        <xs:attribute type="xs:string" name="id" use="required"/>
-        <xs:attribute type="xs:int" name="sort" use="optional"/><!-- mandatory in merged file-->
-        <xs:attribute type="xs:boolean" name="disabled" use="optional"/>
-        <xs:attribute type="xs:string" name="translate" use="optional"/>
-    </xs:attributeGroup>
+    <!--<xs:attributeGroup name="fieldsetAttributeGroup">-->
+        <!--<xs:attribute type="xs:string" name="id" use="required"/>-->
+        <!--<xs:attribute type="xs:int" name="sort" use="optional"/>&lt;!&ndash; mandatory in merged file&ndash;&gt;-->
+        <!--<xs:attribute type="xs:boolean" name="disabled" use="optional"/>-->
+        <!--<xs:attribute type="xs:string" name="translate" use="optional"/>-->
+    <!--</xs:attributeGroup>-->
 
-    <xs:attributeGroup name="sourceAttributeGroup">
-        <xs:attribute type="xs:string" name="method" use="optional"/><!-- mandatory in merged file-->
-        <xs:attribute type="xs:string" name="class" use="optional"/><!--mandatory in merged file-->
-        <xs:attribute type="xs:boolean" name="shared" use="optional"/>
-    </xs:attributeGroup>
+    <!--<xs:attributeGroup name="sourceAttributeGroup">-->
+        <!--<xs:attribute type="xs:string" name="method" use="optional"/>&lt;!&ndash; mandatory in merged file&ndash;&gt;-->
+        <!--<xs:attribute type="xs:string" name="class" use="optional"/>&lt;!&ndash;mandatory in merged file&ndash;&gt;-->
+        <!--<xs:attribute type="xs:boolean" name="shared" use="optional"/>-->
+    <!--</xs:attributeGroup>-->
 
-    <xs:attributeGroup name="columnAttributeGroup">
-        <xs:attribute type="xs:string" name="id" use="required"/>
-        <xs:attribute type="xs:int" name="sort" use="optional"/><!-- mandatory in merged file-->
-        <xs:attribute type="xs:string" name="translate" use="optional"/>
-    </xs:attributeGroup>
+    <!--<xs:attributeGroup name="columnAttributeGroup">-->
+        <!--<xs:attribute type="xs:string" name="id" use="required"/>-->
+        <!--<xs:attribute type="xs:int" name="sort" use="optional"/>&lt;!&ndash; mandatory in merged file&ndash;&gt;-->
+        <!--<xs:attribute type="xs:string" name="translate" use="optional"/>-->
+    <!--</xs:attributeGroup>-->
 
-    <xs:attributeGroup name="moduleAttributeGroup">
-        <xs:attribute type="xs:string" name="id" use="required"/>
-        <xs:attribute type="xs:int" name="sort" use="optional"/>
-        <xs:attribute type="xs:string" name="build" use="optional"/>
-    </xs:attributeGroup>
+    <!--<xs:attributeGroup name="moduleAttributeGroup">-->
+        <!--<xs:attribute type="xs:string" name="id" use="required"/>-->
+        <!--<xs:attribute type="xs:int" name="sort" use="optional"/>-->
+        <!--<xs:attribute type="xs:string" name="build" use="optional"/>-->
+    <!--</xs:attributeGroup>-->
 
 
 </xs:schema>

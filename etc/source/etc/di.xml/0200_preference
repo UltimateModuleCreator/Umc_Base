@@ -1,0 +1,2 @@
+    <preference for="{{Namespace}}\{{Module}}\Api\{{Entity}}RepositoryInterface" type="{{Namespace}}\{{Module}}\Model\{{Entity}}Repository" />
+    <preference for="{{Namespace}}\{{Module}}\Api\Data\{{Entity}}Interface" type="{{Namespace}}\{{Module}}\Model\{{Entity}}" />

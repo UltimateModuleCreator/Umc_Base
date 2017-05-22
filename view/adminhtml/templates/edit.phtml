@@ -11,13 +11,13 @@
  *
  * @category  Umc
  * @package   Umc_Base
- * @copyright 2015 Marius Strajeru
+ * @copyright Marius Strajeru
  * @license   http://opensource.org/licenses/mit-license.php MIT License
  * @author    Marius Strajeru <ultimate.module.creator@gmail.com>
  */
 ?>
-<?php /** @var \Umc\Base\Block\Adminhtml\Module\Edit $this */ ?>
-<?php echo $this->getFormHtml();?>
+<?php /** @var \Umc\Base\Block\Adminhtml\Module\Edit $block */ ?>
+<?php echo $block->getFormHtml();?>
 <script type="text/javascript">
     require([
         "jquery",
@@ -29,13 +29,14 @@
     ], function(jQuery){
         jQuery(document).ready(function(){
             jQuery('#edit_form').umcmodule({
-                attributeDepends: <?php echo $this->getAttributeDepends();?>,
-                entityDepends: <?php echo $this->getEntityDepends();?>,
-                nameAttributes:<?php echo $this->getNameAttributes();?>,
-                relations: <?php echo $this->getRelationsAsJson();?>
+                attributeDepends: <?php /* @escapeNotVerified */  echo $block->getAttributeDepends(); ?>,
+                entityDepends: <?php /* @escapeNotVerified */  echo $block->getEntityDepends(); ?>,
+                moduleDepends: <?php /* @escapeNotVerified */  echo $block->getModuleDepends(); ?>,
+                nameAttributes:<?php /* @escapeNotVerified */  echo $block->getNameAttributes(); ?>,
+                tooltipType: '<?php /* @escapeNotVerified */  echo $block->getTooltipType(); ?>'
             })
             .validation({
-                validationUrl: '<?php echo $this->getValidationUrl() ?>',
+                validationUrl: '<?php /* @escapeNotVerified */  echo $block->getValidationUrl() ?>',
                 highlight: function(element) {
                     jQuery(element).parents('.fieldset-wrapper-content').each(function(){
                         if (!jQuery(this).hasClass('in')) {

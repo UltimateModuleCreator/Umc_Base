@@ -1,0 +1,21 @@
+
+    /**
+     * @return bool|string
+     * @throws {{class Magento\Framework\Exception\LocalizedException}}
+     */
+    public function get{{CodeCamelCase}}Url()
+    {
+        $url = false;
+        ${{codeCamelCase}} = $this->get{{CodeCamelCase}}();
+        if (${{codeCamelCase}}) {
+            if (is_string(${{codeCamelCase}})) {
+                $uploader = $this->{{_}}uploaderPool->getUploader('{{type}}');
+                $url = $uploader->getBaseUrl().$uploader->getBasePath().${{codeCamelCase}};
+            } else {
+                throw new {{class Magento\Framework\Exception\LocalizedException}}(
+                    __('Something went wrong while getting the {{LabelEscaped}} url.')
+                );
+            }
+        }
+        return $url;
+    }

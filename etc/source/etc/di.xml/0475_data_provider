@@ -1,6 +1,0 @@
-    <virtualType name="{{Namespace}}{{Module}}{{Entity}}GridDataProvider" type="Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider">
-        <arguments>
-            <argument name="collection" xsi:type="object" shared="false">{{Namespace}}\{{Module}}\Model\ResourceModel\{{Entity}}\Collection</argument>
-            <argument name="filterPool" xsi:type="object" shared="false">{{Namespace}}{{Module}}GirdFilterPool</argument>
-        </arguments>
-    </virtualType>

@@ -12,12 +12,13 @@
  *
  * @category  Umc
  * @package   Umc_Base
- * @copyright 2015 Marius Strajeru
+ * @copyright Marius Strajeru
  * @license   http://opensource.org/licenses/mit-license.php MIT License
  * @author    Marius Strajeru <ultimate.module.creator@gmail.com>
  */
 -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:include schemaLocation="urn:magento:module:Umc_Base:etc/umc/arguments.xsd" />
     <xs:element name="restrictions">
         <xs:annotation>
             <xs:documentation>All restriction elements</xs:documentation>
@@ -42,9 +43,17 @@
         </xs:annotation>
         <xs:complexType>
             <xs:sequence>
-                <xs:element ref="restriction" minOccurs="0" maxOccurs="unbounded" /><!-- mandatory in merged file -->
+                <xs:choice minOccurs="0" maxOccurs="unbounded">
+                    <xs:element name="arguments" type="argumentsType" minOccurs="0" maxOccurs="1">
+                        <xs:key name="entityArgumentName">
+                            <xs:selector xpath="argument"></xs:selector>
+                            <xs:field xpath="@name"></xs:field>
+                        </xs:key>
+                    </xs:element>
+                </xs:choice>
+                <xs:element ref="restriction" minOccurs="0" maxOccurs="unbounded" />
             </xs:sequence>
-            <xs:attributeGroup ref="entityAttributeGroup"/>
+            <xs:attribute name="id" type="xs:string" use="required" />
         </xs:complexType>
         <xs:unique name="uniqueRestrictionId">
             <xs:annotation>
@@ -61,9 +70,17 @@
         </xs:annotation>
         <xs:complexType>
             <xs:sequence>
+                <xs:choice minOccurs="0" maxOccurs="unbounded">
+                    <xs:element name="arguments" type="argumentsType" minOccurs="0" maxOccurs="1">
+                        <xs:key name="restrictionArgumentName">
+                            <xs:selector xpath="argument"></xs:selector>
+                            <xs:field xpath="@name"></xs:field>
+                        </xs:key>
+                    </xs:element>
+                </xs:choice>
                 <xs:element ref="val" minOccurs="0" maxOccurs="unbounded" /><!-- mandatory in merged file -->
             </xs:sequence>
-            <xs:attributeGroup ref="restrictionAttributeGroup"/>
+            <xs:attribute type="xs:string" name="id" use="required" />
         </xs:complexType>
         <xs:unique name="uniqueValId">
             <xs:annotation>
@@ -81,12 +98,18 @@
         <xs:complexType>
             <xs:sequence>
                 <xs:sequence>
-                    <xs:element name="real_val" type="xs:string" minOccurs="0" maxOccurs="1" /><!--mandatory in merged file-->
-                    <xs:element name="message" type="xs:string" minOccurs="0" maxOccurs="1" /><!--mandatory in merged file-->
+                    <xs:choice minOccurs="0" maxOccurs="unbounded">
+                        <xs:element name="arguments" type="argumentsType" minOccurs="0" maxOccurs="1">
+                            <xs:key name="valArgumentName">
+                                <xs:selector xpath="argument"></xs:selector>
+                                <xs:field xpath="@name"></xs:field>
+                            </xs:key>
+                        </xs:element>
+                    </xs:choice>
                     <xs:element ref="depend" minOccurs="0" maxOccurs="1" />
                 </xs:sequence>
             </xs:sequence>
-            <xs:attributeGroup ref="valAttributeGroup"/>
+            <xs:attribute type="xs:string" name="id" use="required" />
         </xs:complexType>
         <xs:unique name="uniqueDependId">
             <xs:annotation>
@@ -103,9 +126,16 @@
         </xs:annotation>
         <xs:complexType>
             <xs:sequence>
-                <xs:element ref="depend_val" minOccurs="0" maxOccurs="1" />
+                <xs:choice minOccurs="0" maxOccurs="unbounded">
+                    <xs:element name="arguments" type="argumentsType" minOccurs="0" maxOccurs="1">
+                        <xs:key name="dependArgumentName">
+                            <xs:selector xpath="argument"></xs:selector>
+                            <xs:field xpath="@name"></xs:field>
+                        </xs:key>
+                    </xs:element>
+                </xs:choice>
             </xs:sequence>
-            <xs:attributeGroup ref="dependAttributeGroup"/>
+            <xs:attribute type="xs:string" name="id" use="required"/>
         </xs:complexType>
         <xs:unique name="uniqueDependValId">
             <xs:annotation>
@@ -129,28 +159,4 @@
             </xs:simpleContent>
         </xs:complexType>
     </xs:element>
-
-    <xs:attributeGroup name="entityAttributeGroup">
-        <xs:attribute name="id" type="xs:string" use="required" />
-        <xs:attribute name="sort"  type="xs:int" use="optional"/>
-    </xs:attributeGroup>
-
-    <xs:attributeGroup name="restrictionAttributeGroup">
-        <xs:attribute type="xs:string" name="id" use="required" />
-        <xs:attribute type="xs:boolean" name="disabled" use="optional" />
-        <xs:attribute type="xs:boolean" name="reserved" use="optional" />
-        <xs:attribute type="xs:string" name="class" use="optional" />
-    </xs:attributeGroup>
-
-    <xs:attributeGroup name="valAttributeGroup">
-        <xs:attribute type="xs:string" name="id" use="required" />
-        <xs:attribute type="xs:boolean" name="disabled" use="optional" />
-        <xs:attribute type="xs:string" name="translate" use="optional"/>
-    </xs:attributeGroup>
-
-    <xs:attributeGroup name="dependAttributeGroup">
-        <xs:attribute type="xs:string" name="id" use="required" />
-        <xs:attribute type="xs:boolean" name="disabled" use="optional" />
-        <xs:attribute type="xs:string" name="type" use="optional" /><!--required in global schema -->
-    </xs:attributeGroup>
 </xs:schema>

@@ -1,0 +1,15 @@
+    /**
+     * Get data
+     *
+     * @return array
+     */
+    public function getData()
+    {
+        if (isset($this->{{_}}loadedData)) {
+            return $this->{{_}}loadedData;
+        }
+        $items = $this->collection->getItems();
+        /** @var \{{Namespace}}\{{Module}}\Model\{{Entity}} ${{entity}} */
+        foreach ($items as ${{entity}}) {
+            $this->{{_}}loadedData[${{entity}}->getId()] = ${{entity}}->getData();
+

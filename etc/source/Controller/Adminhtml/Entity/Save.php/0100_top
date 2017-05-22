@@ -1,10 +1,11 @@
     /**
      * run the action
      *
-     * @return {{class Magento\Backend\Model\View\Result\Redirect}}
+     * @return \Magento\Framework\Controller\Result\Redirect
      */
     public function execute()
     {
-        $data = $this->getRequest()->getPost('{{entity}}');
-        $resultRedirect = $this->resultRedirectFactory->create();
-        if ($data) {
+        /** @var \{{Namespace}}\{{Module}}\Api\Data\{{Entity}}Interface ${{entity}} */
+        ${{entity}} = null;
+        $postData = $this->getRequest()->getPostValue();
+        $data = $postData;

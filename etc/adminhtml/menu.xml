@@ -12,16 +12,16 @@
  *
  * @category  Umc
  * @package   Umc_Base
- * @copyright 2015 Marius Strajeru
+ * @copyright Marius Strajeru
  * @license   http://opensource.org/licenses/mit-license.php MIT License
  * @author    Marius Strajeru <ultimate.module.creator@gmail.com>
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
     <menu>
-        <add id="Umc_Base::umc" title="UMC" module="Umc_Base" sortOrder="200" resource="Umc_Base::umc" />
+        <add id="Umc_Base::umc" title="Ultimate Module Creator" module="Umc_Base" sortOrder="200" resource="Umc_Base::umc" parent="Magento_Backend::system" />
         <add id="Umc_Base::umc_list" title="View Modules" module="Umc_Base" sortOrder="10" resource="Umc_Base::umc" parent="Umc_Base::umc" action="umc/module/" />
         <add id="Umc_Base::umc_add" title="Create Module" module="Umc_Base" sortOrder="20" resource="Umc_Base::umc" parent="Umc_Base::umc" action="umc/module/new" />
-        <add id="Umc_Base::umc_help" title="Help" module="Umc_Base" sortOrder="30" resource="Umc_Base::umc" parent="Umc_Base::umc" action="umc/module/help" />
+        <add id="Umc_Base::umc_help" title="UMC Help" module="Umc_Base" sortOrder="30" resource="Umc_Base::umc" parent="Umc_Base::umc" action="umc/module/help" />
     </menu>
 </config>

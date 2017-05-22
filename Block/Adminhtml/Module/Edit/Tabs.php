@@ -11,7 +11,7 @@
  *
  * @category  Umc
  * @package   Umc_Base
- * @copyright 2015 Marius Strajeru
+ * @copyright Marius Strajeru
  * @license   http://opensource.org/licenses/mit-license.php MIT License
  * @author    Marius Strajeru <ultimate.module.creator@gmail.com>
  */
@@ -20,7 +20,7 @@ namespace Umc\Base\Block\Adminhtml\Module\Edit;
 use Magento\Backend\Block\Widget\Tabs as TabsWidget;
 
 /**
- * @method Tabs setTitle(\string $title)
+ * @api
  */
 class Tabs extends TabsWidget
 {
@@ -32,8 +32,8 @@ class Tabs extends TabsWidget
     protected function _construct()
     {
         parent::_construct();
-        $this->setId('umc_base_module_tabs');
+        $this->setData('id', 'umc_base_module_tabs');
         $this->setDestElementId('edit_form');
-        $this->setTitle(__('Module Creator'));
+        $this->setData('title', __('Module Creator'));
     }
 }
