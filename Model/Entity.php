@@ -33,6 +33,7 @@ use Umc\Base\Model\Attribute\Type\Integer;
 use Umc\Base\Model\Attribute\Type\Text;
 use Umc\Base\Model\Entity\Type\Factory as TypeFactory;
 use Umc\Base\Api\Data\Entity\TypeInterface;
+use Umc\Base\Model\Relation\Type\ParentRelation;
 use Umc\Base\Source\Grid;
 
 /**
@@ -632,6 +633,7 @@ class Entity extends AbstractModel implements EntityInterface
         $setup = '';
         /** @var AttributeInterface[] $allAttributes */
         $allAttributes = array_merge(
+            $this->getParentEntityFields(),
             $this->getAttributes(),
             $this->getSystemAttributes()
         );
@@ -728,6 +730,32 @@ class Entity extends AbstractModel implements EntityInterface
             $attribute->setType(Integer::NAME);
             $attribute->setEntity($this);
             $attributes[] = $attribute;
+        }
+        return $attributes;
+    }
+
+    /**
+     * @return AttributeInterface[]
+     */
+    public function getParentEntityFields()
+    {
+        $attributes = [];
+        foreach ($this->getModule()->getRelations() as $relation) {
+            if ($relation->getType() == ParentRelation::RELATION_TYPE_PARENT) {
+                $entities = $relation->getEntities();
+                if ($entities[1]->getNameSingular() == $this->getNameSingular()) {
+                    $attribute = $this->attributeFactory->create();
+                    $relationCode = $relation->getCode();
+                    $code = ($relationCode) ? $relationCode . '_' : '';
+                    $code .= $entities[0]->getNameSingular().'_id';
+                    $attribute->setCode($code);
+                    $attribute->setLabel($relation->getTitle().' '. $entities[0]->getLabelSingular());
+                    $attribute->setType(Integer::NAME);
+                    $attribute->setEntity($this);
+                    $attribute->setRequired($relation->getRequired());
+                    $attributes[] = $attribute;
+                }
+            }
         }
         return $attributes;
     }

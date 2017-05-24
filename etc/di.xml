@@ -22,6 +22,7 @@
     <preference for="Umc\Base\Api\Data\ModuleInterface" type="Umc\Base\Model\Module" />
     <preference for="Umc\Base\Api\Data\EntityInterface" type="Umc\Base\Model\Entity" />
     <preference for="Umc\Base\Api\Data\AttributeInterface" type="Umc\Base\Model\Attribute" />
+    <preference for="Umc\Base\Api\Data\RelationInterface" type="Umc\Base\Model\Relation" />
 
     <virtualType name="UmcBaseEntityInterfaceFactory" type="Umc\Base\Model\ModelInterfaceFactory">
         <arguments>
@@ -34,11 +35,18 @@
         </arguments>
     </virtualType>
 
+    <virtualType name="UmcBaseRelationInterfaceFactory" type="Umc\Base\Model\ModelInterfaceFactory">
+        <arguments>
+            <argument name="instanceName" xsi:type="string">Umc\Base\Api\Data\RelationInterface</argument>
+        </arguments>
+    </virtualType>
+
     <type name="Umc\Base\Model\Module">
         <arguments>
             <argument name="factories" xsi:type="array">
                 <item name="entity" xsi:type="object">UmcBaseEntityInterfaceFactory</item>
                 <item name="attribute" xsi:type="object">UmcBaseAttributeInterfaceFactory</item>
+                <item name="relation" xsi:type="object">UmcBaseRelationInterfaceFactory</item>
             </argument>
             <argument name="sequenceDependencies" xsi:type="array">
                 <item name="Magento_Backend" xsi:type="number">10</item>
@@ -76,6 +84,17 @@
         <arguments>
             <argument name="entityCode" xsi:type="const">Umc\Base\Api\Data\EntityInterface::ENTITY_CODE</argument>
             <argument name="entityBlockTemplate" xsi:type="string">Umc_Base::entity.phtml</argument>
+        </arguments>
+    </type>
+    <type name="Umc\Base\Block\Adminhtml\Module\Edit\Tab\Relations">
+        <arguments>
+            <argument name="entityCode" xsi:type="const">Umc\Base\Api\Data\RelationInterface::ENTITY_CODE</argument>
+            <argument name="relationBlockTemplate" xsi:type="string">Umc_Base::relation.phtml</argument>
+        </arguments>
+    </type>
+    <type name="Umc\Base\Block\Adminhtml\Relation">
+        <arguments>
+            <argument name="entityCode" xsi:type="const">Umc\Base\Api\Data\RelationInterface::ENTITY_CODE</argument>
         </arguments>
     </type>
 
@@ -1034,7 +1053,7 @@
             <argument name="discriminator" xsi:type="const">Magento\Framework\View\Model\Layout\Merge::TYPE_ATTRIBUTE</argument>
         </arguments>
     </virtualType>
-    <!-- [+] Dragons live here. Do not enter -->
+    <!-- [-] Dragons live here. Do not enter -->
 
     <virtualType name="UmcSourceEntityType" type="Umc\Base\Source\Type">
         <arguments>
@@ -1046,6 +1065,12 @@
         <arguments>
             <argument name="entityCode" xsi:type="const">Umc\Base\Api\Data\AttributeInterface::ENTITY_CODE</argument>
             <argument name="emptyLabel" xsi:type="string" translate="true">Select Attribute Type</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="UmcSourceRelationType" type="Umc\Base\Source\Type">
+        <arguments>
+            <argument name="entityCode" xsi:type="const">Umc\Base\Api\Data\RelationInterface::ENTITY_CODE</argument>
+            <argument name="emptyLabel" xsi:type="string" translate="true">Select Relation Type</argument>
         </arguments>
     </virtualType>
     <!--[+] validators -->

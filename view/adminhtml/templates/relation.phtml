@@ -1,0 +1,57 @@
+<?php
+/**
+ * Umc_Base extension
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the MIT License
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/mit-license.php
+ *
+ * @category  Umc
+ * @package   Umc_Base
+ * @copyright Marius Strajeru
+ * @license   http://opensource.org/licenses/mit-license.php MIT License
+ * @author    Marius Strajeru <ultimate.module.creator@gmail.com>
+ */
+?>
+<?php /** @var \Umc\Base\Block\Adminhtml\Relation $block */ ?>
+<?php if ($block->getIsTemplate()) : ?>
+    <script id="relation-template" type="text/x-magento-template">
+        <?php endif;?>
+        <div class="entry-edit umc-relation"
+             id="relation-container-<?php echo $block->escapeHtml($block->getIncrement());?>">
+            <div id="relation-<?php echo $block->escapeHtml($block->getIncrement()) ?>-wrapper"
+                 class="fieldset-wrapper admin__collapsible-block-wrapper opened">
+                <div class="fieldset-wrapper-title">
+                    <div class="col-left">
+                        <strong
+                            class="admin__collapsible-title"
+                            data-toggle="collapse"
+                            data-target="#relation-<?php echo $block->escapeHtml($block->getIncrement()) ?>-content">
+                        <span class="relation-fieldset-title">
+                            <?php echo $block->escapeHtml(($block->getRelation())
+                                ? $block->getRelation()->getTitle()
+                                : __('Relation %1', $block->getIncrement()));?>
+                        </span>
+                        </strong>
+                    </div>
+                    <div class="actions col-right">
+                        <button type="button" title="<?php echo $block->escapeHtml(__('Remove relation')); ?>"
+                                class="action-delete remove-relation">
+                            <span><?php echo $block->escapeHtml(__('Remove relation')) ?></span>
+                        </button>
+                    </div>
+                </div>
+                <div id="relation-<?php echo $block->escapeHtml($block->getIncrement()) ?>-content"
+                     class="fieldset-wrapper-content in collapse">
+                    <fieldset class="fieldset">
+                        <?php echo $block->getFormHtml();?>
+                    </fieldset>
+                </div>
+            </div>
+        </div>
+        <?php if ($block->getIsTemplate()) : ?>
+    </script>
+<?php endif;?>

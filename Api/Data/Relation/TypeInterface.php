@@ -15,31 +15,25 @@
  * @license   http://opensource.org/licenses/mit-license.php MIT License
  * @author    Marius Strajeru <ultimate.module.creator@gmail.com>
  */
-namespace Umc\Base\Api\Data;
+namespace Umc\Base\Api\Data\Relation;
+
+use Umc\Base\Api\Data\EntityInterface;
+use Umc\Base\Api\Data\RelationInterface;
 
 /**
  * @api
  */
-interface FactoryInterface
+interface TypeInterface
 {
     /**
-     * @var string
+     * @param RelationInterface $relation
+     * @return mixed
      */
-    const ATTRIBUTE_FACTORY_KEY = 'attribute';
+    public function setRelation(RelationInterface $relation);
 
     /**
-     * @var string
+     * @return array
      */
-    const ENTITY_FACTORY_KEY = 'entity';
+    public function getPlaceholders();
 
-    /**
-     * @var string
-     */
-    const RELATION_FACTORY_KEY = 'relation';
-
-    /**
-     * @param array $data
-     * @return ModelInterface
-     */
-    public function create(array $data = []);
 }

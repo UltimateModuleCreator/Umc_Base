@@ -104,9 +104,12 @@ define([
         menuDialog: '',
         entityIndex: 0,
         entities: [],
+        relationIndex: 0,
+        relations: [],
         options: {
             addAttributeTrigger:        '.add-attribute',
             addEntityTrigger:           '.add-entity',
+            addRelationTrigger:         '.add-relation',
             attributeContainer:         '.attributes-container:first',
             attributeDepends:           {},
             attributeLabelSelector:     '.attribute-label',
@@ -131,8 +134,21 @@ define([
             moduleDepends:              {},
             moduleReloaderSelector:     '.module-reloader',
             nameAttributes:             {},
+            relationContainerSelector:  '#relations_container',
+            relationDepends:            {},
+            relations :                 {},
+            relationSelector:           '.umc-relation',
+            relationTitleSelector:      '.relation-title',
+            relationOptionClassPrefix:  'relation-entity-index-',
+            relationReloaderSelector:   '.relation-reloader',
+            relationTabIndex:           2,
+            relationsTabSelector:       'li[data-ui-id="umc-base-module-tabs-tab-item-relation"]',
+            relationTemplate:           '#relation-template',
+            relationValues:             {},
             removeEntityMessage:        $.mage.__('Are you sure you want to remove this entity?'),
             removeEntityTrigger:        '.remove-entity',
+            removeRelationMessage:      $.mage.__('Are you sure you want to remove this relation?'),
+            removeRelationTrigger:      '.remove-relation',
             tabsSelector                :'#umc_base_module_tabs',
             tooltipSelector:            '.umc-tooltip',
             tooltipType:                'popup',
@@ -159,6 +175,17 @@ define([
             });
             $(this.options.entityContainer).find(this.options.entitySelector).each(function() {
                 that.registerEntity(this, true, false);
+            });
+            $(this.options.addRelationTrigger).on('click', function() {
+                that.addRelation();
+            });
+            $(this.options.relationContainerSelector).find(this.options.relationSelector).each(function() {
+                that.registerRelation(this, true);
+                var index = that.relationIndex - 1;
+                if (typeof that.options.relationValues[index] != "undefined") {
+                    $('#relation_' + index + '_entity_one').val(that.options.relationValues[index]['entity_one']);
+                    $('#relation_' + index + '_entity_two').val(that.options.relationValues[index]['entity_two']);
+                }
             });
             this._super();
             jQuery(document).ready(function(){
@@ -246,6 +273,13 @@ define([
             var newEntityContainer = $('#entity-container-' + index);
             this.registerEntity(newEntityContainer, false, true);
             $(this.options.tabsSelector).tabs("option", "active", this.options.entityTabIndex);
+            // add it to relations
+            var option = $('<option />');
+            option.attr({
+                value: index,
+                class: this.options.relationOptionClassPrefix + index
+            }).text($(this.entities[index]).umcentity('getLabel'));
+            $('.relation-entity').append(option);
             $('html, body').animate({
                 scrollTop: newEntityContainer.offset().top
             }, 1000);
@@ -285,6 +319,7 @@ define([
                 if (this.entities[i].umcentity('getIndex') == index) {
                     this.entities[i].umcentity('destroy');
                     this.entities.splice(i, 1);
+                    $(this.options.relationOptionClassPrefix + index).remove();
                 }
             }
             return this;
@@ -294,6 +329,45 @@ define([
         },
         enableElement: function(elem) {
             $(elem).removeAttr('disabled');
+        },
+        addRelation: function() {
+            $(this.options.relationContainerSelector).append(
+                mageTemplate(this.options.relationTemplate)({relation_id:this.relationIndex})
+            );
+            var newRelationContainer = $('#relation-container-' + this.relationIndex);
+            this.registerRelation(newRelationContainer, false);
+            $(this.options.tabsSelector).tabs("option", "active", this.options.relationTabIndex);
+            $('html, body').animate({
+                scrollTop: newRelationContainer.offset().top
+            }, 1000);
+        },
+        removeRelation: function(index) {
+            for (var i = 0; i < this.relations.length; i++) {
+                if (this.relations[i].umcrelation('getIndex') == index) {
+                    this.relations[i].umcrelation('destroy');
+                    this.relations.splice(i, 1);
+                }
+            }
+            return this;
+        },
+
+        registerRelation: function(element, collapse) {
+            var relation = $(element).umcrelation({
+                index: this.relationIndex,
+                module: this,
+                relationOptionClassPrefix: this.options.relationOptionClassPrefix,
+                removeRelationMessage:     this.options.removeRelationMessage,
+                removeRelationTrigger:     this.options.removeRelationTrigger,
+                relationTitleSelector:     this.options.relationTitleSelector,
+                relationDepends:           this.options.relationDepends,
+                relationReloaderSelector:  this.options.relationReloaderSelector
+            });
+            this.relations.push(relation);
+            this.relationIndex++;
+            if (collapse) {
+                $(element).find('.fieldset-wrapper-content.collapse').collapse('hide');
+            }
+            return relation;
         }
     });
     $.widget("umc_base.umcentity", {
@@ -330,6 +404,7 @@ define([
             this.module = this.options.module;
             $(this.element).find(this.options.entityNameSelector).on('change', function() {
                 $(that.element).find(that.options.entityTitleSelector).html(that.getLabel());
+                $('.relation-entity-index-' + that.getIndex()).html(that.getLabel());
             });
             $(this.element).find(this.options.removeEntityTrigger).on('click', function() {
                 confirm({
@@ -606,6 +681,114 @@ define([
         enableElement: function(elem) {
             this.getEntity().enableElement(elem);
         }
+    });
 
+    $.widget("umc_base.umcrelation", {
+        module: '',
+        index: '',
+        options: {
+            entityDropdownSelector: '.relation-entity',
+            index: '',
+            module: '',
+            relationOptionClassPrefix:    'relation-entity-index-',
+            removeRelationMessage:        $.mage.__('Are you sure you want to remove this relation?'),
+            removeRelationTrigger:        '.remove-relation',
+            relationTitleSelector:        '.relation-title',
+            relationFieldsetTitleSelector: '.relation-fieldset-title',
+            relationDepends:              {},
+            reloaderSelector:             '.reload-relation'
+        },
+        _create: function() {
+            var that = this;
+            this.index = this.options.index;
+            this.module = this.options.module;
+            this.fillEntities();
+            $(this.element).find(this.options.removeRelationTrigger).on('click', function() {
+                confirm({
+                    content: that.options.removeRelationMessage,
+                    actions: {
+                        confirm: function () {
+                            that.remove();
+                        }
+                    }
+                });
+            });
+            $(this.element).find(this.options.relationTitleSelector).on('change', function(){
+                var val = 'Relation ' + that.getIndex();
+                if ($(this).val()) {
+                    val = $(this).val();
+                }
+                $(that.element).find(that.options.relationFieldsetTitleSelector).html(val);
+            });
+            $(this.element).find(this.options.reloaderSelector).on('change', function() {
+                that.checkElements();
+            });
+            this.checkElements();
+        },
+        getIndex: function() {
+            return this.index;
+        },
+        fillEntities: function() {
+            var entities = this.module.getEntities();
+            var selects = $(this.element).find(this.options.entityDropdownSelector);
+            for (var i = 0; i<selects.length;i++) {
+                var currentValue = $(selects[i]).val();
+                $(selects[i]).find('option').remove = '';
+                for (var j = 0; j<entities.length;j++) {
+                    var index = $(entities[j]).umcentity('getIndex');
+                    var option = $('<option/>');
+                    option.attr({
+                        value: index,
+                        class: this.options.relationOptionClassPrefix + index
+                    }).text($(entities[j]).umcentity('getLabel'));
+                    if (index == currentValue) {
+                        option.attr('selected', 'selected');
+                    }
+                    $(selects[i]).append(option);
+                }
+            }
+        },
+        remove: function() {
+            var that = this;
+            this.module.removeRelation(this.index);
+            $(this.element).slideUp(500, function() {
+                $(that.element).remove();
+            });
+        },
+        checkElements: function() {
+            for (var id in this.options.relationDepends) {
+                if (this.options.relationDepends.hasOwnProperty(id)) {
+                    var depends = this.options.relationDepends[id];
+                    var valid = false;
+                    for (var j = 0; j < depends.length; j++) {
+                        var groupValid = true;
+                        for (var k in depends[j]) {
+                            if (depends[j].hasOwnProperty(k)) {
+                                var parentElem = $(this.element).find('#relation_' + this.getIndex() + '_' + k);
+                                var value = $(parentElem).val();
+                                if (typeof depends[j][k]['self'] != "undefined") {
+                                    if ($.inArray(value, depends[j][k]['self']) == -1) {
+                                        groupValid = false;
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                        if (groupValid) {
+                            valid = true;
+                            break;
+                        }
+                    }
+                    var mainElement = $(this.element).find('#relation_' + this.getIndex() + '_' + id);
+                    valid ? this.enableElement(mainElement) : this.disableElement(mainElement);
+                }
+            }
+        },
+        disableElement: function(elem) {
+            this.module.disableElement(elem);
+        },
+        enableElement: function(elem) {
+            this.module.enableElement(elem);
+        }
     });
 });

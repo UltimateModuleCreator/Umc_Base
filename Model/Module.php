@@ -24,6 +24,7 @@ use Umc\Base\Api\Data\EntityInterface;
 use Umc\Base\Api\Data\FactoryInterface;
 use Umc\Base\Api\Data\ModelInterface;
 use Umc\Base\Api\Data\ModuleInterface;
+use Umc\Base\Api\Data\RelationInterface;
 use Umc\Base\Config\Form as FormConfig;
 use Umc\Base\Config\SaveAttributes as SaveAttributesConfig;
 
@@ -42,6 +43,11 @@ class Module extends AbstractModel implements ModuleInterface
      * @var EntityInterface[]
      */
     protected $entities = [];
+
+    /**
+     * @var RelationInterface[]
+     */
+    protected $relations = [];
 
     /**
      * @var array
@@ -425,6 +431,14 @@ class Module extends AbstractModel implements ModuleInterface
             }
             $xml .= '</'.$entitiesTag.'>';
         }
+        if (count($this->getRelations())) {
+            $relationsTag = 'relations';
+            $xml .= '<' . $relationsTag . '>';
+            foreach ($this->getRelations() as $relation) {
+                $xml .= $relation->toXml();
+            }
+            $xml .= '</' . $relationsTag . '>';
+        }
         if ($rootName != false) {
             $xml.= '</'.$rootName.'>'."\n";
         }
@@ -451,7 +465,7 @@ class Module extends AbstractModel implements ModuleInterface
     /**
      * get error key
      *
-     * @param strin $field
+     * @param string $field
      * @return string
      */
     public function getValidationErrorKey($field)
@@ -489,6 +503,17 @@ class Module extends AbstractModel implements ModuleInterface
                     $this->addEntity($entity);
                     $entitiesByIndex[$key] = $entity;
                 }
+            }
+        }
+        if (isset($data['relation'])) {
+            foreach ($data['relation'] as $index => $values) {
+                /** @var \Umc\Base\Api\Data\RelationInterface  $relation */
+                $relation = $this->getFactory(FactoryInterface::RELATION_FACTORY_KEY)->create();
+                $relation->addData($values);
+                $relation->setEntities($entitiesByIndex[$values['entity_one']], $entitiesByIndex[$values['entity_two']]);
+                $relation->setType($values['type']);
+                $relation->setIndex($index);
+                $this->addRelation($relation);
             }
         }
         return $this;
@@ -546,6 +571,53 @@ class Module extends AbstractModel implements ModuleInterface
     {
         return $this->entities;
     }
+
+    /**
+     * @param RelationInterface $relation
+     * @return $this
+     * @throws \Exception
+     */
+    public function addRelation(RelationInterface $relation)
+    {
+        $key = $relation->getUniqueKey();
+        if (isset($this->relations[$key])) {
+            throw new \Exception("You cannot have 2 relations between the same entities with the same code");
+        }
+        $relation->setModule($this);
+        $this->relations[$key] = $relation;
+        return $this;
+    }
+
+    /**
+     * @return RelationInterface[]
+     */
+    public function getRelations()
+    {
+        return $this->relations;
+    }
+
+    /**
+     * get relations as json
+     *
+     * @return string
+     */
+    public function getRelationsAsJson()
+    {
+        $json = [];
+        $relations = $this->getRelations();
+        foreach ($relations as $relation) {
+            $reversed = $relation->getReversed();
+            $relation->setReversed(false);
+            $entities = $relation->getEntities();
+            $json[$relation->getIndex()] = [
+                'entity_one' => $entities[0]->getIndex(),
+                'entity_two' => $entities[1]->getIndex()
+            ];
+            $relation->setReversed($reversed);
+        }
+        return json_encode($json);
+    }
+
 
     /**
      * get placeholders

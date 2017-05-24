@@ -15,31 +15,15 @@
  * @license   http://opensource.org/licenses/mit-license.php MIT License
  * @author    Marius Strajeru <ultimate.module.creator@gmail.com>
  */
-namespace Umc\Base\Api\Data;
+namespace Umc\Base\Model\Relation\Type;
 
-/**
- * @api
- */
-interface FactoryInterface
+use Umc\Base\Api\Data\Relation\TypeInterface;
+
+class ParentRelation extends AbstractRelation implements TypeInterface
 {
     /**
      * @var string
      */
-    const ATTRIBUTE_FACTORY_KEY = 'attribute';
-
-    /**
-     * @var string
-     */
-    const ENTITY_FACTORY_KEY = 'entity';
-
-    /**
-     * @var string
-     */
-    const RELATION_FACTORY_KEY = 'relation';
-
-    /**
-     * @param array $data
-     * @return ModelInterface
-     */
-    public function create(array $data = []);
+    const RELATION_TYPE_PARENT = 'parent';
 }
+
