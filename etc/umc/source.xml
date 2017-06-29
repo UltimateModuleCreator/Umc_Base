@@ -968,6 +968,17 @@
             <argument name="api" xsi:type="boolean">true</argument>
         </arguments>
         <members>
+            <member id="{{ENTITY}}_ID">
+                <arguments>
+                    <argument name="doc" xsi:type="string">ID</argument>
+                    <argument name="var" xsi:type="string">string</argument>
+                    <argument name="sort" xsi:type="number">5</argument>
+                    <argument name="show" xsi:type="boolean">true</argument>
+                    <argument name="construct" xsi:type="boolean">false</argument>
+                    <argument name="constant" xsi:type="boolean">true</argument>
+                    <argument name="default" xsi:type="string">'{{entity}}_id'</argument>
+                </arguments>
+            </member>
             <member id="{{CODE}}">
                 <arguments>
                     <argument name="doc" xsi:type="string">{{Label}} attribute constant</argument>
@@ -980,6 +991,18 @@
                     <argument name="default" xsi:type="string">'{{code}}'</argument>
                 </arguments>
             </member>
+            <member id="{{RELATION_COLUMN}}">
+                <arguments>
+                    <argument name="doc" xsi:type="string">{{relation_label}} attribute constant</argument>
+                    <argument name="var" xsi:type="string">string</argument>
+                    <argument name="sort" xsi:type="number">20</argument>
+                    <argument name="show" xsi:type="boolean">true</argument>
+                    <argument name="construct" xsi:type="boolean">false</argument>
+                    <argument name="constant" xsi:type="boolean">true</argument>
+                    <argument name="scope" xsi:type="const">Umc\Base\Config\Source::PARENT_ENTITY</argument>
+                    <argument name="default" xsi:type="string">'{{relation_column_code}}'</argument>
+                </arguments>
+            </member>
         </members>
         <code>
             <part id="top">
@@ -987,7 +1010,14 @@
                     <argument name="file" xsi:type="string">0100_top</argument>
                     <argument name="sort" xsi:type="number">100</argument>
                 </arguments>
-            </part><!-- TODO: add parent entities columns in here -->
+            </part>
+            <part id="parent_relation">
+                <arguments>
+                    <argument name="file" xsi:type="string">0250_parent_relation</argument>
+                    <argument name="sort" xsi:type="number">250</argument>
+                    <argument name="scope" xsi:type="const">Umc\Base\Config\Source::PARENT_ENTITY</argument>
+                </arguments>
+            </part>
             <part id="attributes">
                 <arguments>
                     <argument name="file" xsi:type="string">0200_attributes</argument>
@@ -2763,6 +2793,13 @@
                     <argument name="sort" xsi:type="number">100</argument>
                 </arguments>
             </part>
+            <part id="parent_relation">
+                <arguments>
+                    <argument name="file" xsi:type="string">0200_parent_relation</argument>
+                    <argument name="sort" xsi:type="number">200</argument>
+                    <argument name="scope" xsi:type="const">Umc\Base\Config\Source::PARENT_ENTITY</argument>
+                </arguments>
+            </part>
             <part id="attributes">
                 <arguments>
                     <argument name="file" xsi:type="string">0300_attributes</argument>
@@ -3459,7 +3496,7 @@
                     <argument name="construct" xsi:type="boolean">true</argument>
                     <argument name="var" xsi:type="string">string</argument>
                     <argument name="sort" xsi:type="number">110</argument>
-                    <argument name="default" xsi:type="string">{{class Magento\Framework\View\Element\UiComponent\DataProvider\Document}}::class</argument>
+                    <argument name="default" xsi:type="string"><![CDATA[{{class Magento\Framework\View\Element\UiComponent\DataProvider\Document}}::class]]></argument>
                 </arguments>
             </member>
         </members>
@@ -3476,6 +3513,68 @@
                 <arguments>
                     <argument name="file" xsi:type="string">0100_content</argument>
                     <argument name="sort" xsi:type="number">100</argument>
+                </arguments>
+            </part>
+        </code>
+    </file>
+    <file id="Source/{{Entity}}.php">
+        <arguments>
+            <argument name="label" xsi:type="string" translate="true">Source model for entity</argument>
+            <argument name="description" xsi:type="string" translate="true">allows you to use the list of entities in dropdowns</argument>
+            <argument name="type" xsi:type="string">class</argument>
+            <argument name="sort" xsi:type="string">320</argument>
+            <argument name="scope" xsi:type="const">Umc\Base\Config\Source::ENTITY_SCOPE</argument>
+        </arguments>
+        <implements>
+            <implement id="Magento\Framework\Option\ArrayInterface" sort="10" />
+        </implements>
+        <members>
+            <member id="{{entity}}Repository">
+                <arguments>
+                    <argument name="show" xsi:type="boolean">true</argument>
+                    <argument name="construct" xsi:type="boolean">true</argument>
+                    <argument name="parent" xsi:type="boolean">false</argument>
+                    <argument name="var" xsi:type="string">{{Namespace}}\{{Module}}\Api\{{Entity}}RepositoryInterface</argument>
+                    <argument name="sort" xsi:type="number">10</argument>
+                    <argument name="doc" xsi:type="string">{{EntityLabel}} repository</argument>
+                </arguments>
+            </member>
+            <member id="searchCriteriaBuilder">
+                <arguments>
+                    <argument name="show" xsi:type="boolean">true</argument>
+                    <argument name="construct" xsi:type="boolean">true</argument>
+                    <argument name="parent" xsi:type="boolean">false</argument>
+                    <argument name="var" xsi:type="string">Magento\Framework\Api\SearchCriteriaBuilder</argument>
+                    <argument name="sort" xsi:type="number">20</argument>
+                    <argument name="doc" xsi:type="string">Search Criteria Builder</argument>
+                </arguments>
+            </member>
+            <member id="filterBuilder">
+                <arguments>
+                    <argument name="show" xsi:type="boolean">true</argument>
+                    <argument name="construct" xsi:type="boolean">true</argument>
+                    <argument name="parent" xsi:type="boolean">false</argument>
+                    <argument name="var" xsi:type="string">Magento\Framework\Api\FilterBuilder</argument>
+                    <argument name="sort" xsi:type="number">30</argument>
+                    <argument name="doc" xsi:type="string">Filter Builder</argument>
+                </arguments>
+            </member>
+            <member id="options">
+                <arguments>
+                    <argument name="show" xsi:type="boolean">true</argument>
+                    <argument name="construct" xsi:type="boolean">false</argument>
+                    <argument name="parent" xsi:type="boolean">false</argument>
+                    <argument name="var" xsi:type="string">array</argument>
+                    <argument name="sort" xsi:type="number">40</argument>
+                    <argument name="doc" xsi:type="string">Options</argument>
+                </arguments>
+            </member>
+        </members>
+        <code>
+            <part id="content">
+                <arguments>
+                    <argument name="file" xsi:type="string">0100_content</argument>
+                    <argument name="sort" xsi:type="string">100</argument>
                 </arguments>
             </part>
         </code>
@@ -3610,6 +3709,24 @@
                     </depend>
                 </depends>
             </part>
+            <part id="parent_field">
+                <arguments>
+                    <argument name="file" xsi:type="string">0150_parent_field</argument>
+                    <argument name="sort" xsi:type="number">150</argument>
+                    <argument name="scope" xsi:type="const">Umc\Base\Config\Source::PARENT_ENTITY</argument>
+                </arguments>
+                <depends id="ui_version_1">
+                    <depend id="ui_version">
+                        <arguments>
+                            <argument name="val" xsi:type="array">
+                                <item name="v1" xsi:type="array">
+                                    <item name="value" xsi:type="const">Umc\Base\Source\UiVersion::V1</item>
+                                </item>
+                            </argument>
+                        </arguments>
+                    </depend>
+                </depends>
+            </part>
             <part id="name_attribute">
                 <arguments>
                     <argument name="file" xsi:type="string">0200_name_attribute</argument>
@@ -3693,6 +3810,24 @@
                 <arguments>
                     <argument name="file" xsi:type="string">0600_top_v2</argument>
                     <argument name="sort" xsi:type="number">600</argument>
+                </arguments>
+                <depends id="ui_version_2">
+                    <depend id="ui_version">
+                        <arguments>
+                            <argument name="val" xsi:type="array">
+                                <item name="v2" xsi:type="array">
+                                    <item name="value" xsi:type="const">Umc\Base\Source\UiVersion::V2</item>
+                                </item>
+                            </argument>
+                        </arguments>
+                    </depend>
+                </depends>
+            </part>
+            <part id="parent_field_v2">
+                <arguments>
+                    <argument name="file" xsi:type="string">0650_parent_field_v2</argument>
+                    <argument name="sort" xsi:type="number">650</argument>
+                    <argument name="scope" xsi:type="const">Umc\Base\Config\Source::PARENT_ENTITY</argument>
                 </arguments>
                 <depends id="ui_version_2">
                     <depend id="ui_version">
@@ -3961,6 +4096,24 @@
                     </depend>
                 </depends>
             </part>
+            <part id="parent_column">
+                <arguments>
+                    <argument name="file" xsi:type="string">0725_parent_column</argument>
+                    <argument name="sort" xsi:type="number">725</argument>
+                    <argument name="scope" xsi:type="const">Umc\Base\Config\Source::PARENT_ENTITY</argument>
+                </arguments>
+                <depends id="ui_version">
+                    <depend id="ui_version">
+                        <arguments>
+                            <argument name="val" xsi:type="array">
+                                <item name="v1" xsi:type="array">
+                                    <item name="value" xsi:type="const">Umc\Base\Source\UiVersion::V1</item>
+                                </item>
+                            </argument>
+                        </arguments>
+                    </depend>
+                </depends>
+            </part>
             <part id="column">
                 <arguments>
                     <argument name="file" xsi:type="string">0800_column</argument>
@@ -3989,7 +4142,7 @@
                             </argument>
                         </arguments>
                     </depend>
-            </depends>
+                </depends>
             </part>
             <part id="created_at_column">
                 <arguments>
@@ -4226,6 +4379,24 @@
                     <argument name="sort" xsi:type="number">2000</argument>
                 </arguments>
                 <depends id="ui_version_2">
+                    <depend id="ui_version">
+                        <arguments>
+                            <argument name="val" xsi:type="array">
+                                <item name="v2" xsi:type="array">
+                                    <item name="value" xsi:type="const">Umc\Base\Source\UiVersion::V2</item>
+                                </item>
+                            </argument>
+                        </arguments>
+                    </depend>
+                </depends>
+            </part>
+            <part id="parent_column_v2">
+                <arguments>
+                    <argument name="file" xsi:type="string">2050_parent_column_v2</argument>
+                    <argument name="sort" xsi:type="number">2050</argument>
+                    <argument name="scope" xsi:type="const">Umc\Base\Config\Source::PARENT_ENTITY</argument>
+                </arguments>
+                <depends id="ui_version">
                     <depend id="ui_version">
                         <arguments>
                             <argument name="val" xsi:type="array">

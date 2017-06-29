@@ -1,0 +1,21 @@
+
+    /**
+     * set {{relation_label}}
+     *
+     * @param mixed ${{relationColumnCamelCase}}
+     * @return {{class {{Namespace}}\{{Module}}\Api\Data\{{Entity}}Interface}}
+     */
+    public function set{{RelationColumnCamelCase}}(${{relationColumnCamelCase}})
+    {
+        return $this->setData({{class {{Namespace}}\{{Module}}\Api\Data\{{Entity}}Interface}}::{{RELATION_COLUMN}}, ${{relationColumnCamelCase}});
+    }
+
+    /**
+     * get {{relation_label}}
+     *
+     * @return string
+     */
+    public function get{{RelationColumnCamelCase}}()
+    {
+        return $this->getData({{class {{Namespace}}\{{Module}}\Api\Data\{{Entity}}Interface}}::{{RELATION_COLUMN}});
+    }

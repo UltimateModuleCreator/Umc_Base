@@ -88,7 +88,7 @@
             ${{entity}}DataObject = $this->{{_}}{{entity}}InterfaceFactory->create();
             $this->{{_}}dataObjectHelper->populateWithArray(
                 ${{entity}}DataObject,
-                ${{entity}}r->getData(),
+                ${{entity}}->getData(),
                 {{class {{Namespace}}\{{Module}}\Api\Data\{{Entity}}Interface}}::class
             );
             ${{entities}}[] = ${{entity}}DataObject;

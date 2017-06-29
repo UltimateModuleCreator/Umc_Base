@@ -1,0 +1,31 @@
+    /**
+     * Retrieve all {{EntitiesLabel}} as an option array
+     *
+     * @return array
+     * @throws StateException
+     */
+    public function getAllOptions()
+    {
+        if (empty($this->{{_}}options)) {
+            $options = [];
+            $searchCriteria = $this->{{_}}searchCriteriaBuilder->create();
+            $searchResults = $this->{{_}}{{entity}}Repository->getList($searchCriteria);
+            foreach ($searchResults->getItems() as ${{entity}}) {
+                $options[] = [
+                    'value' => ${{entity}}->get{{Entity}}Id(),
+                    'label' => ${{entity}}->get{{NameAttributeCode}}(),
+                ];
+            }
+            $this->{{_}}options = $options;
+        }
+
+        return $this->{{_}}options;
+    }
+
+    /**
+     * @return array
+     */
+    public function toOptionArray()
+    {
+        return $this->getAllOptions();
+    }

@@ -23,6 +23,7 @@
     <preference for="Umc\Base\Api\Data\EntityInterface" type="Umc\Base\Model\Entity" />
     <preference for="Umc\Base\Api\Data\AttributeInterface" type="Umc\Base\Model\Attribute" />
     <preference for="Umc\Base\Api\Data\RelationInterface" type="Umc\Base\Model\Relation" />
+    <preference for="Umc\Base\Api\Data\ParentRelationInterface" type="Umc\Base\Model\ParentRelation" />
 
     <virtualType name="UmcBaseEntityInterfaceFactory" type="Umc\Base\Model\ModelInterfaceFactory">
         <arguments>
@@ -61,6 +62,57 @@
                 <item name="framework" xsi:type="array">
                     <item name="name" xsi:type="string">magento/framework</item>
                     <item name="version" xsi:type="string">100.*.*</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Umc\Base\Model\Entity">
+        <arguments>
+            <argument name="systemAttributes" xsi:type="array">
+                <item name="parent_id" xsi:type="array">
+                    <item name="code" xsi:type="string">parent_id</item>
+                    <item name="label" xsi:type="string">Parent Id</item>
+                    <item name="type" xsi:type="const">Umc\Base\Model\Attribute\Type\Integer::NAME</item>
+                    <item name="condition" xsi:type="array">
+                        <item name="method" xsi:type="string">getIsTree</item>
+                        <item name="value" xsi:type="boolean">true</item>
+                    </item>
+                </item>
+                <item name="path" xsi:type="array">
+                    <item name="code" xsi:type="string">path</item>
+                    <item name="label" xsi:type="string">Path</item>
+                    <item name="type" xsi:type="const">Umc\Base\Model\Attribute\Type\Text::NAME</item>
+                    <item name="condition" xsi:type="array">
+                        <item name="method" xsi:type="string">getIsTree</item>
+                        <item name="value" xsi:type="boolean">true</item>
+                    </item>
+                </item>
+                <item name="position" xsi:type="array">
+                    <item name="code" xsi:type="string">position</item>
+                    <item name="label" xsi:type="string">Position</item>
+                    <item name="type" xsi:type="const">Umc\Base\Model\Attribute\Type\Integer::NAME</item>
+                    <item name="condition" xsi:type="array">
+                        <item name="method" xsi:type="string">getIsTree</item>
+                        <item name="value" xsi:type="boolean">true</item>
+                    </item>
+                </item>
+                <item name="level" xsi:type="array">
+                    <item name="code" xsi:type="string">level</item>
+                    <item name="label" xsi:type="string">Level</item>
+                    <item name="type" xsi:type="const">Umc\Base\Model\Attribute\Type\Integer::NAME</item>
+                    <item name="condition" xsi:type="array">
+                        <item name="method" xsi:type="string">getIsTree</item>
+                        <item name="value" xsi:type="boolean">true</item>
+                    </item>
+                </item>
+                <item name="children_count" xsi:type="array">
+                    <item name="code" xsi:type="string">children_count</item>
+                    <item name="label" xsi:type="string">Children Count</item>
+                    <item name="type" xsi:type="const">Umc\Base\Model\Attribute\Type\Integer::NAME</item>
+                    <item name="condition" xsi:type="array">
+                        <item name="method" xsi:type="string">getIsTree</item>
+                        <item name="value" xsi:type="boolean">true</item>
+                    </item>
                 </item>
             </argument>
         </arguments>
@@ -661,6 +713,18 @@
         </arguments>
     </virtualType>
 
+    <virtualType name="UmcEntityParentRelationPartProcessor" type="Umc\Base\Processor\PartProcessor">
+        <arguments>
+            <argument name="modelProvider" xsi:type="object">Umc\Base\Provider\Processor\EntityParentRelationProvider</argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="UmcEntityParentRelationMemberProcessor" type="Umc\Base\Processor\MemberProcessor">
+        <arguments>
+            <argument name="modelProvider" xsi:type="object">Umc\Base\Provider\Processor\EntityParentRelationProvider</argument>
+        </arguments>
+    </virtualType>
+
     <type name="Umc\Base\Generator\ClassGenerator">
         <arguments>
             <argument name="defaultScope" xsi:type="const">Umc\Base\Config\Source::MODULE_SCOPE</argument>
@@ -689,8 +753,10 @@
             <argument name="processors" xsi:type="array">
                 <item name="part.umc_entity" xsi:type="object">UmcSelfPartProcessor</item>
                 <item name="part.umc_attribute" xsi:type="object">UmcChildPartProcessor</item>
+                <item name="part.umc_parent_entity" xsi:type="object">UmcEntityParentRelationPartProcessor</item>
                 <item name="member.umc_entity" xsi:type="object">UmcSelfMemberProcessor</item>
                 <item name="member.umc_attribute" xsi:type="object">UmcChildMemberProcessor</item>
+                <item name="member.umc_parent_entity" xsi:type="object">UmcEntityParentRelationMemberProcessor</item>
                 <item name="annotation.umc_entity" xsi:type="object">UmcSelfAnnotationProcessor</item>
                 <item name="annotation.umc_attribute" xsi:type="object">UmcChildAnnotationProcessor</item>
                 <item name="implement.umc_entity" xsi:type="object">UmcSelfImplementProcessor</item>
@@ -719,6 +785,7 @@
             <argument name="processors" xsi:type="array">
                 <item name="part.umc_entity" xsi:type="object">UmcSelfPartProcessor</item>
                 <item name="part.umc_attribute" xsi:type="object">UmcChildPartProcessor</item>
+                <item name="part.umc_parent_entity" xsi:type="object">UmcEntityParentRelationPartProcessor</item>
             </argument>
         </arguments>
     </virtualType>

@@ -1,0 +1,21 @@
+        <field name="{{relation_column_code}}" formElement="select">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">{{entity}}</item>
+                </item>
+            </argument>
+            <settings>
+                <dataType>text</dataType>
+                <label translate="true">{{relation_label}}</label>
+                <dataScope>{{relation_column_code}}</dataScope>
+                {{form_validation_v2}}
+            </settings>
+            <formElements>
+                <select>
+                    <settings>
+                        <options class="{{Namespace}}\{{Module}}\Source\{{RelatedEntity}}"/>
+                        <caption translate="true">-- Please Select --</caption>
+                    </settings>
+                </select>
+            </formElements>
+        </field>

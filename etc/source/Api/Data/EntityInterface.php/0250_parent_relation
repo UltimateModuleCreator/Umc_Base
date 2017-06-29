@@ -1,0 +1,15 @@
+    /**
+     * Get {{relation_label}}
+     *
+     * @return int
+     */
+    public function get{{RelationColumnCamelCase}}();
+
+    /**
+     * Set {{relation_label}}
+     *
+     * @param mixed ${{relationColumnCamelCase}}
+     * @return {{Entity}}Interface
+     */
+    public function set{{RelationColumnCamelCase}}(${{relationColumnCamelCase}});
+

@@ -5,3 +5,18 @@
      */
     public function getId();
 
+    /**
+     * Get ID
+     *
+     * @return int|null
+     */
+    public function get{{Entity}}Id();
+
+    /**
+     * Set ID
+     *
+     * @param int ${{entity}}Id
+     * @return EntityInterface
+     */
+    public function set{{Entity}}Id(${{entity}}Id);
+

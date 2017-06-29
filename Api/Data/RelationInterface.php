@@ -71,7 +71,7 @@ interface RelationInterface extends ModelInterface
     public function setType($type);
 
     /**
-     * @return bool
+     * @return string
      */
     public function getType();
 

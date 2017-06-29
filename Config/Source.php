@@ -35,6 +35,11 @@ class Source extends Config
     const ATTRIBUTE_SCOPE = 'umc_attribute';
 
     /**
+     * @var string
+     */
+    const PARENT_ENTITY   = 'umc_parent_entity';
+
+    /**
      * get scope label
      *
      * @param string $scope
