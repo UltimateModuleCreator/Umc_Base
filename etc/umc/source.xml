@@ -292,7 +292,7 @@
             <part id="collections">
                 <arguments>
                     <argument name="file" xsi:type="string">0800_collections</argument>
-                    <argument name="sort" xsi:type="number">700</argument>
+                    <argument name="sort" xsi:type="number">800</argument>
                     <argument name="scope" xsi:type="const">Umc\Base\Config\Source::ENTITY_SCOPE</argument>
                 </arguments>
                 <depends id="is_not_tree">
