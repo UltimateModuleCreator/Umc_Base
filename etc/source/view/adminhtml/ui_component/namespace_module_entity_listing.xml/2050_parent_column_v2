@@ -1,0 +1,9 @@
+        <column name="{{relation_column_code}}" component="Magento_Ui/js/grid/columns/select">
+            <settings>
+                <options class="{{Namespace}}\{{Module}}\Source\{{RelatedEntity}}"/>
+                <filter>select</filter>
+                {{grid_editor_v2}}
+                <dataType>select</dataType>
+                <label translate="true">{{relation_label}}</label>
+            </settings>
+        </column>

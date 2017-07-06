@@ -17,3 +17,24 @@
     {
         return [self::CACHE_TAG . '_' . $this->getId()];
     }
+
+    /**
+     * Get {{EntityLabel}} id
+     *
+     * @return array
+     */
+    public function get{{Entity}}Id()
+    {
+        return $this->getData({{class {{Namespace}}\{{Module}}\Api\Data\{{Entity}}Interface}}::{{ENTITY}}_ID);
+    }
+
+    /**
+     * set {{EntityLabel}} id
+     *
+     * @param int ${{entity}}Id
+     * @return {{class {{Namespace}}\{{Module}}\Api\Data\{{Entity}}Interface}}
+     */
+    public function set{{Entity}}Id(${{entity}}Id)
+    {
+        return $this->setData({{class {{Namespace}}\{{Module}}\Api\Data\{{Entity}}Interface}}::{{ENTITY}}_ID, ${{entity}}Id);
+    }

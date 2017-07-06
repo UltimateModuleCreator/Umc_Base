@@ -31,8 +31,10 @@
             jQuery('#edit_form').umcmodule({
                 attributeDepends: <?php /* @escapeNotVerified */  echo $block->getAttributeDepends(); ?>,
                 entityDepends: <?php /* @escapeNotVerified */  echo $block->getEntityDepends(); ?>,
+                relationDepends: <?php /* @escapeNotVerified */  echo $block->getRelationDepends(); ?>,
                 moduleDepends: <?php /* @escapeNotVerified */  echo $block->getModuleDepends(); ?>,
                 nameAttributes:<?php /* @escapeNotVerified */  echo $block->getNameAttributes(); ?>,
+                relationValues: <?php /* @escapeNotVerified */  echo $block->getRelationsAsJson(); ?>,
                 tooltipType: '<?php /* @escapeNotVerified */  echo $block->getTooltipType(); ?>'
             })
             .validation({

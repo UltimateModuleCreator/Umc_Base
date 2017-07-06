@@ -280,4 +280,14 @@ interface ModuleInterface extends ModelInterface
      * @return ModuleInterface
      */
     public function addEntity(EntityInterface $entity);
+
+    /**
+     * @return RelationInterface[]
+     */
+    public function getRelations();
+
+    /**
+     * @return string
+     */
+    public function getRelationsAsJson();
 }

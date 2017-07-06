@@ -78,4 +78,12 @@
             </arguments>
         </fieldset>
     </section>
+
+    <section id="release-notes">
+        <arguments>
+            <argument name="label" xsi:type="string" translate="true">Release Notes</argument>
+            <argument name="class" xsi:type="object">Umc\Base\Model\Help\Section\ReleaseNotes</argument>
+            <argument name="sort" xsi:type="number">30</argument>
+        </arguments>
+    </section>
 </help>

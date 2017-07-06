@@ -33,6 +33,11 @@ interface FactoryInterface
     const ENTITY_FACTORY_KEY = 'entity';
 
     /**
+     * @var string
+     */
+    const RELATION_FACTORY_KEY = 'relation';
+
+    /**
      * @param array $data
      * @return ModelInterface
      */

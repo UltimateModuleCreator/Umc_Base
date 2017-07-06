@@ -33,6 +33,7 @@ use Umc\Base\Model\Attribute\Type\Integer;
 use Umc\Base\Model\Attribute\Type\Text;
 use Umc\Base\Model\Entity\Type\Factory as TypeFactory;
 use Umc\Base\Api\Data\Entity\TypeInterface;
+use Umc\Base\Model\Relation\Type\ParentRelation;
 use Umc\Base\Source\Grid;
 
 /**
@@ -93,11 +94,18 @@ class Entity extends AbstractModel implements EntityInterface
     protected $parentAttributes = [];
 
     /**
-     * @param TypeFactory $typeFactory
-     * @param AttributeInterfaceFactory $attributeFactory
+     * @var array
+     */
+    protected $systemAttributes = [];
+
+    /**
+     * Entity constructor.
      * @param SaveAttributesConfig $saveAttributesConfig
      * @param FormConfig $formConfig
      * @param Escaper $escaper
+     * @param TypeFactory $typeFactory
+     * @param AttributeInterfaceFactory $attributeFactory
+     * @param array $systemAttributes
      * @param array $data
      */
     public function __construct(
@@ -106,10 +114,12 @@ class Entity extends AbstractModel implements EntityInterface
         Escaper $escaper,
         TypeFactory $typeFactory,
         AttributeInterfaceFactory $attributeFactory,
+        array $systemAttributes,
         array $data = []
     ) {
         $this->typeFactory      = $typeFactory;
         $this->attributeFactory = $attributeFactory;
+        $this->systemAttributes = $systemAttributes;
         parent::__construct($saveAttributesConfig, $formConfig, $escaper, $data);
     }
 
@@ -632,6 +642,7 @@ class Entity extends AbstractModel implements EntityInterface
         $setup = '';
         /** @var AttributeInterface[] $allAttributes */
         $allAttributes = array_merge(
+            $this->getParentEntityFields(),
             $this->getAttributes(),
             $this->getSystemAttributes()
         );
@@ -692,42 +703,45 @@ class Entity extends AbstractModel implements EntityInterface
     public function getSystemAttributes()
     {
         $attributes = [];
-        if ($this->getIsTree()) {
-            /** @var AttributeInterface $attribute */
-            $attribute = $this->attributeFactory->create();
-            $attribute->setCode('parent_id');
-            $attribute->setLabel('Parent id');
-            $attribute->setType(Integer::NAME);
-            $attribute->setEntity($this);
-            $attributes[] = $attribute;
+        foreach ($this->systemAttributes as $systemAttribute) {
+            $valid = true;
+            if (isset($systemAttribute['condition']['method']) && isset($systemAttribute['condition']['value'])) {
+                $method = $systemAttribute['condition']['method'];
+                $value = $systemAttribute['condition']['value'];
+                $valid = ($this->$method() == $value);
+                unset($systemAttribute['condition']);
+            }
+            if ($valid) {
+                $attribute = $this->attributeFactory->create();
+                $attribute->setData($systemAttribute);
+                $attributes[] = $attribute;
+            }
+        }
+        return $attributes;
+    }
 
-            $attribute = $this->attributeFactory->create();
-            $attribute->setCode('path');
-            $attribute->setLabel('Path');
-            $attribute->setType(Text::NAME);
-            $attribute->setEntity($this);
-            $attributes[] = $attribute;
-
-            $attribute = $this->attributeFactory->create();
-            $attribute->setCode('position');
-            $attribute->setLabel('Position');
-            $attribute->setType(Integer::NAME);
-            $attribute->setEntity($this);
-            $attributes[] = $attribute;
-
-            $attribute = $this->attributeFactory->create();
-            $attribute->setCode('level');
-            $attribute->setLabel('Level');
-            $attribute->setType(Integer::NAME);
-            $attribute->setEntity($this);
-            $attributes[] = $attribute;
-
-            $attribute = $this->attributeFactory->create();
-            $attribute->setCode('children_count');
-            $attribute->setLabel('Children Count');
-            $attribute->setType(Integer::NAME);
-            $attribute->setEntity($this);
-            $attributes[] = $attribute;
+    /**
+     * @return AttributeInterface[]
+     */
+    public function getParentEntityFields()
+    {
+        $attributes = [];
+        foreach ($this->getModule()->getRelations() as $relation) {
+            if ($relation->getType() == ParentRelation::RELATION_TYPE_PARENT) {
+                $entities = $relation->getEntities();
+                if ($entities[1]->getNameSingular() == $this->getNameSingular()) {
+                    $attribute = $this->attributeFactory->create();
+                    $relationCode = $relation->getCode();
+                    $code = ($relationCode) ? $relationCode . '_' : '';
+                    $code .= $entities[0]->getNameSingular().'_id';
+                    $attribute->setCode($code);
+                    $attribute->setLabel($relation->getTitle().' '. $entities[0]->getLabelSingular());
+                    $attribute->setType(Integer::NAME);
+                    $attribute->setEntity($this);
+                    $attribute->setRequired($relation->getRequired());
+                    $attributes[] = $attribute;
+                }
+            }
         }
         return $attributes;
     }

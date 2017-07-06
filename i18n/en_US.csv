@@ -6,6 +6,7 @@ Modules,Modules
 "Save Module","Save Module"
 "Save and Continue Edit","Save and Continue Edit"
 "Add Entity","Add Entity"
+"Add Relation","Add Relation"
 "Edit Module ""%1""","Edit Module ""%1"""
 "Create module","Create module"
 label,label
@@ -13,6 +14,7 @@ label,label
 "Options for field %1 should be an instance of %2 or an array","Options for field %1 should be an instance of %2 or an array"
 Entities,Entities
 Module,Module
+"Entity Relations","Entity Relations"
 "Module Creator","Module Creator"
 "The requested file does not exist or is not readable","The requested file does not exist or is not readable"
 "Ultimate Module Creator","Ultimate Module Creator"
@@ -26,6 +28,7 @@ Help,Help
 "Module files list is not available","Module files list is not available"
 "Download Module Archive","Download Module Archive"
 "Module archive is not available","Module archive is not available"
+"Missing version or name for module %1","Missing version or name for module %1"
 "For each attribute for which","For each attribute for which"
 " OR "," OR "
 "the following conditions are met:","the following conditions are met:"
@@ -42,6 +45,9 @@ message,message
 "value is not permitted.","value is not permitted."
 "These are PHP reserved keywords","These are PHP reserved keywords"
 "These values would conflict with the magic getters and setters of the generated model","These values would conflict with the magic getters and setters of the generated model"
+Title,Title
+Description,Description
+Type,Type
 "Yes but hidden","Yes but hidden"
 Popup,Popup
 Slide,Slide
@@ -65,8 +71,11 @@ Edit,Edit
 "The Ultimate Module Creator for Magento 2 (UMC2) is a Magento extension that lets you create other magento CRUD modules for your own entities. You can create as many entities as you want in one extension.","The Ultimate Module Creator for Magento 2 (UMC2) is a Magento extension that lets you create other magento CRUD modules for your own entities. You can create as many entities as you want in one extension."
 "This module is intended for developers. It should not be used in production.","This module is intended for developers. It should not be used in production."
 "Also, the modules you create with it should be tested before moved to production.","Also, the modules you create with it should be tested before moved to production."
+"Relation %1","Relation %1"
+"Remove relation","Remove relation"
 "OK! I got it!","OK! I got it!"
 "Are you sure you want to remove this entity?","Are you sure you want to remove this entity?"
+"Are you sure you want to remove this relation?","Are you sure you want to remove this relation?"
 "It is not recomended to add menu items on the top level of the admin menu. Are you sure you want to do this?","It is not recomended to add menu items on the top level of the admin menu. Are you sure you want to do this?"
 "Select parent menu and position","Select parent menu and position"
 "Are you sure you want to remove this attribute?","Are you sure you want to remove this attribute?"
@@ -78,12 +87,11 @@ Edit,Edit
 "Setting this to Yes will make your session not expire while you are on the add/edit module form","Setting this to Yes will make your session not expire while you are on the add/edit module form"
 "Select Entity Type","Select Entity Type"
 "Select Attribute Type","Select Attribute Type"
+"Select Relation Type","Select Relation Type"
 "Each module must contain at least one entity.","Each module must contain at least one entity."
 "Each entity must contain at least one attribute.","Each entity must contain at least one attribute."
 Version,Version
 Field,Field
-Type,Type
-Description,Description
 MODULE,MODULE
 ENTITY,ENTITY
 ATTRIBUTE,ATTRIBUTE
@@ -171,6 +179,18 @@ Note,Note
 "Default value","Default value"
 "Fill in a default value for the attribute. Leave empty for no value. For dropdown and multiselect attributes the value, must be a valid value. not valid ones will be removed. For the multiselect attributes add one default value on each line. For Yes/No attribtues enter 1 for Yes, 0 for No. For country attributes fill in the country ISO2 code. You cannot set a default value for image and file attributes.For the moment the default values don't work for the form ui components V2.2.","Fill in a default value for the attribute. Leave empty for no value. For dropdown and multiselect attributes the value, must be a valid value. not valid ones will be removed. For the multiselect attributes add one default value on each line. For Yes/No attribtues enter 1 for Yes, 0 for No. For country attributes fill in the country ISO2 code. You cannot set a default value for image and file attributes.For the moment the default values don't work for the form ui components V2.2."
 "One option on each row for multiple selects","One option on each row for multiple selects"
+"Relation settings","Relation settings"
+"Relation code","Relation code"
+"Used in generated method names. For example if you have 2 entities named 'author' and 'article' and you fill in the relation code 'related' methods will be generated with the name 'getRelatedArticles' on the author model and 'getRelatedAuthors' on the article model.","Used in generated method names. For example if you have 2 entities named 'author' and 'article' and you fill in the relation code 'related' methods will be generated with the name 'getRelatedArticles' on the author model and 'getRelatedAuthors' on the article model."
+"Relation Type","Relation Type"
+"This defines the type of relation between the 2 entities. You can have a many to many relation or a parent-child relation. For many to many relations an additional table will be created, keeping the related entity ids. For parent-child relations, a field with a reference to the parent will be added in the child entity table.","This defines the type of relation between the 2 entities. You can have a many to many relation or a parent-child relation. For many to many relations an additional table will be created, keeping the related entity ids. For parent-child relations, a field with a reference to the parent will be added in the child entity table."
+"Entity One","Entity One"
+"It takes to to have a relationship. This is the first entity in the relationship. You can have multiple relations between the same entities.","It takes to to have a relationship. This is the first entity in the relationship. You can have multiple relations between the same entities."
+"Entity Two","Entity Two"
+"It takes to to have a relationship. This is the second entity in the relationship. You can have multiple relations between the same entities.","It takes to to have a relationship. This is the second entity in the relationship. You can have multiple relations between the same entities."
+"Relation Title","Relation Title"
+"This will be used as label in the grid/form for related entities. Example: You have EntityOne as parent for Entity2. The value of this field will appear as label for the dropdown containing the instances of EntityOne in the form and grid for Entity2.","This will be used as label in the grid/form for related entities. Example: You have EntityOne as parent for Entity2. The value of this field will appear as label for the dropdown containing the instances of EntityOne in the form and grid for Entity2."
+"Setting to Yes will make the parent entities select mandatory in the child entities add/edit form. Tip: if you are creating a parent-child relation on the same entity, don't set this as true. You won't be able to create your entities from the UI because when you add the first entity you will have none to select as related.  ","Setting to Yes will make the parent entities select mandatory in the child entities add/edit form. Tip: if you are creating a parent-child relation on the same entity, don't set this as true. You won't be able to create your entities from the UI because when you add the first entity you will have none to select as related.  "
 "General Information","General Information"
 "Installed UMC2 modules","Installed UMC2 modules"
 "UMC2 consists of several modules. Each one except the base module can be disabled. Your current installed modules are:","UMC2 consists of several modules. Each one except the base module can be disabled. Your current installed modules are:"
@@ -186,6 +206,28 @@ Note,Note
 "There are some naming restrictions for the entity setup.","There are some naming restrictions for the entity setup."
 "Attribute naming restrictions","Attribute naming restrictions"
 "There are some naming restrictions for the attribute setup.","There are some naming restrictions for the attribute setup."
+"Release Notes","Release Notes"
+Compatibility,Compatibility
+"Made compatible with Magento 2.1 and Magento 2.2-dev","Made compatible with Magento 2.1 and Magento 2.2-dev"
+Improvement,Improvement
+"<a href=""https://github.com/UltimateModuleCreator/Umc_Base/issues/12"">#12: File cannot be uploaded</a>","<a href=""https://github.com/UltimateModuleCreator/Umc_Base/issues/12"">#12: File cannot be uploaded</a>"
+"Files could not be uploaded in certain congfigurations.","Files could not be uploaded in certain congfigurations."
+"Bug Fix","Bug Fix"
+"<a href=""https://github.com/UltimateModuleCreator/Umc_Base/issues/13"">#13: PHP 7 causes exception on usage of Int as classname </a>","<a href=""https://github.com/UltimateModuleCreator/Umc_Base/issues/13"">#13: PHP 7 causes exception on usage of Int as classname </a>"
+"In PHP 7 'Int' is a reserved word. Changed class names to Integer","In PHP 7 'Int' is a reserved word. Changed class names to Integer"
+"<a href=""https://github.com/UltimateModuleCreator/Umc_Base/issues/22"">#22: Feature Request: Short admin session warning</a>","<a href=""https://github.com/UltimateModuleCreator/Umc_Base/issues/22"">#22: Feature Request: Short admin session warning</a>"
+"On the create/edit module page the session is prolonged automatically now. This feature can be disabled from configuration section.","On the create/edit module page the session is prolonged automatically now. This feature can be disabled from configuration section."
+"<a href=""https://github.com/UltimateModuleCreator/Umc_Base/issues/30"">#30: Problems with ACL if name of an entity matches the name of the module</a>","<a href=""https://github.com/UltimateModuleCreator/Umc_Base/issues/30"">#30: Problems with ACL if name of an entity matches the name of the module</a>"
+"ACL resource name collisions were possible if the module and the entity were named the same. ","ACL resource name collisions were possible if the module and the entity were named the same. "
+"<a href=""https://github.com/UltimateModuleCreator/Umc_Base/issues/32"">#32: No valid composer.json was found in any branch or tag</a>","<a href=""https://github.com/UltimateModuleCreator/Umc_Base/issues/32"">#32: No valid composer.json was found in any branch or tag</a>"
+"A rogue `~` prevented composer installation","A rogue `~` prevented composer installation"
+"<a href=""https://github.com/UltimateModuleCreator/Umc_Base/issues/33"">#33: Invalid application config error</a>","<a href=""https://github.com/UltimateModuleCreator/Umc_Base/issues/33"">#33: Invalid application config error</a>"
+"The di.xml file was generated wrongly.","The di.xml file was generated wrongly."
+"Added parent-child relation between entities support","Added parent-child relation between entities support"
+"You can now create parent-child relations between entities and even in the same entity","You can now create parent-child relations between entities and even in the same entity"
+Feature,Feature
+"Added release notes","Added release notes"
+"You are reading them right now","You are reading them right now"
 "Module registration file","Module registration file"
 "The registration file","The registration file"
 "Composer file","Composer file"
@@ -266,6 +308,8 @@ Note,Note
 "Entity Collection Model","Entity Collection Model"
 "Grid collection","Grid collection"
 "Collection used for grid","Collection used for grid"
+"Source model for entity","Source model for entity"
+"allows you to use the list of entities in dropdowns","allows you to use the list of entities in dropdowns"
 "Index Action layout handle","Index Action layout handle"
 "Layout handle for the admin index page of the entity","Layout handle for the admin index page of the entity"
 "Add/Edit Action layout handle","Add/Edit Action layout handle"
@@ -302,5 +346,7 @@ Text,Text
 Textarea,Textarea
 "Yes / No","Yes / No"
 "Multiple select","Multiple select"
+"Entity 1 Is Parent For Entity 2","Entity 1 Is Parent For Entity 2"
+"One To Many","One To Many"
 "Module Name","Module Name"
 Action,Action

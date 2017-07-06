@@ -23,6 +23,7 @@ use Magento\Framework\Registry;
 use Umc\Base\Api\Data\AttributeInterface;
 use Umc\Base\Api\Data\EntityInterface;
 use Umc\Base\Api\Data\ModuleInterface;
+use Umc\Base\Api\Data\RelationInterface;
 use Umc\Base\Block\Adminhtml\Module\Edit\Tab\AbstractTab;
 use Umc\Base\Config\Form as FormConfig;
 
@@ -92,6 +93,14 @@ class Edit extends Container
                 'class'     => 'save add-entity',
             ],
             -150
+        );
+        $this->buttonList->add(
+            'add-relation',
+            [
+                'label'     => __('Add Relation'),
+                'class'     => 'save add-relation',
+            ],
+            -200
         );
     }
 
@@ -163,6 +172,14 @@ class Edit extends Container
     /**
      * @return string
      */
+    public function getRelationDepends()
+    {
+        return $this->formConfig->getDepends(RelationInterface::ENTITY_CODE);
+    }
+
+    /**
+     * @return string
+     */
     public function getNameAttributes()
     {
         return $this->getModule()->getNameAttributes();
@@ -176,5 +193,18 @@ class Edit extends Container
     public function getTooltipType()
     {
         return $this->_scopeConfig->getValue(AbstractTab::XML_TOOLTIP_TYPE_PATH);
+    }
+
+    /**
+     * @return string
+     */
+    public function getRelationsAsJson()
+    {
+        /** @var \Umc\Base\Api\Data\ModuleInterface $module */
+        $module = $this->coreRegistry->registry('current_module');
+        if ($module) {
+            return $module->getRelationsAsJson();
+        }
+        return '{}';
     }
 }

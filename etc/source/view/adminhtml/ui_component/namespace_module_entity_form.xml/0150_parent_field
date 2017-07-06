@@ -1,0 +1,13 @@
+        <field name="{{relation_column_code}}">
+            <argument name="data" xsi:type="array">
+                <item name="options" xsi:type="object">{{Namespace}}\{{Module}}\Source\{{RelatedEntity}}</item>
+                <item name="config" xsi:type="array">
+                    <item name="dataType" xsi:type="string">text</item>
+                    <item name="label" xsi:type="string" translate="true">{{relation_label}}</item>
+                    <item name="formElement" xsi:type="string">select</item>
+                    <item name="source" xsi:type="string">{{entity}}</item>
+                    <item name="dataScope" xsi:type="string">{{relation_column_code}}</item>
+                    {{form_validation_v1}}
+                </item>
+            </argument>
+        </field>

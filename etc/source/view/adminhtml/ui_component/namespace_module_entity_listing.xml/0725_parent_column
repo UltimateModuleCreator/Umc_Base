@@ -1,0 +1,12 @@
+        <column name="{{relation_column_code}}">
+            <argument name="data" xsi:type="array">
+                <item name="options" xsi:type="object">{{Namespace}}\{{Module}}\Source\{{RelatedEntity}}</item>
+                <item name="config" xsi:type="array">
+                    <item name="filter" xsi:type="string">select</item>
+                    <item name="dataType" xsi:type="string">select</item>
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/select</item>
+                    <item name="label" xsi:type="string" translate="true">{{relation_label}}</item>
+                    {{grid_editor_v1}}
+                </item>
+            </argument>
+        </column>

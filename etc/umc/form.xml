@@ -964,4 +964,100 @@
             </field>
         </fieldset>
     </form>
+    <form id="umc_relation">
+        <fieldset id="relation">
+            <arguments>
+                <argument name="label" xsi:type="string" translate="true">Relation settings</argument>
+                <argument name="collapsible" xsi:type="boolean">true</argument>
+                <argument name="sort" xsi:type="number">10</argument>
+            </arguments>
+            <field id="code">
+                <arguments>
+                    <argument name="type" xsi:type="string">text</argument>
+                    <argument name="required" xsi:type="boolean">true</argument>
+                    <argument name="label" xsi:type="string" translate="true">Relation code</argument>
+                    <argument name="tooltip" xsi:type="string" translate="true">Used in generated method names. For example if you have 2 entities named 'author' and 'article' and you fill in the relation code 'related' methods will be generated with the name 'getRelatedArticles' on the author model and 'getRelatedAuthors' on the article model.</argument>
+                    <argument name="class" xsi:type="array">
+                        <item name="relation-title" xsi:type="string">relation-title</item>
+                    </argument>
+                    <argument name="sort" xsi:type="number">10</argument>
+                </arguments>
+            </field>
+            <field id="type">
+                <arguments>
+                    <argument name="type" xsi:type="string">select</argument>
+                    <argument name="required" xsi:type="boolean">true</argument>
+                    <argument name="label" xsi:type="string" translate="true">Relation Type</argument>
+                    <argument name="options" xsi:type="object">UmcSourceRelationType</argument>
+                    <argument name="tooltip" xsi:type="string" translate="true">This defines the type of relation between the 2 entities. You can have a many to many relation or a parent-child relation. For many to many relations an additional table will be created, keeping the related entity ids. For parent-child relations, a field with a reference to the parent will be added in the child entity table.</argument>
+                    <argument name="system" xsi:type="boolean">true</argument>
+                    <argument name="sort" xsi:type="number">20</argument>
+                    <argument name="reloader-class" xsi:type="array">
+                        <item name="reload-relation" xsi:type="string">reload-relation</item>
+                    </argument>
+                </arguments>
+            </field>
+            <field id="entity_one">
+                <arguments>
+                    <argument name="type" xsi:type="string">select</argument>
+                    <argument name="required" xsi:type="boolean">true</argument>
+                    <argument name="label" xsi:type="string" translate="true">Entity One</argument>
+                    <argument name="options" xsi:type="object">Umc\Base\Source\Blank</argument>
+                    <argument name="tooltip" xsi:type="string" translate="true">It takes to to have a relationship. This is the first entity in the relationship. You can have multiple relations between the same entities.</argument>
+                    <argument name="class" xsi:type="array">
+                        <item name="relation-entity" xsi:type="string">relation-entity</item>
+                    </argument>
+                    <argument name="sort" xsi:type="number">30</argument>
+                </arguments>
+            </field>
+            <field id="entity_two">
+                <arguments>
+                    <argument name="type" xsi:type="string">select</argument>
+                    <argument name="required" xsi:type="boolean">true</argument>
+                    <argument name="label" xsi:type="string" translate="true">Entity Two</argument>
+                    <argument name="options" xsi:type="object">Umc\Base\Source\Blank</argument>
+                    <argument name="tooltip" xsi:type="string" translate="true">It takes to to have a relationship. This is the second entity in the relationship. You can have multiple relations between the same entities.</argument>
+                    <argument name="class" xsi:type="array">
+                        <item name="relation-entity" xsi:type="string">relation-entity</item>
+                    </argument>
+                    <argument name="sort" xsi:type="number">40</argument>
+                </arguments>
+            </field>
+            <field id="title">
+                <arguments>
+                    <argument name="type" xsi:type="string">text</argument>
+                    <argument name="required" xsi:type="boolean">true</argument>
+                    <argument name="label" xsi:type="string" translate="true">Relation Title</argument>
+                    <argument name="tooltip" xsi:type="string" translate="true">This will be used as label in the grid/form for related entities. Example: You have EntityOne as parent for Entity2. The value of this field will appear as label for the dropdown containing the instances of EntityOne in the form and grid for Entity2.</argument>
+                    <argument name="class" xsi:type="array">
+                        <item name="relation-title" xsi:type="string">relation-title</item>
+                    </argument>
+                    <argument name="sort" xsi:type="number">50</argument>
+                </arguments>
+            </field>
+            <field id="required">
+                <arguments>
+                    <argument name="type" xsi:type="string">select</argument>
+                    <argument name="required" xsi:type="boolean">true</argument>
+                    <argument name="label" xsi:type="string" translate="true">Required</argument>
+                    <argument name="tooltip" xsi:type="string" translate="true">Setting to Yes will make the parent entities select mandatory in the child entities add/edit form. Tip: if you are creating a parent-child relation on the same entity, don't set this as true. You won't be able to create your entities from the UI because when you add the first entity you will have none to select as related.  </argument>
+                    <argument name="options" xsi:type="object">Umc\Base\Source\Yesno</argument>
+                    <argument name="system" xsi:type="boolean">true</argument>
+                    <argument name="sort" xsi:type="number">60</argument>
+                </arguments>
+                <depends id="type">
+                    <depend id="type">
+                        <arguments>
+                            <argument name="type" xsi:type="const">Umc\Base\Config\Form::DEPENDENCY_TYPE_SELF</argument>
+                            <argument name="val" xsi:type="array">
+                                <item name="parent" xsi:type="array">
+                                    <item name="value" xsi:type="const">Umc\Base\Model\Relation\Type\ParentRelation::RELATION_TYPE_PARENT</item>
+                                </item>
+                            </argument>
+                        </arguments>
+                    </depend>
+                </depends>
+            </field>
+        </fieldset>
+    </form>
 </forms>

@@ -51,4 +51,9 @@
         <attribute id="search" />
         <attribute id="inline_edit" />
     </entity>
+    <entity id="umc_relation">
+        <attribute id="title" />
+        <attribute id="code" />
+        <attribute id="required" />
+    </entity>
 </save_attributes>

@@ -29,6 +29,7 @@ use Magento\Framework\Xml\Parser;
 use Umc\Base\Api\Data\AttributeInterface;
 use Umc\Base\Api\Data\EntityInterface;
 use Umc\Base\Api\Data\ModuleInterface;
+use Umc\Base\Api\Data\RelationInterface;
 use Umc\Base\Controller\Adminhtml\Module;
 use Umc\Base\Api\Data\ModuleInterfaceFactory;
 use Umc\Base\Writer\Filesystem as UmcFilesystem;
@@ -191,9 +192,20 @@ class Edit extends Module
                 }
             }
             unset($data['entities']);
+            $relations = [];
+            if (isset($data['relations'])) {
+                if (isset($data['relations'][RelationInterface::ENTITY_CODE][0])) {
+                    $relations = $data['relations'][RelationInterface::ENTITY_CODE];
+                } else {
+                    $relations = [$data['relations'][RelationInterface::ENTITY_CODE]];
+                }
+
+            }
+            unset($data['relations']);
             $data = [
                 ModuleInterface::ENTITY_CODE     => $data,
                 'entity'                         => $entities,
+                'relation'                       => $relations
             ];
         }
         return $data;

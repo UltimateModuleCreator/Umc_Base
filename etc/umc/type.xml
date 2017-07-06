@@ -155,4 +155,20 @@
             </arguments>
         </group>
     </entity>
+    <entity id="umc_relation">
+        <type id="parent">
+            <arguments>
+                <argument name="model" xsi:type="string">Umc\Base\Model\Relation\Type\ParentRelation</argument>
+                <argument name="label" xsi:type="string" translate="true">Entity 1 Is Parent For Entity 2</argument>
+                <argument name="group" xsi:type="string">one_to_many</argument>
+                <argument name="sort" xsi:type="number">10</argument>
+            </arguments>
+        </type>
+        <group id="one_to_many">
+            <arguments>
+                <argument name="label" xsi:type="string" translate="true">One To Many</argument>
+                <argument name="sort" xsi:type="number">10</argument>
+            </arguments>
+        </group>
+    </entity>
 </types>
