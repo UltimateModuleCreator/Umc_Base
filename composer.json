@@ -1,7 +1,7 @@
 {
     "name": "ultimatemodulecreator/umc-base",
     "description": "Magento 2 Ultimate Module Creator - Base Package",
-    "version": "0.7.0",
+    "version": "0.8.0",
     "license": "MIT",
     "require": {
         "magento/framework": "100.*.*",
