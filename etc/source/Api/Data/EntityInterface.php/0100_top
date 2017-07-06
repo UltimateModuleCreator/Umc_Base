@@ -16,7 +16,7 @@
      * Set ID
      *
      * @param int ${{entity}}Id
-     * @return EntityInterface
+     * @return {{Entity}}Interface
      */
     public function set{{Entity}}Id(${{entity}}Id);
 

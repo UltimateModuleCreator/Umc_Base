@@ -18,7 +18,9 @@
 
 namespace Umc\Base\Model\Composer;
 
-class Exception extends \Exception
+use Magento\Framework\Exception\LocalizedException;
+
+class Exception extends LocalizedException
 {
 
 }

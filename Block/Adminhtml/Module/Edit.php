@@ -195,6 +195,9 @@ class Edit extends Container
         return $this->_scopeConfig->getValue(AbstractTab::XML_TOOLTIP_TYPE_PATH);
     }
 
+    /**
+     * @return string
+     */
     public function getRelationsAsJson()
     {
         /** @var \Umc\Base\Api\Data\ModuleInterface $module */
@@ -204,5 +207,4 @@ class Edit extends Container
         }
         return '{}';
     }
-
 }

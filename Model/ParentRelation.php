@@ -30,10 +30,12 @@ class ParentRelation extends AbstractModel implements ParentRelationInterface
      * @var array
      */
     protected $placeholders;
+
     /**
      * @var RelationInterface
      */
     protected $relation;
+
     /**
      * @var EntityInterface
      */
@@ -55,8 +57,7 @@ class ParentRelation extends AbstractModel implements ParentRelationInterface
         EntityInterface $entity,
         RelationInterface $relation,
         array $data = []
-    )
-    {
+    ) {
         $this->relation = $relation;
         $this->entity = $entity;
         parent::__construct($saveAttributesConfig, $formConfig, $escaper, $data);
@@ -139,6 +140,9 @@ class ParentRelation extends AbstractModel implements ParentRelationInterface
         return $content;
     }
 
+    /**
+     * @return string
+     */
     protected function getFormValidationV2()
     {
         $content = '';
@@ -150,6 +154,9 @@ class ParentRelation extends AbstractModel implements ParentRelationInterface
         return $content;
     }
 
+    /**
+     * @return string
+     */
     protected function getGridEditorOptionsV1()
     {
         $content = '';

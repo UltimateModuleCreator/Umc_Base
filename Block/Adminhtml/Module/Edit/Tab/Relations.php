@@ -20,12 +20,14 @@ namespace Umc\Base\Block\Adminhtml\Module\Edit\Tab;
 use Magento\Backend\Block\Widget\Tab\TabInterface;
 use Magento\Backend\Block\Template\Context;
 use Magento\Framework\Data\FormFactory;
-use Magento\Framework\Phrase;
 use Magento\Framework\Registry;
 use Umc\Base\Api\Data\RelationInterface;
 use Umc\Base\Config\Form as FormConfig;
 use Umc\Base\Block\Adminhtml\RelationFactory as RelationBlockFactory;
 
+/**
+ * @api
+ */
 class Relations extends AbstractTab implements TabInterface
 {
     /**
@@ -43,9 +45,9 @@ class Relations extends AbstractTab implements TabInterface
      * @param Registry $registry
      * @param FormFactory $formFactory
      * @param FormConfig $formConfig
-     * @param $entityCode
+     * @param string $entityCode
      * @param RelationBlockFactory $relationBlockFactory
-     * @param $relationBlockTemplate
+     * @param string $relationBlockTemplate
      * @param array $data
      */
     public function __construct(
@@ -62,6 +64,7 @@ class Relations extends AbstractTab implements TabInterface
         $this->relationBlockTemplate = $relationBlockTemplate;
         parent::__construct($context, $registry, $formFactory, $formConfig, $entityCode, $data);
     }
+
     /**
      * get tab label
      *
@@ -102,6 +105,7 @@ class Relations extends AbstractTab implements TabInterface
     {
         return false;
     }
+
     /**
      * get the current entities
      *
@@ -117,7 +121,7 @@ class Relations extends AbstractTab implements TabInterface
     }
 
     /**
-     * @param $increment
+     * @param int $increment
      * @param RelationInterface|null $relation
      * @return \Umc\Base\Block\Adminhtml\Relation
      */
@@ -130,5 +134,4 @@ class Relations extends AbstractTab implements TabInterface
         $entityBlock->setData('increment', $increment);
         return $entityBlock;
     }
-
 }

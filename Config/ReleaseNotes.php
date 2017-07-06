@@ -1,5 +1,4 @@
-<?xml version="1.0"?>
-<!--
+<?php
 /**
  * Umc_Base extension
  *
@@ -16,12 +15,9 @@
  * @license   http://opensource.org/licenses/mit-license.php MIT License
  * @author    Marius Strajeru <ultimate.module.creator@gmail.com>
  */
--->
-<versions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="version.xsd">
-    <module id="Umc_Base">
-        <arguments>
-            <argument name="sort" xsi:type="number">1</argument>
-            <argument name="build" xsi:type="string">beta2</argument>
-        </arguments>
-    </module>
-</versions>
+namespace Umc\Base\Config;
+
+class ReleaseNotes extends Config
+{
+
+}

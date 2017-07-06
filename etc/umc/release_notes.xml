@@ -1,0 +1,108 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Umc_Base extension
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the MIT License
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/mit-license.php
+ *
+ * @category  Umc
+ * @package   Umc_Base
+ * @copyright Marius Strajeru
+ * @license   http://opensource.org/licenses/mit-license.php MIT License
+ * @author    Marius Strajeru <ultimate.module.creator@gmail.com>
+ */
+-->
+<notes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="release_notes.xsd">
+    <module id="Umc_Base">
+        <version id="2.0.0-beta1">
+            <arguments>
+                <argument name="date" xsi:type="string">2017-05-22</argument>
+                <argument name="sort" xsi:type="string">10</argument>
+            </arguments>
+            <fix id="compatibility">
+                <arguments>
+                    <argument name="title" xsi:type="string" translate="true">Compatibility</argument>
+                    <argument name="description" xsi:type="string" translate="true">Made compatible with Magento 2.1 and Magento 2.2-dev</argument>
+                    <argument name="type" xsi:type="string" translate="true">Improvement</argument>
+                    <argument name="sort" xsi:type="number">10</argument>
+                </arguments>
+            </fix>
+            <fix id="12">
+                <arguments>
+                    <argument name="title" xsi:type="string" translate="true"><![CDATA[<a href="https://github.com/UltimateModuleCreator/Umc_Base/issues/12">#12: File cannot be uploaded</a>]]></argument>
+                    <argument name="description" xsi:type="string" translate="true">Files could not be uploaded in certain congfigurations.</argument>
+                    <argument name="type" xsi:type="string" translate="true">Bug Fix</argument>
+                    <argument name="sort" xsi:type="number">20</argument>
+                </arguments>
+            </fix>
+            <fix id="13">
+                <arguments>
+                    <argument name="title" xsi:type="string" translate="true"><![CDATA[<a href="https://github.com/UltimateModuleCreator/Umc_Base/issues/13">#13: PHP 7 causes exception on usage of Int as classname </a>]]></argument>
+                    <argument name="description" xsi:type="string" translate="true">In PHP 7 'Int' is a reserved word. Changed class names to Integer</argument>
+                    <argument name="type" xsi:type="string" translate="true">Bug Fix</argument>
+                    <argument name="sort" xsi:type="number">30</argument>
+                </arguments>
+            </fix>
+            <fix id="22">
+                <arguments>
+                    <argument name="title" xsi:type="string" translate="true"><![CDATA[<a href="https://github.com/UltimateModuleCreator/Umc_Base/issues/22">#22: Feature Request: Short admin session warning</a>]]></argument>
+                    <argument name="description" xsi:type="string" translate="true">On the create/edit module page the session is prolonged automatically now. This feature can be disabled from configuration section.</argument>
+                    <argument name="type" xsi:type="string" translate="true">Improvement</argument>
+                    <argument name="sort" xsi:type="number">40</argument>
+                </arguments>
+            </fix>
+            <fix id="30">
+                <arguments>
+                    <argument name="title" xsi:type="string" translate="true"><![CDATA[<a href="https://github.com/UltimateModuleCreator/Umc_Base/issues/30">#30: Problems with ACL if name of an entity matches the name of the module</a>]]></argument>
+                    <argument name="description" xsi:type="string" translate="true">ACL resource name collisions were possible if the module and the entity were named the same. </argument>
+                    <argument name="type" xsi:type="string" translate="true">Bug Fix</argument>
+                    <argument name="sort" xsi:type="number">40</argument>
+                </arguments>
+            </fix>
+            <fix id="32">
+                <arguments>
+                    <argument name="title" xsi:type="string" translate="true"><![CDATA[<a href="https://github.com/UltimateModuleCreator/Umc_Base/issues/32">#32: No valid composer.json was found in any branch or tag</a>]]></argument>
+                    <argument name="description" xsi:type="string" translate="true">A rogue `~` prevented composer installation</argument>
+                    <argument name="type" xsi:type="string" translate="true">Bug Fix</argument>
+                    <argument name="sort" xsi:type="number">50</argument>
+                </arguments>
+            </fix>
+            <fix id="33">
+                <arguments>
+                    <argument name="title" xsi:type="string" translate="true"><![CDATA[<a href="https://github.com/UltimateModuleCreator/Umc_Base/issues/33">#33: Invalid application config error</a>]]></argument>
+                    <argument name="description" xsi:type="string" translate="true">The di.xml file was generated wrongly.</argument>
+                    <argument name="type" xsi:type="string" translate="true">Bug Fix</argument>
+                    <argument name="sort" xsi:type="number">60</argument>
+                </arguments>
+            </fix>
+        </version>
+        <version id="2.0.0-beta2">
+            <arguments>
+                <argument name="date" xsi:type="string">2017-07-06</argument>
+                <argument name="sort" xsi:type="string">20</argument>
+            </arguments>
+            <fix id="parent-relation">
+                <arguments>
+                    <argument name="title" xsi:type="string" translate="true">Added parent-child relation between entities support</argument>
+                    <argument name="description" xsi:type="string" translate="true">You can now create parent-child relations between entities and even in the same entity</argument>
+                    <argument name="type" xsi:type="string" translate="true">Feature</argument>
+                    <argument name="sort" xsi:type="number">10</argument>
+                </arguments>
+            </fix>
+            <fix id="release-notes">
+                <arguments>
+                    <argument name="title" xsi:type="string" translate="true">Added release notes</argument>
+                    <argument name="description" xsi:type="string" translate="true">You are reading them right now</argument>
+                    <argument name="type" xsi:type="string" translate="true">Improvement</argument>
+                    <argument name="sort" xsi:type="number">10</argument>
+                </arguments>
+            </fix>
+        </version>
+    </module>
+</notes>
+

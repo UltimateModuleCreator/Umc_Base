@@ -16,6 +16,7 @@
  * @author    Marius Strajeru <ultimate.module.creator@gmail.com>
  */
 namespace Umc\Base\Api\Data;
+
 use Umc\Base\Api\Data\Relation\TypeInterface;
 
 /**
@@ -43,7 +44,7 @@ interface RelationInterface extends ModelInterface
     public function getModule();
 
     /**
-     * @param $reversed
+     * @param bool $reversed
      * @return RelationInterface
      */
     public function setReversed($reversed);
@@ -65,7 +66,7 @@ interface RelationInterface extends ModelInterface
     public function setRequired($required);
 
     /**
-     * @param $type
+     * @param string $type
      * @return RelationInterface
      */
     public function setType($type);
@@ -93,7 +94,7 @@ interface RelationInterface extends ModelInterface
     public function getTitle();
 
     /**
-     * @param $title
+     * @param string $title
      * @return RelationInterface
      */
     public function setTitle($title);

@@ -26,4 +26,3 @@ class ParentRelation extends AbstractRelation implements TypeInterface
      */
     const RELATION_TYPE_PARENT = 'parent';
 }
-

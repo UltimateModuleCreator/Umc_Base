@@ -272,6 +272,59 @@
     </type>
     <!--[-] definitions for type config -->
 
+
+
+    <!--[+] definitions for release notes config -->
+    <virtualType name="UmcConfigReleaseNotesSchemaLocator" type="Umc\Base\Config\SchemaLocator\SchemaLocator">
+        <arguments>
+            <argument name="fileSchema" xsi:type="string">release_notes</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="UmcConfigReleaseNotesMapperSorting" type="Umc\Base\Config\Mapper\Sorting">
+        <arguments>
+            <argument name="paths" xsi:type="array">
+                <item name="module/version" xsi:type="array">
+                    <item name="0" xsi:type="string">module</item>
+                </item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="UmcConfigReleaseNotesConverter" type="Umc\Base\Config\Converter\Converter">
+        <arguments>
+            <argument name="argumentInterpreter" xsi:type="object">UmcConfigArgumentReaderInterpreter</argument>
+            <argument name="mapperList" xsi:type="array">
+                <item name="0" xsi:type="object">UmcConfigReleaseNotesMapperSorting</item>
+            </argument>
+            <argument name="idNodes" xsi:type="array">
+                <item name="0" xsi:type="string">module</item>
+                <item name="1" xsi:type="string">version</item>
+                <item name="2" xsi:type="string">fix</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="UmcConfigReleaseNotesReader" type="Magento\Framework\Config\Reader\Filesystem">
+        <arguments>
+            <argument name="schemaLocator" xsi:type="object">UmcConfigReleaseNotesSchemaLocator</argument>
+            <argument name="converter" xsi:type="object">UmcConfigReleaseNotesConverter</argument>
+            <argument name="fileName" xsi:type="string">release_notes.xml</argument>
+            <argument name="idAttributes" xsi:type="array">
+                <item name="/notes/module" xsi:type="string">id</item>
+                <item name="/notes/module/version" xsi:type="string">id</item>
+                <item name="/notes/module/version/arguments/argument" xsi:type="string">name</item>
+                <item name="/notes/module/version/fix" xsi:type="string">id</item>
+                <item name="/notes/module/version/fix/arguments/argument" xsi:type="string">name</item>
+            </argument>
+            <argument name="defaultScope" xsi:type="string">umc</argument>
+        </arguments>
+    </virtualType>
+    <type name="Umc\Base\Config\ReleaseNotes">
+        <arguments>
+            <argument name="reader" xsi:type="object">UmcConfigReleaseNotesReader</argument>
+            <argument name="rootNode" xsi:type="string">notes</argument>
+        </arguments>
+    </type>
+    <!--[-] definitions for release notes config -->
+
     <!--[+] definitions for save attributes config -->
     <virtualType name="UmcConfigSaveAttributesSchemaLocator" type="Umc\Base\Config\SchemaLocator\SchemaLocator">
         <arguments>
@@ -1252,6 +1305,7 @@
             </argument>
         </arguments>
     </type>
+
     <virtualType name="UmcModelHelpModuleRestrictions" type="Umc\Base\Model\Help\Restrictions">
         <arguments>
             <argument name="entityCode" xsi:type="const">Umc\Base\Api\Data\ModuleInterface::ENTITY_CODE</argument>

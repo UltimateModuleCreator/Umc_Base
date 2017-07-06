@@ -32,7 +32,7 @@
      * set {{EntityLabel}} id
      *
      * @param int ${{entity}}Id
-     * @return array
+     * @return {{class {{Namespace}}\{{Module}}\Api\Data\{{Entity}}Interface}}
      */
     public function set{{Entity}}Id(${{entity}}Id)
     {

@@ -21,6 +21,7 @@ use Magento\Backend\Block\Template;
 use Magento\Backend\Block\Template\Context;
 use Umc\Base\Block\Adminhtml\Help\Section\Fieldset;
 use Umc\Base\Block\Adminhtml\Help\Section\FieldsetFactory;
+use Umc\Base\Model\Help\SectionInterface;
 
 class Section extends Template
 {
@@ -98,7 +99,9 @@ class Section extends Template
     public function getFieldsets()
     {
         if ($this->fieldsets === null) {
-            if (isset($this->sectionData['fieldset'])) {
+            if (isset($this->sectionData['class']) && $this->sectionData['class'] instanceof SectionInterface) {
+                $this->fieldsets = $this->sectionData['class']->getFieldsets($this);
+            } elseif (isset($this->sectionData['fieldset'])) {
                 foreach ($this->sectionData['fieldset'] as $fieldsetData) {
                     $this->fieldsets[] = $this->fieldsetFactory->create([
                         'section' => $this,

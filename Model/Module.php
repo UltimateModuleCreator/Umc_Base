@@ -510,7 +510,10 @@ class Module extends AbstractModel implements ModuleInterface
                 /** @var \Umc\Base\Api\Data\RelationInterface  $relation */
                 $relation = $this->getFactory(FactoryInterface::RELATION_FACTORY_KEY)->create();
                 $relation->addData($values);
-                $relation->setEntities($entitiesByIndex[$values['entity_one']], $entitiesByIndex[$values['entity_two']]);
+                $relation->setEntities(
+                    $entitiesByIndex[$values['entity_one']],
+                    $entitiesByIndex[$values['entity_two']]
+                );
                 $relation->setType($values['type']);
                 $relation->setIndex($index);
                 $this->addRelation($relation);
@@ -617,7 +620,6 @@ class Module extends AbstractModel implements ModuleInterface
         }
         return json_encode($json);
     }
-
 
     /**
      * get placeholders

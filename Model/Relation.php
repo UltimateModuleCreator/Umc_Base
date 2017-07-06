@@ -35,26 +35,32 @@ class Relation extends AbstractModel implements RelationInterface
      * @var string
      */
     protected $entityCode = RelationInterface::ENTITY_CODE;
+
     /**
      * @var null|TypeInterface
      */
     protected $typeInstance;
+
     /**
      * @var ModuleInterface
      */
     protected $module;
+
     /**
      * @var EntityInterface
      */
     protected $entityOne;
+
     /**
      * @var EntityInterface
      */
     protected $entityTwo;
+
     /**
      * @var string
      */
     protected $type;
+
     /**
      * @var bool
      */
@@ -84,8 +90,9 @@ class Relation extends AbstractModel implements RelationInterface
         $this->typeFactory = $typeFactory;
         parent::__construct($saveAttributesConfig, $formConfig, $escaper, $data);
     }
+
     /**
-     * @param $flag
+     * @param bool $flag
      * @return $this
      */
     public function setReversed($flag)
@@ -145,14 +152,13 @@ class Relation extends AbstractModel implements RelationInterface
     }
 
     /**
-     * @param $title
+     * @param string $title
      * @return RelationInterface
      */
     public function setTitle($title)
     {
-        return $this->setData('title', $title);
+        return $this->setData(self::TITLE, $title);
     }
-
 
     /**
      * @param ModuleInterface $module
@@ -181,7 +187,7 @@ class Relation extends AbstractModel implements RelationInterface
     }
 
     /**
-     * @param $type
+     * @param string $type
      * @return RelationInterface
      */
     public function setType($type)
@@ -193,6 +199,11 @@ class Relation extends AbstractModel implements RelationInterface
         return $this;
     }
 
+    /**
+     * @param EntityInterface $entityOne
+     * @param EntityInterface $entityTwo
+     * @return RelationInterface|Relation
+     */
     public function setEntities(EntityInterface $entityOne, EntityInterface $entityTwo)
     {
         $this->entityOne = $entityOne;
@@ -256,7 +267,7 @@ class Relation extends AbstractModel implements RelationInterface
      */
     public function getTypeInstance()
     {
-        if (is_null($this->typeInstance)) {
+        if ($this->typeInstance === null) {
             $this->typeInstance = $this->typeFactory->create($this);
         }
         return $this->typeInstance;
@@ -278,7 +289,7 @@ class Relation extends AbstractModel implements RelationInterface
         $addCdata = false
     ) {
         $xml = '';
-        if (is_null($rootName)) {
+        if ($rootName === null) {
             $rootName = $this->getEntityCode();
         }
         if ($rootName) {

@@ -86,7 +86,7 @@ class Composer
         }
 
         if (empty($data['version']) || empty($data['name'])) {
-            throw new Exception('missing version or name for module '. $moduleName);
+            throw new Exception(__('Missing version or name for module %1', $moduleName));
         }
         return [
             'name' => $data['name'],

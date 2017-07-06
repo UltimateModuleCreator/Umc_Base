@@ -35,5 +35,4 @@ interface TypeInterface
      * @return array
      */
     public function getPlaceholders();
-
 }
